@@ -27,7 +27,7 @@ while True:
         cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2) 
         
         # get the result of Face_Compare script
-        result = Face_Compare.face_match(frame) 
+        result = Face_Compare.face_match(frame,) 
         
         cv2.putText(frame,str(result[0]),(x,y+h+30),cv2.FONT_HERSHEY_COMPLEX,1,(0,255,255),1)
 
