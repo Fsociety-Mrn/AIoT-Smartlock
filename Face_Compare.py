@@ -35,7 +35,7 @@ def face_match(face, threshold=0.6):
             if len(dist_list) > 0:
                 min_dist = min(dist_list)
                 print(min_dist)
-                if min_dist <= threshold:
+                if min_dist < threshold:
                     
                     idx_min = dist_list.index(min_dist)
                     return (name_list[idx_min], min_dist)
