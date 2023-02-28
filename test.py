@@ -1,5 +1,3 @@
-import cv2
-import torch
 import torchvision.transforms as transforms
 from facenet_pytorch import MTCNN
 from PIL import Image
