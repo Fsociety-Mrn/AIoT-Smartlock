@@ -6,7 +6,7 @@ import Face_Compare
 face_detector=cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 
 # Set up the camera
-cap = cv2.VideoCapture(1)
+cap = cv2.VideoCapture(0)
 cap.set(4,1080)
 
 # Start streaming the camera
