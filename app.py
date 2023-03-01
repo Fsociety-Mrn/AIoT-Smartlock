@@ -1,6 +1,8 @@
 # Main script
 import cv2
-import Face_Compare
+
+from JoloRecognition import JoloRecognition as Jolo
+
 
 # face detection
 face_detector=cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
@@ -16,6 +18,7 @@ while True:
     frame = cv2.flip(frame, 1)
 
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    # rgb = cv2.cvtColor(frame, cv2.COLOR_GRAY2BGR)
     
     # Detect faces in the frame
     faces = face_detector.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=20, minSize=(100, 100), flags=cv2.CASCADE_SCALE_IMAGE)
@@ -26,7 +29,8 @@ while True:
         cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2) 
         
         # get the result of Face_Compare script
-        result = Face_Compare.face_match(frame,) 
+        result = Jolo().Face_Compare(frame,threshold=0.6)
+
         
         cv2.putText(frame,str(result[0]),(x,y+h+30),cv2.FONT_HERSHEY_COMPLEX,1,(0,255,255),1)
 
