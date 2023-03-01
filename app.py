@@ -10,6 +10,9 @@ face_detector=cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontal
 # Set up the camera
 cap = cv2.VideoCapture(0)
 cap.set(4,1080)
+cap.set(cv2.CAP_PROP_FRAME_WIDTH, 400)
+cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 400)
+# cap.set(cv2.CAP_PROP_FPS, 36)
 
 # Start streaming the camera
 while True:   
