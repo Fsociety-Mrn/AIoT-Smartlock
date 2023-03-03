@@ -50,7 +50,7 @@ class Ui_SmartAIoT(object):
         QtCore.QMetaObject.connectSlotsByName(SmartAIoT)
 
         # open cv2
-        self.cap = cv2.VideoCapture(0)
+        self.cap = cv2.VideoCapture(1) if cv2.VideoCapture(1).isOpened() else cv2.VideoCapture(0)
         self.cap.set(4,1080)
         # self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, 400)
         # self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 400)
@@ -60,6 +60,7 @@ class Ui_SmartAIoT(object):
         self.last_recognition_time = time.time()
         self.timer.start(30)
         
+        # facial data 
         self.matchs = "Initializing face recognition"
         self.R=255
         self.G=255

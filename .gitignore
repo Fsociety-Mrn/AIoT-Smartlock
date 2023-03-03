@@ -2,3 +2,5 @@
 /__pycache__
 /Known_Faces_dataset/data.pt
 /Model/InceptionResnetV1_mobile.ptl
+/test.py
+/UI.py
