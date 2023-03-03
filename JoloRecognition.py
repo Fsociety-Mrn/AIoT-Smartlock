@@ -2,7 +2,7 @@ import torch
 
 from torchvision import datasets
 from torch.utils.data import DataLoader
-from facenet_pytorch import MTCNN
+from facenet_pytorch import MTCNN,InceptionResnetV1
 from torch.utils.mobile_optimizer import optimize_for_mobile
 # Importing the library
 import psutil
@@ -16,12 +16,12 @@ class JoloRecognition:
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         
         # face detection
-        self.mtcnn  = MTCNN(image_size=160, margin=0, min_face_size=40).to(self.device)
+        self.mtcnn  = MTCNN(image_size=160, margin=0, min_face_size=40,select_largest=False, device=self.device)
         
         # facial recognition
-        # self.facenet = InceptionResnetV1(pretrained='vggface2').eval().to(self.device)
+        self.facenet = InceptionResnetV1(pretrained='vggface2').eval().to(self.device)
         
-        self.facenet = torch.jit.load("Model/InceptionResnetV1_mobile.ptl", map_location='cpu').eval()
+        # self.facenet = torch.jit.load("Model/InceptionResnetV1_mobile.ptl", map_location='cpu').eval()
         
         # known faces data
         self.Saved_Data = torch.load('Model/data.pt', map_location='cpu')
@@ -53,10 +53,6 @@ class JoloRecognition:
                 if len(match_list) > 0:
                     
                     min_dist = min(match_list)
-                    # Getting % usage of virtual_memory ( 3rd field)
-                    print('RAM memory % used:', psutil.virtual_memory()[2])
-                # Getting usage of virtual_memory in GB ( 4th field)
-                    print('RAM Used (GB):', psutil.virtual_memory()[3]/1000000000)
 
                     if min_dist < threshold:
                         idx_min = match_list.index(min_dist)
@@ -116,3 +112,4 @@ class JoloRecognition:
 
 # print(Jolo.Face_Train('Known_Faces', 'Model'))
 # Jolo.facenetMobile("Model")
+

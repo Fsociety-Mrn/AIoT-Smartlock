@@ -15,3 +15,10 @@ pip install -r requirements.txt
 2.  kapag  okay edi run mo  yung Model/CONVERT_PYTHON_MOBILE.py
 3.  run mo yung TrainData.py
 4.  edi run muna app.py
+
+## convert .ui to .py
+
+```shell
+pipreqs
+pyuic5 -x <name of  UI>.ui -o <name of  UI>.py
+```

@@ -1,0 +1,99 @@
+import cv2
+import face_recognition
+
+from JoloRecognition import JoloRecognition as Jolo
+from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtCore import QTimer
+
+class Ui_SmartAIoT(object):
+    def setupUi(self, SmartAIoT):
+        
+        SmartAIoT.setObjectName("SmartAIoT")
+        SmartAIoT.setWindowModality(QtCore.Qt.ApplicationModal)
+        SmartAIoT.resize(660, 691)
+        SmartAIoT.setStyleSheet("background-color:rgb(0, 0, 127)")
+        SmartAIoT.setAnimated(False)
+        SmartAIoT.setDocumentMode(True)
+        self.SmartAIoT_3 = QtWidgets.QWidget(SmartAIoT)
+        self.SmartAIoT_3.setObjectName("SmartAIoT_3")
+        
+        # label
+        self.label = QtWidgets.QLabel(self.SmartAIoT_3)
+        self.label.setGeometry(QtCore.QRect(10, 10, 641, 561))
+        font = QtGui.QFont()
+        font.setFamily("Courier New")
+        font.setPointSize(14)
+        self.label.setFont(font)
+        self.label.setStyleSheet("background-color:rgb(255, 255, 255)")
+        self.label.setAlignment(QtCore.Qt.AlignCenter)
+        self.label.setObjectName("label")
+        
+        # Timer
+        self.timer = QTimer(self.SmartAIoT_3)
+        self.timer.timeout.connect(self.videoStreaming)
+        
+        # Register Button
+        self.pushButton = QtWidgets.QPushButton(self.SmartAIoT_3)
+        self.pushButton.setGeometry(QtCore.QRect(20, 600, 621, 71))
+        font = QtGui.QFont()
+        font.setFamily("Courier New")
+        font.setPointSize(14)
+        self.pushButton.setFont(font)
+        self.pushButton.setAutoFillBackground(False)
+        self.pushButton.setStyleSheet("background-color:rgb(255, 255, 255)")
+        self.pushButton.setObjectName("pushButton")
+        SmartAIoT.setCentralWidget(self.SmartAIoT_3)
+
+        self.retranslateUi(SmartAIoT)
+        QtCore.QMetaObject.connectSlotsByName(SmartAIoT)
+
+        # open cv2
+        self.cap = cv2.VideoCapture(0)
+        self.cap.set(4,1080)
+        self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, 400)
+        self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 400)
+
+        # face detection
+        self.face_detector = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+        self.timer.start(30)
+        
+    def retranslateUi(self, SmartAIoT):
+        _translate = QtCore.QCoreApplication.translate
+        SmartAIoT.setWindowTitle(_translate("SmartAIoT", "MainWindow"))
+        self.label.setText(_translate("SmartAIoT", "Loading"))
+        self.pushButton.setToolTip(_translate("SmartAIoT", "click to register"))
+        self.pushButton.setText(_translate("SmartAIoT", "Register"))
+        
+    def videoStreaming(self):
+        ret, frame = self.cap.read()
+        if ret:
+            frame = cv2.flip(frame, 1)
+            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)  # Convert the frame to RGB
+            
+            gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+            faces = self.face_detector.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=20, minSize=(100, 100), flags=cv2.CASCADE_SCALE_IMAGE)
+            
+            for (x, y, w, h) in faces:
+                cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
+                
+                # get the result of Face_Compare script
+                result = Jolo().Face_Compare(frame,threshold=0.6)
+                
+                cv2.putText(frame,str(result[0]),(x,y+h+30),cv2.FONT_HERSHEY_COMPLEX,1,(255,0,255),1)
+            
+            img = QtGui.QImage(frame, frame.shape[1], frame.shape[0], QtGui.QImage.Format_RGB888)  # Convert the frame to a QImage
+            self.label.setPixmap(QtGui.QPixmap.fromImage(img))  # Set the label pixmap to the QImage
+        
+    def closeEvent(self, event):
+        self.cap.release()  # Release the camera when the application is closed
+
+
+if __name__ == "__main__":
+    print("Loading.........")
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    SmartAIoT = QtWidgets.QMainWindow()
+    ui = Ui_SmartAIoT()
+    ui.setupUi(SmartAIoT)
+    SmartAIoT.show()
+    sys.exit(app.exec_())

@@ -7,13 +7,18 @@ import torchvision.datasets as datasets
 from facenet_pytorch import MTCNN
 from PIL import Image,ImageOps
 
+
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
 # Initialize the MTCNN model
 mtcnn = MTCNN(
-    margin=0,
-    post_process=False,
-    select_largest=True,    
-    image_size=160
-)
+    image_size=160,
+    factor=0.8,
+    
+    selection_method="probability",
+    keep_all=True,
+    device=device
+    )
 
 
 def face_scan(input_folder):
