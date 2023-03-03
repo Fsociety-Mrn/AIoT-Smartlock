@@ -3,8 +3,7 @@ import sys
 import time
 
 from JoloRecognition import JoloRecognition as Jolo
-from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtCore import QTimer
+from PyQt5 import QtCore,QtGui,QtWidgets
 
 class Ui_SmartAIoT(object):
     def setupUi(self, SmartAIoT):
@@ -30,7 +29,7 @@ class Ui_SmartAIoT(object):
         self.label.setObjectName("label")
         
         # Timer
-        self.timer = QTimer(self.SmartAIoT_3)
+        self.timer = QtCore.QTimer(self.SmartAIoT_3)
         self.timer.timeout.connect(self.videoStreaming)
         
         # Register Button
