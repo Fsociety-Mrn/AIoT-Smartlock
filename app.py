@@ -102,6 +102,7 @@ class Ui_SmartAIoT(object):
                         self.R=0
                         self.G=255
                         self.B=0
+         
 
             
             
