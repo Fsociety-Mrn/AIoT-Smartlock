@@ -58,13 +58,13 @@ class JoloRecognition:
                         idx_min = match_list.index(min_dist)
                         return (self.Name_List[idx_min], min_dist)
                     else:
-                        return ('Unknown', None)
+                        return ('No match detected', None)
                 
                 else:
-                    return ('No match faces', None)
+                    return ('No match detected', None)
                 
             else:
-                ('No face detected', None)
+                ('No match detected', None)
     
     # training from dataset
     def Face_Train(self, Dataset_Folder, location):
