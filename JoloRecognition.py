@@ -21,6 +21,11 @@ class JoloRecognition:
         # facial recognition
         self.facenet = InceptionResnetV1(pretrained='vggface2').eval().to(self.device)
         
+        # model = torch.quantization.convert(self.facenet)
+        # model_scripitted = torch.jit.trace(model,torch.randn(1, 3, 224, 224))
+        # self.facenet = optimize_for_mobile(model_scripitted)
+        
+        
         # self.facenet = torch.jit.load("Model/InceptionResnetV1_mobile.ptl", map_location='cpu').eval()
         
         # known faces data
@@ -45,6 +50,7 @@ class JoloRecognition:
                     try:
                         dist = torch.dist(emb, emb_db).item()
                         match_list.append(dist)
+                        
                     except:
                         break
                 
@@ -53,9 +59,11 @@ class JoloRecognition:
                 if len(match_list) > 0:
                     
                     min_dist = min(match_list)
-
+                    
                     if min_dist < threshold:
                         idx_min = match_list.index(min_dist)
+   
+                        print(min_dist,self.Name_List[idx_min])
                         return (self.Name_List[idx_min], min_dist)
                     else:
                         return ('No match detected', None)
@@ -104,12 +112,14 @@ class JoloRecognition:
         model = torch.quantization.convert(facenet)
         model_scripitted = torch.jit.trace(model,torch.randn(1, 3, 224, 224))
         optimize_mobile = optimize_for_mobile(model_scripitted)
+        
+
         optimize_mobile._save_for_lite_interpreter(location + "/InceptionResnetV1_mobile.ptl")
         print("done")
         
-        
+
 # Jolo = JoloRecognition()
 
 # print(Jolo.Face_Train('Known_Faces', 'Model'))
-# Jolo.facenetMobile("Model")
+
 

@@ -35,9 +35,11 @@ while True:
         
         if time.time() - start_time > 2:
             start_time = time.time()
-        
+
+
         # get the result of Face_Compare script
             result = Jolo().Face_Compare(frame,threshold=0.6)
+        
 
         
         cv2.putText(frame,str(result[0]),(x,y+h+30),cv2.FONT_HERSHEY_COMPLEX,1,(0,255,255),1)
