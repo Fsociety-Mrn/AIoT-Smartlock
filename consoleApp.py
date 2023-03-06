@@ -1,5 +1,6 @@
 # Main script
 import cv2
+import time
 
 from JoloRecognition import JoloRecognition as Jolo
 
@@ -14,6 +15,7 @@ cap.set(cv2.CAP_PROP_FRAME_WIDTH, 400)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 400)
 cap.set(cv2.CAP_PROP_FPS, 36)
 
+start_time = time.time()
 # Start streaming the camera
 while True:   
     
@@ -31,8 +33,11 @@ while True:
         
         cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2) 
         
+        if time.time() - start_time > 2:
+            start_time = time.time()
+        
         # get the result of Face_Compare script
-        result = Jolo().Face_Compare(frame,threshold=0.6)
+            result = Jolo().Face_Compare(frame,threshold=0.6)
 
         
         cv2.putText(frame,str(result[0]),(x,y+h+30),cv2.FONT_HERSHEY_COMPLEX,1,(0,255,255),1)
