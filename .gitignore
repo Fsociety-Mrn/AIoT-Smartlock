@@ -4,3 +4,5 @@
 /Model/InceptionResnetV1_mobile.ptl
 /test.py
 /UI.py
+/Model/data.pt
+/Face_Recognition/__pycache__

@@ -2,7 +2,7 @@ import cv2
 import sys
 import time
 
-from JoloRecognition import JoloRecognition as Jolo
+from Face_Recognition.JoloRecognition import JoloRecognition as Jolo
 from PyQt5 import QtCore,QtGui,QtWidgets
 
 class Ui_SmartAIoT(object):
@@ -10,7 +10,7 @@ class Ui_SmartAIoT(object):
         
         SmartAIoT.setObjectName("SmartAIoT")
         SmartAIoT.setWindowModality(QtCore.Qt.ApplicationModal)
-        SmartAIoT.resize(660, 691)
+        SmartAIoT.resize(660, 600)
         SmartAIoT.setStyleSheet("background-color:rgb(0, 0, 127)")
         SmartAIoT.setAnimated(False)
         SmartAIoT.setDocumentMode(True)
@@ -33,18 +33,18 @@ class Ui_SmartAIoT(object):
         self.timer.timeout.connect(self.videoStreaming)
         
         # Register Button
-        self.pushButton = QtWidgets.QPushButton(self.SmartAIoT_3)
-        self.pushButton.setGeometry(QtCore.QRect(20, 600, 621, 71))
+        # self.pushButton = QtWidgets.QPushButton(self.SmartAIoT_3)
+        # self.pushButton.setGeometry(QtCore.QRect(20, 600, 621, 71))
         font = QtGui.QFont()
         font.setFamily("Courier New")
         font.setPointSize(14)
-        self.pushButton.setFont(font)
-        self.pushButton.setAutoFillBackground(False)
-        self.pushButton.setStyleSheet("background-color:rgb(255, 255, 255)")
-        self.pushButton.setObjectName("pushButton")
+        # self.pushButton.setFont(font)
+        # self.pushButton.setAutoFillBackground(False)
+        # self.pushButton.setStyleSheet("background-color:rgb(255, 255, 255)")
+        # self.pushButton.setObjectName("pushButton")
         SmartAIoT.setCentralWidget(self.SmartAIoT_3)
 
-        self.retranslateUi(SmartAIoT)
+        # self.retranslateUi(SmartAIoT)
         QtCore.QMetaObject.connectSlotsByName(SmartAIoT)
 
         # open cv2
@@ -68,8 +68,8 @@ class Ui_SmartAIoT(object):
         _translate = QtCore.QCoreApplication.translate
         SmartAIoT.setWindowTitle(_translate("SmartAIoT", "MainWindow"))
         self.label.setText(_translate("SmartAIoT", "Loading"))
-        self.pushButton.setToolTip(_translate("SmartAIoT", "click to register"))
-        self.pushButton.setText(_translate("SmartAIoT", "Register"))
+        # self.pushButton.setToolTip(_translate("SmartAIoT", "click to register"))
+        # self.pushButton.setText(_translate("SmartAIoT", "Register"))
         
     def videoStreaming(self):
         ret, frame = self.cap.read()
