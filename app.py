@@ -37,7 +37,7 @@ class Ui_SmartAIoT(object):
         # self.pushButton.setGeometry(QtCore.QRect(20, 600, 621, 71))
         font = QtGui.QFont()
         font.setFamily("Courier New")
-        font.setPointSize(14)
+        font.setPointSize(14) #
         # self.pushButton.setFont(font)
         # self.pushButton.setAutoFillBackground(False)
         # self.pushButton.setStyleSheet("background-color:rgb(255, 255, 255)")
