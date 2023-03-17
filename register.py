@@ -9,15 +9,18 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from Face_Recognition.JoloRecognition import JoloRecognition as JL
 
 import os
 import cv2
+import time
 
 class Ui_SmartAIoT(object):
     def setupUi(self, SmartAIoT):
         
         # camera
         self.camera = False
+        self.capture = 1
         
         # open camera
         self.cap = cv2.VideoCapture(1) if cv2.VideoCapture(1).isOpened() else cv2.VideoCapture(0)
@@ -66,6 +69,7 @@ class Ui_SmartAIoT(object):
         # Timer
         self.timer = QtCore.QTimer(self.SmartAIoT_3)
         self.timer.timeout.connect(self.videoStreaming)
+        self.last_recognition_time = time.time()
         
         # Textbox
         self.plainTextEdit = QtWidgets.QPlainTextEdit(self.SmartAIoT_3)
@@ -103,7 +107,7 @@ class Ui_SmartAIoT(object):
         _translate = QtCore.QCoreApplication.translate
         
         # window name
-        SmartAIoT.setWindowTitle(_translate("SmartAIoT", "MainWindow"))
+        SmartAIoT.setWindowTitle(_translate("SmartAIoT", "Facial Registration"))
         
         # video
         self.label.setText(_translate("SmartAIoT", "camera disbale"))
@@ -134,7 +138,7 @@ class Ui_SmartAIoT(object):
         
         retval = self.MessageBox.exec_()
         
-     # create  folder
+    # create  folder
     def button_Create(self):
               
         path = f"Known_Faces/{self.plainTextEdit.toPlainText()}"
@@ -168,7 +172,8 @@ class Ui_SmartAIoT(object):
         
         self.pushButton.setEnabled(pushButton)
         self.plainTextEdit.setReadOnly(plainTextEdit)
-        
+    
+    # videio streaming with facial detection
     def videoStreaming(self):
         ret, frame = self.cap.read()
         
@@ -180,6 +185,9 @@ class Ui_SmartAIoT(object):
             gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
             faces = self.face_detector.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=20, minSize=(100, 100), flags=cv2.CASCADE_SCALE_IMAGE)
             
+            current_time = time.time()
+            
+            
             # Check if at least one face is detected
             if len(faces) > 0:
                 
@@ -188,12 +196,39 @@ class Ui_SmartAIoT(object):
                 
                 # If only one face is detected
                 if len(faces) == 1:
-                    
+                     
                     # Update the label text to indicate a face is detected
-                    self.label_2.setText("Face detected")
+                    self.label_2.setText("Face capture left " + str(21-self.capture))
                     
                     # Draw a green rectangle around the detected face
                     cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
+                    
+                    # ervery 30 seconds save the camera
+                    if current_time - self.last_recognition_time >= 0.5:
+                        
+                        self.last_recognition_time = current_time
+
+                        # save the capture camera if less than 20
+                        if self.capture <= 20:
+                            path = f"Known_Faces/{self.plainTextEdit.toPlainText()}/{self.capture}.png"
+                            cv2.imwrite(path, frame)
+                            self.capture +=1
+                        else:
+                            
+                            self.label_2.setText("Trained data")
+                            
+                            # train the facial registration
+                            message = JL().Face_Train()
+                            
+                            # show the result
+                            self.messageBoxShow(Title="Facial Registration",
+                                                Text="Facial training complete" if message == "Successfully trained" else message,
+                                                Buttons=self.MessageBox.Ok,
+                                                Icon=self.MessageBox.Information if message == "Successfully trained" else self.MessageBox.Warning)
+                            # exit the system
+                            QtCore.QCoreApplication.quit()
+
+                        
                 else:
                     
                     # If multiple faces are detected, update the label text to indicate the issue
@@ -205,6 +240,8 @@ class Ui_SmartAIoT(object):
                 
                 # If no faces are detected, update the label text to indicate the issue
                 self.label_2.setText("No face detected. Please align your face properly.")
+                
+
 
             img = QtGui.QImage(frame, frame.shape[1], frame.shape[0], QtGui.QImage.Format_RGB888)  # Convert the frame to a QImage
             self.label.setPixmap(QtGui.QPixmap.fromImage(img))  # Set the label pixmap to the QImage

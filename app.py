@@ -63,10 +63,12 @@ class Ui_SmartAIoT(object):
         self.R=255
         self.G=255
         self.B=0
-        
+    
+    
+    # main function
     def retranslateUi(self, SmartAIoT):
         _translate = QtCore.QCoreApplication.translate
-        SmartAIoT.setWindowTitle(_translate("SmartAIoT", "MainWindow"))
+        SmartAIoT.setWindowTitle(_translate("SmartAIoT", "Facial Recognition"))
         self.label.setText(_translate("SmartAIoT", "Loading"))
         # self.pushButton.setToolTip(_translate("SmartAIoT", "click to register"))
         # self.pushButton.setText(_translate("SmartAIoT", "Register"))
@@ -86,13 +88,13 @@ class Ui_SmartAIoT(object):
                 cv2.rectangle(frame, (x, y), (x+w, y+h), (self.R,self.G , self.B), 2)
                 cv2.putText(frame,str(self.matchs),(x,y+h+30),cv2.FONT_HERSHEY_COMPLEX,1,(self.R,self.G,self.B),1)
                 
-                if current_time - self.last_recognition_time >= 1:
+                if current_time - self.last_recognition_time >= 2:
                     self.last_recognition_time = current_time
                 # get the result of Face_Compare script
                     result = Jolo().Face_Compare(frame)
                 
                     if result is not None and result[0] == 'No match detected':
-                        # do something
+                    # do something
                         self.matchs = str(result[0])
                         self.R=255
                         self.G=0
@@ -120,7 +122,7 @@ if __name__ == "__main__":
 
     app = QtWidgets.QApplication(sys.argv)
     SmartAIoT = QtWidgets.QMainWindow()
-    ui = Ui_SmartAIoT()
+    ui = Ui_SmartAIoT()                          
     ui.setupUi(SmartAIoT)
     print("Done loading.")
     SmartAIoT.show()

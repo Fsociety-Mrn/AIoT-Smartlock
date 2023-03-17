@@ -78,7 +78,7 @@ class JoloRecognition:
                 ('No match detected', None)
     
     # training from dataset
-    def Face_Train(self, Dataset_Folder, location):
+    def Face_Train(self, Dataset_Folder="Known_Faces", location="Model"):
         try:
         # define a function to collate data
             def collate_fn(x):
@@ -123,6 +123,3 @@ class JoloRecognition:
             print(f"Error occurred while training the model: {str(e)}")
             return "Error occurred while training the model"
 
-
-
-#print(JoloRecognition().Face_Train("FaceDetection/Known_Faces","FaceDetection/Model"))
