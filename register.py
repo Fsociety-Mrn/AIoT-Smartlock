@@ -11,26 +11,50 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 import os
+import cv2
 
 class Ui_SmartAIoT(object):
     def setupUi(self, SmartAIoT):
         
+        # camera
+        self.camera = False
+        
+        # open camera
+        self.cap = cv2.VideoCapture(1) if cv2.VideoCapture(1).isOpened() else cv2.VideoCapture(0)
+        self.cap.set(4,1080)
+        
+        # face detector
+        self.face_detector = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+        
         # message box
         self.MessageBox = QtWidgets.QMessageBox()
+        self.MessageBox.setStyleSheet("""
+            QMessageBox { 
+                text-align: center;
+            }
+            QMessageBox::icon {
+                subcontrol-position: center;
+            }
+            QPushButton { 
+                width: 250px; 
+                height: 30px; 
+                font-size: 15px;
+            }
+        """)
         
         # form layout
         SmartAIoT.setObjectName("SmartAIoT")
         SmartAIoT.setWindowModality(QtCore.Qt.ApplicationModal)
-        SmartAIoT.resize(660, 697)
+        SmartAIoT.resize(565, 591)
         SmartAIoT.setStyleSheet("background-color:rgb(0, 0, 127)")
         SmartAIoT.setAnimated(False)
         SmartAIoT.setDocumentMode(True)
         self.SmartAIoT_3 = QtWidgets.QWidget(SmartAIoT)
         self.SmartAIoT_3.setObjectName("SmartAIoT_3")
-        self.label = QtWidgets.QLabel(self.SmartAIoT_3)
-        self.label.setGeometry(QtCore.QRect(10, 210, 641, 471))
         
         # video
+        self.label = QtWidgets.QLabel(self.SmartAIoT_3)
+        self.label.setGeometry(QtCore.QRect(10, 210, 541, 361))
         font = QtGui.QFont()
         font.setFamily("Courier New")
         font.setPointSize(14)
@@ -39,43 +63,72 @@ class Ui_SmartAIoT(object):
         self.label.setAlignment(QtCore.Qt.AlignCenter)
         self.label.setObjectName("label")
         
+        # Timer
+        self.timer = QtCore.QTimer(self.SmartAIoT_3)
+        self.timer.timeout.connect(self.videoStreaming)
         
         # Textbox
         self.plainTextEdit = QtWidgets.QPlainTextEdit(self.SmartAIoT_3)
-        self.plainTextEdit.setGeometry(QtCore.QRect(10, 30, 641, 61))
+        self.plainTextEdit.setGeometry(QtCore.QRect(10, 10, 541, 41))
         self.plainTextEdit.setStyleSheet("background-color:rgb(255, 255, 255)")
         self.plainTextEdit.setObjectName("plainTextEdit")
         
         # Button
         self.pushButton = QtWidgets.QPushButton(self.SmartAIoT_3)
-        self.pushButton.setGeometry(QtCore.QRect(110, 122, 441, 61))
+        self.pushButton.setGeometry(QtCore.QRect(100, 70, 371, 41))
         self.pushButton.setStyleSheet("background-color:rgb(255, 255, 255)")
         self.pushButton.setObjectName("pushButton")
         self.pushButton.clicked.connect(self.button_Create)
+        
+        # label
+        self.label_2 = QtWidgets.QLabel(self.SmartAIoT_3)
+        self.label_2.setGeometry(QtCore.QRect(10, 140, 541, 41))
+        font = QtGui.QFont()
+        font.setFamily("Courier New")
+        font.setPointSize(14)
+        self.label_2.setFont(font)
+        self.label_2.setStyleSheet("background-color:rgb(255, 255, 255)")
+        self.label_2.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_2.setObjectName("label_2")
+        
         
         SmartAIoT.setCentralWidget(self.SmartAIoT_3)
 
         self.retranslateUi(SmartAIoT)
         QtCore.QMetaObject.connectSlotsByName(SmartAIoT)
+        
+        self.timer.start(30)
 
     def retranslateUi(self, SmartAIoT):
         _translate = QtCore.QCoreApplication.translate
+        
+        # window name
         SmartAIoT.setWindowTitle(_translate("SmartAIoT", "MainWindow"))
-        self.label.setText(_translate("SmartAIoT", "Create folder name first"))
+        
+        # video
+        self.label.setText(_translate("SmartAIoT", "camera disbale"))
+        
+        # textfield
         self.pushButton.setText(_translate("SmartAIoT", "Create folder"))
+        
+        # label
+        self.label_2.setText(_translate("SmartAIoT", "Create folder name first"))
 
     # Message Box 
-    def messageBox(self, Icon = None, Title = None , Text= None,Buttons=None):
+    def messageBoxShow(self, Icon=None, Title= None , Text= None,Buttons=None):
         
         # set windows icon
         self.MessageBox.setIcon(Icon)
             
         # set windows title
         self.MessageBox.setWindowTitle(Title)
-            
+        
         # set windows text
         self.MessageBox.setText(Text)
-            
+        
+        # self.MessageBox.setFixedHeight(400) # height
+        self.MessageBox.setFixedWidth(400)  # width
+        
         # set buttonms
         self.MessageBox.setStandardButtons(Buttons)
         
@@ -83,18 +136,79 @@ class Ui_SmartAIoT(object):
         
      # create  folder
     def button_Create(self):
-        
+              
         path = f"Known_Faces/{self.plainTextEdit.toPlainText()}"
+        
         # Check if the folder already exists
-        if not os.path.exists(path):
-            os.makedirs(path)
+        if os.path.exists(path):
+            pushButton = True
+            plainTextEdit = False
+            message = "Folder already exists"
+            icon = self.MessageBox.Warning
             
-            self.button_Create(
-                Icon=self.MessageBox.Information,
-                Title="Facial Registration",
-                Text = "Folder already created"
-            )
+            self.camera = False
+        else:
             
+            self.camera = True
+            pushButton = False
+            plainTextEdit = True            
+            message = "Folder Created"
+            icon = self.MessageBox.Information
+            
+            
+        os.makedirs(path, exist_ok=True)
+
+        self.messageBoxShow(
+            Icon=icon,
+            Title="Facial Recognition",
+            Text=message,
+            Buttons=self.MessageBox.Ok
+        )
+        
+        
+        self.pushButton.setEnabled(pushButton)
+        self.plainTextEdit.setReadOnly(plainTextEdit)
+        
+    def videoStreaming(self):
+        ret, frame = self.cap.read()
+        
+        if ret and self.camera:
+            
+            frame = cv2.flip(frame,1)
+            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                        
+            gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+            faces = self.face_detector.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=20, minSize=(100, 100), flags=cv2.CASCADE_SCALE_IMAGE)
+            
+            # Check if at least one face is detected
+            if len(faces) > 0:
+                
+                # Extract coordinates of the first detected face
+                x, y, w, h = faces[0]
+                
+                # If only one face is detected
+                if len(faces) == 1:
+                    
+                    # Update the label text to indicate a face is detected
+                    self.label_2.setText("Face detected")
+                    
+                    # Draw a green rectangle around the detected face
+                    cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
+                else:
+                    
+                    # If multiple faces are detected, update the label text to indicate the issue
+                    self.label_2.setText("Multiple faces detected. Please align only one face.")
+        
+                    # Draw a red rectangle around the first detected face
+                    cv2.rectangle(frame, (x, y), (x+w, y+h), (255, 0, 0), 2)
+            else:
+                
+                # If no faces are detected, update the label text to indicate the issue
+                self.label_2.setText("No face detected. Please align your face properly.")
+
+            img = QtGui.QImage(frame, frame.shape[1], frame.shape[0], QtGui.QImage.Format_RGB888)  # Convert the frame to a QImage
+            self.label.setPixmap(QtGui.QPixmap.fromImage(img))  # Set the label pixmap to the QImage
+    
     
         
 
