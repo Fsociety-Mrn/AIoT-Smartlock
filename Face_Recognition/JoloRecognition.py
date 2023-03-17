@@ -122,4 +122,3 @@ class JoloRecognition:
         except Exception as e:
             print(f"Error occurred while training the model: {str(e)}")
             return "Error occurred while training the model"
-
