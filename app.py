@@ -19,7 +19,7 @@ class Ui_SmartAIoT(object):
         
         # label
         self.label = QtWidgets.QLabel(self.SmartAIoT_3)
-        self.label.setGeometry(QtCore.QRect(10, 10, 641, 561))
+        self.label.setGeometry(QtCore.QRect(10, 10, 641, 460))
         font = QtGui.QFont()
         font.setFamily("Courier New")
         font.setPointSize(14)
@@ -33,15 +33,15 @@ class Ui_SmartAIoT(object):
         self.timer.timeout.connect(self.videoStreaming)
         
         # Register Button
-        # self.pushButton = QtWidgets.QPushButton(self.SmartAIoT_3)
-        # self.pushButton.setGeometry(QtCore.QRect(20, 600, 621, 71))
+        self.pushButton = QtWidgets.QPushButton(self.SmartAIoT_3)
+        self.pushButton.setGeometry(QtCore.QRect(20, 600, 621, 71))
         font = QtGui.QFont()
         font.setFamily("Courier New")
         font.setPointSize(14) #
-        # self.pushButton.setFont(font)
-        # self.pushButton.setAutoFillBackground(False)
-        # self.pushButton.setStyleSheet("background-color:rgb(255, 255, 255)")
-        # self.pushButton.setObjectName("pushButton")
+        self.pushButton.setFont(font)
+        self.pushButton.setAutoFillBackground(False)
+        self.pushButton.setStyleSheet("background-color:rgb(255, 255, 255)")
+        self.pushButton.setObjectName("pushButton")
         SmartAIoT.setCentralWidget(self.SmartAIoT_3)
 
         # self.retranslateUi(SmartAIoT)
@@ -70,8 +70,8 @@ class Ui_SmartAIoT(object):
         _translate = QtCore.QCoreApplication.translate
         SmartAIoT.setWindowTitle(_translate("SmartAIoT", "Facial Recognition"))
         self.label.setText(_translate("SmartAIoT", "Loading"))
-        # self.pushButton.setToolTip(_translate("SmartAIoT", "click to register"))
-        # self.pushButton.setText(_translate("SmartAIoT", "Register"))
+        self.pushButton.setToolTip(_translate("SmartAIoT", "click to register"))
+        self.pushButton.setText(_translate("SmartAIoT", "Register"))
         
     def videoStreaming(self):
         ret, frame = self.cap.read()
