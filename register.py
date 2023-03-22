@@ -135,8 +135,11 @@ class Ui_SmartAIoT(object):
         
         # set buttonms
         self.MessageBox.setStandardButtons(Buttons)
+    
         
-        retval = self.MessageBox.exec_()
+        return self.MessageBox.exec_()
+        
+        
         
     # create  folder
     def button_Create(self):
@@ -163,7 +166,7 @@ class Ui_SmartAIoT(object):
             self.messageBoxShow(
                 Icon=self.MessageBox.Information,
                 Title="Facial Recognition",
-                Text="Folder Created",
+                Text="Folder Created please align your face to camera properly",
                 Buttons=self.MessageBox.Ok
             )
             
@@ -198,9 +201,7 @@ class Ui_SmartAIoT(object):
                 # If only one face is detected
                 if len(faces) == 1:
                      
-                    # Update the label text to indicate a face is detected
-                    self.label_2.setText("Face capture left " + str(21-self.capture))
-                    
+
                     # Draw a green rectangle around the detected face
                     cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
                     
@@ -214,33 +215,66 @@ class Ui_SmartAIoT(object):
                             path = f"Known_Faces/{self.plainTextEdit.toPlainText()}/{self.capture}.png"
                             cv2.imwrite(path, frame)
                             self.capture +=1
-                        else:
                             
-                            self.label_2.setText("Trained data")
+                            
+                        else:
+                            result =self.messageBoxShow(Title="Facial Registration",
+                                                Text="Done capturing facial do you want to add people faces again ?",
+                                                Buttons=self.MessageBox.Yes | self.MessageBox.No,
+                                                Icon=self.MessageBox.Information)
+                            # show the result
+                            if result == self.MessageBox.No:
+                                
+                            
+                                self.label_2.setText("Done Training")
+                            
                             
                             # train the facial registration
-                            message = JL().Face_Train()
+                                message = JL().Face_Train()
                             
                             # show the result
-                            self.messageBoxShow(Title="Facial Registration",
+                                self.messageBoxShow(Title="Facial Registration",
                                                 Text="Facial training complete" if message == "Successfully trained" else message,
                                                 Buttons=self.MessageBox.Ok,
                                                 Icon=self.MessageBox.Information if message == "Successfully trained" else self.MessageBox.Warning)
                             # exit the system
-                            QtCore.QCoreApplication.quit()
-
-                        
+                                QtCore.QCoreApplication.quit()
+                                
+                            elif result == self.MessageBox.Yes    :
+                                
+                                # video
+                                self.label.setText("camera disable")
+        
+                                 # create Button
+                                self.pushButton.setText("Create folder")
+        
+                                # label
+                                self.label_2.setText("Create folder name first")
+                                
+                                self.pushButton.setEnabled(True)
+                                self.plainTextEdit.setReadOnly(False)
+            
+                                self.camera = False
+                                self.capture = 1
+                                
+                            
+                                
+                        if self.camera == True:
+                            # Update the label text to indicate a face is detected
+                            self.label_2.setText("Training facial" if self.capture == 21 else "Face capture left " + str(21-self.capture))
+                            
+                    
                 else:
                     
                     # If multiple faces are detected, update the label text to indicate the issue
-                    self.label_2.setText("Multiple faces detected. Please align only one face.")
+                    self.label_2.setText("Training facial" if self.capture == 21 else "Multiple faces detected. Please align only one face.")
         
                     # Draw a red rectangle around the first detected face
                     cv2.rectangle(frame, (x, y), (x+w, y+h), (255, 0, 0), 2)
             else:
                 
                 # If no faces are detected, update the label text to indicate the issue
-                self.label_2.setText("No face detected. Please align your face properly.")
+                self.label_2.setText("Training facial" if self.capture == 21 else "No face detected. Please align your face properly.")
                 
 
 

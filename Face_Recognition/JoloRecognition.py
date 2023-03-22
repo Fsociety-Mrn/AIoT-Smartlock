@@ -66,7 +66,7 @@ class JoloRecognition:
                         
                         idx_min = match_list.index(min_dist)
                         
-                        print(min_dist)
+                        # print(min_dist)
                         return (self.Name_List[idx_min], min_dist)
                     else:
                         return ('No match detected', None)
@@ -122,3 +122,5 @@ class JoloRecognition:
         except Exception as e:
             print(f"Error occurred while training the model: {str(e)}")
             return "Error occurred while training the model"
+
+# JoloRecognition().Face_Train()

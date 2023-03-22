@@ -32,16 +32,6 @@ class Ui_SmartAIoT(object):
         self.timer = QtCore.QTimer(self.SmartAIoT_3)
         self.timer.timeout.connect(self.videoStreaming)
         
-        # Register Button
-        self.pushButton = QtWidgets.QPushButton(self.SmartAIoT_3)
-        self.pushButton.setGeometry(QtCore.QRect(20, 600, 621, 71))
-        font = QtGui.QFont()
-        font.setFamily("Courier New")
-        font.setPointSize(14) #
-        self.pushButton.setFont(font)
-        self.pushButton.setAutoFillBackground(False)
-        self.pushButton.setStyleSheet("background-color:rgb(255, 255, 255)")
-        self.pushButton.setObjectName("pushButton")
         SmartAIoT.setCentralWidget(self.SmartAIoT_3)
 
         # self.retranslateUi(SmartAIoT)
@@ -70,8 +60,7 @@ class Ui_SmartAIoT(object):
         _translate = QtCore.QCoreApplication.translate
         SmartAIoT.setWindowTitle(_translate("SmartAIoT", "Facial Recognition"))
         self.label.setText(_translate("SmartAIoT", "Loading"))
-        self.pushButton.setToolTip(_translate("SmartAIoT", "click to register"))
-        self.pushButton.setText(_translate("SmartAIoT", "Register"))
+  
         
     def videoStreaming(self):
         ret, frame = self.cap.read()
@@ -84,7 +73,8 @@ class Ui_SmartAIoT(object):
             
             current_time = time.time()
             
-            for (x, y, w, h) in faces:
+            if len(faces) == 1:
+                x,y,w,h = faces[0]
                 cv2.rectangle(frame, (x, y), (x+w, y+h), (self.R,self.G , self.B), 2)
                 cv2.putText(frame,str(self.matchs),(x,y+h+30),cv2.FONT_HERSHEY_COMPLEX,1,(self.R,self.G,self.B),1)
                 
@@ -104,7 +94,11 @@ class Ui_SmartAIoT(object):
                         self.R=0
                         self.G=255
                         self.B=0
-         
+                        
+            elif len(faces) > 1:
+                print("more than 1 faces is detected")
+            else:
+                print("No face is detected")
 
             
             
@@ -118,6 +112,7 @@ class Ui_SmartAIoT(object):
 
 
 if __name__ == "__main__":
+    
     print("Loading.........")
 
     app = QtWidgets.QApplication(sys.argv)
