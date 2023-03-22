@@ -50,20 +50,20 @@ def track_eye(frame):
             cv2.rectangle(roi_color,(ex,ey),(ex+ew,ey+eh),(0,255,0),2)
 
             # Extract the region of interest (ROI) containing the eye
-            eye_roi = roi_color[ey:ey+eh, ex:ex+ew]
-            rows, cols, _ = eye_roi.shape
+            # eye_roi = roi_color[ey:ey+eh, ex:ex+ew]
+            # rows, cols, _ = eye_roi.shape
             
-            # Convert the eye ROI to grayscale
-            eye_gray = cv2.cvtColor(eye_roi, cv2.COLOR_BGR2GRAY)
-            eye_gray = cv2.GaussianBlur(eye_roi, (3,3),0)
-            _, threshold = cv2.threshold(src=eye_gray, 
-                                         thresh=3, 
-                                         maxval=255, 
-                                         type=cv2.THRESH_BINARY)
+            # # Convert the eye ROI to grayscale
+            # eye_gray = cv2.cvtColor(eye_roi, cv2.COLOR_BGR2GRAY)
+            # eye_gray = cv2.GaussianBlur(eye_roi, (3,3),0)
+            # _, threshold = cv2.threshold(src=eye_gray, 
+            #                              thresh=3, 
+            #                              maxval=255, 
+            #                              type=cv2.THRESH_BINARY)
             
-            _, contours, _ = cv2.findContours(threshold,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
-            for cnt in contours:
-                cv2.drawContours(eye_roi,[cnt],-1,(0,0,255),3)           
+            # _, contours, _ = cv2.findContours(threshold,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
+            # for cnt in contours:
+            #     cv2.drawContours(eye_roi,[cnt],-1,(0,0,255),3)           
 
 
     # Return the processed frame
