@@ -145,30 +145,31 @@ class Ui_SmartAIoT(object):
         
         # Check if the folder already exists
         if os.path.exists(path):
+            
+            self.messageBoxShow(
+                Icon=self.MessageBox.Warning,
+                Title="Facial Recognition",
+                Text="Folder already exists",
+                Buttons=self.MessageBox.Ok
+            )
+            
             pushButton = True
             plainTextEdit = False
-            message = "Folder already exists"
-            icon = self.MessageBox.Warning
             
             self.camera = False
         else:
             
+            os.makedirs(path, exist_ok=True)
+            self.messageBoxShow(
+                Icon=self.MessageBox.Information,
+                Title="Facial Recognition",
+                Text="Folder Created",
+                Buttons=self.MessageBox.Ok
+            )
+            
             self.camera = True
             pushButton = False
-            plainTextEdit = True            
-            message = "Folder Created"
-            icon = self.MessageBox.Information
-            
-            
-        os.makedirs(path, exist_ok=True)
-
-        self.messageBoxShow(
-            Icon=icon,
-            Title="Facial Recognition",
-            Text=message,
-            Buttons=self.MessageBox.Ok
-        )
-        
+            plainTextEdit = True              
         
         self.pushButton.setEnabled(pushButton)
         self.plainTextEdit.setReadOnly(plainTextEdit)
