@@ -6,15 +6,10 @@ cap = cv2.VideoCapture(0)
 face_cascade=cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 eye_cascade=cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_eye.xml')
 
-prev_frame = None
-prev_points = None
-
-# Define the parameters for Lucas-Kanade optical flow
-lk_params = dict(winSize=(15,15), maxLevel=4, criteria=(cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 0.03))
 
 # Create a function to track eye motion
 def track_eye(frame):
-    global prev_frame,prev_points
+
     # Convert the frame to grayscale
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
@@ -26,7 +21,10 @@ def track_eye(frame):
                                           flags=cv2.CASCADE_SCALE_IMAGE)
 
     # Loop through all the detected faces
-    for (x,y,w,h) in faces:
+    if len(faces) == 1:
+
+        x, y, w, h = faces[0]
+        
         # Draw a rectangle around the face
         cv2.rectangle(frame,(x,y),(x+w,y+h),(255,0,0),2)
 
@@ -41,30 +39,22 @@ def track_eye(frame):
             minNeighbors=20,
             flags=cv2.CASCADE_SCALE_IMAGE
         )
-
-        # Loop through all the detected eyes
-        for (ex,ey,ew,eh) in eyes:
-            
-
-            # Draw a rectangle around the eye
-            cv2.rectangle(roi_color,(ex,ey),(ex+ew,ey+eh),(0,255,0),2)
-
-            # Extract the region of interest (ROI) containing the eye
-            # eye_roi = roi_color[ey:ey+eh, ex:ex+ew]
-            # rows, cols, _ = eye_roi.shape
-            
-            # # Convert the eye ROI to grayscale
-            # eye_gray = cv2.cvtColor(eye_roi, cv2.COLOR_BGR2GRAY)
-            # eye_gray = cv2.GaussianBlur(eye_roi, (3,3),0)
-            # _, threshold = cv2.threshold(src=eye_gray, 
-            #                              thresh=3, 
-            #                              maxval=255, 
-            #                              type=cv2.THRESH_BINARY)
-            
-            # _, contours, _ = cv2.findContours(threshold,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
-            # for cnt in contours:
-            #     cv2.drawContours(eye_roi,[cnt],-1,(0,0,255),3)           
-
+        
+        # eyes should detected 2
+        if len(eyes) == 2:
+    
+            # Loop through all the detected eyes
+            for (ex,ey,ew,eh) in eyes:
+                
+                # Draw a rectangle around the eye
+                cv2.rectangle(roi_color,(ex,ey),(ex+ew,ey+eh),(0,255,0),2)
+                
+                # B G R
+                cv2.putText(frame,"Eyes are open.",(x,y+h+30),cv2.FONT_HERSHEY_COMPLEX,1,(0,255,0),1)
+                
+        else:
+            # B G R
+            cv2.putText(frame,"Eyes are closed!",(x,y+h+30),cv2.FONT_HERSHEY_COMPLEX,1,(0,0,255),1)
 
     # Return the processed frame
     return frame
