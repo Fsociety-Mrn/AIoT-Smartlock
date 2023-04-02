@@ -80,6 +80,8 @@ class JoloRecognition:
     # training from dataset
     def Face_Train(self, Dataset_Folder="Known_Faces", location="Model"):
         try:
+
+            cplusplus = 1
         # define a function to collate data
             def collate_fn(x):
                 return x[0]
@@ -98,7 +100,7 @@ class JoloRecognition:
             embedding_list = []
 
             for images, label in loader:
-                print("Training...")
+                print(str(cplusplus) + " Training...")
                 with torch.no_grad():
 
                 # for facial detection level 2 --- Using MTCNN model
@@ -111,6 +113,8 @@ class JoloRecognition:
 
                         embedding_list.append(emb.detach())
                         name_list.append(label_names[label])
+
+                        cplusplus +=1
 
             data = [embedding_list, name_list]
 

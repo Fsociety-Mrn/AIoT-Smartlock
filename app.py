@@ -11,7 +11,7 @@ class Ui_SmartAIoT(object):
         SmartAIoT.setObjectName("SmartAIoT")
         SmartAIoT.setWindowModality(QtCore.Qt.ApplicationModal)
         SmartAIoT.resize(660, 600)
-        SmartAIoT.setStyleSheet("background-color:rgb(0, 0, 127)")
+        SmartAIoT.setStyleSheet("background-color:rgb(255, 255, 255)")
         SmartAIoT.setAnimated(False)
         SmartAIoT.setDocumentMode(True)
         self.SmartAIoT_3 = QtWidgets.QWidget(SmartAIoT)
