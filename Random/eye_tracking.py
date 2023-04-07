@@ -33,11 +33,6 @@ RIGHT_EYE_LANDMARKS = (
 # Define function to calculate eye aspect ratio (EAR)
 def eye_aspect_ratio(eye):
     
-    # if not len(eye):
-    #     return "N/A"
-    
-    # print(len(eye))
-    
     # Compute the euclidean distances between the two sets of
     # vertical eye landmarks (x, y)-coordinates
     A = np.linalg.norm(eye[1] - eye[5]) # 0 4
