@@ -33,6 +33,11 @@ RIGHT_EYE_LANDMARKS = (
 # Define function to calculate eye aspect ratio (EAR)
 def eye_aspect_ratio(eye):
     
+    # if not len(eye):
+    #     return "N/A"
+    
+    # print(len(eye))
+    
     # Compute the euclidean distances between the two sets of
     # vertical eye landmarks (x, y)-coordinates
     A = np.linalg.norm(eye[1] - eye[5]) # 0 4
@@ -87,31 +92,36 @@ def track_eye(frame):
             
         # eyes should detected 2
         if len(eyes) == 2:
-                
+              
             for (ex,ey,ew,eh) in eyes:
                 
-                eye_roi_gray = roi_gray[ey:ey+eh, ex:ex+ew]
-                eye_roi_color = roi_color[ey:ey+eh, ex:ex+ew]
+                # draw rectangle in eyes
+                cv2.rectangle(roi_color,(ex,ey),(ex+ew,ey+eh),(255,0,255),2)
                 
-                LEFT_landmarks = np.array([(ex + x, ey + y) for (ex, ey) in LEFT_EYE_LANDMARKS])
- 
-                ear = eye_aspect_ratio(LEFT_landmarks)
- 
+            
+            # detect left eyes
+            exx,eyy,eww,ehh = eyes[0] 
                 
-                cv2.drawContours(roi_color, [LEFT_landmarks], -1, (255, 0, 0), 1)
-
-                cv2.putText(roi_color, "EAR: {:.2f}".format(ear), (10, 30),
-                         cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
-     
-                cv2.rectangle(roi_color,(ex,ey),(ex+ew,ey+eh),(255,0,0),2)
+            eye_region = gray[eyy:eyy + ehh, exx:exx + eww]
                 
-                if ear < 0.5:
-                    blink = False
-                    blink_counter += 1
+            canny = cv2.Canny(eye_region, 30, 100)
+            # # Find the eye landmarks using the Hough transform
+            # circles = cv2.HoughCircles(canny, cv2.HOUGH_GRADIENT, 1, 20, param1=50, param2=30, minRadius=0, maxRadius=0)
+            # # eye_landmarks = np.uint16(np.around(circles))
+            # print(circles)
+                
+            ear = eye_aspect_ratio(canny)
+            
+                            # get ear value
+            cv2.putText(roi_color, f"EAR: {ear}", (10, 30),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)  
+            if ear < 0.4:
+                blink = False
+                blink_counter += 1
                 # Eye is closed
                 # Do something
-                else:
-                    blink = True
+            else:
+                blink = True
                 # Eye is open
                 # Do something else
                 
