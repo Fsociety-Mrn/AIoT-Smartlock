@@ -1,4 +1,4 @@
-
+import torch
 import cv2
 import dlib
 import numpy as np
@@ -7,16 +7,28 @@ from scipy.spatial import distance as dist
 
 # Calculate eye aspect ratio
 def eye_aspect_ratio(eye):
-    A = dist.euclidean(eye[1], eye[5])
-    B = dist.euclidean(eye[2], eye[4])
-    C = dist.euclidean(eye[0], eye[3])
-    ear = (A + B) / (2.0 * C)
+    
+    eye = torch.from_numpy(eye)
+    # ------- verticle ------- #
+    v1 = torch.dist(eye[1],eye[5])
+    v2 = torch.dist(eye[2],eye[4])
+
+    # ------- horizontal ------- #
+    h1 = torch.dist(eye[0],eye[3])
+
+    ear = (v1+v2)/h1
     return ear
+    
+    # A = dist.euclidean(eye[1], eye[5])
+    # B = dist.euclidean(eye[2], eye[4])
+    # C = dist.euclidean(eye[0], eye[3])
+    # ear = (A + B) / (2.0 * C)
+    # return ear
 
 
 # Load the face and landmark detector models
 face_detector = dlib.get_frontal_face_detector()
-landmark_detector = dlib.shape_predictor("shape_predictor_68_face_landmarks.dat")
+landmark_detector = dlib.shape_predictor('Model/shape_predictor_68_face_landmarks.dat')
 
 # Define the video stream
 video_stream = cv2.VideoCapture(0)
@@ -30,6 +42,8 @@ while True:
     # Read the current frame
     ret, frame = video_stream.read()
 
+    frame = cv2.flip(frame,1)
+
     # Convert the frame to grayscale
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
@@ -38,6 +52,13 @@ while True:
 
     # Loop over the detected faces
     for face in faces:
+        
+        x1 = face.left()
+        y1 = face.top()
+        x2 = face.right()
+        y2= face.bottom()
+        cv2.rectangle(frame,(x1,y1),(x2,y2),(200),2)
+        
         # Detect the facial landmarks
         landmarks = landmark_detector(gray, face)
 

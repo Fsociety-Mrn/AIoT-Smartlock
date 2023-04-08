@@ -32,6 +32,7 @@ ptime = 0
 def EAR_cal(eye):
     
     eye = torch.from_numpy(eye).float()
+    
     #----verticle-#
     v1 = torch.dist(eye[1],eye[5])
     v2 = torch.dist(eye[2],eye[4])
@@ -69,7 +70,7 @@ while True:
     faces = face_cascade.detectMultiScale(img_gray,
                                           scaleFactor=1.1, 
                                           minNeighbors=20, 
-                                          minSize=(230, 230), 
+                                          minSize=(100, 100), 
                                           flags=cv2.CASCADE_SCALE_IMAGE)
     
     if len(faces) == 1:
