@@ -94,9 +94,7 @@ class Ui_SmartAIoT(object):
     
     # eye blink
     def Eye_Blink(self,frame = None,gray = None):
-        
-        
-
+    
         # face detector using dlib
         faceDlib = self.dlib_faceDetcetoor(gray,0)
             
