@@ -20,12 +20,6 @@ class MainWindow(object):
         Frame.setObjectName("Frame")
         Frame.resize(400, 300)
         
-        
-        self.status = QtWidgets.QLabel(Frame)
-        self.status.setGeometry(QtCore.QRect(90, 200, 201, 51))
-        self.status.setAlignment(QtCore.Qt.AlignCenter)
-        self.status.setObjectName("label")
-        
         # Face Login Button
         self.FaceLoginButton = QtWidgets.QPushButton(Frame)
         self.FaceLoginButton.setGeometry(QtCore.QRect(90, 70, 201, 51))
@@ -56,10 +50,7 @@ class MainWindow(object):
         self.FacialRegisterButton.clicked.connect(self.openFacialRegister)
         
         
-        # frame status
-        self.status.setText(_translate("Frame", "Status"))
-        
-    # open facial Login
+    # ===================== open facial Login ===================== #
     def openFacialLogin(self):
         
         self.FaceLoginButton.setText("Loading.............")
@@ -70,7 +61,6 @@ class MainWindow(object):
         QtCore.QTimer.singleShot(100, self.clickFacialLogin)
         
     def clickFacialLogin(self):
-        
         print("start loading")
         self.facial_login = QtWidgets.QFrame()
         self.ui = FacialLogin()
@@ -78,15 +68,23 @@ class MainWindow(object):
         self.facial_login.show()
         Frame.hide()
         
-    # open facial resgister
+    # ===================== open Facial Register ===================== #
     def openFacialRegister(self):
 
-        Frame.hide()
+        self.FacialRegisterButton.setText("Loading.............")
+        self.FaceLoginButton.isEnabled = False
+        self.FacialRegisterButton.isEnabled = False
+
+        # Delay the creation of the FacialLogin object by 100 milliseconds
+        QtCore.QTimer.singleShot(100, self.clickFacialRegister)      
         
+    def clickFacialRegister(self):
+        print("start loading")
         self.facial_register = QtWidgets.QFrame()
         self.ui = facialRegister()
         self.ui.setupUi(self.facial_register)
         self.facial_register.show()
+        Frame.hide()
         
     # when close the frame
     def closeEvent(self, event):
