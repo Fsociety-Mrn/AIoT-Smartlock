@@ -156,7 +156,7 @@ class Ui_SmartAIoT(object):
                 Buttons=self.MessageBox.Ok
             )
             
-            pushButton = True
+            pushButton = False
             plainTextEdit = False
             
             self.camera = True
@@ -170,7 +170,7 @@ class Ui_SmartAIoT(object):
                 Buttons=self.MessageBox.Ok
             )
             
-            self.camera =False
+            self.camera =True
             pushButton = False
             plainTextEdit = True              
         
