@@ -219,17 +219,17 @@ class FacialLogin(object):
     def backTomain(self):
         print("go back to main menu")
 
-# if __name__ == "__main__":
+if __name__ == "__main__":
     
-#     print("Loading.........")
+    print("Loading.........")
     
-#     import sys
-#     app = QtWidgets.QApplication(sys.argv)
-#     Frame = QtWidgets.QFrame()
-#     ui = FacialLogin()
-#     ui.setupUi(Frame)
-#     Frame.show()
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    Frame = QtWidgets.QFrame()
+    ui = FacialLogin()
+    ui.setupUi(Frame)
+    Frame.show()
     
-#     print("Done Loading")
+    print("Done Loading")
     
-#     sys.exit(app.exec_())
+    sys.exit(app.exec_())

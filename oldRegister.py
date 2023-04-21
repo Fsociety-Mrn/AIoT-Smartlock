@@ -119,25 +119,22 @@ class Ui_SmartAIoT(object):
         self.label_2.setText(_translate("SmartAIoT", "Create folder name first"))
 
     # Message Box 
-    def messageBoxShow(self, Icon=None, Title= None , Text= None,Buttons=None):
+    def messageBoxShow(self, icon=None, title=None, text=None, buttons=None):
         
-        # set windows icon
-        self.MessageBox.setIcon(Icon)
-            
-        # set windows title
-        self.MessageBox.setWindowTitle(Title)
-        
-        # set windows text
-        self.MessageBox.setText(Text)
-        
-        # self.MessageBox.setFixedHeight(400) # height
-        self.MessageBox.setFixedWidth(400)  # width
-        
-        # set buttonms
-        self.MessageBox.setStandardButtons(Buttons)
+        # Set the window icon, title, and text
+        self.MessageBox.setIcon(icon)
+        self.MessageBox.setWindowTitle(title)
+        self.MessageBox.setText(text)
     
-        
+        # Set the window size
+        self.MessageBox.setFixedWidth(400)
+    
+        # Set the standard buttons
+        self.MessageBox.setStandardButtons(buttons)
+    
+        # Show the message box and return the result
         return self.MessageBox.exec_()
+
         
         
         

@@ -9,35 +9,79 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from Face_Recognition.JoloRecognition import JoloRecognition as JL
+
+import os
+import cv2
+import time
 
 
 class facialRegister(object):
     def setupUi(self, Frame):
+        
+        # message box
+        self.MessageBox = QtWidgets.QMessageBox()
+        self.MessageBox.setStyleSheet("""
+            QMessageBox { 
+                text-align: center;
+            }
+            QMessageBox::icon {
+                subcontrol-position: center;
+            }
+            QPushButton { 
+                width: 250px; 
+                height: 30px; 
+                font-size: 15px;
+            }
+        """)
+        
+        # frame
         Frame.setObjectName("Frame")
         Frame.resize(532, 643)
         Frame.setStyleSheet("background-color: rgb(142, 213, 227)")
         
-        self.label = QtWidgets.QLabel(Frame)
-        self.label.setGeometry(QtCore.QRect(10, 10, 501, 341))
-        self.label.setAlignment(QtCore.Qt.AlignCenter)
-        self.label.setObjectName("label")
+        # camera
+        self.camera = QtWidgets.QLabel(Frame)
+        self.camera.setGeometry(QtCore.QRect(10, 10, 501, 341))
+        self.camera.setAlignment(QtCore.Qt.AlignCenter)
+        self.camera.setObjectName("camera")
+
+        self.cameraStat = False
+        self.capture = 1
         
-        self.label_2 = QtWidgets.QLabel(Frame)
-        self.label_2.setGeometry(QtCore.QRect(10, 400, 501, 41))
-        self.label_2.setAlignment(QtCore.Qt.AlignCenter)
-        self.label_2.setObjectName("label_2")
+        # open camera
+        self.cap = cv2.VideoCapture(1) if cv2.VideoCapture(1).isOpened() else cv2.VideoCapture(0)
+        self.cap.set(4,1080)
         
-        self.lineEdit = QtWidgets.QLineEdit(Frame)
-        self.lineEdit.setGeometry(QtCore.QRect(10, 479, 511, 61))
-        self.lineEdit.setAlignment(QtCore.Qt.AlignCenter)
-        self.lineEdit.setObjectName("lineEdit")
+        # face detector
+        self.face_detector = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
         
-        self.pushButton = QtWidgets.QPushButton(Frame)
-        self.pushButton.setGeometry(QtCore.QRect(20, 562, 491, 61))
-        self.pushButton.setObjectName("pushButton")
+        # status
+        self.status = QtWidgets.QLabel(Frame)
+        self.status.setGeometry(QtCore.QRect(10, 400, 501, 41))
+        self.status.setAlignment(QtCore.Qt.AlignCenter)
+        self.status.setObjectName("status")
+        
+        # textbox name
+        self.textboxName = QtWidgets.QLineEdit(Frame)
+        self.textboxName.setGeometry(QtCore.QRect(10, 479, 511, 61))
+        self.textboxName.setAlignment(QtCore.Qt.AlignCenter)
+        self.textboxName.setObjectName("textboxName")
+        
+        # create button
+        self.create = QtWidgets.QPushButton(Frame)
+        self.create.setGeometry(QtCore.QRect(20, 562, 491, 61))
+        self.create.setObjectName("create")
+        self.create.clicked.connect(self.createButton)
 
         # connect the close event to the method
         Frame.closeEvent = self.closeEvent
+        
+        # Timer
+        self.timer = QtCore.QTimer(Frame)
+        self.timer.timeout.connect(self.videoStreaming)
+        self.last_recognition_time = time.time()
+        self.timer.start(30)
         
         self.retranslateUi(Frame)
         QtCore.QMetaObject.connectSlotsByName(Frame)
@@ -45,10 +89,179 @@ class facialRegister(object):
     def retranslateUi(self, Frame):
         _translate = QtCore.QCoreApplication.translate
         Frame.setWindowTitle(_translate("Frame", "Frame"))
-        self.label.setText(_translate("Frame", "Loading"))
-        self.label_2.setText(_translate("Frame", "Status"))
-        self.pushButton.setText(_translate("Frame", "Create folder"))
+        
+        # for camera
+        self.camera.setText(_translate("Frame", "Loading"))
+        
+        # message status
+        self.status.setText(_translate("Frame", "Please create folder first"))
+        
+        # create Button
+        self.create.setText(_translate("Frame", "Create folder"))
+    
+    
+    # capture and Train Images
+    def captureSave(self, current_time=None, frame=None):
+        
+        # Check if camera is enabled
+        if not self.cameraStat:
+            return
+        else:
+            self.status.setText("Training facial" if self.capture == 21 else "Face capture left " + str(21-self.capture))
+    
+        # Set time delay to avoid over capturing
+        if current_time - self.last_recognition_time <= 0.5:
+            return
+    
+        self.last_recognition_time = current_time
+    
+        # Save captured images if capture count is less than 20
+        if self.capture <= 20:
+            
+            path = f"Known_Faces/{self.textboxName.text()}/{self.capture}.png"
+            cv2.imwrite(path, frame)
+            self.capture += 1
+            
+            
+            
+        else:
+            
+            # Train the facial recognition model
+            message = JL().Face_Train()
+            
+            # Show the result
+            title = "Facial Registration"
+            text = "Facial training complete" if message == "Successfully trained" else message
+            icon = self.MessageBox.Information if message == "Successfully trained" else self.MessageBox.Warning
+            self.messageBoxShow(title=title, text=text, buttons=self.MessageBox.Ok, icon=icon)
+            self.status.setText("Please create folder first")
+            
+            self.textboxName.setText("")
+            
+            self.create.setEnabled(True)
+            self.textboxName.setReadOnly(False)
+            
+            self.cameraStat = False
+            self.capture = 1
+            
+    # video Streaming
+    def videoStreaming(self):
+        ret, frame = self.cap.read()
+        
+        if not ret:
+            self.camera.setText("Camera wont load")
+            return
+        
+        # process the frame
+        frame = cv2.flip(frame,1)
+  
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        
+        # load facial detector haar
+        faces = self.face_detector.detectMultiScale(gray, 
+                                                    scaleFactor=1.1, 
+                                                    minNeighbors=20, 
+                                                    minSize=(100, 100), 
+                                                    flags=cv2.CASCADE_SCALE_IMAGE)
+        current_time = time.time()
+        
+        if len(faces) == 1:
+            x,y,w,h = faces[0]
+            cv2.rectangle(frame, (x, y), (x+w, y+h), (0,255, 0), 2)
+            self.status.setText("Please create folder first")
+            
+            self.captureSave(current_time=current_time,frame=frame)
+            
+            
+        elif len(faces) >= 1:
+            self.status.setText("Multiple face is detected")
+        else:
+            self.status.setText("No face is detected")
+            
+        height, width, channel = frame.shape
+        bytesPerLine = channel * width
+        qImg = QtGui.QImage(frame.data, width, height, bytesPerLine, QtGui.QImage.Format_BGR888)
+        pixmap = QtGui.QPixmap.fromImage(qImg)
+        self.camera.setPixmap(pixmap)
 
+    
+    
+    def messageBoxShow(self, icon=None, title=None, text=None, buttons=None):
+        
+        # Set the window icon, title, and text
+        self.MessageBox.setIcon(icon)
+        self.MessageBox.setWindowTitle(title)
+        self.MessageBox.setText(text)
+    
+        # Set the window size
+        self.MessageBox.setFixedWidth(400)
+    
+        # Set the standard buttons
+        self.MessageBox.setStandardButtons(buttons)
+        
+        result =self.MessageBox.exec_()
+        
+        self.MessageBox.close()
+        # Show the message box and return the result
+        return result
+    
+    # create folder
+    def createButton(self):
+        
+        # Define the path for the known faces folder
+        path = f"Known_Faces/{self.textboxName.text()}"
+        
+        if not self.textboxName.text():
+            self.messageBoxShow(
+            icon=self.MessageBox.Warning,
+            title="Facial Recognition",
+            text="Name cannot be empty",
+            buttons=self.MessageBox.Ok
+            )
+            return
+        
+        # Check if the folder already exists
+        if os.path.exists(path):
+            # Show a message box indicating that the folder already exists
+            self.messageBoxShow(
+                icon=self.MessageBox.Warning,
+                title="Facial Recognition",
+                text="Folder already exists",
+                buttons=self.MessageBox.Ok
+            )
+        
+            # Disable the push button and plain text edit
+            pushButtonEnabled = False
+            plainTextEditEnabled = False
+        
+            # Set the camera status to true
+            self.cameraStat = False
+        else:
+            
+            # Create the known faces folder if it doesn't exist
+            os.makedirs(path, exist_ok=True)
+        
+            # Show a message box indicating that the folder has been created
+            self.messageBoxShow(
+                icon=self.MessageBox.Information,
+                title="Facial Recognition",
+                text="Folder Created please align your face to camera properly",
+                buttons=self.MessageBox.Ok
+            )
+        
+            # Enable the camera and plain text edit
+            pushButtonEnabled = False
+            plainTextEditEnabled = True
+        
+            # Set the camera status to true
+            self.cameraStat = True
+
+        # Update the enabled status of the push button and plain text edit
+        self.create.setEnabled(pushButtonEnabled)
+        self.textboxName.setReadOnly(plainTextEditEnabled)
+
+    
+    
     # when close the frame
     def closeEvent(self, event):
         # show a message box asking for confirmation
