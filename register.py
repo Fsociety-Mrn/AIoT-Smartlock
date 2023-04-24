@@ -8,7 +8,7 @@ import time
 import dlib
 import torch
 import numpy as np
-
+import threading
 
 class facialRegister(object):
     def setupUi(self, Frame):
@@ -47,7 +47,7 @@ class facialRegister(object):
         self.camera.setObjectName("camera")
 
         self.cameraStat = True
-        self.capture = 21
+        self.capture = 19
         
         # open camera
         self.cap = cv2.VideoCapture(1) if cv2.VideoCapture(1).isOpened() else cv2.VideoCapture(0)
@@ -102,18 +102,27 @@ class facialRegister(object):
         self.create.setText(_translate("Frame", "Create folder"))
     
 
-    
-
-    
+    def setStatus(self):
+        
+        if self.blink:
+            self.status.setText("Please blink")
+            return
+        self.status.setText("Training Facial")
+                
+                
     # capture and Train Images
-    def captureSave(self, current_time=None, frame=None):
+    def captureSave(self, current_time=None, frame=None,gray=None):
         
         # Check if camera is enabled
         if not self.cameraStat:
             return
+
+            
+        if self.capture == 19:
+            self.status.setText("Please blink")
         else:
-            self.status.setText("Training facial" if self.capture == 21 else "Face capture left " + str(21-self.capture))
-    
+            self.status.setText("Training Facial" if self.capture >= 20 else "Face capture left " + str(21-self.capture))
+        
         # Set time delay to avoid over capturing
         if current_time - self.last_recognition_time <= 0.5:
             return
@@ -123,33 +132,45 @@ class facialRegister(object):
         # Save captured images if capture count is less than 20
         if self.capture <= 20:
             
+            if self.capture == 19:
+                if not self.eyeBlink(frame=frame, gray=gray):
+                    path = f"Known_Faces/{self.textboxName.text()}/{self.capture}.png"
+                    cv2.imwrite(path, frame)
+                    self.capture += 1
+                    return
+                else:
+                    self.status.setText("Please blink")
+                    return            
+            
             path = f"Known_Faces/{self.textboxName.text()}/{self.capture}.png"
             cv2.imwrite(path, frame)
             self.capture += 1
             
         else:
             
-            if self.blink:
-                self.status.setText("Please blink")
-                return
-            # Train the facial recognition model
-            message = JL().Face_Train()
+            # facial training 
+            self.facialTraining()
+
+    def facialTraining(self):
+        
+        # Train the facial recognition model
+        message = JL().Face_Train()
             
-            # Show the result
-            title = "Facial Registration"
-            text = "Facial training complete" if message == "Successfully trained" else message
-            icon = self.MessageBox.Information if message == "Successfully trained" else self.MessageBox.Warning
-            self.messageBoxShow(title=title, text=text, buttons=self.MessageBox.Ok, icon=icon)
-            self.status.setText("Please create folder first")
+        # Show the result
+        title = "Facial Registration"
+        text = "Facial training complete" if message == "Successfully trained" else message
+        icon = self.MessageBox.Information if message == "Successfully trained" else self.MessageBox.Warning
+        self.messageBoxShow(title=title, text=text, buttons=self.MessageBox.Ok, icon=icon)
+        self.status.setText("Please create folder first")
             
-            self.textboxName.setText("")
+        self.textboxName.setText("")
             
-            self.create.setEnabled(True)
-            self.textboxName.setReadOnly(False)
+        self.create.setEnabled(True)
+        self.textboxName.setReadOnly(False)
             
-            self.cameraStat = False
-            self.capture = 1
-            
+        self.cameraStat = False
+        self.capture = 1
+        
     # video Streaming
     def videoStreaming(self):
         ret, frame = self.cap.read()
@@ -176,9 +197,11 @@ class facialRegister(object):
             cv2.rectangle(frame, (x, y), (x+w, y+h), (0,255, 0), 2)
             self.status.setText("Please create folder first")
             
+
+                
+            # if not self.eyeBlink(frame=frame,gray=gray):
+            self.captureSave(current_time=current_time,frame=frame,gray=gray)
             
-            self.eyeBlink(frame=frame,gray=gray)
-            self.captureSave(current_time=current_time,frame=frame)
             
             
         elif len(faces) >= 1:
@@ -283,14 +306,15 @@ class facialRegister(object):
     
             # calculate eye aspect ratio
             ear = self.calculate_ear(left_eye, right_eye)
-    
-            # update blink count and status
-            self.update_blink_count_and_status(ear)
-    
+            
+            # update blink count and status  
+            status = self.update_blink_count_and_status(ear)
+            
             # display blink count, EAR, and eye status on frame
             self.display_stats_on_frame(frame,ear)
             
-        return self.blink
+        
+        return status
     
     def extract_eye_coordinates(self,landmarks):
         left_eye = []
@@ -333,9 +357,11 @@ class facialRegister(object):
             if self.blink:
                 self.blink_counter += 1
                 self.blink = False
+                return False
         else:
             # if eye is open
             self.blink = True
+            return True
                 
     def display_stats_on_frame(self,frame,EAR):
         # cv2.putText(frame, "Blink Counter: {}".format(self.blink_counter), (80, 70), cv2.FONT_HERSHEY_SIMPLEX, 0.7,(200, 200, 0), 2)
