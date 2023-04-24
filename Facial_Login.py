@@ -19,7 +19,7 @@ class FacialLogin(object):
         # ========= for facial detection ========= #
         
         # facial data 
-        self.matchs = "please blink"
+        self.matchs = ""
         self.R=255
         self.G=255
         self.B=0
@@ -67,6 +67,7 @@ class FacialLogin(object):
         # Timer
         self.timer = QtCore.QTimer(Frame)
         self.timer.timeout.connect(self.videoStreaming)
+        self.last_recognition_time = time.time()
         self.timer.start(30)
         
         self.retranslateUi(Frame)
@@ -80,11 +81,29 @@ class FacialLogin(object):
         self.video.setText(_translate("Frame", "Loading..."))
         
         # frame status
-        self.status.setText(_translate("Frame", "Status"))
+        self.status.setText(_translate("Frame", "status"))
         
         # back to main Menu
         self.backToMainMeneButton.setText(_translate("Frame", "back to mainMenu"))
         self.backToMainMeneButton.clicked.connect(self.backTomain)
+    
+    def FacialRecognition(self,frame):
+        result = Jolo().Face_Compare(frame)
+        
+        if result is not None and result[0] == 'No match detected':
+            
+            self.matchs = str(result[0])
+            self.R=255
+            self.G=0
+            self.B=0
+        else:
+            self.matchs = str(result[0])
+            self.R=0
+            self.G=255
+            self.B=0
+            
+            
+
         
     # for video streaming
     def videoStreaming(self):
@@ -106,6 +125,7 @@ class FacialLogin(object):
                                                     minSize=(100, 100), 
                                                     flags=cv2.CASCADE_SCALE_IMAGE)
         
+        current_time = time.time()
         # display the result
         if len(faces) == 1:
             x,y,w,h = faces[0]
@@ -113,9 +133,23 @@ class FacialLogin(object):
             cv2.rectangle(frame, (x, y), (x+w, y+h), (self.B,self.G , self.R), 2)
             cv2.putText(frame,str(self.matchs),(x,y+h+30),cv2.FONT_HERSHEY_COMPLEX,1,(self.B,self.G,self.R),1)
             
-            self.eyeBlink(gray=gray,frame=frame)
-            
-            self.status.setText("Facial Recognition")
+            if not self.eyeBlink(gray=gray,frame=frame):
+
+                self.FacialRecognition(frame=frame)
+                    
+            # check if ervery 5 second        
+            if current_time - self.last_recognition_time >= 5:
+                
+                self.last_recognition_time = current_time
+                
+                self.status.setText("Facial Recognition")
+                self.matchs = ""
+                self.R=255
+                self.G=255
+                self.B=0
+            else:
+                self.status.setText("Please Blink")
+                
         elif len(faces) >= 1:
             self.status.setText("more than 1 faces is detected")
         else:

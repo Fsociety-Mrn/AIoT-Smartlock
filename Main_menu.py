@@ -10,7 +10,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from Facial_Login import FacialLogin
-from Register import facialRegister
+from register import facialRegister
 
 class MainWindow(object):
     def setupUi(self, Frame):
