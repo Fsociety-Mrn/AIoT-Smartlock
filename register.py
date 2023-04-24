@@ -46,8 +46,8 @@ class facialRegister(object):
         self.camera.setAlignment(QtCore.Qt.AlignCenter)
         self.camera.setObjectName("camera")
 
-        self.cameraStat = True
-        self.capture = 19
+        self.cameraStat = False
+        self.capture = 1
         
         # open camera
         self.cap = cv2.VideoCapture(1) if cv2.VideoCapture(1).isOpened() else cv2.VideoCapture(0)
