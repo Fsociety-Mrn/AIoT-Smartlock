@@ -24,11 +24,13 @@ class transfercript:
             split_index = len(files) // 2
     
             # create a new folder name by appending "new_" to the current folder name
-            new_folder_name = self.folder
+            new_folder_name = folder
     
             # create the new folder in the specified directory
-            os.makedirs(self.new_folder + self.new_folder_name)
+            os.makedirs(self.new_folder + new_folder_name)
     
             # move the second half of the files to the new folder
             for file in files[split_index:]:
                 shutil.move(self.path_to_folders + folder + "/" + file, self.new_folder + new_folder_name)
+
+transfercript().transferPath()
