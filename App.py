@@ -10,10 +10,13 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from Facial_Login import FacialLogin
-from register import facialRegister
+from Facial_Register import facialRegister
 
 
 class MainWindow(object):
+    
+    
+    
     def setupUi(self,Frame):
 
         # frame
@@ -240,7 +243,9 @@ class MainWindow(object):
         self.ui = FacialLogin()
         self.ui.setupUi(self.facial_login)
         self.facial_login.show()
-        Frame.hide()
+        
+        # QtWidgets.qApp.quit()
+        # Frame.hide()
 
         # ===================== open Facial Register ===================== #
 
@@ -258,9 +263,8 @@ class MainWindow(object):
         self.ui = facialRegister()
         self.ui.setupUi(self.facial_register)
         self.facial_register.show()
-        Frame.hide()
-
-
+        # Frame.hide()
+        
 
     # when close the frame
     def closeEvent(self, event):

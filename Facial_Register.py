@@ -90,7 +90,7 @@ class facialRegister(object):
             self.create.clicked.connect(self.createButton)
 
             # connect the close event to the method
-            Frame.closeEvent = self.closeEvent
+            # Frame.closeEvent = self.closeEvent
 
             # Timer
             self.timer = QtCore.QTimer(Frame)
@@ -382,24 +382,24 @@ class facialRegister(object):
                                                        "Are you sure you want to exit?", QtWidgets.QMessageBox.Yes |
                                                        QtWidgets.QMessageBox.No, QtWidgets.QMessageBox.No)
                 if reply == QtWidgets.QMessageBox.Yes:
-                    from New_menu import MainWindow
+                    from App import MainWindow
                     print("go back to main menu")
                     self.window = QtWidgets.QFrame()
                     self.ui = MainWindow()
                     self.ui.setupUi(self.window)
                     self.window.show()
-                    Frame.Hide()
+                    # Frame.Hide()
 
                 else:
                     event.ignore()
 
 
-if __name__ == "__main__":
-        import sys,res
-        app = QtWidgets.QApplication(sys.argv)
-        Frame = QtWidgets.QFrame()
-        ui = facialRegister()
-        ui.setupUi(Frame)
-        Frame.show()
-        sys.exit(app.exec_())
+# if __name__ == "__main__":
+#         import sys,res
+#         app = QtWidgets.QApplication(sys.argv)
+#         Frame = QtWidgets.QFrame()
+#         ui = facialRegister()
+#         ui.setupUi(Frame)
+#         Frame.show()
+#         sys.exit(app.exec_())
 

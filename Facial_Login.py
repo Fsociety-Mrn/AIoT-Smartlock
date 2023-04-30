@@ -10,6 +10,9 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 
 class FacialLogin(object):
+    
+    backSignal = QtCore.pyqtSignal()
+    
     def setupUi(self, Frame):
         
         # for video streaming variable
@@ -67,9 +70,6 @@ class FacialLogin(object):
         self.backToMainMeneButton.setObjectName("pushButton")
         self.backToMainMeneButton.setStyleSheet("color: white;\n""")
         
-        # connect the close event to the method
-        Frame.closeEvent = self.closeEvent
-        
         # Timer
         self.timer = QtCore.QTimer(Frame)
         self.timer.timeout.connect(self.videoStreaming)
@@ -96,19 +96,25 @@ class FacialLogin(object):
     
     def FacialRecognition(self,frame):
         result = Jolo().Face_Compare(frame)
+        print(result)
         
         if result is not None and result[0] == 'No match detected':
-            
-            self.matchs = str(result[0])
-            self.R=255
-            self.G=0
-            self.B=0
+            try:
+                self.matchs = str(result[0])
+                self.R=255
+                self.G=0
+                self.B=0
+            except:
+                pass
             
         else:
-            self.matchs = str(result[0])
-            self.R=0
-            self.G=255
-            self.B=0
+            try:
+                self.matchs = str(result[0])
+                self.R=0
+                self.G=255
+                self.B=0
+            except:
+                pass
             
             
     # for video streaming
@@ -257,29 +263,23 @@ class FacialLogin(object):
         else:
             event.ignore()
 
-    def backTomain(self):
-        from New_menu import MainWindow
-        
-        print("go back to main menu")
-        self.window = QtWidgets.QFrame()
-        self.ui = MainWindow()
-        self.ui.setupUi(self.window)
-        self.window.show()
-        Frame.hide()
+    def backTomain(self):  
+        QtWidgets.qApp.restoreOverrideCursor()
 
 
 
-if __name__ == "__main__":
+
+# if __name__ == "__main__":
     
-    print("Loading.........")
+#     print("Loading.........")
     
-    import sys,res
-    app = QtWidgets.QApplication(sys.argv)
-    Frame = QtWidgets.QFrame()
-    ui = FacialLogin()
-    ui.setupUi(Frame)
-    Frame.show()
+#     import sys,res
+#     app = QtWidgets.QApplication(sys.argv)
+#     Frame = QtWidgets.QFrame()
+#     ui = FacialLogin()
+#     ui.setupUi(Frame)
+#     Frame.show()
     
-    print("Done Loading")
+#     print("Done Loading")
     
-    sys.exit(app.exec_())
+#     sys.exit(app.exec_())
