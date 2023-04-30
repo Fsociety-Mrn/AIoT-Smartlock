@@ -43,24 +43,28 @@ class FacialLogin(object):
         # frame
         Frame.setObjectName("Frame")
         Frame.resize(543, 521)
-        
+        Frame.setWindowFlags(QtCore.Qt.FramelessWindowHint)
+        Frame.setStyleSheet(
+            "background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0.0965909, y2:0.909, stop:0 rgba(61, 152, 154, 255), stop:1 rgba(12, 14, 36, 255));")
+
         # video framing
         self.video = QtWidgets.QLabel(Frame)
         self.video.setGeometry(QtCore.QRect(20, 20, 501, 401))
         self.video.setAlignment(QtCore.Qt.AlignCenter)
         self.video.setObjectName("label")
-        
+        self.video.setStyleSheet("color: white;\n""")
         # face status
         self.status = QtWidgets.QLabel(Frame)
         self.status.setGeometry(QtCore.QRect(10, 420, 511, 41))
         self.status.setAlignment(QtCore.Qt.AlignCenter)
         self.status.setObjectName("label_2")
+        self.status.setStyleSheet("color: white;\n""")
         
         # back to mainmenu button
         self.backToMainMeneButton = QtWidgets.QPushButton(Frame)
         self.backToMainMeneButton.setGeometry(QtCore.QRect(130, 460, 271, 51))
         self.backToMainMeneButton.setObjectName("pushButton")
-
+        self.backToMainMeneButton.setStyleSheet("color: white;\n""")
         # connect the close event to the method
         Frame.closeEvent = self.closeEvent
         
@@ -74,6 +78,7 @@ class FacialLogin(object):
         QtCore.QMetaObject.connectSlotsByName(Frame)
 
     def retranslateUi(self, Frame):
+        
         _translate = QtCore.QCoreApplication.translate
         Frame.setWindowTitle(_translate("Frame", "Frame"))
         
@@ -249,15 +254,24 @@ class FacialLogin(object):
             QtWidgets.qApp.quit()
         else:
             event.ignore()
-            
+
     def backTomain(self):
+        from New_menu import MainWindow
+        
         print("go back to main menu")
+        self.window = QtWidgets.QFrame()
+        self.ui = MainWindow()
+        self.ui.setupUi(self.window)
+        self.window.show()
+        Frame.hide()
+
+
 
 if __name__ == "__main__":
     
     print("Loading.........")
     
-    import sys
+    import sys,res
     app = QtWidgets.QApplication(sys.argv)
     Frame = QtWidgets.QFrame()
     ui = FacialLogin()
