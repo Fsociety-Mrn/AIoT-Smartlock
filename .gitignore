@@ -1,15 +1,8 @@
-/Model/InceptionResnetV1.pt
 /__pycache__
-/Known_Faces_dataset/data.pt
-/Model/InceptionResnetV1_mobile.ptl
-/test.py
-/UI.py
-/Model/data.pt
 /Face_Recognition/__pycache__
-/delete
-/Known_Faces/Kate Alberca
-/Model/dlib-19.22.99-cp310-cp310-win_amd64.whl
-/Model/shape_predictor_68_face_landmarks.dat
 /New Py
 /Random
 /UI design
+/Model/dlib-19.22.99-cp310-cp310-win_amd64.whl
+/Model/InceptionResnetV1_mobile.ptl
+/Model/shape_predictor_68_face_landmarks.dat
