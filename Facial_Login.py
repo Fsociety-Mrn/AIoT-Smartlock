@@ -53,6 +53,7 @@ class FacialLogin(object):
         self.video.setAlignment(QtCore.Qt.AlignCenter)
         self.video.setObjectName("label")
         self.video.setStyleSheet("color: white;\n""")
+        
         # face status
         self.status = QtWidgets.QLabel(Frame)
         self.status.setGeometry(QtCore.QRect(10, 420, 511, 41))
@@ -65,6 +66,7 @@ class FacialLogin(object):
         self.backToMainMeneButton.setGeometry(QtCore.QRect(130, 460, 271, 51))
         self.backToMainMeneButton.setObjectName("pushButton")
         self.backToMainMeneButton.setStyleSheet("color: white;\n""")
+        
         # connect the close event to the method
         Frame.closeEvent = self.closeEvent
         
@@ -101,6 +103,7 @@ class FacialLogin(object):
             self.R=255
             self.G=0
             self.B=0
+            
         else:
             self.matchs = str(result[0])
             self.R=0
@@ -108,8 +111,6 @@ class FacialLogin(object):
             self.B=0
             
             
-
-        
     # for video streaming
     def videoStreaming(self):
         ret, frame = self.videoStream.read()
@@ -131,6 +132,7 @@ class FacialLogin(object):
                                                     flags=cv2.CASCADE_SCALE_IMAGE)
         
         current_time = time.time()
+        
         # display the result
         if len(faces) == 1:
             x,y,w,h = faces[0]

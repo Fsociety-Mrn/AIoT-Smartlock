@@ -10,7 +10,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from Facial_Login import FacialLogin
-from Register import facialRegister
+from register import facialRegister
 
 
 class MainWindow(object):
@@ -55,6 +55,8 @@ class MainWindow(object):
                                   "}\n"
                                   "\n"
                                   "")
+        
+        # icons Logo
         self.widget.setObjectName("widget")
         self.label = QtWidgets.QLabel(Frame)
         self.label.setGeometry(QtCore.QRect(40, 30, 280, 430))
@@ -74,6 +76,8 @@ class MainWindow(object):
         font.setPointSize(10)
         font.setBold(True)
         font.setWeight(75)
+        
+        # facial Login Button
         self.FaceLoginButton.setFont(font)
         self.FaceLoginButton.setStyleSheet("\n"
                                            "   background-color: qlineargradient(spread:pad, x1:0, y1:0.505682, x2:1, y2:0.477, stop:0 rgba(11, 131, 120, 219), stop:1 rgba(85, 98, 112, 226));\n"
@@ -108,6 +112,7 @@ class MainWindow(object):
                                            "")
         self.FaceLoginButton.setObjectName("FaceLoginButton")
 
+        # facial register button
         self.FacialRegisterButton = QtWidgets.QPushButton(Frame)
         self.FacialRegisterButton.setGeometry(QtCore.QRect(330, 240, 131, 41))
         font = QtGui.QFont()
@@ -152,16 +157,17 @@ class MainWindow(object):
                                    "border-top-left-radius: 50px;")
         self.label_4.setText("")
         self.label_4.setObjectName("label_4")
-
-        self.backtomainbutton = QtWidgets.QPushButton(Frame)
-        self.backtomainbutton.setGeometry(QtCore.QRect(330, 300, 131, 41))
+        
+        
+        self.closeButton = QtWidgets.QPushButton(Frame)
+        self.closeButton.setGeometry(QtCore.QRect(330, 300, 131, 41))
         font = QtGui.QFont()
         font.setPointSize(10)
         font.setBold(True)
         font.setWeight(80)
-        self.backtomainbutton.setFont(font)
-        self.backtomainbutton.setText("Close")
-        self.backtomainbutton.setStyleSheet("\n"
+        self.closeButton.setFont(font)
+        self.closeButton.setText("Close")
+        self.closeButton.setStyleSheet("\n"
                                             "   background-color: qlineargradient(spread:pad, x1:0, y1:0.505682, x2:1, y2:0.477, stop:0 rgba(11, 131, 120, 219), stop:1 rgba(85, 98, 112, 226));\n"
                                             "   color:rgba(255, 255, 255, 210);\n"
                                             "   border-radius:5px;\n"
@@ -191,7 +197,7 @@ class MainWindow(object):
                                             " color:rgba(91, 88, 53, 255);\n"
                                             "}\n"
                                             "")
-        self.backtomainbutton.setObjectName("backtomainbutton")
+        self.closeButton.setObjectName("backtomainbutton")
 
         # connect the close event to the method
         Frame.closeEvent = self.closeEvent
@@ -213,11 +219,11 @@ class MainWindow(object):
         self.FacialRegisterButton.clicked.connect(self.openFacialRegister)
 
         # Back Button
-        self.backtomainbutton.setText(_translate("Frame", "Close"))
-        self.backtomainbutton.setStyleSheet("color: Red;\n""")
-        self.backtomainbutton.clicked.connect(self.openbacktomainbutton)
+        self.closeButton.setText(_translate("Frame", "Close"))
+        self.closeButton.setStyleSheet("color: Red;\n""")
+        self.closeButton.clicked.connect(self.closeEvent)
 
-        # ===================== open facial Login ===================== #
+    # ===================== open facial Login ===================== #
 
     def openFacialLogin(self):
 
@@ -227,19 +233,6 @@ class MainWindow(object):
 
         # Delay the creation of the FacialLogin object by 100 milliseconds
         QtCore.QTimer.singleShot(100, self.clickFacialLogin)
-
-    def openbacktomainbutton(self):
-
-        self.FaceLoginButton.isEnabled = False
-        self.FacialRegisterButton.isEnabled = False
-
-        # Delay the creation of the FacialLogin object by 100 milliseconds
-        QtCore.QTimer.singleShot(100, self.clickback)
-
-    def clickback(self):
-        QtWidgets.qApp.quit()
-
-
 
     def clickFacialLogin(self):
         print("start loading")
@@ -267,8 +260,9 @@ class MainWindow(object):
         self.facial_register.show()
         Frame.hide()
 
-        # when close the frame
 
+
+    # when close the frame
     def closeEvent(self, event):
         # show a message box asking for confirmation
         reply = QtWidgets.QMessageBox.question(None, 'Smart AIoT',
@@ -280,6 +274,17 @@ class MainWindow(object):
             QtWidgets.qApp.quit()
         else:
             event.ignore()
+            
+    def closeButton(self):
+
+        self.FaceLoginButton.isEnabled = False
+        self.FacialRegisterButton.isEnabled = False
+
+        # Delay the creation of the FacialLogin object by 100 milliseconds
+        QtCore.QTimer.singleShot(100, self.clickback)
+
+    def clickback(self):
+        QtWidgets.qApp.quit()
 
 if __name__ == "__main__":
         import sys,res
