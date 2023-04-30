@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>532</width>
+    <width>533</width>
     <height>643</height>
    </rect>
   </property>
@@ -14,16 +14,20 @@
    <string>Frame</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-color: rgb(142, 213, 227)</string>
+   <string notr="true">background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0.0965909, y2:0.909, stop:0 rgba(61, 152, 154, 255), stop:1 rgba(12, 14, 36, 255));</string>
   </property>
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>10</y>
+     <y>20</y>
      <width>501</width>
      <height>341</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: white;
+</string>
    </property>
    <property name="text">
     <string>Loading</string>
@@ -36,10 +40,14 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>400</y>
+     <y>380</y>
      <width>501</width>
      <height>41</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: white;
+</string>
    </property>
    <property name="text">
     <string>Status</string>
@@ -52,10 +60,14 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>479</y>
+     <y>460</y>
      <width>511</width>
      <height>61</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: white;
+</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>
@@ -64,17 +76,41 @@
   <widget class="QPushButton" name="pushButton">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>562</y>
-     <width>491</width>
-     <height>61</height>
+     <x>40</x>
+     <y>530</y>
+     <width>451</width>
+     <height>41</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: white;
+</string>
    </property>
    <property name="text">
     <string>Create folder</string>
    </property>
   </widget>
+  <widget class="QPushButton" name="pushButton_2">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>590</y>
+     <width>451</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: white;
+font: 75 8pt &quot;MS Shell Dlg 2&quot;;
+</string>
+   </property>
+   <property name="text">
+    <string>Back to Main Menu</string>
+   </property>
+  </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="../res.qrc"/>
+ </resources>
  <connections/>
 </ui>
