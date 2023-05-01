@@ -394,12 +394,12 @@ class facialRegister(object):
                     event.ignore()
 
 
-# if __name__ == "__main__":
-#         import sys,res
-#         app = QtWidgets.QApplication(sys.argv)
-#         Frame = QtWidgets.QFrame()
-#         ui = facialRegister()
-#         ui.setupUi(Frame)
-#         Frame.show()
-#         sys.exit(app.exec_())
+if __name__ == "__main__":
+        import sys,res
+        app = QtWidgets.QApplication(sys.argv)
+        Frame = QtWidgets.QFrame()
+        ui = facialRegister()
+        ui.setupUi(Frame)
+        Frame.show()
+        sys.exit(app.exec_())
 

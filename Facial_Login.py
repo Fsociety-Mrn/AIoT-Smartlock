@@ -65,10 +65,10 @@ class FacialLogin(object):
         self.status.setStyleSheet("color: white;\n""")
         
         # back to mainmenu button
-        self.backToMainMeneButton = QtWidgets.QPushButton(Frame)
-        self.backToMainMeneButton.setGeometry(QtCore.QRect(130, 460, 271, 51))
-        self.backToMainMeneButton.setObjectName("pushButton")
-        self.backToMainMeneButton.setStyleSheet("color: white;\n""")
+        # self.backToMainMeneButton = QtWidgets.QPushButton(Frame)
+        # self.backToMainMeneButton.setGeometry(QtCore.QRect(130, 460, 271, 51))
+        # self.backToMainMeneButton.setObjectName("pushButton")
+        # self.backToMainMeneButton.setStyleSheet("color: white;\n""")
         
         # Timer
         self.timer = QtCore.QTimer(Frame)
@@ -91,12 +91,12 @@ class FacialLogin(object):
         self.status.setText(_translate("Frame", "status"))
         
         # back to main Menu
-        self.backToMainMeneButton.setText(_translate("Frame", "back to mainMenu"))
-        self.backToMainMeneButton.clicked.connect(self.backTomain)
+        # self.backToMainMeneButton.setText(_translate("Frame", "back to mainMenu"))
+        # self.backToMainMeneButton.clicked.connect(self.backTomain)
     
     def FacialRecognition(self,frame):
         result = Jolo().Face_Compare(frame)
-        print(result)
+        print("face distance", result[1])
         
         if result is not None and result[0] == 'No match detected':
             try:
@@ -269,17 +269,17 @@ class FacialLogin(object):
 
 
 
-# if __name__ == "__main__":
+if __name__ == "__main__":
     
-#     print("Loading.........")
+    print("Loading.........")
     
-#     import sys,res
-#     app = QtWidgets.QApplication(sys.argv)
-#     Frame = QtWidgets.QFrame()
-#     ui = FacialLogin()
-#     ui.setupUi(Frame)
-#     Frame.show()
+    import sys,res
+    app = QtWidgets.QApplication(sys.argv)
+    Frame = QtWidgets.QFrame()
+    ui = FacialLogin()
+    ui.setupUi(Frame)
+    Frame.show()
     
-#     print("Done Loading")
+    print("Done Loading")
     
-#     sys.exit(app.exec_())
+    sys.exit(app.exec_())

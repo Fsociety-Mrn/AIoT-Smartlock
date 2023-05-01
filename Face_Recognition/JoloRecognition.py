@@ -38,6 +38,8 @@ class JoloRecognition:
                 emb  = self.facenet(face.unsqueeze(0)).detach()
                 
                 match_list = []
+
+                
                 
                 # self.Embeding_List is the load data.pt 
                 
@@ -46,6 +48,7 @@ class JoloRecognition:
                         # torch.dist = is use to compare the face detected into batch of faceas in self embediing
                         dist = torch.dist(emb, emb_db).item()
                         
+                      
                         # append the comparing result
                         match_list.append(dist)
                     except:
@@ -69,7 +72,7 @@ class JoloRecognition:
                         # print(min_dist)
                         return (self.Name_List[idx_min], min_dist)
                     else:
-                        return ('No match detected', None)
+                        return ('No match detected', min_dist)
                 
                 else:
                     return ('No match detected', None)
