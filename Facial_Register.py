@@ -128,11 +128,8 @@ class facialRegister(object):
                 if not self.cameraStat:
                     return
 
-                if self.capture == 19:
-                    self.status.setText("Please blink")
-                else:
-                    self.status.setText(
-                        "Training Facial" if self.capture >= 20 else "Face capture left " + str(21 - self.capture))
+                self.status.setText(
+                    "Please blink" if self.capture >= 20 else "Face capture left " + str(21 - self.capture))
 
                 # Set time delay to avoid over capturing
                 if current_time - self.last_recognition_time <= 0.5:
@@ -143,24 +140,14 @@ class facialRegister(object):
                 # Save captured images if capture count is less than 20
                 if self.capture <= 20:
 
-                    if self.capture == 19:
-                        if not self.eyeBlink(frame=frame, gray=gray):
-                            path = f"Known_Faces/{self.textboxName.text()}/{self.capture}.png"
-                            cv2.imwrite(path, frame)
-                            self.capture += 1
-                            return
-                        else:
-                            self.status.setText("Please blink")
-                            return
-
                     path = f"Known_Faces/{self.textboxName.text()}/{self.capture}.png"
                     cv2.imwrite(path, frame)
                     self.capture += 1
-
+                    
+                    return False
                 else:
+                    return True
 
-                    # facial training
-                    self.facialTraining()
 
     def facialTraining(self):
 
@@ -209,8 +196,11 @@ class facialRegister(object):
                     self.status.setText("Please create folder first")
 
                     # if not self.eyeBlink(frame=frame,gray=gray):
-                    self.captureSave(current_time=current_time, frame=frame, gray=gray)
+                    statusCap = self.captureSave(current_time=current_time, frame=frame, gray=gray)
 
+                    if statusCap:
+                        if not self.eyeBlink(frame=frame,gray=gray):
+                            self.facialTraining()
 
 
                 elif len(faces) >= 1:
@@ -300,7 +290,7 @@ class facialRegister(object):
                 self.textboxName.setReadOnly(plainTextEditEnabled)
 
             # =================== for eye blinking detection functions =================== #
-    def eyeBlink(self, gray, frame):
+    def eyeBlink(self, gray=None, frame=None):
 
                 # detect eyes using dlib
                 faces = self.dlib_faceDetcetoor(gray, 0)
@@ -316,9 +306,6 @@ class facialRegister(object):
 
                     # update blink count and status
                     status = self.update_blink_count_and_status(ear)
-
-                    # display blink count, EAR, and eye status on frame
-                    self.display_stats_on_frame(frame, ear)
 
                 return status
 
@@ -368,12 +355,6 @@ class facialRegister(object):
                     # if eye is open
                     self.blink = True
                     return True
-
-    def display_stats_on_frame(self, frame, EAR):
-                # cv2.putText(frame, "Blink Counter: {}".format(self.blink_counter), (80, 70), cv2.FONT_HERSHEY_SIMPLEX, 0.7,(200, 200, 0), 2)
-                # cv2.putText(frame, "EAR: {}".format(EAR), (80, 100), cv2.FONT_HERSHEY_SIMPLEX, 0.7,(200, 200, 0), 2)
-                cv2.putText(frame, "Eye Status: {}".format(self.blink), (80, 130), cv2.FONT_HERSHEY_SIMPLEX, 0.7,
-                            (200, 200, 0), 2)
 
             # when close the frame
     def closeEvent(self, event):

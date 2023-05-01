@@ -96,9 +96,9 @@ class FacialLogin(object):
     
     def FacialRecognition(self,frame):
         result = Jolo().Face_Compare(frame)
-        print("face distance", result[1])
+        print("face distance: " + str(result[1]))
         
-        if result is not None and result[0] == 'No match detected':
+        if result[1] is not None and result[0] == 'No match detected':
             try:
                 self.matchs = str(result[0])
                 self.R=255

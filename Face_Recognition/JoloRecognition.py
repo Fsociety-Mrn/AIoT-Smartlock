@@ -22,9 +22,15 @@ class JoloRecognition:
         self.Saved_Data = torch.load('Model/data.pt', map_location='cpu')
         self.Embeding_List = self.Saved_Data[0]
         self.Name_List = self.Saved_Data[1]
-        
+    
     # for face recognition
     def Face_Compare(self, face, threshold=0.6):
+        try:
+            return self.FaceCompare(face,threshold=threshold)
+        except:
+            return ('No match detected', None)
+            
+    def FaceCompare(self, face, threshold=0.6):
     
         with torch.no_grad():
             
