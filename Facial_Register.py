@@ -138,7 +138,7 @@ class facialRegister(QFrame):
         self.status.setText("Please blink" if self.capture >= 20 else "Face capture left " + str(21 - self.capture))
 
         # Set time delay to avoid over capturing
-        if current_time - self.last_recognition_time <= 0.3:
+        if current_time - self.last_recognition_time <= 0.2:
             return
 
         self.last_recognition_time = current_time
@@ -177,49 +177,51 @@ class facialRegister(QFrame):
 
     # video Streaming
     def videoStreaming(self):
-                ret, frame = self.cap.read()
+        ret, frame = self.cap.read()
 
-                if not ret:
-                    self.camera.setText("Camera wont load")
-                    return
+        if not ret:
+            self.camera.setText("Camera wont load")
+            return
 
                 # process the frame
-                frame = cv2.flip(frame, 1)
+        frame = cv2.flip(frame, 1)
 
-                gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
                 # load facial detector haar
-                faces = self.face_detector.detectMultiScale(gray,
+        faces = self.face_detector.detectMultiScale(gray,
                                                             scaleFactor=1.1,
                                                             minNeighbors=20,
                                                             minSize=(100, 100),
                                                             flags=cv2.CASCADE_SCALE_IMAGE)
-                current_time = time.time()
+        current_time = time.time()
 
-                if len(faces) == 1:
-                    x, y, w, h = faces[0]
-                    cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
-                    self.status.setText("Please create folder first")
+        if len(faces) == 1:
+            x, y, w, h = faces[0]
+            cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+            self.status.setText("Please create folder first")
 
                     # if not self.eyeBlink(frame=frame,gray=gray):
-                    statusCap = self.captureSave(current_time=current_time, frame=frame)
+            statusCap = self.captureSave(current_time=current_time, frame=frame)
 
-                    if statusCap:
-                        if not self.eyeBlink(frame=frame,gray=gray):
-                            self.facialTraining()
+            if statusCap:
+                print(self.eyeBlink(frame=frame,gray=gray))
+                if not self.eyeBlink(frame=frame,gray=gray) == None and self.eyeBlink(frame=frame,gray=gray) == False:
+                    print("facial training")
+                    self.facialTraining()
 
 
 
-                elif len(faces) >= 1:
-                    self.status.setText("Multiple face is detected")
-                else:
-                    self.status.setText("No face is detected")
+        elif len(faces) >= 1:
+            self.status.setText("Multiple face is detected")
+        else:
+            self.status.setText("No face is detected")
 
-                height, width, channel = frame.shape
-                bytesPerLine = channel * width
-                qImg = QtGui.QImage(frame.data, width, height, bytesPerLine, QtGui.QImage.Format_BGR888)
-                pixmap = QtGui.QPixmap.fromImage(qImg)
-                self.camera.setPixmap(pixmap)
+        height, width, channel = frame.shape
+        bytesPerLine = channel * width
+        qImg = QtGui.QImage(frame.data, width, height, bytesPerLine, QtGui.QImage.Format_BGR888)
+        pixmap = QtGui.QPixmap.fromImage(qImg)
+        self.camera.setPixmap(pixmap)
 
             # message box
     def messageBoxShow(self, icon=None, title=None, text=None, buttons=None):
@@ -301,7 +303,7 @@ class facialRegister(QFrame):
 
         # detect eyes using dlib
         faces = self.dlib_faceDetcetoor(gray, 0)
-
+        status = None
         for face in faces:
             landmarks = self.landmark_detector(gray, face)
 
@@ -314,9 +316,8 @@ class facialRegister(QFrame):
             # update blink count and status
             status = self.update_blink_count_and_status(ear)
 
-            self.display_stats_on_frame(EAR=ear,frame=frame)
 
-        return status
+        return self.blink
 
     def extract_eye_coordinates(self, landmarks):
         left_eye = []
@@ -368,12 +369,7 @@ class facialRegister(QFrame):
                 self.blink = True
                 return True
 
-    def display_stats_on_frame(self, frame, EAR):
-        cv2.putText(frame, "Blink Counter: {}".format(self.blink_counter), (80, 70), cv2.FONT_HERSHEY_SIMPLEX, 0.7,
-                    (200, 200, 0), 2)
-        cv2.putText(frame, "EAR: {}".format(EAR), (80, 100), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (200, 200, 0), 2)
-        cv2.putText(frame, "Eye Status: {}".format(self.blink), (80, 130), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (200, 200, 0),
-                    2)
+
 
     # when close the frame
     def closeEvent(self, event):
