@@ -104,9 +104,9 @@ class FacialLogin(QtWidgets.QFrame):
         self.close()
 
     def FacialRecognition(self, frame):
-        result = Jolo().Face_Compare(frame)
+        result = Jolo().Face_Compare(frame,threshold=0.7)
 
-        if result[1] is not None and result[0] == 'No match detected':
+        if result[0] == 'No match detected':
 
             self.matchs = str(result[0])
             self.R = 255
@@ -144,11 +144,10 @@ class FacialLogin(QtWidgets.QFrame):
             x, y, w, h = faces[0]
 
             cv2.rectangle(frame, (x, y), (x + w, y + h), (self.B, self.G, self.R), 2)
-            cv2.putText(frame, str(self.matchs), (x, y + h + 30), cv2.FONT_HERSHEY_COMPLEX, 1, (self.B, self.G, self.R),
-                        1)
+            cv2.putText(frame, str(self.matchs), (x, y + h + 30), cv2.FONT_HERSHEY_COMPLEX, 1, (self.B, self.G, self.R),1)
 
-            # if not self.eyeBlink(gray=gray, frame=frame):
-            self.FacialRecognition(frame=frame)
+            if not self.eyeBlink(gray=gray, frame=frame):
+                self.FacialRecognition(frame=frame)
 
             # check if ervery 5 second
             if current_time - self.last_recognition_time >= 5:
