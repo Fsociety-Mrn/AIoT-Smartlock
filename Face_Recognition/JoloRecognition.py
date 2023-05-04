@@ -70,7 +70,7 @@ class JoloRecognition:
                     # threshold is the bias point number for accuracy
                     # in this if statment we set a threshold value of 0.6
                     # meaning all the result of comparing faces should atleast 0.6 value in order to recognize people
-                    
+                    print("threshold value: ",min_dist )
                     if min_dist < threshold:
                         
                         idx_min = match_list.index(min_dist)
@@ -78,13 +78,14 @@ class JoloRecognition:
                         # print(min_dist)
                         return (self.Name_List[idx_min], min_dist)
                     else:
-                        return ('No match detected', min_dist)
+
+                        return ('No match detected', None)
                 
                 else:
                     return ('No match detected', None)
                 
             else:
-                ('No match detected', None)
+                return ('No match detected', None)
     
     # training from dataset
     def Face_Train(self, Dataset_Folder="Known_Faces", location="Model"):
