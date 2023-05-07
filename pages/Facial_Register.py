@@ -415,11 +415,16 @@ class facialRegister(QFrame):
 
     # when close the frame
     def closeEvent(self, event):
-        from Main_Menu import MainWindow
+        from pages.Main_Menu import MainWindow
         print("go back to main menu")
 
         self.resize(555, 495)
+        
+        self.cap.release()
+        cv2.destroyAllWindows()
         MainWindow(self).show()
+        
+        
         self.close()
 
 

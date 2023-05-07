@@ -99,7 +99,7 @@ class FacialLogin(QtWidgets.QFrame):
         self.backToMainMeneButton.clicked.connect(self.backTomain)
 
     def backTomain(self):
-        from Main_Menu import MainWindow
+        from pages.Main_Menu import MainWindow
         
         print("go back to main menu")
 
