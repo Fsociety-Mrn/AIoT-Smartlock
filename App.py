@@ -1,6 +1,7 @@
-import res, sys
+import res,sys
+
 from PyQt5.QtWidgets import QApplication
-from Main_Menu import MainWindow
+from pages.Main_Menu import MainWindow
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 

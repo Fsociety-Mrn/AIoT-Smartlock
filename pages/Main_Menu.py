@@ -234,7 +234,7 @@ class MainWindow(QtWidgets.QFrame):
 
     def clickFacialLogin(self):
 
-        from Facial_Login import FacialLogin
+        from pages.Facial_Login import FacialLogin
         print("start loading")
 
         self.resize(543, 521)
@@ -255,7 +255,7 @@ class MainWindow(QtWidgets.QFrame):
 
     def clickFacialRegister(self):
         print("start loading")
-        from Facial_Register import facialRegister
+        from pages.Facial_Register import facialRegister
         print("start loading")
 
 
