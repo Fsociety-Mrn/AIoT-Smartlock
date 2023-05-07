@@ -18,11 +18,18 @@ class FacialLogin(QtWidgets.QFrame):
 
         # ========= for facial detection ========= #
 
-        # facial data
+        
         self.matchs = ""
-        self.R = 255
-        self.G = 255
-        self.B = 0
+        
+        # grey
+        self.R = 115
+        self.G = 115
+        self.B = 115
+        
+        # yellow
+        # self.R = 255
+        # self.G = 255
+        # self.B = 0
 
         # EAR of eye
         self.blink_threshold = 0.3
@@ -103,8 +110,9 @@ class FacialLogin(QtWidgets.QFrame):
         cv2.destroyAllWindows()
         self.close()
 
+    #  for facial recognition
     def FacialRecognition(self, frame):
-        result = Jolo().Face_Compare(frame,threshold=0.7)
+        result = Jolo().Face_Compare(frame,threshold=0.6)
 
         if result[0] == 'No match detected':
 
@@ -117,6 +125,52 @@ class FacialLogin(QtWidgets.QFrame):
             self.R = 0
             self.G = 255
             self.B = 0
+    
+    # for facial detection
+    def curveBox(self,frame=None,p1=None,p2=None,curvedRadius=30):
+    
+        # upper left curve
+        cv2.ellipse(
+                img=frame, 
+                center=(p1[0] + curvedRadius+15, p1[1] + curvedRadius), 
+                axes=(curvedRadius, curvedRadius), 
+                angle=180, 
+                startAngle=0, 
+                endAngle=90, 
+                color=(self.B, self.G, self.R), # BGR
+                thickness=3)
+        
+        # bottom left curve
+        cv2.ellipse(
+                img=frame, 
+                center=(p1[0] + curvedRadius+15, p2[1] - curvedRadius-10), 
+                axes=(curvedRadius, curvedRadius), 
+                angle=90, 
+                startAngle=0, 
+                endAngle=90, 
+                color=(self.B, self.G, self.R), # BGR
+                thickness=3)
+        
+        # upper right curve
+        cv2.ellipse(img=frame, 
+                center=(p2[0]+curvedRadius-75, p1[1]+curvedRadius), 
+                axes=(curvedRadius, curvedRadius), 
+                angle=270, 
+                startAngle=0, 
+                endAngle=90, 
+                color=(self.B, self.G, self.R), # BGR
+                thickness=3)
+                
+        # bottom right curve
+        cv2.ellipse(
+                img=frame, 
+                center=(p2[0] - curvedRadius - 15, p2[1] - curvedRadius -10), 
+                axes=(curvedRadius, curvedRadius), 
+                angle=0, 
+                startAngle=0, 
+                endAngle=90, 
+                color=(self.B, self.G, self.R), # BGR
+                thickness=3)
 
     # for video streaming
     def videoStreaming(self):
@@ -143,7 +197,10 @@ class FacialLogin(QtWidgets.QFrame):
         if len(faces) == 1:
             x, y, w, h = faces[0]
 
-            cv2.rectangle(frame, (x, y), (x + w, y + h), (self.B, self.G, self.R), 2)
+            
+            self.curveBox(frame=frame,p1=(x,y),p2=(x+w,y+h))
+            
+            # cv2.rectangle(frame, (x, y), (x + w, y + h), (self.B, self.G, self.R), 2)
             cv2.putText(frame, str(self.matchs), (x, y + h + 30), cv2.FONT_HERSHEY_COMPLEX, 1, (self.B, self.G, self.R),1)
 
             if not self.eyeBlink(gray=gray, frame=frame):
@@ -156,9 +213,14 @@ class FacialLogin(QtWidgets.QFrame):
 
                 self.status.setText("Facial Recognition")
                 self.matchs = ""
-                self.R = 255
-                self.G = 255
-                self.B = 0
+                
+                self.R = 115
+                self.G = 115
+                self.B = 115
+                # yellow
+                # self.R = 255
+                # self.G = 255
+                # self.B = 0
             else:
                 self.status.setText("Please Blink")
 
