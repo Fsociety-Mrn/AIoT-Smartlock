@@ -22,14 +22,14 @@ class FacialLogin(QtWidgets.QFrame):
         self.matchs = ""
         
         # grey
-        self.R = 115
-        self.G = 115
-        self.B = 115
+        # self.R = 115
+        # self.G = 115
+        # self.B = 115
         
         # yellow
-        # self.R = 255
-        # self.G = 255
-        # self.B = 0
+        self.R = 255
+        self.G = 255
+        self.B = 0
 
         # EAR of eye
         self.blink_threshold = 0.3
@@ -246,13 +246,14 @@ class FacialLogin(QtWidgets.QFrame):
                 self.status.setText("Facial Recognition")
                 self.matchs = ""
                 
-                self.R = 115
-                self.G = 115
-                self.B = 115
+                # self.R = 115
+                # self.G = 115
+                # self.B = 115
+                
                 # yellow
-                # self.R = 255
-                # self.G = 255
-                # self.B = 0
+                self.R = 255
+                self.G = 255
+                self.B = 0
             else:
                 self.status.setText("Please Blink")
 
