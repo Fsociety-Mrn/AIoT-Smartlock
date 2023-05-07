@@ -204,7 +204,7 @@ class FacialLogin(QtWidgets.QFrame):
             return
         
         # check if the frame is Bright
-        if mean_value > 130:
+        if mean_value > 100:
             
             self.status.setText("It is too bright.")
             
