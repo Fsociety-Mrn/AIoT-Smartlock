@@ -129,7 +129,7 @@ class facialRegister(QFrame):
 
 
     # capture and Train Images
-    def captureSave(self, current_time=None, frame=None):
+    def captureSave(self, current_time=None, frame=None,gray=None):
 
         # Check if camera is enabled
         if not self.cameraStat:
@@ -137,6 +137,9 @@ class facialRegister(QFrame):
 
         self.status.setText("Please blink" if self.capture >= 20 else "Face capture left " + str(21 - self.capture))
 
+
+        
+        
         # Set time delay to avoid over capturing
         if current_time - self.last_recognition_time <= 0.2:
             return
@@ -183,10 +186,13 @@ class facialRegister(QFrame):
             self.camera.setText("Camera wont load")
             return
 
-                # process the frame
+        # process the frame
         frame = cv2.flip(frame, 1)
 
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        
+        
+
 
                 # load facial detector haar
         faces = self.face_detector.detectMultiScale(gray,
@@ -196,19 +202,55 @@ class facialRegister(QFrame):
                                                             flags=cv2.CASCADE_SCALE_IMAGE)
         current_time = time.time()
 
+        if self.cameraStat:
+            
+            # check if the frame is dark
+            mean_value = cv2.mean(gray)[0]
+            print(mean_value)
+            if mean_value < 50:
+                
+                self.status.setText("It is too dark.")
+                    
+                height, width, channel = frame.shape
+                bytesPerLine = channel * width
+                qImg = QtGui.QImage(frame.data, width, height, bytesPerLine, QtGui.QImage.Format_BGR888)
+                pixmap = QtGui.QPixmap.fromImage(qImg)
+                self.camera.setPixmap(pixmap)
+                return
+        
+            # check if the frame is Bright
+            if mean_value > 100:
+                self.status.setText("It is too bright.")
+                
+                height, width, channel = frame.shape
+                bytesPerLine = channel * width
+                qImg = QtGui.QImage(frame.data, width, height, bytesPerLine, QtGui.QImage.Format_BGR888)
+                pixmap = QtGui.QPixmap.fromImage(qImg)
+                self.camera.setPixmap(pixmap)
+                return
+        
+        # if facial training is true
+        if self.status.text() == "facial training":
+            self.facialTraining()
+            return
+        
         if len(faces) == 1:
             x, y, w, h = faces[0]
             cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
             self.status.setText("Please create folder first")
 
                     # if not self.eyeBlink(frame=frame,gray=gray):
-            statusCap = self.captureSave(current_time=current_time, frame=frame)
+            statusCap = self.captureSave(current_time=current_time, frame=frame, gray=gray)
 
             if statusCap:
                 print(self.eyeBlink(frame=frame,gray=gray))
                 if not self.eyeBlink(frame=frame,gray=gray) == None and self.eyeBlink(frame=frame,gray=gray) == False:
-                    print("facial training")
-                    self.facialTraining()
+                    # print("facial training")
+                    self.camera.setText("Please bear with me")
+                    self.status.setText("facial training")
+                    return
+                    
+            
 
 
 

@@ -179,17 +179,49 @@ class FacialLogin(QtWidgets.QFrame):
         if not ret:
             self.video.setText("Camera wont load")
             return
-
+        
         # process the frame
         frame = cv2.flip(frame, 1)
 
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        
+        # check if the frame is dark
+        mean_value = cv2.mean(gray)[0]
+
+        if mean_value < 50:
+            
+            self.status.setText("It is too dark.")
+            
+            # display the frame on the label
+            height, width, channel = frame.shape
+            bytesPerLine = channel * width
+            qImg = QtGui.QImage(frame.data, width, height, bytesPerLine, QtGui.QImage.Format_BGR888)
+            pixmap = QtGui.QPixmap.fromImage(qImg)
+            self.video.setPixmap(pixmap)
+           
+            
+            
+            return
+        
+        # check if the frame is Bright
+        if mean_value > 130:
+            
+            self.status.setText("It is too bright.")
+            
+            # display the frame on the label
+            height, width, channel = frame.shape
+            bytesPerLine = channel * width
+            qImg = QtGui.QImage(frame.data, width, height, bytesPerLine, QtGui.QImage.Format_BGR888)
+            pixmap = QtGui.QPixmap.fromImage(qImg)
+            self.video.setPixmap(pixmap)
+    
+            return
 
         # load facial detector haar
         faces = self.face_detector.detectMultiScale(gray,
                                                     scaleFactor=1.1,
                                                     minNeighbors=20,
-                                                    minSize=(100, 100),
+                                                    minSize=(150, 150),
                                                     flags=cv2.CASCADE_SCALE_IMAGE)
 
         current_time = time.time()
