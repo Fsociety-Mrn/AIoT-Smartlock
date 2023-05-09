@@ -21,3 +21,7 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+/Face_Recognition
+/pages
+/test.py
+/pages/__pycache__
