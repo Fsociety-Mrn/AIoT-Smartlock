@@ -39,8 +39,6 @@ React.useEffect(()=>{
 }
 
 // Mobile view
-
-
 const Mobile = () => {
   return (
     <div style={{ 
