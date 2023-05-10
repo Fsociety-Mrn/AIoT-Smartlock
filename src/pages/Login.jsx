@@ -1,4 +1,18 @@
-import { Avatar, Box, Button, Divider, Grid, Link, Paper, Stack, TextField, Typography  } from '@mui/material'
+import { 
+  Avatar, 
+  Box, 
+  Button, 
+  Divider, 
+  Grid, 
+  Link, 
+  Paper, 
+  Stack, 
+  TextField, 
+  Typography  
+} from '@mui/material'
+
+import { MobileTextbox } from '../Components/Textfield';
+
 import React from 'react'
 
 const Login = () => {
@@ -34,6 +48,7 @@ const Mobile = () => {
     justifyContent: 'center', 
     alignItems: 'center' 
     }}>
+
       <Grid 
       container   
       direction="column"
@@ -45,9 +60,7 @@ const Mobile = () => {
       >
 
         <Grid item xs={8}>
-
-
-        <Box
+          <Box
           sx={{
             width: '90vw',
             height: '80vh',
@@ -68,7 +81,7 @@ const Mobile = () => {
             alignItems="center"
             >
 
-            
+              {/* Icons */}
               <Avatar
               sizes='40px'
               sx={{ 
@@ -76,39 +89,54 @@ const Mobile = () => {
                 height: '150px', width: '150px'
               }}>S</Avatar>
 
-<Grid container       
-  direction="row"
-      justifyContent="center"
-      alignItems="center" padding={2}>
+
+              <Grid container       
+              direction="row"
+              justifyContent="center"
+              alignItems="center" padding={2}>
 
           
-                <TextField type='email' margin='dense' label="Email" variant="outlined" fullWidth  size='medium'/>
-                <TextField type='password' margin='dense' label="Password" variant="outlined" fullWidth  size='medium'/>
-                <Link href="#" underline="always" style={{
-                    color: 'white'
-                  }} >Forgot Password</Link>
-                  <br/>
+                <MobileTextbox 
+                type='email' 
+                placeholder='Email'
+                margin='dense' 
+                variant="outlined" 
+                fullWidth  
+                size='medium'/>
 
-            <Button variant='contained' fullWidth 
+                <MobileTextbox 
+                type='password' 
+                margin='dense'  
+                variant="outlined" 
+                fullWidth  
+                size='medium'
+                placeholder='Password'
+                />
+                
+                <Link href="#" 
+                underline="always" 
                   style={{
-                    background: 'linear-gradient(to right, rgb(11, 131, 120) 0%, rgb(85, 98, 112) 100%)'
-                  }}>Login</Button>
+                    color: 'white',
+                    marginTop:'15px',
+                    marginBottom: '20px'
+                  }} >Forgot Password</Link>
+                 
 
-                <Stack
-                direction="column"
-                justifyContent="center"
-                alignItems="center"
-                spacing={2}
-                >
-           
-
-                </Stack>
+                <Button 
+                variant='contained' 
+                fullWidth 
+                style={{
+                  background: 'linear-gradient(to right, rgb(11, 131, 120) 0%, #e7e5d6b5 100%)',
+                  marginBottom: '15px'
+                }}>Login</Button>
 
                 <Grid item xs={12}>
-                <Divider><Typography
-                style={{
-                  color: '#FFFFFF'
-                }}>Or</Typography></Divider>
+                  <Divider>
+                    <Typography
+                      style={{
+                      color: '#FFFFFF'
+                      }}>Or</Typography>
+                    </Divider>
                 </Grid>
 
                 <Stack
@@ -116,6 +144,7 @@ const Mobile = () => {
                 justifyContent="center"
                 alignItems="center"
                 spacing={2}
+                marginTop={1}
                 >
                   <Button variant='contained' fullWidth
                   style={{
@@ -124,13 +153,10 @@ const Mobile = () => {
                   }}
                   >Login with Google</Button>
                 </Stack>
-                </Grid>
 
+              </Grid>
 
-
-                </Stack>
-
-
+            </Stack>
 
           </Box>
         </Grid>
