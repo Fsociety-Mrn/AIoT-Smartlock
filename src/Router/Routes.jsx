@@ -1,14 +1,21 @@
 import React from 'react'
 import LoginPage from '../pages/Login'
+import Homepage from '../pages/admin/Homepage'
+import { Appbar } from '../Components/Appbar'
+
 import { 
     Navigate, 
     Route, 
-    Routes 
+    Routes,
+    Outlet,
   } from 'react-router-dom'
 
 const Routess = () => {
   return (
-    <div><Login/></div>
+    <div>
+
+      <Admin/>
+    </div>
   )
 }
 
@@ -24,4 +31,25 @@ const Login = () => {
     )
   }
 
+
+const Header = () => {
+    return(
+      <>
+        <Appbar/>
+        <Outlet />
+      </>
+    )
+  }
+
+const Admin = () =>{
+  return (
+    <div>      
+      <Routes>
+        <Route element={<Header/>}>
+          <Route path="/Admin" element={<Homepage/>}/>
+          <Route path="*" element={<Navigate to="/Admin"/>}/>
+        </Route>
+      </Routes> </div>
+  )
+}
 export default Routess
