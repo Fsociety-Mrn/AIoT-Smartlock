@@ -46,8 +46,8 @@ const Admin = () =>{
     <div>      
       <Routes>
         <Route element={<Header/>}>
-          <Route path="/Admin" element={<Homepage/>}/>
-          <Route path="*" element={<Navigate to="/Admin"/>}/>
+          <Route path="/Admin/" element={<Homepage/>}/>
+          <Route path="*" element={<Navigate to="/Admin/"/>}/>
         </Route>
       </Routes> </div>
   )

@@ -263,10 +263,12 @@ const Desktop = () => {
 
                 </Stack>
 
-                <Divider><Typography
-                style={{
-                  color: 'rgb(61, 152, 154)'
-                }}>Or</Typography></Divider>
+                <Divider orientation='horizontal' color='rgb(12, 14, 36)'>
+                  <Typography
+                  style={{
+                    color: 'rgb(61, 152, 154)'
+                  }}>Or</Typography>
+                </Divider>
 
                 <Stack
                 direction="column"
