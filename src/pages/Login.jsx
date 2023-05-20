@@ -14,8 +14,15 @@ import {
 } from '@mui/material'
 import { MobileTextbox,DesktopTextbox } from '../Components/Textfield';
 
+// validation
+import {
+  userSchema
+} from '../Authentication/Validation'
+
 // icons
 import GoogleIcon from '@mui/icons-material/Google';
+
+
 
 
 
@@ -44,6 +51,42 @@ React.useEffect(()=>{
 
 // Mobile view
 const Mobile = () => {
+
+  const [user, setUser] = React.useState({
+    email: "",
+    password: ""
+  })
+
+  const [error, setError] = React.useState(false)
+
+
+  // Login Details
+  const Email = (e) => {
+    setUser({...user, email: e.target.value})
+  }
+
+  const Password = (e) => {
+    setUser({...user, password: e.target.value})
+  }
+
+
+  // validation
+  const isValid = async (Email,Password) =>{
+   await userSchema.isValid({
+    email: Email,
+    password: Password
+   }).then(result=>{
+    setError(!result)
+   });
+
+  }
+
+  const Login = (e) =>{
+    e.preventDefault();
+    isValid(user.email,user.password)
+  }
+  
+
   return (
     <div style={{ 
     display: 'flex', 
@@ -97,15 +140,20 @@ const Mobile = () => {
               justifyContent="center"
               alignItems="center" padding={2}>
 
-          
+          {/* email */}
                 <MobileTextbox 
                 type='email' 
                 placeholder='Email'
                 margin='dense' 
                 variant="outlined" 
                 fullWidth  
-                size='medium'/>
+                size='medium'
+                value={user.email}
+                onChange={Email}
+                error={error}
+                />
 
+          {/* password */}
                 <MobileTextbox 
                 type='password' 
                 margin='dense'  
@@ -113,6 +161,9 @@ const Mobile = () => {
                 fullWidth  
                 size='medium'
                 placeholder='Password'
+                value={user.password}
+                onChange={Password}
+                error={error}
                 />
                 
                 <Link href="#" 
@@ -123,7 +174,7 @@ const Mobile = () => {
                     marginBottom: '20px'
                   }} >Forgot Password</Link>
                  
-
+            {/* Login */}
                 <Button 
                 variant='contained' 
                 fullWidth 
@@ -132,7 +183,9 @@ const Mobile = () => {
                   marginBottom: '15px',
                   background: 'linear-gradient(to right, rgb(11, 131, 120) 0%, rgb(85, 98, 112) 100%)'
                   
-                }}>Login</Button>
+                }}
+                onClick={Login}
+                >Login</Button>
 
                 <Grid item xs={12}>
                   <Divider>
@@ -173,6 +226,41 @@ const Mobile = () => {
 
 // Desktop view
 const Desktop = () => {
+
+  const [user, setUser] = React.useState({
+    email: "",
+    password: ""
+  })
+
+  const [error, setError] = React.useState(false)
+
+
+  // Login Details
+  const Email = (e) => {
+    setUser({...user, email: e.target.value})
+  }
+
+  const Password = (e) => {
+    setUser({...user, password: e.target.value})
+  }
+
+
+  // validation
+  const isValid = async (Email,Password) =>{
+   await userSchema.isValid({
+    email: Email,
+    password: Password
+   }).then(result=>{
+    setError(!result)
+   });
+
+  }
+
+  const Login = (e) =>{
+    e.preventDefault();
+    isValid(user.email,user.password)
+  }
+
   return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
     
@@ -243,8 +331,31 @@ const Desktop = () => {
               <Paper
               elevation={0}
               >
-                <DesktopTextbox type='email' margin='dense' placeholder='email' variant="outlined" fullWidth  size='medium'/>
-                <DesktopTextbox type='password' margin='dense' placeholder='password'   variant="outlined" fullWidth  size='medium'/>
+                {/* email */}
+                <DesktopTextbox 
+                type='email' 
+                margin='dense' 
+                placeholder='email' 
+                variant="outlined" 
+                fullWidth  
+                size='medium'
+                value={user.email}
+                onChange={Email}
+                error={error}
+                />
+
+                {/* password */}
+                <DesktopTextbox 
+                type='password' 
+                margin='dense' 
+                placeholder='password'  
+                variant="outlined" 
+                fullWidth  
+                size='medium'
+                value={user.password}
+                onChange={Password}
+                error={error}
+                />
                 
                 <Stack
                 direction="column"
@@ -256,10 +367,14 @@ const Desktop = () => {
                   <Link href="#" style={{
                     color: 'rgb(11, 131, 120)'
                   }} >Forgot Password</Link>
+
+                  {/* click Login */}
                   <Button variant='contained' fullWidth style={{
                     background:'linear-gradient(to right, rgb(61, 152, 154) 0%, rgb(12, 14, 36) 100%)'
                     //background: 'linear-gradient(to right, rgb(11, 131, 120) 0%, rgb(85, 98, 112) 100%)'
-                  }}>Login</Button>
+                  }}
+                  onClick={Login}
+                  >Login</Button>
 
                 </Stack>
 

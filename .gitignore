@@ -25,3 +25,4 @@ yarn-error.log*
 /pages
 /test.py
 /pages/__pycache__
+/__pycache__
