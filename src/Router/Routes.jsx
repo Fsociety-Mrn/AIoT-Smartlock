@@ -11,10 +11,12 @@ import {
   } from 'react-router-dom'
 
 const Routess = () => {
+  let authToken = sessionStorage.getItem('TOKEN')
   return (
     <div>
 
-      <Admin/>
+      { authToken ? <Admin/> : <Login/> }
+      {/* <Admin/> */}
     </div>
   )
 }

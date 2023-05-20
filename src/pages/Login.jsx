@@ -22,7 +22,7 @@ import GoogleIcon from '@mui/icons-material/Google';
 const Login = () => {
 
   // get windows screen
-const [state, setState] = React.useState(true);
+const [state, setState] = React.useState(false);
 React.useEffect(()=>{
     const setResponsiveness = () => {
         return window.innerWidth < 700 ? setState(true) : setState(false);
