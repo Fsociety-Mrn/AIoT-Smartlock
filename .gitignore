@@ -8,3 +8,5 @@
 /node_modules
 /test.py
 /pages/__pycache__
+/.firebase
+/build
