@@ -29,9 +29,11 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import { useNavigate } from 'react-router-dom';
 import { styled } from "@mui/material/styles";
+import ICON from '../Images/logo512.png'
 
 export const Appbar = () => {
-
+    
+  let appBarStatus = sessionStorage.getItem('SCREEN')
   // get windows screen
   const [state, setState] = React.useState(true);
   React.useEffect(()=>{
@@ -99,6 +101,7 @@ const MobileAppbar = () => {
                             border: "2px solid rgb(61, 152, 154)",
                             width: 50, height: 50 
                         }}
+                        src={ICON}
                         >S</Avatar>
                     </IconButton>
 
@@ -181,6 +184,7 @@ const DesktopAppbar = () => {
                             border: "2px solid rgb(61, 152, 154)",
                             height: '55px', width: '55px'
                         }}
+                        src={ICON}
                         >S</Avatar>
                     </IconButton>
                     <Typography variant="h6" color="inherit" component="div" sx={{ flexGrow: 1 }}>

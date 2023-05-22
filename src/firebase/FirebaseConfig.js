@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 // import { getAnalytics } from "firebase/analytics";
-import { getAuth } from "firebase/auth"
+import { getAuth, onAuthStateChanged } from "firebase/auth"
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -25,3 +25,24 @@ const app = initializeApp(firebaseConfig);
 
 // for firebase authentication
 export const auth = getAuth(app);
+
+
+// check the login status
+export const statusLogin = () => {
+
+  return new Promise((resolve, reject) => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        
+        sessionStorage.setItem('TOKEN',"Login")   
+        resolve(user);
+      } else {
+
+        sessionStorage.clear()
+        resolve(null);
+      }
+    }, reject);
+  });
+};
+
+

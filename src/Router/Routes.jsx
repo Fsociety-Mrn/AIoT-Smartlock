@@ -1,7 +1,7 @@
 import React from 'react'
-import LoginPage from '../pages/Login'
-import Homepage from '../pages/admin/Homepage'
 import { Appbar } from '../Components/Appbar'
+
+
 
 import { 
     Navigate, 
@@ -10,42 +10,45 @@ import {
     Outlet,
   } from 'react-router-dom'
 
-  import { auth } from '../firebase/FirebaseConfig'
+  import { statusLogin } from '../firebase/FirebaseConfig'
 
-  import { onAuthStateChanged } from "firebase/auth";
 
 const Routess = () => {
 
-  const [loginUser, setLoginUser] = React.useState(false)
-  
+  let LoginStatus = sessionStorage.getItem('TOKEN')
+
   React.useEffect( ()=>{
-     onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setLoginUser(true)
-      } else {
-        setLoginUser(false)
-      }
-    });
+    statusLogin()
   },[])
 
   return (
+    // <React.Suspense fallback={<div>Loading...</div>}>
     <div>
-
-      { loginUser ? <Admin/> : <Login/> }
-      {/* <Admin/> */}
+      { LoginStatus ? (<Admin/>) : (<Login/>) }
     </div>
+    // </React.Suspense>
   )
 }
 
+
+// import LoginPage from '../pages/Login'
+const LoginPage = React.lazy(()=> import('../pages/Login'))
 const Login = () => {
     return (
-      <div>      
+      <React.Suspense fallback={<div>Loading...</div>}>
+        <div>      
+
+
+
         <Routes>
-    
+
             <Route path="/Login" element={<LoginPage/>}/>
             <Route path="*" element={<Navigate to="/Login"/>}/>
-  
-        </Routes> </div>
+
+        </Routes> 
+
+        </div>
+      </React.Suspense>
     )
   }
 
@@ -59,15 +62,22 @@ const Header = () => {
     )
   }
 
+  // import Homepage from '../pages/admin/Homepage'
+const Homepage = React.lazy(()=> import('../pages/admin/Homepage'))
 const Admin = () =>{
   return (
     <div>      
+      <React.Suspense fallback={<div>Loading...</div>}>
       <Routes>
         <Route element={<Header/>}>
+
           <Route path="/Admin/" element={<Homepage/>}/>
           <Route path="*" element={<Navigate to="/Admin/"/>}/>
+
         </Route>
-      </Routes> </div>
+      </Routes> 
+      </React.Suspense>
+</div>
   )
 }
 export default Routess

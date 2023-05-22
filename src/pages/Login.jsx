@@ -24,7 +24,7 @@ import { LoginSession } from '../Authentication/Authentication';
 
 // icons
 import GoogleIcon from '@mui/icons-material/Google';
-
+import ICON from '../Images/logo512.png'
 
 
 
@@ -82,10 +82,32 @@ const Mobile = () => {
   const isValid = async (Email,Password) =>{
     try {
       await userSchema.validate({ email: Email, password: Password }, { abortEarly: false });
-  
-      // If there are no validation errors
-      setError(false);
-      LoginSession(user);
+      
+
+      LoginSession(user).then(result=>{
+          console.log(result)
+          
+          setError({
+            email: false,
+            emailError: "",
+
+            password: false,
+            passwordError: ""
+          });
+
+      }).catch((error) => {
+        console.log("error",error); // Error message
+
+          setError({
+            email: true,
+            emailError: "",
+
+            password: true,
+            passwordError: error
+          });
+
+      });
+
 
     } catch (validationError) {
 
@@ -160,7 +182,9 @@ const Mobile = () => {
               sx={{ 
                 bgcolor: "#e7e5d6b5",
                 height: '150px', width: '150px'
-              }}>S</Avatar>
+              }}
+              
+              src={ICON}>S</Avatar>
 
 
               <Grid container       
@@ -262,7 +286,13 @@ const Desktop = () => {
     password: ""
   })
 
-  const [error, setError] = React.useState(false)
+  const [error, setError] = React.useState({
+    email: false,
+    emailError: "",
+    password: false,
+    passwordError: ""
+  })
+
 
 
   // Login Details
@@ -277,15 +307,54 @@ const Desktop = () => {
 
   // validation
   const isValid = async (Email,Password) =>{
+    try {
+      await userSchema.validate({ email: Email, password: Password }, { abortEarly: false });
+      
 
-   await userSchema.isValid({
-    email: Email,
-    password: Password
-   }).then(result=>{
-      setError(!result)
-   });
+      LoginSession(user).then(result=>{
+          console.log(result)
+          
+          setError({
+            email: false,
+            emailError: "",
+
+            password: false,
+            passwordError: ""
+          });
+
+      }).catch((error) => {
+        console.log("error",error); // Error message
+
+          setError({
+            email: true,
+            emailError: "",
+
+            password: true,
+            passwordError: error
+          });
+
+      });
+
+
+    } catch (validationError) {
+
+      // Extract specific error messages for email and password
+      const emailError = validationError.inner.find((error) => error.path === 'email');
+      const passwordError = validationError.inner.find((error) => error.path === 'password');
+
+      // If validation errors occur
+      setError({
+        email: !!emailError,
+        emailError: emailError && emailError.message,
+
+        password: !!passwordError,
+        passwordError: passwordError && passwordError.message
+      });
+      
+    }
 
   }
+
 
   const Login = (e) =>{
     e.preventDefault();
@@ -337,7 +406,9 @@ const Desktop = () => {
              sx={{ 
               bgcolor: "#e7e5d6b5",
               height: '280px', width: '280px'
-            }}>S</Avatar>
+            }}
+            src={ICON}
+            >S</Avatar>
             </Stack>
           
           </Box>
@@ -375,7 +446,8 @@ const Desktop = () => {
                 size='medium'
                 value={user.email}
                 onChange={Email}
-                error={error}
+                error={error.email}
+                helperText={error.emailError}
                 />
 
                 {/* password */}
@@ -388,8 +460,8 @@ const Desktop = () => {
                 size='medium'
                 value={user.password}
                 onChange={Password}
-                helperText={!error ? "" : "Please check email and password,password should contain min 6 char long"}
-                error={error}
+                error={error.password}
+                helperText={error.passwordError}
                 />
                 
                 <Stack

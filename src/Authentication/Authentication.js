@@ -2,31 +2,47 @@
 import { 
     setPersistence, 
     signInWithEmailAndPassword, 
-    browserSessionPersistence 
+    browserSessionPersistence,
+    signOut,
 } from "firebase/auth";
 
 import { auth } from '../firebase/FirebaseConfig'
 
 
 // Login 
-export const LoginSession = async (user) => {
+export const LoginSession = (user) => {
+    return new Promise((resolve, reject) => {
 
-    await setPersistence(auth, browserSessionPersistence)
-        .then(async () =>{
+      setPersistence(auth, browserSessionPersistence)
 
-            return await signInWithEmailAndPassword(auth, user.email, user.password)
-                .then(
-                    ()=> {
-                        return String("Login Successful")
-                    }
-                )
-                .catch(error=>{
-                    console.log(error)
-                    const errorMessage = error.message.match(/\((.*?)\)/)[1];
-                    const errorMessages = errorMessage.replace('auth/', '').replace(/-/g, ' ');
-                    console.log(errorMessages)
-                    return errorMessages
-                })
-    })
+        .then(() => {
+          signInWithEmailAndPassword(auth, user.email, user.password)
 
+            .then(() => {
+                window.location.reload();
+              resolve("Login Successful");
+            })
+            .catch((error) => {
+              console.log(error);
+              const errorMessage = error.message.match(/\((.*?)\)/)[1];
+              const errorMessages = errorMessage.replace('auth/', '').replace(/-/g, ' ');
+
+              reject(errorMessages);
+            });
+        })
+        .catch((error) => {
+          console.log(error);
+          reject("An error occurred during login.");
+        });
+    });
+  };
+
+
+  // Logout
+export const LogoutSession = async () => {
+    await signOut(auth).then(()=>{
+        console.log("Succesfull signout")
+    }).catch((err)=>console.log(err))
+  
 }
+  
