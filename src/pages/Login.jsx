@@ -19,7 +19,7 @@ import {
   userSchema
 } from '../Authentication/Validation'
 
-  // --- Temporary Login
+// --- Temporary Login
 import { LoginSession } from '../Authentication/Authentication';
 
 // icons
@@ -60,7 +60,12 @@ const Mobile = () => {
     password: ""
   })
 
-  const [error, setError] = React.useState(false)
+  const [error, setError] = React.useState({
+    email: false,
+    emailError: "",
+    password: false,
+    passwordError: ""
+  })
 
 
   // Login Details
@@ -75,18 +80,29 @@ const Mobile = () => {
 
   // validation
   const isValid = async (Email,Password) =>{
-    await userSchema.isValid({
-      email: Email,
-      password: Password
-    }).then(result=>{
-      setError(!result);
-      console.log(result)
+    try {
+      await userSchema.validate({ email: Email, password: Password }, { abortEarly: false });
+  
+      // If there are no validation errors
+      setError(false);
+      LoginSession(user);
 
-      if (result){
-        LoginSession(user)
-      }
+    } catch (validationError) {
 
-    });
+      // Extract specific error messages for email and password
+      const emailError = validationError.inner.find((error) => error.path === 'email');
+      const passwordError = validationError.inner.find((error) => error.path === 'password');
+
+      // If validation errors occur
+      setError({
+        email: !!emailError,
+        emailError: emailError && emailError.message,
+
+        password: !!passwordError,
+        passwordError: passwordError && passwordError.message
+      });
+      
+    }
 
   }
 
@@ -135,6 +151,7 @@ const Mobile = () => {
             direction="column"
             justifyContent="center"
             alignItems="center"
+            paddingTop={4}
             >
 
               {/* Icons */}
@@ -161,7 +178,8 @@ const Mobile = () => {
                 size='medium'
                 value={user.email}
                 onChange={Email}
-                error={error}
+                error={error.email}
+                helperText={error.emailError}
                 />
 
           {/* password */}
@@ -174,7 +192,8 @@ const Mobile = () => {
                 placeholder='Password'
                 value={user.password}
                 onChange={Password}
-                error={error}
+                error={error.password}
+                helperText={error.passwordError}
                 />
                 
                 <Link href="#" 

@@ -12,7 +12,7 @@ import {
 
   import { auth } from '../firebase/FirebaseConfig'
 
-  import { getAuth,onAuthStateChanged } from "firebase/auth";
+  import { onAuthStateChanged } from "firebase/auth";
 
 const Routess = () => {
 
@@ -21,15 +21,8 @@ const Routess = () => {
   React.useEffect( ()=>{
      onAuthStateChanged(auth, (user) => {
       if (user) {
-        // User is signed in, see docs for a list of available properties
-        // https://firebase.google.com/docs/reference/js/firebase.User
-        const uid = user.uid;
-        console.log(user)
         setLoginUser(true)
-        // ...
       } else {
-        // User is signed out
-        // ...
         setLoginUser(false)
       }
     });

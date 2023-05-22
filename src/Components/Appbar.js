@@ -126,6 +126,9 @@ const MobileAppbar = () => {
                         case 1:
                             routeServices();
                         break;
+                        default:
+                            routeHome();
+                        break;
 
                      }
                 }}

@@ -1,3 +1,4 @@
+
 import { 
     setPersistence, 
     signInWithEmailAndPassword, 
@@ -7,22 +8,25 @@ import {
 import { auth } from '../firebase/FirebaseConfig'
 
 
+// Login 
 export const LoginSession = async (user) => {
 
-    const login = await setPersistence(auth, browserSessionPersistence)
+    await setPersistence(auth, browserSessionPersistence)
         .then(async () =>{
 
             return await signInWithEmailAndPassword(auth, user.email, user.password)
                 .then(
-                    userdata=> {
-                        console.log(userdata)
+                    ()=> {
+                        return String("Login Successful")
                     }
                 )
                 .catch(error=>{
-                    console.log(error.code)
-                    console.log(error.message)
+                    console.log(error)
+                    const errorMessage = error.message.match(/\((.*?)\)/)[1];
+                    const errorMessages = errorMessage.replace('auth/', '').replace(/-/g, ' ');
+                    console.log(errorMessages)
+                    return errorMessages
                 })
-
     })
 
 }

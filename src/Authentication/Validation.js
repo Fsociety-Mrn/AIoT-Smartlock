@@ -7,22 +7,18 @@ import * as yup from "yup"
 //     purchase : yup.string().required()
 // })
 
-//Email validation
+
+// const passwordRules = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{5,}$/;
+// min 5 characters, 1 upper case letter, 1 lower case letter, 1 numeric digit.
+
+//Email and password validation
 export const userSchema = yup.object().shape({
-    email : yup.string().email().required(),
-    password: yup.string().min(6).required(),
+    email : yup.string()
+            .email("Incorrect email format")
+            .required("Please fill out the email field"),
+
+    password: yup.string()
+            // .matches(passwordRules, { message: "Please create a stronger password" })
+            .required("Please enter a password")
+            .min(6,"Password should be 6 char long")
 });
-
-
-export const emailSchema = yup.object().shape({
-    email : yup.string().email().required()
-});
-
-export const passwordSchema = yup.object().shape({
-    password: yup.string().min(6).required()
-});
-
-// // Quantity Order
-// export const QuantitySchema = yup.object().shape({
-//     quantity: yup.number().positive().integer()
-// })
