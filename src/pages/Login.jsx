@@ -18,9 +18,9 @@ import { MobileTextbox,DesktopTextbox } from '../Components/Textfield';
 import {
   userSchema
 } from '../Authentication/Validation'
-import { 
-  LoginSession 
-} from '../Authentication/Authentication';
+
+  // --- Temporary Login
+import { LoginSession } from '../Authentication/Authentication';
 
 // icons
 import GoogleIcon from '@mui/icons-material/Google';

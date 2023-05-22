@@ -10,12 +10,35 @@ import {
     Outlet,
   } from 'react-router-dom'
 
+  import { auth } from '../firebase/FirebaseConfig'
+
+  import { getAuth,onAuthStateChanged } from "firebase/auth";
+
 const Routess = () => {
-  let authToken = sessionStorage.getItem('TOKEN')
+
+  const [loginUser, setLoginUser] = React.useState(false)
+  
+  React.useEffect( ()=>{
+     onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in, see docs for a list of available properties
+        // https://firebase.google.com/docs/reference/js/firebase.User
+        const uid = user.uid;
+        console.log(user)
+        setLoginUser(true)
+        // ...
+      } else {
+        // User is signed out
+        // ...
+        setLoginUser(false)
+      }
+    });
+  },[])
+
   return (
     <div>
 
-      { authToken ? <Admin/> : <Login/> }
+      { loginUser ? <Admin/> : <Login/> }
       {/* <Admin/> */}
     </div>
   )
