@@ -18,6 +18,9 @@ import { MobileTextbox,DesktopTextbox } from '../Components/Textfield';
 import {
   userSchema
 } from '../Authentication/Validation'
+import { 
+  LoginSession 
+} from '../Authentication/Authentication';
 
 // icons
 import GoogleIcon from '@mui/icons-material/Google';
@@ -72,17 +75,25 @@ const Mobile = () => {
 
   // validation
   const isValid = async (Email,Password) =>{
-   await userSchema.isValid({
-    email: Email,
-    password: Password
-   }).then(result=>{
-    setError(!result)
-   });
+    await userSchema.isValid({
+      email: Email,
+      password: Password
+    }).then(result=>{
+      setError(!result);
+      console.log(result)
+
+      if (result){
+        LoginSession(user)
+      }
+
+    });
 
   }
 
   const Login = (e) =>{
     e.preventDefault();
+
+    // check email and password validaty
     isValid(user.email,user.password)
   }
   
@@ -247,18 +258,22 @@ const Desktop = () => {
 
   // validation
   const isValid = async (Email,Password) =>{
+
    await userSchema.isValid({
     email: Email,
     password: Password
    }).then(result=>{
-    setError(!result)
+      setError(!result)
    });
 
   }
 
   const Login = (e) =>{
     e.preventDefault();
-    isValid(user.email,user.password)
+
+    // Check if validation
+    console.log(isValid(user.email,user.password))
+    
   }
 
   return (
@@ -354,6 +369,7 @@ const Desktop = () => {
                 size='medium'
                 value={user.password}
                 onChange={Password}
+                helperText={!error ? "" : "Please check email and password,password should contain min 6 char long"}
                 error={error}
                 />
                 
@@ -370,10 +386,12 @@ const Desktop = () => {
 
                   {/* click Login */}
                   <Button variant='contained' fullWidth style={{
-                    background:'linear-gradient(to right, rgb(61, 152, 154) 0%, rgb(12, 14, 36) 100%)'
-                    //background: 'linear-gradient(to right, rgb(11, 131, 120) 0%, rgb(85, 98, 112) 100%)'
+                    background:'linear-gradient(to right, rgb(61, 152, 154) 0%, rgb(12, 14, 36) 100%)',
+                    //background: 'linear-gradient(to right, rgb(11, 131, 120) 0%, rgb(85, 98, 112) 100%),'
+                    textTransform: 'none' 
                   }}
                   onClick={Login}
+       
                   >Login</Button>
 
                 </Stack>
@@ -397,7 +415,8 @@ const Desktop = () => {
                   style={{
                     color: 'rgb(61, 152, 154)',
                     border: 'solid 2px rgb(61, 152, 154)',
-                    backgroundColor: "white"
+                    backgroundColor: "white",
+                    textTransform: 'none' 
                   }}
                   >Login with Google</Button>
                 </Stack>
