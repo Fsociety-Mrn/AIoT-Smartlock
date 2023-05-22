@@ -26,3 +26,5 @@ yarn-error.log*
 /test.py
 /pages/__pycache__
 /__pycache__
+/src/firebase/Firebase.js
+/.firebase
