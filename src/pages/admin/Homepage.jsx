@@ -15,7 +15,7 @@ const homepage = () => {
     <br/>
     <br/>
     <br/>
-    <h1>homepage</h1>
+    <h1>My Locker</h1>
     <button onClick={(e)=>{
       LogoutSession();
       window.location.reload();

@@ -222,6 +222,7 @@ const Mobile = () => {
                 
                 <Link href="#" 
                 underline="always" 
+                fontFamily={'sans-serif'}
                   style={{
                     color: 'white',
                     marginTop:'15px',
@@ -235,8 +236,9 @@ const Mobile = () => {
                 style={{
                   // background: 'linear-gradient(to right, rgb(11, 131, 120) 0%, #e7e5d6b5 100%)',
                   marginBottom: '15px',
-                  background: 'linear-gradient(to right, rgb(11, 131, 120) 0%, rgb(85, 98, 112) 100%)'
-                  
+                  background: 'linear-gradient(to right, rgb(11, 131, 120) 0%, rgb(85, 98, 112) 100%)',
+                  textTransform: 'none',
+                  fontFamily: 'sans-serif'
                 }}
                 onClick={Login}
                 >Login</Button>
@@ -244,6 +246,7 @@ const Mobile = () => {
                 <Grid item xs={12}>
                   <Divider>
                     <Typography
+                      fontFamily={'sans-serif'}
                       style={{
                       color: '#FFFFFF'
                       }}>Or</Typography>
@@ -261,7 +264,11 @@ const Mobile = () => {
                   startIcon={<GoogleIcon />}
                   style={{
                     color: 'rgb(11, 131, 120)',
-                    backgroundColor: "white"
+                    backgroundColor: "white",
+                    textTransform: 'none',
+                    fontFamily: 'sans-serif',
+                    width: '250px',
+                    padding: '8px'
                   }}
                   >Login with Google</Button>
                 </Stack>
@@ -448,6 +455,7 @@ const Desktop = () => {
                 onChange={Email}
                 error={error.email}
                 helperText={error.emailError}
+                
                 />
 
                 {/* password */}
@@ -468,27 +476,30 @@ const Desktop = () => {
                 direction="column"
                 justifyContent="center"
                 alignItems="center"
-                padding={3}
-                spacing={1}
+                padding={2}
+                spacing={2}
                 >
-                  <Link href="#" style={{
+                  <Link href="#" fontFamily={'sans-serif'} 
+                  style={{
                     color: 'rgb(11, 131, 120)'
                   }} >Forgot Password</Link>
 
                   {/* click Login */}
-                  <Button variant='contained' fullWidth style={{
+                  <Button variant='contained' fullWidth  style={{
                     background:'linear-gradient(to right, rgb(61, 152, 154) 0%, rgb(12, 14, 36) 100%)',
                     //background: 'linear-gradient(to right, rgb(11, 131, 120) 0%, rgb(85, 98, 112) 100%),'
-                    textTransform: 'none' 
+                    textTransform: 'none',
+                    fontFamily: 'sans-serif'
                   }}
                   onClick={Login}
-       
+    
                   >Login</Button>
 
                 </Stack>
 
                 <Divider orientation='horizontal' color='rgb(12, 14, 36)'>
                   <Typography
+                  fontFamily={'sans-serif'} 
                   style={{
                     color: 'rgb(61, 152, 154)'
                   }}>Or</Typography>

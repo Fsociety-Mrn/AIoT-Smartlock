@@ -1,24 +1,26 @@
 import { 
     AppBar, 
     Avatar, 
-    BottomNavigation, 
+    // BottomNavigation, 
     Box, 
     Drawer, 
     IconButton, 
     List, 
+    Tab, 
+    Tabs, 
     Typography
 } from '@mui/material'
 import Toolbar from '@mui/material/Toolbar';
 import React from 'react'
 
-import CssBaseline from '@mui/material/CssBaseline';
+
 
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MuiBottomNavigationAction from "@mui/material/BottomNavigationAction";
+// import MuiBottomNavigationAction from "@mui/material/BottomNavigationAction";
 
 // icons
 // import SmartToyOutlinedIcon from '@mui/icons-material/SmartToyOutlined';
@@ -27,13 +29,16 @@ import MuiBottomNavigationAction from "@mui/material/BottomNavigationAction";
 import HomeRepairServiceIcon from '@mui/icons-material/HomeRepairService';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
-import { useNavigate } from 'react-router-dom';
-import { styled } from "@mui/material/styles";
+
+// import { styled } from "@mui/material/styles";
 import ICON from '../Images/logo512.png'
 
+import { useLocation, useNavigate, Route, Routes, Navigate } from 'react-router-dom';
+
+import { useTheme } from '@emotion/react';
+
 export const Appbar = () => {
-    
-  let appBarStatus = sessionStorage.getItem('SCREEN')
+
   // get windows screen
   const [state, setState] = React.useState(true);
   React.useEffect(()=>{
@@ -61,28 +66,63 @@ export const Appbar = () => {
 // Mobile mode
 
 // for button custom button navigation
-const BottomNavigationAction = styled(MuiBottomNavigationAction)(`
-  color: rgb(12, 14, 36);
-  &.Mui-selected {
-    color: white;
-  }
-`);
+// const BottomNavigationAction = styled(MuiBottomNavigationAction)(`
+//   color: rgb(12, 14, 36);
+//   &.Mui-selected {
+//     color: white;
+//   }
+// `);
 
 const MobileAppbar = () => {
+    const theme = useTheme();
+
     // const trigger = useScrollTrigger();
     const [value, setValue] = React.useState(0);
 
+    const location = useLocation();
     let navigate = useNavigate();
 
-    // function for navigation to home page
-    const routeHome = () => {
-        navigate("/");
-    }
-    
-    const routeServices = () => {
-        navigate("/");
-    }
 
+    const getRoutePath = (index) => {
+        // Define the route paths for each index
+        const routePaths = [
+          '/Admin/',
+          '/Admin/LockerAvailable"',
+          '/Admin/ManageLocker',
+          '/Admin/MyAccount'
+        ];
+        return routePaths[index];
+      };
+    
+
+
+    // FOR ROUTE changes 
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+        switch(newValue){
+            case 0:
+                navigate("/Admin/");
+            break;
+            case 1:
+                navigate("/Admin/LockerAvailable");
+            break;
+            case 2:
+                navigate("/Admin/ManageLocker");
+            break;
+            case 3:
+                navigate("/Admin/MyAccount");
+            break;
+
+            default:
+                navigate("/Admin/");
+            break;
+
+         }
+      };
+
+
+
+    // for swipe
     return (
         <div>
             <AppBar position="fixed">
@@ -90,7 +130,10 @@ const MobileAppbar = () => {
                 {/* Title */}
                 <Toolbar variant="regular"                
                 sx={{ 
+                    // display: 'flex',
+                    // justifyContent: 'center',
                     backgroundImage: 'linear-gradient(to right, rgb(61, 152, 154) 50%, rgb(12, 14, 36) 100%)',
+                    borderBottom: 'none', // Remove the bottom border
                 }}>
 
                     <IconButton edge="start" color="inherit" aria-label="menu" 
@@ -105,57 +148,40 @@ const MobileAppbar = () => {
                         >S</Avatar>
                     </IconButton>
 
-                    <Typography variant="h5" color="inherit" 
+                    <Typography variant="h5" 
+                    fontFamily={'sans-serif'}
+                    color="inherit" 
                     sx={{ marginTop: 1.5}}
                     >
                         AIoT Smartlock
                     </Typography>
 
                 </Toolbar>
-
-                {/* navigation */}
-                <BottomNavigation
+                <Box sx={{ marginTop: -1 }}>
+                <Tabs 
+                value={value} 
+                onChange={handleChange}        
+                indicatorColor='secondary'  
+                textColor='inherit'
                 sx={{ 
                     backgroundImage: 'linear-gradient(to right, rgb(61, 152, 154) 50%, rgb(12, 14, 36) 100%)',
+                    border: 'none', // Remove the bottom border
                 }}
-                showLabels
-                value={value}
-                onChange={(event, newValue) => {
-                    setValue(newValue);
-                    switch(newValue){
-                        case 0:
-                            routeHome();
-                        break;
-                        case 1:
-                            routeServices();
-                        break;
-                        default:
-                            routeHome();
-                        break;
+                centered>
 
-                     }
-                }}
-                >
-                    <BottomNavigationAction 
-                    // label="My Personal Locker" 
-                    icon={<HomeRoundedIcon />} onClick={routeHome}/>
-
-                    <BottomNavigationAction 
-                    // label="Locker Availability" 
-                    icon={<HomeRepairServiceIcon onClick={routeServices}/>} />
-
-                    <BottomNavigationAction 
-                    // label="Manage Smartlocker" 
-                    icon={<HomeRepairServiceIcon onClick={routeServices}/>} />
-
-                    <BottomNavigationAction 
-                    // label="Account Settings" 
-                    icon={<AccountCircleIcon />} />
-                    
-                </BottomNavigation>
-
+      
+                    <Tab icon={<HomeRoundedIcon />} />
+                    <Tab icon={<AccountCircleIcon />}  />
+                    <Tab icon={<HomeRepairServiceIcon />}  />
+                    <Tab icon={<AccountCircleIcon />}  />
+ 
+                </Tabs>
+                </Box>
          
             </AppBar>
+
+
+
         </div>
     )
 }
@@ -168,7 +194,7 @@ const drawerWidth = 240;
 const DesktopAppbar = () => {
     return (
         <div>
-            <CssBaseline />
+
             <AppBar
             position="fixed"
             sx={{ 

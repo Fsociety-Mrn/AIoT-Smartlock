@@ -3,9 +3,22 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { BrowserRouter } from 'react-router-dom';
+import CssBaseline from '@mui/material/CssBaseline';
+import { Box } from '@mui/material';
 
 const theme = createTheme({
+  typography: {
+    "fontFamily": `sans-serif`,
+    "fontSize": 14,
+    "fontWeightLight": 300,
+    "fontWeightRegular": 400,
+    "fontWeightMedium": 500
+  },
+
   palette: {
+    background: {
+      default: '#e7e5d6b5', // Set your desired background color here
+    },
     primary: {
       main: 'rgb(61, 152, 154)',
     },
@@ -33,9 +46,12 @@ const theme = createTheme({
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
+  <CssBaseline />
     <ThemeProvider theme={theme}>
       <BrowserRouter>
+      <Box sx={{ backgroundColor: '#e7e5d6b5', minHeight: '100vh' }}>
         <App />
+        </Box>
       </BrowserRouter>
     </ThemeProvider>
   </React.StrictMode>

@@ -1,16 +1,18 @@
 import React from 'react'
 import { Appbar } from '../Components/Appbar'
 
-
-
 import { 
     Navigate, 
     Route, 
     Routes,
-    Outlet,
+    Outlet
   } from 'react-router-dom'
 
-  import { statusLogin } from '../firebase/FirebaseConfig'
+import { statusLogin } from '../firebase/FirebaseConfig'
+
+
+
+
 
 
 const Routess = () => {
@@ -64,20 +66,35 @@ const Header = () => {
 
   // import Homepage from '../pages/admin/Homepage'
 const Homepage = React.lazy(()=> import('../pages/admin/Homepage'))
+const MyAccount = React.lazy(()=> import('../pages/admin/Account'))
+const CheckLocker  = React.lazy(()=> import('../pages/admin/LockerAvailable'))
+const ManageLocker = React.lazy(()=> import('../pages/admin/ManageLocker'))
 const Admin = () =>{
+
   return (
     <div>      
       <React.Suspense fallback={<div>Loading...</div>}>
-      <Routes>
-        <Route element={<Header/>}>
+        <Routes>
+          <Route element={<Header/>}>
 
-          <Route path="/Admin/" element={<Homepage/>}/>
-          <Route path="*" element={<Navigate to="/Admin/"/>}/>
+            <Route path="/Admin/" element={<Homepage/>}/>
+            <Route path="/Admin/MyAccount" element={<MyAccount/>}/>
+            <Route path="/Admin/LockerAvailable" element={<CheckLocker/>}/>
+            <Route path="/Admin/ManageLocker" element={<ManageLocker/>}/>
+            <Route path="*" element={<Navigate to="/Admin/"/>}/>
 
-        </Route>
-      </Routes> 
+          </Route>
+        </Routes> 
       </React.Suspense>
 </div>
   )
 }
+
+
+
+export const routesRouter = [
+  { path: '/', component: Homepage }
+];
+
+
 export default Routess
