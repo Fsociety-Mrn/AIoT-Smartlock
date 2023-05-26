@@ -1,10 +1,9 @@
 import React from 'react'
-import { LogoutSession } from '../../Authentication/Authentication'
+import { LogoutSession } from '../../Authentication/Authentication';
 
-
-const homepage = () => {
+const Homepage = () => {
   return (
-    <div>
+    <div>    
     <br/>
     <br/>
     <br/>
@@ -17,16 +16,13 @@ const homepage = () => {
     <br/>
     <br/>
     <br/>
-    <h1>My Locker</h1>
+    <h1>User</h1>
     <button onClick={(e)=>{
       LogoutSession();
       window.location.reload();
       }}>Logout</button>
-
-    
-    
     </div>
   )
 }
 
-export default homepage
+export default Homepage

@@ -42,6 +42,8 @@ export const LoginSession = (user) => {
 export const LogoutSession = async () => {
     await signOut(auth).then(()=>{
         console.log("Succesfull signout")
+        sessionStorage.clear()
+
     }).catch((err)=>console.log(err))
   
 }

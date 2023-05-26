@@ -6,7 +6,6 @@ import Routess from './Router/Routes';
 function App() {
   return (
     <div>
-
       <Routess/>
     </div>
   );

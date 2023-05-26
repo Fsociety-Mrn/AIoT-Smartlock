@@ -9,26 +9,36 @@ import {
   } from 'react-router-dom'
 
 import { statusLogin } from '../firebase/FirebaseConfig'
+import { isAdmin } from '../firebase/Firestore'
 
 
 
 
-
-
+// for Login
 const Routess = () => {
 
-  let LoginStatus = sessionStorage.getItem('TOKEN')
+  const [datas,setDatas] = React.useState()
+
+  const isLoggedIn = sessionStorage.getItem('TOKEN');
 
   React.useEffect( ()=>{
+
+
     statusLogin()
+    .then(
+      data=> setDatas(isAdmin(data))
+    )
+                        sessionStorage.setItem('isAdmin',datas) 
   },[])
 
+
   return (
-    // <React.Suspense fallback={<div>Loading...</div>}>
+ 
     <div>
-      { LoginStatus ? (<Admin/>) : (<Login/>) }
+      { isLoggedIn ? (<Mainpage/>) : (<Login/>) }
+      {/* { isLoggedIn ? (<Admin />) : (<Login/>) } */}
     </div>
-    // </React.Suspense>
+
   )
 }
 
@@ -54,6 +64,16 @@ const Login = () => {
     )
   }
 
+// for mainpage
+const Mainpage = () =>{
+  const isAdminS = sessionStorage.getItem('isAdmin');
+
+  if (isAdminS) {
+    return (<Admin/>)
+  }
+  
+  return (<User/>)
+}
 
 const Header = () => {
     return(
@@ -69,8 +89,8 @@ const Homepage = React.lazy(()=> import('../pages/admin/Homepage'))
 const MyAccount = React.lazy(()=> import('../pages/admin/Account'))
 const CheckLocker  = React.lazy(()=> import('../pages/admin/LockerAvailable'))
 const ManageLocker = React.lazy(()=> import('../pages/admin/ManageLocker'))
-const Admin = () =>{
 
+const Admin = () =>{
   return (
     <div>      
       <React.Suspense fallback={<div>Loading...</div>}>
@@ -90,11 +110,23 @@ const Admin = () =>{
   )
 }
 
+// user info
+const HomepageUser = React.lazy(()=> import('../pages/user/Homepage'))
 
+const User = ()=>{
+  return(
+  <div>
+      <React.Suspense fallback={<div>Loading...</div>}>
+        <Routes>
+          {/* <Route element={<Header/>}> */}
 
-export const routesRouter = [
-  { path: '/', component: Homepage }
-];
+            <Route path="/User/" element={<HomepageUser/>}/>
+            <Route path="*" element={<Navigate to="/User/"/>}/>
 
-
+          {/* </Route> */}
+        </Routes> 
+      </React.Suspense>
+  </div>
+  )
+}
 export default Routess

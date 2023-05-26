@@ -33,9 +33,9 @@ import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 // import { styled } from "@mui/material/styles";
 import ICON from '../Images/logo512.png'
 
-import { useLocation, useNavigate, Route, Routes, Navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-import { useTheme } from '@emotion/react';
+// import { useTheme } from '@emotion/react';
 
 export const Appbar = () => {
 
@@ -74,27 +74,9 @@ export const Appbar = () => {
 // `);
 
 const MobileAppbar = () => {
-    const theme = useTheme();
 
-    // const trigger = useScrollTrigger();
     const [value, setValue] = React.useState(0);
-
-    const location = useLocation();
     let navigate = useNavigate();
-
-
-    const getRoutePath = (index) => {
-        // Define the route paths for each index
-        const routePaths = [
-          '/Admin/',
-          '/Admin/LockerAvailable"',
-          '/Admin/ManageLocker',
-          '/Admin/MyAccount'
-        ];
-        return routePaths[index];
-      };
-    
-
 
     // FOR ROUTE changes 
     const handleChange = (event, newValue) => {
@@ -185,9 +167,6 @@ const MobileAppbar = () => {
         </div>
     )
 }
-
-
-
 
 // Desktop mode
 const drawerWidth = 240;

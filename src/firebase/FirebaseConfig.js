@@ -2,7 +2,7 @@
 import { initializeApp } from "firebase/app";
 // import { getAnalytics } from "firebase/analytics";
 import { getAuth, onAuthStateChanged } from "firebase/auth"
-
+import { getFirestore } from "firebase/firestore";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -26,6 +26,8 @@ const app = initializeApp(firebaseConfig);
 // for firebase authentication
 export const auth = getAuth(app);
 
+// for firesstore database
+export const Fdb  = getFirestore(app);
 
 // check the login status
 export const statusLogin = () => {
@@ -33,9 +35,8 @@ export const statusLogin = () => {
   return new Promise((resolve, reject) => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        
         sessionStorage.setItem('TOKEN',"Login")   
-        resolve(user);
+        resolve(user.uid);
       } else {
 
         sessionStorage.clear()
@@ -44,5 +45,6 @@ export const statusLogin = () => {
     }, reject);
   });
 };
+
 
 

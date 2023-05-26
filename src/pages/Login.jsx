@@ -14,6 +14,8 @@ import {
 } from '@mui/material'
 import { MobileTextbox,DesktopTextbox } from '../Components/Textfield';
 
+import { isAdmin } from '../firebase/Firestore'
+
 // validation
 import {
   userSchema
@@ -270,6 +272,7 @@ const Mobile = () => {
                     width: '250px',
                     padding: '8px'
                   }}
+                  onClick={()=> isAdmin()}
                   >Login with Google</Button>
                 </Stack>
 
