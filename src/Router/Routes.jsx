@@ -18,24 +18,37 @@ import { isAdmin } from '../firebase/Firestore'
 const Routess = () => {
 
   const isLoggedIn = sessionStorage.getItem('TOKEN');
+
   const isAdmins = sessionStorage.getItem('isAdmin');
-  const [admins,setAdmins] = React.useState()
+
+  const [admins,setAdmins] = React.useState({
+    Name: "",
+    profile: ""
+  })
+
+
   React.useEffect(()=>{
+    // statusLogin().then(user=>console.log(user.uid))
+    statusLogin()
+      .then(user=>{ 
 
-    statusLogin().then(uid=>
-      isAdmin(uid).then(data=>{
-        console.log(data) 
-        sessionStorage.setItem('isAdmin', data ? "true" : "false");
+        setAdmins({
+          Name: user.displayName,
+          profile: user.photoURL
+        })
 
-        
-        if (!isAdmins){
-          window.location.reload()
-        }
-        
-      }
-        ).catch(error=> console.log(error))
-    )
-      console.log(isAdmins)
+
+        // verify Admin
+        isAdmin(user.uid)
+          .then(data=>{
+            sessionStorage.setItem('isAdmin', data ? "true" : "false");  
+            
+            // if (!isAdmins){
+            //   window.location.reload()
+            // }
+    
+          }).catch(error=> console.log(error))
+        }).catch(error=> console.log(error))
 
     
   },[])
@@ -43,7 +56,8 @@ const Routess = () => {
  
     <div>
     
-      {isAdmins ? <Mainpage isAdminS={isAdmins}/>:<Login/>}
+      {isLoggedIn ? <Mainpage isAdminS={isAdmins} Users={admins.Name} photoUrl={admins.profile}/>:<Login/>}
+      {/* <WelcomePage/> */}
       {/* <Login/> */}
     </div>
 
@@ -72,18 +86,24 @@ const Login = () => {
 
 
 // for mainpage
+const WelcomePage = React.lazy(()=> import('../pages/Welcome'))
+const Mainpage = ({ isAdminS, Users, photoUrl }) =>{
 
-const Mainpage = ({ isAdminS }) =>{
 
-
-
+  if (isAdminS === "true"){
+    return <Admin/>
+  }else if(isAdminS === "false"){
+    return <User/>
+  }else{
+    return <WelcomePage User={Users} photoUrl={photoUrl}/>
+  }
   
 
-  return (
-    <div>
-      {isAdminS === "true" ? <Admin/> : <User/>}
-    </div>
-  )
+  // return (
+  //   <div>
+  //     {isAdminS === "true" ? <Admin/> : <User/>}
+  //   </div>
+  // )
 
 }
 
@@ -96,7 +116,7 @@ const Header = () => {
     )
   }
 
-  // import Homepage from '../pages/admin/Homepage'
+// Admin Page
 const Homepage = React.lazy(()=> import('../pages/admin/Homepage'))
 const MyAccount = React.lazy(()=> import('../pages/admin/Account'))
 const CheckLocker  = React.lazy(()=> import('../pages/admin/LockerAvailable'))
@@ -124,9 +144,8 @@ const Admin = () =>{
   )
 }
 
-// user info
+// User Page
 const HomepageUser = React.lazy(()=> import('../pages/user/Homepage'))
-
 const User = ()=>{
 
   return(

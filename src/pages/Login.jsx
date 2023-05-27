@@ -10,7 +10,8 @@ import {
   Link, 
   Paper, 
   Stack, 
-  Typography  
+  Typography,
+  Fab
 } from '@mui/material'
 import { MobileTextbox,DesktopTextbox } from '../Components/Textfield';
 
@@ -162,6 +163,7 @@ const Mobile = () => {
             height: '80vh',
             backgroundColor: 'primary.dark',
             borderTopLeftRadius: '50px',
+            // backgroundColor: "white",
             background: 'linear-gradient(to right, rgb(61, 152, 154) 0%, rgb(12, 14, 36) 100%)',
             // backgroundSize: '200% 200%',
             // backgroundPosition: 'left',
@@ -240,7 +242,17 @@ const Mobile = () => {
                   marginBottom: '15px',
                   background: 'linear-gradient(to right, rgb(11, 131, 120) 0%, rgb(85, 98, 112) 100%)',
                   textTransform: 'none',
-                  fontFamily: 'sans-serif'
+                  fontFamily: 'sans-serif',
+                  borderRadius: 25,
+                  boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.25)',
+                  fontWeight: 'bold',
+                  fontSize: '16px',
+                  transition: 'background-color 0.3s ease',
+                  // Mobile-specific styles
+                  '@media (maxWidth: 700px)': {
+                    fontSize: '14px',
+                    padding: '10px 16px',
+                  },
                 }}
                 onClick={Login}
                 >Login</Button>
@@ -270,9 +282,19 @@ const Mobile = () => {
                     textTransform: 'none',
                     fontFamily: 'sans-serif',
                     width: '250px',
-                    padding: '8px'
+                    padding: '8px',
+                    borderRadius: 25,
+                  boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.25)',
+                  fontWeight: 'bold',
+  
+                  transition: 'background-color 0.3s ease',
+                  // Mobile-specific styles
+                  '@media (maxWidth: 700px)': {
+                    fontSize: '14px',
+                    padding: '10px 16px',
+                  },
                   }}
-                  onClick={()=> console.log(isAdmin()) }
+                  // onClick={()=> console.log(isAdmin()) }
                   >Login with Google</Button>
                 </Stack>
 
@@ -458,7 +480,7 @@ const Desktop = () => {
                 onChange={Email}
                 error={error.email}
                 helperText={error.emailError}
-                
+       
                 />
 
                 {/* password */}
@@ -488,15 +510,26 @@ const Desktop = () => {
                   }} >Forgot Password</Link>
 
                   {/* click Login */}
-                  <Button variant='contained' fullWidth  style={{
-                    background:'linear-gradient(to right, rgb(61, 152, 154) 0%, rgb(12, 14, 36) 100%)',
-                    //background: 'linear-gradient(to right, rgb(11, 131, 120) 0%, rgb(85, 98, 112) 100%),'
+                  <Button variant='contained' fullWidth  
+                  style={{
+                    background: 'linear-gradient(to right, rgb(61, 152, 154) 0%, rgb(12, 14, 36) 100%)',
                     textTransform: 'none',
-                    fontFamily: 'sans-serif'
+                    fontFamily: 'sans-serif',
+                    borderRadius: 25,
+                    color: 'white', // Added explicit color to ensure text is visible
+                    boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.25)', // Added a subtle shadow for depth
+                    fontWeight: 'bold', // Added bold font weight
+                    fontSize: '16px', // Adjusted font size for better readability
+                    padding: '10px', // Adjusted padding for more comfortable touch interaction
+                    transition: 'background-color 0.3s ease', // Added a smooth transition for hover effect
                   }}
                   onClick={Login}
     
                   >Login</Button>
+
+                  {/* <Fab variant="extended">
+                    Login
+                  </Fab> */}
 
                 </Stack>
 
@@ -521,7 +554,14 @@ const Desktop = () => {
                     color: 'rgb(61, 152, 154)',
                     border: 'solid 2px rgb(61, 152, 154)',
                     backgroundColor: "white",
-                    textTransform: 'none' 
+                    textTransform: 'none',
+                    fontFamily: 'sans-serif',
+                    borderRadius: 25,
+                    boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.25)', // Added a subtle shadow for depth
+                    fontWeight: 'bold', // Added bold font weight
+                    fontSize: '16px', // Adjusted font size for better readability
+                    padding: '10px', // Adjusted padding for more comfortable touch interaction
+                    transition: 'background-color 0.3s ease', 
                   }}
                   >Login with Google</Button>
                 </Stack>

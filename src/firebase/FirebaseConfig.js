@@ -37,7 +37,7 @@ export const statusLogin = () => {
       if (user) {
         sessionStorage.setItem('TOKEN',"Login")   
                             // window.location.reload();
-        resolve(user.uid);
+        resolve(user);
       } else {
 
         sessionStorage.clear()
