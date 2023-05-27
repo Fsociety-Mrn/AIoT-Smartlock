@@ -9,7 +9,7 @@ import {
   } from 'react-router-dom'
 
 import { statusLogin } from '../firebase/FirebaseConfig'
-import { isAdmin } from '../firebase/Firestore'
+// import { isAdmin } from '../firebase/Firestore'
 
 
 
@@ -17,26 +17,18 @@ import { isAdmin } from '../firebase/Firestore'
 // for Login
 const Routess = () => {
 
-  const [datas,setDatas] = React.useState()
+  // const isLoggedIn = sessionStorage.getItem('TOKEN');
+  const isAdmins = sessionStorage.getItem('isAdmin');
 
-  const isLoggedIn = sessionStorage.getItem('TOKEN');
-
-  React.useEffect( ()=>{
-
+  React.useEffect(()=>{
 
     statusLogin()
-    .then(
-      data=> setDatas(isAdmin(data))
-    )
-                        sessionStorage.setItem('isAdmin',datas) 
+
   },[])
-
-
   return (
  
     <div>
-      { isLoggedIn ? (<Mainpage/>) : (<Login/>) }
-      {/* { isLoggedIn ? (<Admin />) : (<Login/>) } */}
+      { isAdmins ? (<Mainpage isAdminS={isAdmins}/>) : (<Login/>) }
     </div>
 
   )
@@ -49,30 +41,34 @@ const Login = () => {
     return (
       <React.Suspense fallback={<div>Loading...</div>}>
         <div>      
-
-
-
-        <Routes>
+          <Routes>
 
             <Route path="/Login" element={<LoginPage/>}/>
             <Route path="*" element={<Navigate to="/Login"/>}/>
 
-        </Routes> 
+          </Routes> 
 
         </div>
       </React.Suspense>
     )
   }
 
-// for mainpage
-const Mainpage = () =>{
-  const isAdminS = sessionStorage.getItem('isAdmin');
 
-  if (isAdminS) {
-    return (<Admin/>)
-  }
+
+// for mainpage
+
+const Mainpage = ({ isAdminS }) =>{
+
+
+
   
-  return (<User/>)
+
+  return (
+    <div>
+      {isAdminS === "true" ? <Admin/> : <User/>}
+    </div>
+  )
+
 }
 
 const Header = () => {
@@ -91,6 +87,8 @@ const CheckLocker  = React.lazy(()=> import('../pages/admin/LockerAvailable'))
 const ManageLocker = React.lazy(()=> import('../pages/admin/ManageLocker'))
 
 const Admin = () =>{
+
+
   return (
     <div>      
       <React.Suspense fallback={<div>Loading...</div>}>
@@ -114,6 +112,7 @@ const Admin = () =>{
 const HomepageUser = React.lazy(()=> import('../pages/user/Homepage'))
 
 const User = ()=>{
+
   return(
   <div>
       <React.Suspense fallback={<div>Loading...</div>}>

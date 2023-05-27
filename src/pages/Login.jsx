@@ -272,7 +272,7 @@ const Mobile = () => {
                     width: '250px',
                     padding: '8px'
                   }}
-                  onClick={()=> isAdmin()}
+                  onClick={()=> console.log(isAdmin()) }
                   >Login with Google</Button>
                 </Stack>
 
