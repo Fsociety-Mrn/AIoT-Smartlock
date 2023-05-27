@@ -9,7 +9,7 @@ import {
   } from 'react-router-dom'
 
 import { statusLogin } from '../firebase/FirebaseConfig'
-// import { isAdmin } from '../firebase/Firestore'
+import { isAdmin } from '../firebase/Firestore'
 
 
 
@@ -17,18 +17,34 @@ import { statusLogin } from '../firebase/FirebaseConfig'
 // for Login
 const Routess = () => {
 
-  // const isLoggedIn = sessionStorage.getItem('TOKEN');
+  const isLoggedIn = sessionStorage.getItem('TOKEN');
   const isAdmins = sessionStorage.getItem('isAdmin');
-
+  const [admins,setAdmins] = React.useState()
   React.useEffect(()=>{
 
-    statusLogin()
+    statusLogin().then(uid=>
+      isAdmin(uid).then(data=>{
+        console.log(data) 
+        sessionStorage.setItem('isAdmin', data ? "true" : "false");
 
+        
+        if (!isAdmins){
+          window.location.reload()
+        }
+        
+      }
+        ).catch(error=> console.log(error))
+    )
+      console.log(isAdmins)
+
+    
   },[])
   return (
  
     <div>
-      { isAdmins ? (<Mainpage isAdminS={isAdmins}/>) : (<Login/>) }
+    
+      {isAdmins ? <Mainpage isAdminS={isAdmins}/>:<Login/>}
+      {/* <Login/> */}
     </div>
 
   )

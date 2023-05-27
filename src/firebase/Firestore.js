@@ -4,26 +4,21 @@ import { Fdb,statusLogin } from './FirebaseConfig'
 const collectionRef = collection(Fdb, "users");
 
 // verify if admin or user
-export const isAdmin = async () =>{
-
-    return await getDocs(collectionRef)
-
-        .then(data=>{
-
-            data.forEach(async doc=>{
-                const uid = doc.id
-
-                const data = await statusLogin();
-                if (uid === data) {
-                    sessionStorage.setItem('TOKEN',"Login");  
-                    sessionStorage.setItem('isAdmin', doc.data().isAdmin ? "true" : "false");
-                    // console.log(doc.data().isAdmin)
-                    return doc.data().isAdmin;
-                }
-        
-                
-            }) 
-
+export const isAdmin = (UID) => {
+    return new Promise((resolve, reject) => {
+      getDocs(collectionRef)
+        .then((data) => {
+          data.forEach((doc) => {
+            if (doc.id === UID) {
+            //   sessionStorage.setItem('isAdmin', doc.data().isAdmin ? "true" : "false");
+              resolve(doc.data().isAdmin);
+            }
+          });
+          reject(new Error("User not found.")); // Reject if user is not found in the data
+        })
+        .catch((error) => {
+          reject(error); // Reject any errors that occur during the retrieval of data
         });
+    });
+  };
   
-}

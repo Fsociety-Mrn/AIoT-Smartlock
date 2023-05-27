@@ -36,6 +36,7 @@ export const statusLogin = () => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         sessionStorage.setItem('TOKEN',"Login")   
+                            // window.location.reload();
         resolve(user.uid);
       } else {
 
