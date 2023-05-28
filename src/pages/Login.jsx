@@ -467,12 +467,23 @@ const Desktop = () => {
             
               <Paper
               elevation={0}
-              >
+              > 
+
+              <Typography>Hello Friend!</Typography>
+              <Typography>This is AIoT Smartlock where you manage you locker Online</Typography>
+
                 {/* email */}
                 <DesktopTextbox 
                 type='email' 
                 margin='dense' 
-                placeholder='email' 
+                label='Email'
+                placeholder='you@gmail.com' 
+                InputLabelProps={{
+                  shrink: true,
+                  style: {
+                    color: 'rgb(11, 131, 120)',
+                  },
+                }}
                 variant="outlined" 
                 fullWidth  
                 size='medium'
@@ -487,7 +498,15 @@ const Desktop = () => {
                 <DesktopTextbox 
                 type='password' 
                 margin='dense' 
-                placeholder='password'  
+                placeholder='At least 6 Characters' 
+                label='Password'
+     
+                InputLabelProps={{
+                  shrink: true,
+                  style: {
+                    color: 'rgb(11, 131, 120)',
+                  },
+                }} 
                 variant="outlined" 
                 fullWidth  
                 size='medium'
@@ -525,7 +544,7 @@ const Desktop = () => {
                   }}
                   onClick={Login}
     
-                  >Login</Button>
+                  >Log In</Button>
 
                   {/* <Fab variant="extended">
                     Login
@@ -538,7 +557,7 @@ const Desktop = () => {
                   fontFamily={'sans-serif'} 
                   style={{
                     color: 'rgb(61, 152, 154)'
-                  }}>Or</Typography>
+                  }}>Or Log in with</Typography>
                 </Divider>
 
                 <Stack
@@ -560,10 +579,10 @@ const Desktop = () => {
                     boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.25)', // Added a subtle shadow for depth
                     fontWeight: 'bold', // Added bold font weight
                     fontSize: '16px', // Adjusted font size for better readability
-                    padding: '10px', // Adjusted padding for more comfortable touch interaction
+                    padding: '5px', // Adjusted padding for more comfortable touch interaction
                     transition: 'background-color 0.3s ease', 
                   }}
-                  >Login with Google</Button>
+                  >Google</Button>
                 </Stack>
 
               </Paper>

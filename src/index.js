@@ -5,10 +5,11 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { BrowserRouter } from 'react-router-dom';
 import CssBaseline from '@mui/material/CssBaseline';
 import { Box } from '@mui/material';
+import './Index.css'
 
 const theme = createTheme({
   typography: {
-    "fontFamily": `sans-serif`,
+    "fontFamily": 'sans-serif',
     "fontSize": 14,
     "fontWeightLight": 300,
     "fontWeightRegular": 400,

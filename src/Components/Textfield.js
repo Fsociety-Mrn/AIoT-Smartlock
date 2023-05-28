@@ -38,18 +38,21 @@ export const MobileTextbox = styled(TextField)({
   });
 
 
-  export const DesktopTextbox = styled(TextField)({
-    input: {
-      color:'rgb(11, 131, 120)',
-      borderRadius: '5px',
-      background: primaryColour,
+export const DesktopTextbox = styled(TextField)({
+  label:{
+    color:'rgb(11, 131, 120)'
+  },
+  input: {
+    color:'rgb(11, 131, 120)',
+    borderRadius: '5px',
+    background: primaryColour,
       '&::placeholder': {
           color: 'rgb(12, 14, 36) '
         }
   },
 
   "& label.Mui-focused": {
-    color: primaryColour
+    color: primaryColour,
   },
   "& .MuiInput-underline:after": {
     borderBottomColor: primaryColour
