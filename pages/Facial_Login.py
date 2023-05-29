@@ -112,7 +112,7 @@ class FacialLogin(QtWidgets.QFrame):
 
     #  for facial recognition
     def FacialRecognition(self, frame):
-        result = Jolo().Face_Compare(frame,threshold=0.6)
+        result = Jolo().Face_Compare(frame,threshold=0.7)
 
         if result[0] == 'No match detected':
 
