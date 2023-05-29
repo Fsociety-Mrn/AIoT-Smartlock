@@ -69,3 +69,40 @@ export const DesktopTextbox = styled(TextField)({
     }
   }
   });
+
+
+  export const DesktopTextboxManage = styled(TextField)({
+    label:{
+      color:'rgb(11, 131, 120)'
+    },
+    input: {
+      color:'rgb(11, 131, 120)',
+      borderRadius: '20px',
+      background: primaryColour,
+      '&::placeholder': {
+        color: 'rgb(12, 14, 36) '
+      },
+      fontWeight: 550, // Adjust the font weight here
+    },
+  
+    "& label.Mui-focused": {
+      color: primaryColour,
+    },
+    "& .MuiInput-underline:after": {
+      borderBottomColor: primaryColour
+    },
+    "& .MuiOutlinedInput-root": {
+      backgroundColor: "white",
+      "& fieldset": {
+        borderColor: lastColour,
+        borderWidth: '2px', // Adjust the border thickness here
+      },
+      "&:hover fieldset": {
+        borderColor: lastColour
+      },
+      "&.Mui-focused fieldset": {
+        borderColor: 'rgb(11, 131, 120)'
+      }
+    },
+  
+    });

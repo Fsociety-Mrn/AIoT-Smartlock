@@ -54,7 +54,7 @@ const Welcome = ({User = "User", photoUrl = null}) => {
             textTransform: 'none',
             boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.25)', // Added a subtle shadow for depth
           }}>
-            <Typography variant="body1" sx={{ fontWeight: 'bold'}}>Continue</Typography>
+            <Typography variant="body1" sx={{ fontWeight: 'bold',color: "white"}} >Continue</Typography>
             <ArrowForwardIcon sx={{ ml:2}}/>
           </Fab>
 

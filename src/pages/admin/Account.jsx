@@ -17,7 +17,7 @@ const Account = () => {
     <br/>
     <br/>
     
-    <h1>My Account</h1>
+    <h1>Profile Settings</h1>
     </div>
   )
 }

@@ -15,7 +15,7 @@ const SetingsAndConfig = () => {
     <br/>
     <br/>
     <br/>
-    <h1>SetingsAndConfig</h1>
+    <h1>Settings and Configuration</h1>
     
     </div>
   )

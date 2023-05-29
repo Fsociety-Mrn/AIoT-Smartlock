@@ -133,7 +133,7 @@ const Admin = () =>{
           <Route element={<Header/>}>
 
             {/* Dashboard */}
-            <Route path="/Admin/" element={<ManageLocker/>}/> 
+            <Route path="/Admin/" element={<Dashboard/>}/> 
 
              {/* My Locker  */}
             <Route path="/Admin/MyLocker" element={<Homepage/>}/>
