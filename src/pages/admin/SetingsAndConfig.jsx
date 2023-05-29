@@ -1,8 +1,6 @@
 import React from 'react'
 
-
-
-const homepage = () => {
+const SetingsAndConfig = () => {
   return (
     <div style={{display: 'flex',  justifyContent:'center', alignItems:'center', height: '100vh'}}>
     <br/>
@@ -17,13 +15,10 @@ const homepage = () => {
     <br/>
     <br/>
     <br/>
-    <h1>My Locker</h1>
-
-
-    
+    <h1>SetingsAndConfig</h1>
     
     </div>
   )
 }
 
-export default homepage
+export default SetingsAndConfig

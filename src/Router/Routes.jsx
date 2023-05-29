@@ -117,11 +117,12 @@ const Header = () => {
   }
 
 // Admin Page
+const Dashboard = React.lazy(()=> import('../pages/admin/Dashboard'))
 const Homepage = React.lazy(()=> import('../pages/admin/Homepage'))
 const MyAccount = React.lazy(()=> import('../pages/admin/Account'))
 const CheckLocker  = React.lazy(()=> import('../pages/admin/LockerAvailable'))
 const ManageLocker = React.lazy(()=> import('../pages/admin/ManageLocker'))
-
+const SettingsConfig = React.lazy(()=> import('../pages/admin/SetingsAndConfig'))
 const Admin = () =>{
 
 
@@ -131,10 +132,24 @@ const Admin = () =>{
         <Routes>
           <Route element={<Header/>}>
 
-            <Route path="/Admin/" element={<Homepage/>}/>
-            <Route path="/Admin/MyAccount" element={<MyAccount/>}/>
+            {/* Dashboard */}
+            <Route path="/Admin/" element={<Dashboard/>}/> 
+
+             {/* My Locker  */}
+            <Route path="/Admin/MyLocker" element={<Homepage/>}/>
+
+            {/* Locker Available */}
             <Route path="/Admin/LockerAvailable" element={<CheckLocker/>}/>
+
+            {/* Manage Locker */}
             <Route path="/Admin/ManageLocker" element={<ManageLocker/>}/>
+
+            {/* Profile Settings */}
+            <Route path="/Admin/ProfileSettings" element={<MyAccount/>}/>
+
+            {/* Settings */}
+            <Route path="/Admin/Settings" element={<SettingsConfig/>}/>
+            
             <Route path="*" element={<Navigate to="/Admin/"/>}/>
 
           </Route>
