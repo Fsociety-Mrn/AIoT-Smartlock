@@ -29,6 +29,9 @@ import InboxIcon from '@mui/icons-material/MoveToInbox';
 import HomeRepairServiceIcon from '@mui/icons-material/HomeRepairService';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
+import ChecklistRtlIcon from '@mui/icons-material/ChecklistRtl';
+import LockPersonIcon from '@mui/icons-material/LockPerson';
 
 // import { styled } from "@mui/material/styles";
 import ICON from '../Images/logo512.png'
@@ -171,6 +174,7 @@ const MobileAppbar = () => {
 // Desktop mode
 const drawerWidth = 240;
 const DesktopAppbar = () => {
+    let navigate = useNavigate()
     return (
         <div>
 
@@ -234,13 +238,15 @@ const DesktopAppbar = () => {
                         <ListItem disablePadding>
                             <ListItemButton sx={{
                                 color: "rgb(61, 152, 154)"
-                            }}>
+                            }} 
+                            onClick={()=>navigate("/Admin/")}
+                            >
                   
                                 <ListItemIcon
                                 sx={{
                                 color: "rgb(61, 152, 154)"
                             }}>
-                                    <InboxIcon /> 
+                                    <LockPersonIcon /> 
                                 </ListItemIcon>
 
                                 <ListItemText primary="My locker" />
@@ -252,34 +258,38 @@ const DesktopAppbar = () => {
                             <ListItemButton 
                             sx={{
                                 color: "rgb(61, 152, 154)"
-                            }}>
+                            }}
+                            onClick={()=>navigate("/Admin/LockerAvailable")}
+                            >
 
                                 <ListItemIcon 
                                 sx={{
                                     color: "rgb(61, 152, 154)"
                                 }}>
-                                    <InboxIcon /> 
+                                    <ChecklistRtlIcon /> 
                                 </ListItemIcon>
 
                                 <ListItemText primary="Locker availability" />
                             </ListItemButton>
                         </ListItem>
 
-                        {/* Locker availability */}
+                        {/* Smartlocker Users */}
                         <ListItem disablePadding>
                             <ListItemButton 
                             sx={{
                                 color: "rgb(61, 152, 154)"
-                            }}>
+                            }}
+                            onClick={()=>navigate("/Admin/ManageLocker")}
+                            >
 
                                 <ListItemIcon 
                                 sx={{
                                     color: "rgb(61, 152, 154)"
                                 }}>
-                                    <InboxIcon /> 
+                                    <ManageAccountsIcon /> 
                                 </ListItemIcon>
 
-                                <ListItemText primary="Smartlocker Users" />
+                                <ListItemText primary="Manage Access & Users" />
                             </ListItemButton>
                         </ListItem>
 

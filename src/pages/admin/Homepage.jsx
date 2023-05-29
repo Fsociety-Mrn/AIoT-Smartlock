@@ -4,7 +4,7 @@ import { LogoutSession } from '../../Authentication/Authentication'
 
 const homepage = () => {
   return (
-    <div>
+    <div style={{display: 'flex',  justifyContent:'center', alignItems:'center', height: '100vh'}}>
     <br/>
     <br/>
     <br/>

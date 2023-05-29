@@ -2,7 +2,7 @@ import React from 'react'
 
 const LockerAvailable = () => {
   return (
-    <div>    
+    <div style={{display: 'flex',  justifyContent:'center', alignItems:'center', height: '100vh'}}>    
     <br/>
     <br/>
     <br/>
@@ -16,7 +16,7 @@ const LockerAvailable = () => {
     <br/>
     <br/>
     
-    <h1>Locker Availability</h1>
+    <h1> Check Availability</h1>
     </div>
   )
 }
