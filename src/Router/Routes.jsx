@@ -133,7 +133,7 @@ const Admin = () =>{
           <Route element={<Header/>}>
 
             {/* Dashboard */}
-            <Route path="/Admin/" element={<Dashboard/>}/> 
+            <Route path="/Admin/" element={<ManageLocker/>}/> 
 
              {/* My Locker  */}
             <Route path="/Admin/MyLocker" element={<Homepage/>}/>
@@ -149,7 +149,7 @@ const Admin = () =>{
 
             {/* Settings */}
             <Route path="/Admin/Settings" element={<SettingsConfig/>}/>
-            
+
             <Route path="*" element={<Navigate to="/Admin/"/>}/>
 
           </Route>

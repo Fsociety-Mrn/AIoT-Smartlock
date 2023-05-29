@@ -13,7 +13,10 @@ const theme = createTheme({
     "fontSize": 14,
     "fontWeightLight": 300,
     "fontWeightRegular": 400,
-    "fontWeightMedium": 500
+    "fontWeightMedium": 500,
+    allVariants: {
+      color: 'rgb(61, 152, 154)'
+    }
   },
 
   palette: {
@@ -30,7 +33,8 @@ const theme = createTheme({
       main: '#F7C873',
     },
     text:{
-      disabled: '#000000',
+      primary: "rgb(61, 152, 154)",
+      disabled: 'rgb(12, 14, 36)',
     },
     error:{
       main: '#c71e1e',

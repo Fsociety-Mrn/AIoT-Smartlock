@@ -67,7 +67,7 @@ export const Appbar = () => {
     <div>
 
         {state ? <MobileAppbar />  : <DesktopAppbar />} 
-
+        {/* <DesktopAppbar /> */}
     </div>
   )
 }
@@ -180,7 +180,7 @@ const MobileAppbar = () => {
 
 // =========================== Desktop mode =========================== //
 
-
+const drawerWidth = 260;
 
 const openedMixin = (theme) => ({
     width: drawerWidth,
@@ -254,7 +254,6 @@ const DrawerHeaderCustom = styled('div')(({ theme }) => ({
   );
 
 
-const drawerWidth = 260;
 const DesktopAppbar = () => {
     let navigate = useNavigate()
 
@@ -275,7 +274,7 @@ const DesktopAppbar = () => {
             <AppBarCustom
             position="fixed"
             sx={{ 
-                backgroundImage: 'linear-gradient(to right, rgb(61, 152, 154) 50%, rgb(12, 14, 36) 100%)',
+                backgroundImage: 'linear-gradient(to right, rgb(61, 152, 154) ,rgb(12, 14, 36))',
                 // zIndex: (theme) => theme.zIndex.drawer + 1 
             }}
 
@@ -325,6 +324,7 @@ const DesktopAppbar = () => {
             <DrawerCustom
             variant="permanent"
             open={open}
+
             >
 
             <DrawerHeaderCustom>

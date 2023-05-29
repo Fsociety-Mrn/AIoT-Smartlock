@@ -3,7 +3,7 @@ import { LogoutSession } from '../../Authentication/Authentication';
 
 const Homepage = () => {
   return (
-    <div>    
+    <div style={{display: 'flex',  justifyContent:'center', alignItems:'center', height: '100vh'}}>    
     <br/>
     <br/>
     <br/>
