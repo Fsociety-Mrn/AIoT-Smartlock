@@ -11,7 +11,7 @@ export const isAdmin = (UID) => {
           data.forEach((doc) => {
             if (doc.id === UID) {
             //   sessionStorage.setItem('isAdmin', doc.data().isAdmin ? "true" : "false");
-              resolve(doc.data().isAdmin);
+              resolve(doc.data());
             }
           });
           reject(new Error("User not found.")); // Reject if user is not found in the data
@@ -21,4 +21,22 @@ export const isAdmin = (UID) => {
         });
     });
   };
-  
+
+// get users list
+export const userData = async () => {
+  return await getDocs(collectionRef)
+    .then((querySnapshot) => {
+      const userDataArray = querySnapshot.docs
+      .filter((document) => !document.data().isAdmin) // Filter out isAdmin = true
+      .map((document) => ({
+        id: document.id,
+        ...document.data(),
+      }));
+      // console.log(userDataArray) ;
+      return userDataArray;
+    })
+    .catch((error) => {
+      console.log(error);
+      return []; // Return an empty array in case of an error
+    });
+};

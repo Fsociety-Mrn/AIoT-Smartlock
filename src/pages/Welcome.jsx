@@ -1,8 +1,10 @@
 import { Avatar, Fab, Grid, Stack, Typography } from '@mui/material'
 import React from 'react'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import ICON from '../Images/logo512.png'
 
-const Welcome = ({User = "User", photoUrl = null}) => {
+const Welcome = () => {
+
   return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
 
@@ -24,7 +26,7 @@ const Welcome = ({User = "User", photoUrl = null}) => {
 
           {/* Icon */}
           <Avatar
-          src={photoUrl}
+          src={ICON}
           sx={{ 
             width: 100, 
             height: 100,
@@ -38,7 +40,8 @@ const Welcome = ({User = "User", photoUrl = null}) => {
             WebkitBackgroundClip: 'text', 
             WebkitTextFillColor: 'transparent' 
           }}
-          >Hello! {User}</Typography>
+          >Hello Friend!</Typography>
+
 
         {/* Continue Button */}
           <Fab variant="extended" size="medium"  

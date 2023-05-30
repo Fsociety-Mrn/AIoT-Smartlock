@@ -21,32 +21,15 @@ const Routess = () => {
 
   const isAdmins = sessionStorage.getItem('isAdmin');
 
-  const [admins,setAdmins] = React.useState({
-    Name: "",
-    profile: ""
-  })
-
 
   React.useEffect(()=>{
-    // statusLogin().then(user=>console.log(user.uid))
+
     statusLogin()
       .then(user=>{ 
-
-        setAdmins({
-          Name: user.displayName,
-          profile: user.photoURL
-        })
-
-
         // verify Admin
         isAdmin(user.uid)
           .then(data=>{
-            sessionStorage.setItem('isAdmin', data ? "true" : "false");  
-            
-            // if (!isAdmins){
-            //   window.location.reload()
-            // }
-    
+            sessionStorage.setItem('isAdmin', data.isAdmin ? "true" : "false");  
           }).catch(error=> console.log(error))
         }).catch(error=> console.log(error))
 
@@ -55,8 +38,8 @@ const Routess = () => {
   return (
  
     <div>
-    
-      {isLoggedIn ? <Mainpage isAdminS={isAdmins} Users={admins.Name} photoUrl={admins.profile}/>:<Login/>}
+
+      {isLoggedIn ? <Mainpage isAdminS={isAdmins} />:<Login/>}
       {/* <WelcomePage/> */}
       {/* <Login/> */}
     </div>
@@ -87,15 +70,14 @@ const Login = () => {
 
 // for mainpage
 const WelcomePage = React.lazy(()=> import('../pages/Welcome'))
-const Mainpage = ({ isAdminS, Users, photoUrl }) =>{
-
+const Mainpage = ({ isAdminS }) =>{
 
   if (isAdminS === "true"){
     return <Admin/>
   }else if(isAdminS === "false"){
     return <User/>
   }else{
-    return <WelcomePage User={Users} photoUrl={photoUrl}/>
+    return <WelcomePage />
   }
   
 

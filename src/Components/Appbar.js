@@ -180,7 +180,10 @@ const MobileAppbar = () => {
 
 // =========================== Desktop mode =========================== //
 
-const drawerWidth = 260;
+const DesktopAppbar = () => {
+
+
+    const drawerWidth = 260;
 
 const openedMixin = (theme) => ({
     width: drawerWidth,
@@ -254,7 +257,6 @@ const DrawerHeaderCustom = styled('div')(({ theme }) => ({
   );
 
 
-const DesktopAppbar = () => {
     let navigate = useNavigate()
 
     const theme = useTheme();

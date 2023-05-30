@@ -18,6 +18,8 @@ import PendingActionsIcon from '@mui/icons-material/PendingActions';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
+// data
+import { userData } from '../../firebase/Firestore'
 
 const ManageLocker = () => {
     // get windows screen
@@ -44,9 +46,37 @@ const ManageLocker = () => {
   )
 }
 
-
-
 const Desktop = () =>{
+
+  // for data user
+  const [dataUser, setDataUser] = React.useState([])
+
+  React.useEffect(() => {
+
+    // fetch the user List
+    const fetchData = async () => {
+      try {
+        const data = await userData();
+  
+        data.forEach((item) => {
+          setDataUser((prevData) => {
+            // Check if the item already exists in the dataUser state
+            if (!prevData.some((dataItem) => dataItem.id === item.id)) {
+              return [...prevData, item]; // Add the item if it doesn't exist
+            }
+            return prevData; // Return the existing state if the item already exists
+          });
+        });
+  
+
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+    console.log(dataUser)
+  }, [dataUser]);
+
   return(
   <div style={{ overflowX: 'hidden' }} >    
   <Grid 
@@ -158,8 +188,8 @@ const Desktop = () =>{
       padding={1}
       >
 
-        {['A', 'B', 'C', 'D', 'E', 'F', 'G'].map(letter=>(
-        <Grid item xs={12} key={letter}   
+        {dataUser.map(data=>(
+        <Grid item xs={12} key={data.id}   
         sx={{
           '&:hover': {
             background: 'white',
@@ -173,7 +203,11 @@ const Desktop = () =>{
           alignItems="center"
           spacing={2}
           > 
-            <Avatar  sx={{ width: 56, height: 56 , bgcolor: 'rgb(61, 152, 154)'}}>{letter} </Avatar>
+
+            {/* Profile */}
+            <Avatar  sx={{ width: 56, height: 56 , bgcolor: 'rgb(61, 152, 154)'}} src={data.photoUrl}>A</Avatar>
+            
+            {/* Name */}
             <Typography variant='h5' component="div" 
             sx={{ 
               flexGrow: 1,
@@ -183,17 +217,8 @@ const Desktop = () =>{
             }}
             
            
-            > Hello Friend</Typography>
-            
-            <Fab color='primary' size='medium'
-              sx={{
-                boxShadow: 'none',    
-                '&:hover': {
-                    boxShadow: 'none',
-                   
-                },
-              }} 
-              > <EditIcon fontSize='medium' /></Fab>
+            > {data.user}</Typography>
+          
 
             <Fab color='error' size='medium'
               sx={{
@@ -225,8 +250,35 @@ const Desktop = () =>{
 }
 
 const Mobile = () =>{
+  const [dataUser, setDataUser] = React.useState([])
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await userData();
+  
+        data.forEach((item) => {
+          setDataUser((prevData) => {
+            // Check if the item already exists in the dataUser state
+            if (!prevData.some((dataItem) => dataItem.id === item.id)) {
+              return [...prevData, item]; // Add the item if it doesn't exist
+            }
+            return prevData; // Return the existing state if the item already exists
+          });
+        });
+  
+
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+    console.log(dataUser)
+  }, [dataUser]);
+
   return(
   <div>
+ 
     <Grid 
     container   
     direction="row"
@@ -325,11 +377,11 @@ const Mobile = () =>{
           },
 
         }}
-        paddingY={1}
+        padding={1}
         >
-
-        {['A', 'B', 'C', 'D', 'E', 'F', 'G'].map(letter=>(
-          <Grid item xs={12} key={letter}   
+          
+          {dataUser.map(data=>(
+          <Grid item xs={12} key={data.id}   
             sx={{
             '&:hover': {
               background: 'white',
@@ -347,27 +399,17 @@ const Mobile = () =>{
             > 
 
               {/* Profile */}
-              <Avatar  sx={{ width: 50, height: 50 , bgcolor: 'rgb(61, 152, 154)'}}>{letter} </Avatar>
+              <Avatar  sx={{ width: 50, height: 50 , bgcolor: 'rgb(61, 152, 154)'}}>{data.photoUrl} </Avatar>
 
               {/* Name */}
               <Typography variant='h6' component="div" 
               sx={{ 
                 flexGrow: 1,
-                background: 'linear-gradient(to left, rgb(61, 152, 154) 80%, rgb(12, 14, 36) 100%)',
+                background: 'linear-gradient(to left, rgb(61, 152, 154) 30%, rgb(12, 14, 36) 100%)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
               }}
-              > Hello Friend</Typography>
-            
-              <Fab color='primary' size='small'
-                sx={{
-                  boxShadow: 'none',    
-                  '&:hover': {
-                      boxShadow: 'none',
-                   
-                  },
-                }} 
-              > <EditIcon fontSize='small' /></Fab>
+              >{data.user}</Typography>
 
               <Fab color='error' size='small'
                 sx={{
