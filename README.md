@@ -1,70 +1,73 @@
-# Getting Started with Create React App
+# MGA GAGAWIN AT DAPAT GAWIN
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Login interface
+* Signup
+    - Don't have an account ? <Strong> Request Now </Strong>   
+    pagclinick mapupunta sa signup pages
+    - Sign Up pages
+        - pero i login muna OTP,   
+        - after setup email ,password and confirm password
+        - setup Prfile (Optional)
+        - Setup First Name and Last Name
 
-## Available Scripts
 
-In the project directory, you can run:
+## Admin Account 
 
-### `npm start`
+* Analytics Dashboard
+NOTE: meron si Firebase analytics  
+    - User Activity Reports
+    - who recently access the locker within that day
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+* My Locker
+  - unlock the smart lock
+  - Generate token for updated faces
+  - change locker
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+* Profile Settings
+  - Profile Information: Allow users to update their personal information such as name, contact details, and  preferred communication methods.
+  - change Info
+  - change password
+  - logout
 
-### `npm test`
+* Check Availability
+  - check the locker availability
+  - check if the locker is open or not (pwede optional)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+* Manage Locker Access
+  - List of registered faces
+    - for each locker check if user is active
+  - generate OTP token user
+  - view the generate Token
+* Settings and Configuration
+  - check if Raspbery is Online (Indicator)
+  - adjust if need to updated the website
 
-### `npm run build`
+## User Account 
+* My Locker
+    - generate for updating the user
+* History
+    - when they access the locker
+* Account Settings
+    - set for active nad inactive
+    - delete account
+    - logout
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+# PAANO IDEPLOY SA WEBSITE ?
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+* login mo muna yung AIoTSmartlock gmail  account sa browser mo
+* optional to run moto
+```shell
+firebase logout
+```
+tapos ilogin moyung AIoTSmartlock gmail 
+```shell
+firebase login
+```
+* run this code 
+```shell
+npm run build
+```
+* para mag deploy sa website natin
+```shell
+firebase deploy
+```
