@@ -1,6 +1,6 @@
 import React from 'react'
 import { Appbar } from '../Components/Appbar'
-
+import Loading from '../pages/Loading'
 import { 
     Navigate, 
     Route, 
@@ -69,7 +69,7 @@ const Routess = () => {
 const LoginPage = React.lazy(()=> import('../pages/Login'))
 const Login = () => {
     return (
-      <React.Suspense fallback={<div>Loading...</div>}>
+      <React.Suspense fallback={<Loading/>}>
         <div>      
           <Routes>
 
@@ -128,7 +128,7 @@ const Admin = () =>{
 
   return (
     <div>      
-      <React.Suspense fallback={<div>Loading...</div>}>
+      <React.Suspense fallback={<Loading/>}>
         <Routes>
           <Route element={<Header/>}>
 
@@ -165,7 +165,7 @@ const User = ()=>{
 
   return(
   <div>
-      <React.Suspense fallback={<div>Loading...</div>}>
+      <React.Suspense fallback={<Loading/>}>
         <Routes>
           {/* <Route element={<Header/>}> */}
 

@@ -1,5 +1,5 @@
 import { collection,getDocs } from "firebase/firestore";
-import { Fdb,statusLogin } from './FirebaseConfig'
+import { Fdb } from './FirebaseConfig'
 
 const collectionRef = collection(Fdb, "users");
 

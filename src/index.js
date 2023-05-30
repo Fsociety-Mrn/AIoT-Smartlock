@@ -23,12 +23,14 @@ const theme = createTheme({
     background: {
       default: '#e7e5d6b5', // Set your desired background color here
     },
+    
     primary: {
       main: 'rgb(61, 152, 154)',
     },
     secondary: {
       main: '#FFFFFF',
     },
+
     info: {
       main: '#F7C873',
     },
