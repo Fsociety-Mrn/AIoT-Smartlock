@@ -1,8 +1,7 @@
-opencv_python==4.6.0.66
-torch==1.13.1
-torchvision==0.14.1
-dlib==19.22.99
+dlib==19.24.1
 facenet_pytorch==2.5.2
 numpy==1.23.2
+opencv_python==4.6.0.66
 PyQt5==5.15.9
-
+torch==1.13.1
+torchvision==0.14.1

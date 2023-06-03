@@ -9,7 +9,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-import res
+import background,sys
 from PyQt5.QtWidgets import *
 
 
@@ -18,267 +18,153 @@ class MainWindow(QtWidgets.QFrame):
         super().__init__(parent)
 
         # frame
-        self.setObjectName("Frame")
-        self.resize(555, 495)
+        self.setObjectName("mainMenu")
+        self.resize(800, 480)
         
+        self.icon = QtGui.QIcon()
+        # self.icon.addPixmap(QtGui.QPixmap("../Images/logo192x192.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        # self.setWindowIcon(self.icon)
         
-        self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
-        self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
+        self.setAutoFillBackground(False)
+        self.setStyleSheet("background-color: rgb(231, 229, 213);\n")
+        self.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.setLineWidth(2)
+        
+        # self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
+        # self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
+        
+        self.horizontalLayout = QtWidgets.QHBoxLayout(self)
+        self.horizontalLayout.setSizeConstraint(QtWidgets.QLayout.SetMinAndMaxSize)
+        self.horizontalLayout.setSpacing(0)
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        
+        # first widget
         self.widget = QtWidgets.QWidget(self)
-        self.widget.setGeometry(QtCore.QRect(30, 30, 550, 500))
-        self.widget.setStyleSheet("QPushButton#pushButton{\n"
-                                  "    background-color: qlineargradient(spread:pad, x1:0, y1:0.505682, x2:1, y2:0.477, stop:0 rgba(11, 131, 120, 219), stop:1 rgba(85, 98, 112, 226));\n"
-                                  "    color:rgba(255, 255, 255, 210);\n"
-                                  "    border-radius:5px;\n"
-                                  "}\n"
-                                  "\n"
-                                  "QPushButton#pushButton:hover{\n"
-                                  "    background-color: qlineargradient(spread:pad, x1:0, y1:0.505682, x2:1, y2:0.477, stop:0 rgba(150, 123, 111, 219), stop:1 rgba(85, 81, 84, 226));\n"
-                                  "}\n"
-                                  "\n"
-                                  "QPushButton#pushButton:pressed{\n"
-                                  "    padding-left:5px;\n"
-                                  "    padding-top:5px;\n"
-                                  "    background-color:rgba(150, 123, 111, 255);\n"
-                                  "}\n"
-                                  "\n"
-                                  "QPushButton#pushButton_2, #pushButton_3, #pushButton_4, #pushButton_5{\n"
-                                  "    background-color: rgba(0, 0, 0, 0);\n"
-                                  "    color:rgba(85, 98, 112, 255);\n"
-                                  "}\n"
-                                  "\n"
-                                  "QPushButton#pushButton_2:hover, #pushButton_3:hover, #pushButton_4:hover, #pushButton_5:hover{\n"
-                                  "    color: rgba(131, 96, 53, 255);\n"
-                                  "}\n"
-                                  "\n"
-                                  "QPushButton#pushButton_2:pressed, #pushButton_3:pressed, #pushButton_4:pressed, #pushButton_5:pressed{\n"
-                                  "    padding-left:5px;\n"
-                                  "    padding-top:5px;\n"
-                                  "    color:rgba(91, 88, 53, 255);\n"
-                                  "}\n"
-                                  "\n"
-                                  "")
+        self.widget.setStyleSheet("background-color: qlineargradient(spread:pad, x1:0, y1:0.505682, x2:1, y2:0.477, stop:0 rgba(11, 131, 120, 219), stop:1 rgba(85, 98, 112, 226));\n"
+        "border-top-left-radius: 50px;")
         self.widget.setObjectName("widget")
-        self.label = QtWidgets.QLabel(self)
-        self.label.setGeometry(QtCore.QRect(40, 30, 280, 430))
-        self.label.setStyleSheet("border-image: url(:/images/background.jpg);\n"
-                                 "border-top-left-radius: 50px;")
-        self.label.setText("")
-        self.label.setObjectName("label")
-        self.label_3 = QtWidgets.QLabel(self)
-        self.label_3.setGeometry(QtCore.QRect(280, 30, 240, 430))
-        self.label_3.setStyleSheet("background-color:rgba(255, 255, 255, 255);\n"
-                                   "border-bottom-right-radius: 50px;")
-        self.label_3.setText("")
-        self.label_3.setObjectName("label_3")
-        self.FaceLoginButton = QtWidgets.QPushButton(self)
-        self.FaceLoginButton.setGeometry(QtCore.QRect(330, 170, 131, 41))
+        
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.widget)
+        self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+        
+        self.gridLayout = QtWidgets.QGridLayout()
+        self.gridLayout.setObjectName("gridLayout")
+        
+        # icon
+        self.label_6 = QtWidgets.QLabel(self.widget)
+        self.label_6.setAutoFillBackground(False)
+        self.label_6.setStyleSheet("")
+        self.label_6.setText("")
+        self.label_6.setPixmap(QtGui.QPixmap(":/background/Images/logo192x192.png"))
+        self.label_6.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_6.setObjectName("label_6")
+        self.gridLayout.addWidget(self.label_6, 0, 0, 1, 1)
+        
+        self.horizontalLayout_2.addLayout(self.gridLayout)
+        self.horizontalLayout.addWidget(self.widget)
+        
+        # second widget
+        self.widget_2 = QtWidgets.QWidget(self)
+        self.widget_2.setAutoFillBackground(False)
+        self.widget_2.setStyleSheet("\n"
+        "background-image:url(:/background/Images/background.jpg);\n"
+        "background-color:rgb(255, 255, 255);\n"
+        "border-bottom-right-radius: 50px;\n"
+        "\n"
+        "")
+        self.widget_2.setObjectName("widget_2")
+        
+        # facial register
+        self.facialRegister = QtWidgets.QPushButton(self.widget_2)
+        self.facialRegister.setGeometry(QtCore.QRect(60, 260, 291, 51))
         font = QtGui.QFont()
-        font.setPointSize(10)
-        font.setBold(True)
-        font.setWeight(75)
-        self.FaceLoginButton.setFont(font)
-        self.FaceLoginButton.setStyleSheet("\n"
-                                           "   background-color: qlineargradient(spread:pad, x1:0, y1:0.505682, x2:1, y2:0.477, stop:0 rgba(11, 131, 120, 219), stop:1 rgba(85, 98, 112, 226));\n"
-                                           "   color:rgba(255, 255, 255, 210);\n"
-                                           "   border-radius:5px;\n"
-                                           "\n"
-                                           "\n"
-                                           "QPushButton#pushButton:hover{\n"
-                                           "    background-color: qlineargradient(spread:pad, x1:0, y1:0.505682, x2:1, y2:0.477, stop:0 rgba(150, 123, 111, 219), stop:1 rgba(85, 81, 84, 226));\n"
-                                           "}\n"
-                                           "\n"
-                                           "QPushButton#pushButton:pressed{\n"
-                                           "padding-left:5px;\n"
-                                           "padding-top:5px;\n"
-                                           "background-color:rgba(150, 123, 111, 255);\n"
-                                           "}\n"
-                                           "\n"
-                                           "QPushButton#pushButton_2, #pushButton_3, #pushButton_4, #pushButton_5{\n"
-                                           "  background-color: rgba(0, 0, 0, 0);\n"
-                                           "color:rgba(85, 98, 112, 255);\n"
-                                           "}\n"
-                                           "\n"
-                                           "QPushButton#pushButton_2:hover, #pushButton_3:hover, #pushButton_4:hover, #pushButton_5:hover{\n"
-                                           "color: rgba(131, 96, 53, 255);\n"
-                                           "}\n"
-                                           "\n"
-                                           "QPushButton#pushButton_2:pressed, #pushButton_3:pressed, #pushButton_4:pressed, #pushButton_5:pressed{\n"
-                                           "padding-left:5px;\n"
-                                           "padding-top:5px;\n"
-                                           " color:rgba(91, 88, 53, 255);\n"
-                                           "}\n"
-                                           "")
-        self.FaceLoginButton.setObjectName("FaceLoginButton")
-
-        self.FacialRegisterButton = QtWidgets.QPushButton(self)
-        self.FacialRegisterButton.setGeometry(QtCore.QRect(330, 240, 131, 41))
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        font.setBold(True)
-        font.setWeight(75)
-        self.FacialRegisterButton.setFont(font)
-        self.FacialRegisterButton.setStyleSheet("\n"
-                                                "   background-color: qlineargradient(spread:pad, x1:0, y1:0.505682, x2:1, y2:0.477, stop:0 rgba(11, 131, 120, 219), stop:1 rgba(85, 98, 112, 226));\n"
-                                                "   color:rgba(255, 255, 255, 210);\n"
-                                                "   border-radius:5px;\n"
-                                                "\n"
-                                                "QPushButton#pushButton:hover{\n"
-                                                "    background-color: qlineargradient(spread:pad, x1:0, y1:0.505682, x2:1, y2:0.477, stop:0 rgba(150, 123, 111, 219), stop:1 rgba(85, 81, 84, 226));\n"
-                                                "}\n"
-                                                "\n"
-                                                "QPushButton#pushButton:pressed{\n"
-                                                "padding-left:5px;\n"
-                                                "padding-top:5px;\n"
-                                                "background-color:rgba(150, 123, 111, 255);\n"
-                                                "}\n"
-                                                "\n"
-                                                "QPushButton#pushButton_2, #pushButton_3, #pushButton_4, #pushButton_5{\n"
-                                                "  background-color: rgba(0, 0, 0, 0);\n"
-                                                "color:rgba(85, 98, 112, 255);\n"
-                                                "}\n"
-                                                "\n"
-                                                "QPushButton#pushButton_2:hover, #pushButton_3:hover, #pushButton_4:hover, #pushButton_5:hover{\n"
-                                                "color: rgba(131, 96, 53, 255);\n"
-                                                "}\n"
-                                                "\n"
-                                                "QPushButton#pushButton_2:pressed, #pushButton_3:pressed, #pushButton_4:pressed, #pushButton_5:pressed{\n"
-                                                "padding-left:5px;\n"
-                                                "padding-top:5px;\n"
-                                                " color:rgba(91, 88, 53, 255);\n"
-                                                "}\n"
-                                                "")
-        self.FacialRegisterButton.setObjectName("FacialRegisterButton")
-        self.label_4 = QtWidgets.QLabel(self)
-        self.label_4.setGeometry(QtCore.QRect(40, 30, 241, 430))
-        self.label_4.setStyleSheet("background-color:rgba(0, 0, 0, 80);\n"
-                                   "border-top-left-radius: 50px;")
-        self.label_4.setText("")
-        self.label_4.setObjectName("label_4")
-
-
-        # close button
-        self.backtomainbutton = QtWidgets.QPushButton(self)
-        self.backtomainbutton.setGeometry(QtCore.QRect(330, 300, 131, 41))
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        font.setBold(True)
-        font.setWeight(80)
-        self.backtomainbutton.setFont(font)
-        self.backtomainbutton.setText("Close")
-        self.backtomainbutton.setStyleSheet("\n"
-                                            "   background-color: qlineargradient(spread:pad, x1:0, y1:0.505682, x2:1, y2:0.477, stop:0 rgba(11, 131, 120, 219), stop:1 rgba(85, 98, 112, 226));\n"
-                                            "   color:rgba(255, 255, 255, 210);\n"
-                                            "   border-radius:5px;\n"
-                                            "\n"
-                                            "QPushButton#pushButton:hover{\n"
-                                            "    background-color: qlineargradient(spread:pad, x1:0, y1:0.505682, x2:1, y2:0.477, stop:0 rgba(150, 123, 111, 219), stop:1 rgba(85, 81, 84, 226));\n"
-                                            "}\n"
-                                            "\n"
-                                            "QPushButton#pushButton:pressed{\n"
-                                            "padding-left:5px;\n"
-                                            "padding-top:5px;\n"
-                                            "background-color:rgba(150, 123, 111, 255);\n"
-                                            "}\n"
-                                            "\n"
-                                            "QPushButton#pushButton_2, #pushButton_3, #pushButton_4, #pushButton_5{\n"
-                                            "  background-color: rgba(0, 0, 0, 0);\n"
-                                            "color:rgba(85, 98, 112, 255);\n"
-                                            "}\n"
-                                            "\n"
-                                            "QPushButton#pushButton_2:hover, #pushButton_3:hover, #pushButton_4:hover, #pushButton_5:hover{\n"
-                                            "color: rgba(131, 96, 53, 255);\n"
-                                            "}\n"
-                                            "\n"
-                                            "QPushButton#pushButton_2:pressed, #pushButton_3:pressed, #pushButton_4:pressed, #pushButton_5:pressed{\n"
-                                            "padding-left:5px;\n"
-                                            "padding-top:5px;\n"
-                                            " color:rgba(91, 88, 53, 255);\n"
-                                            "}\n"
-                                            "")
-        self.backtomainbutton.setObjectName("backtomainbutton")
-
-        # connect the close event to the method
-        self.closeEvent = self.closeEvent
-
-        self.retranslateUi()
-        QtCore.QMetaObject.connectSlotsByName(self)
+        font.setFamily("Segoe UI")
+        font.setPointSize(12)
+        self.facialRegister.setFont(font)
+        self.facialRegister.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.facialRegister.setAutoFillBackground(False)
+        self.facialRegister.setStyleSheet("background: qlineargradient(spread:pad, x1:0, y1:0.505682, x2:1, y2:0.477, stop:0 rgba(11, 131, 120, 219), stop:1 rgba(85, 98, 112, 226));\n"
+        "border: none;\n"
+        "border-radius: 25px;\n"
+        "color: white;\n"
+        "padding: 10px;")
+        self.facialRegister.setObjectName("facialRegister")
+        
+        # facial login
 
     def retranslateUi(self):
         _translate = QtCore.QCoreApplication.translate
 
-        self.setWindowTitle(_translate("Frame", "Smart AIoT"))
-
-        # Face Login Button
-        self.FaceLoginButton.setText(_translate("Frame", "Face Login"))
-        self.FaceLoginButton.clicked.connect(self.openFacialLogin)
-
-        # Facial Register Button
-        self.FacialRegisterButton.setText(_translate("Frame", "Facial Register"))
-        self.FacialRegisterButton.clicked.connect(self.openFacialRegister)
-
-        # clos button
-        self.backtomainbutton.setText(_translate("Frame", "Close"))
-        self.backtomainbutton.clicked.connect(self.closeEvent)
-
-    # ===================== open facial Login ===================== #
-
-    def openFacialLogin(self):
-        self.FaceLoginButton.setText("Loading..........")
-        self.FaceLoginButton.isEnabled = False
-        self.FacialRegisterButton.isEnabled = False
-
-        # Delay the creation of the FacialLogin object by 100 milliseconds
-        QtCore.QTimer.singleShot(100, self.clickFacialLogin)
 
 
-    def clickFacialLogin(self):
+    # # ===================== open facial Login ===================== #
 
-        from pages.Facial_Login import FacialLogin
-        print("start loading")
+    # def openFacialLogin(self):
+    #     self.FaceLoginButton.setText("Loading..........")
+    #     self.FaceLoginButton.isEnabled = False
+    #     self.FacialRegisterButton.isEnabled = False
 
-        self.resize(543, 521)
-        Facial_Login = FacialLogin(self)
-        Facial_Login.show()
-        self.FaceLoginButton.setText("Facial Login")
-
-        # ===================== open Facial Register ===================== #
-
-    def openFacialRegister(self):
-
-        self.FacialRegisterButton.setText("Loading..............")
-        self.FaceLoginButton.isEnabled = False
-        self.FacialRegisterButton.isEnabled = False
-
-        # Delay the creation of the FacialLogin object by 100 milliseconds
-        QtCore.QTimer.singleShot(100, self.clickFacialRegister)
-
-    def clickFacialRegister(self):
-        print("start loading")
-        from pages.Facial_Register import facialRegister
-        print("start loading")
+    #     # Delay the creation of the FacialLogin object by 100 milliseconds
+    #     QtCore.QTimer.singleShot(100, self.clickFacialLogin)
 
 
-        self.resize(533, 643)
-        Register = facialRegister(self)
+    # def clickFacialLogin(self):
 
-        Register.show()
-        self.FacialRegisterButton.setText("Facial Register")
+    #     from pages.Facial_Login import FacialLogin
+    #     print("start loading")
+
+    #     self.resize(543, 521)
+    #     Facial_Login = FacialLogin(self)
+    #     Facial_Login.show()
+    #     self.FaceLoginButton.setText("Facial Login")
+
+    #     # ===================== open Facial Register ===================== #
+
+    # def openFacialRegister(self):
+
+    #     self.FacialRegisterButton.setText("Loading..............")
+    #     self.FaceLoginButton.isEnabled = False
+    #     self.FacialRegisterButton.isEnabled = False
+
+    #     # Delay the creation of the FacialLogin object by 100 milliseconds
+    #     QtCore.QTimer.singleShot(100, self.clickFacialRegister)
+
+    # def clickFacialRegister(self):
+    #     print("start loading")
+    #     from pages.Facial_Register import facialRegister
+    #     print("start loading")
+
+
+    #     self.resize(533, 643)
+    #     Register = facialRegister(self)
+
+    #     Register.show()
+    #     self.FacialRegisterButton.setText("Facial Register")
       
 
-    # when close the frame
-    def clickback(self):
-        QtWidgets.qApp.quit()
+    # # when close the frame
+    # def clickback(self):
+    #     QtWidgets.qApp.quit()
 
-    def closeEvent(self, event):
-        # show a message box asking for confirmation
-        reply = QtWidgets.QMessageBox.question(None, 'Smart AIoT ito sya',
-                                               "Are you sure you want to exit?", QtWidgets.QMessageBox.Yes |
-                                               QtWidgets.QMessageBox.No, QtWidgets.QMessageBox.No)
+    # def closeEvent(self, event):
+    #     # show a message box asking for confirmation
+    #     reply = QtWidgets.QMessageBox.question(None, 'Smart AIoT ito sya',
+    #                                            "Are you sure you want to exit?", QtWidgets.QMessageBox.Yes |
+    #                                            QtWidgets.QMessageBox.No, QtWidgets.QMessageBox.No)
 
-        # if the user confirms, exit the application
-        if reply == QtWidgets.QMessageBox.Yes:
-            QtWidgets.qApp.quit()
-        else:
-            event.ignore()
+    #     # if the user confirms, exit the application
+    #     if reply == QtWidgets.QMessageBox.Yes:
+    #         QtWidgets.qApp.quit()
+    #     else:
+    #         event.ignore()
 #error dito
+
+if __name__ == "__main__":
+    # Create a new QApplication object
+    app = QApplication(sys.argv)
+
+    New_menu = MainWindow()
+    New_menu.show()
+
+    sys.exit(app.exec_())
