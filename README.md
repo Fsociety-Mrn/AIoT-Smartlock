@@ -9,6 +9,8 @@
         - after setup email ,password and confirm password
         - setup Prfile (Optional)
         - Setup First Name and Last Name
+        - setup username
+        - setup password for locker
 
 
 ## Admin Account 
