@@ -7,10 +7,10 @@
     - Sign Up pages
         - pero i login muna OTP,   
         - after setup email ,password and confirm password
-        - setup Prfile (Optional)
-        - Setup First Name and Last Name
-        - setup username
-        - setup password for locker
+        - setup Profile Picture (Optional)
+        - Setup First Name and Last Name ( Kelangan )
+        - setup username ( kelangan at dapat unique ) 
+        - setup 6 min and 6 max password for locker ( kelangan dapat unique )
 
 
 ## Admin Account 
