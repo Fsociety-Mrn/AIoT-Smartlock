@@ -30,7 +30,7 @@ class MainWindow(QtWidgets.QFrame):
         self.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.setLineWidth(2)
         
-        # self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
+        self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         # self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
         
         self.horizontalLayout = QtWidgets.QHBoxLayout(self)
@@ -92,9 +92,105 @@ class MainWindow(QtWidgets.QFrame):
         self.facialRegister.setObjectName("facialRegister")
         
         # facial login
+        self.facialLogin = QtWidgets.QPushButton(self.widget_2)
+        self.facialLogin.setGeometry(QtCore.QRect(60, 200, 291, 51))
+        font = QtGui.QFont()
+        font.setFamily("Segoe UI")
+        font.setPointSize(12)
+        self.facialLogin.setFont(font)
+        self.facialLogin.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.facialLogin.setAutoFillBackground(False)
+        self.facialLogin.setStyleSheet("background: qlineargradient(spread:pad, x1:0, y1:0.505682, x2:1, y2:0.477, stop:0 rgba(11, 131, 120, 219), stop:1 rgba(85, 98, 112, 226));\n"
+        "\n"
+        "border-radius: 25px;\n"
+        "color: white;\n"
+        "padding: 10px;")
+        self.facialLogin.setObjectName("facialLogin")
+        
+        # paro paro g
+        self.label = QtWidgets.QLabel(self.widget_2)
+        self.label.setGeometry(QtCore.QRect(100, 420, 211, 20))
+        font = QtGui.QFont()
+        font.setFamily("Segoe UI")
+        font.setPointSize(10)
+        font.setStrikeOut(False)
+        self.label.setFont(font)
+        self.label.setStyleSheet("color:  rgba(11, 131, 120, 219)")
+        self.label.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.label.setAlignment(QtCore.Qt.AlignCenter)
+        self.label.setObjectName("label")
+        
+        # settings
+        self.settings = QtWidgets.QPushButton(self.widget_2)
+        self.settings.setEnabled(True)
+        self.settings.setGeometry(QtCore.QRect(330, 10, 51, 51))
+        self.settings.setStyleSheet("border-radius: 100px;")
+        self.settings.setText("")
+        icon1 = QtGui.QIcon()
+        icon1.addPixmap(QtGui.QPixmap(":/background/Images/setting.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.settings.setIcon(icon1)
+        self.settings.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.settings.setIconSize(QtCore.QSize(32, 32))
+        self.settings.setObjectName("settings")
+        
+        # about
+        self.about = QtWidgets.QPushButton(self.widget_2)
+        self.about.setEnabled(True)
+        self.about.setGeometry(QtCore.QRect(10, 410, 41, 41))
+        self.about.setStyleSheet("border-radius: 100px;")
+        self.about.setText("")
+        icon2 = QtGui.QIcon()
+        icon2.addPixmap(QtGui.QPixmap(":/background/Images/info.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.about.setIcon(icon2)
+        self.about.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.about.setIconSize(QtCore.QSize(24, 24))
+        self.about.setObjectName("about")
+        
+        # time
+        self.label_2 = QtWidgets.QLabel(self.widget_2)
+        self.label_2.setGeometry(QtCore.QRect(0, 80, 401, 61))
+        font = QtGui.QFont()
+        font.setFamily("Segoe UI")
+        font.setPointSize(42)
+        font.setStrikeOut(False)
+        self.label_2.setFont(font)
+        self.label_2.setStyleSheet("color:  rgba(11, 131, 120, 219)")
+        self.label_2.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.label_2.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_2.setObjectName("label_2")
+        
+        # date
+        self.label_3 = QtWidgets.QLabel(self.widget_2)
+        self.label_3.setGeometry(QtCore.QRect(90, 150, 211, 20))
+        font = QtGui.QFont()
+        font.setFamily("Segoe UI")
+        font.setPointSize(13)
+        font.setStrikeOut(False)
+        self.label_3.setFont(font)
+        self.label_3.setStyleSheet("color:  rgba(11, 131, 120, 219)")
+        self.label_3.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.label_3.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_3.setObjectName("label_3")
+        
+        self.horizontalLayout.addWidget(self.widget_2)
+        self.retranslateUi()
+        QtCore.QMetaObject.connectSlotsByName(self)
+        
 
     def retranslateUi(self):
         _translate = QtCore.QCoreApplication.translate
+        
+        self.setWindowTitle(_translate("mainMenu", "Frame"))
+        
+        self.facialRegister.setText(_translate("mainMenu", "Facial Register"))
+        
+        self.facialLogin.setText(_translate("mainMenu", "Facial Login"))
+        
+        self.label.setText(_translate("mainMenu", "paro paro g fly high butterfly"))
+        
+        self.label_2.setText(_translate("mainMenu", "12:00 PM"))
+        
+        self.label_3.setText(_translate("mainMenu", "Wed,Jun 3 2023"))
 
 
 
@@ -160,11 +256,11 @@ class MainWindow(QtWidgets.QFrame):
     #         event.ignore()
 #error dito
 
-if __name__ == "__main__":
-    # Create a new QApplication object
-    app = QApplication(sys.argv)
+# if __name__ == "__main__":
+#     # Create a new QApplication object
+#     app = QApplication(sys.argv)
 
-    New_menu = MainWindow()
-    New_menu.show()
+#     New_menu = MainWindow()
+#     New_menu.show()
 
-    sys.exit(app.exec_())
+#     sys.exit(app.exec_())
