@@ -19,7 +19,6 @@ import dlib
 import torch
 import numpy as np
 import threading
-import sys, res
 from PyQt5.QtWidgets import *
 
 
@@ -52,7 +51,8 @@ class facialRegister(QFrame):
             self.setObjectName("Facial register")
             self.resize(533, 643)
             self.setStyleSheet("background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0.0965909, y2:0.909, stop:0 rgba(61, 152, 154, 255), stop:1 rgba(12, 14, 36, 255));")
-          #camera
+            
+            #camera
             self.camera = QtWidgets.QLabel(self)
             self.camera.setGeometry(QtCore.QRect(10, 20, 501, 341))
             self.camera.setStyleSheet("color: white;\n""")
@@ -432,6 +432,7 @@ class facialRegister(QFrame):
 
 if __name__ == "__main__":
     # Create a new QApplication object
+    import sys
     app = QApplication(sys.argv)
 
     New_menu = facialRegister()

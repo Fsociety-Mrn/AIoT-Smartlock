@@ -1,4 +1,5 @@
 import torch
+import torchvision.transforms as transforms
 
 from torchvision import datasets
 from torch.utils.data import DataLoader
@@ -95,6 +96,16 @@ class JoloRecognition:
         # define a function to collate data
             def collate_fn(x):
                 return x[0]
+            
+        # Define your augmentation transformations
+            transform = transforms.Compose([
+                transforms.RandomHorizontalFlip(),
+                transforms.RandomRotation(degrees=10),
+                transforms.ColorJitter(brightness=0.4, contrast=0.4, saturation=0.4, hue=0.1),
+                transforms.ToTensor(),
+                transforms.Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])
+            ])
+
 
         # locate the dataset of known faces
             dataset = datasets.ImageFolder(Dataset_Folder)

@@ -5,6 +5,7 @@ import numpy as np
 import torch
 
 from Face_Recognition.JoloRecognition import JoloRecognition as Jolo
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import *
 
@@ -50,60 +51,145 @@ class FacialLogin(QtWidgets.QFrame):
         # frame
 
         self.setObjectName("Facial Login")
-        self.resize(543, 521)
-        self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
-        self.setStyleSheet(
-            "background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0.0965909, y2:0.909, stop:0 rgba(61, 152, 154, 255), stop:1 rgba(12, 14, 36, 255));")
-
+        self.resize(800, 480)
+        
+        # self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
+        
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap(":/background/Images/logo192x192.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.setWindowIcon(icon)
+        self.setStyleSheet("background-color: rgb(231, 229, 213);\n"
+        "background-image: url(:/background/Images/background-removebg-preview.png);\n"
+        "background-position: center;\n"
+        "\n"
+        "")
         # video framing
-        self.video = QtWidgets.QLabel(self)
-        self.video.setGeometry(QtCore.QRect(20, 20, 501, 401))
+        self.widget = QtWidgets.QWidget(self)
+        self.widget.setGeometry(QtCore.QRect(70, 50, 661, 351))
+        self.widget.setStyleSheet("border: 2px solid rgb(61, 152, 154) ;\n"
+        "border-radius: 50px;")
+        self.widget.setObjectName("widget")
+        
+        self.horizontalLayoutWidget = QtWidgets.QWidget(self.widget)
+        self.horizontalLayoutWidget.setGeometry(QtCore.QRect(20, 10, 621, 331))
+        self.horizontalLayoutWidget.setObjectName("horizontalLayoutWidget")
+        self.horizontalLayout = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget)
+        self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        
+        # video for facial recognition
+        self.video = QtWidgets.QLabel(self.horizontalLayoutWidget)
+        font = QtGui.QFont()
+        font.setFamily("Segoe UI")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        font.setStrikeOut(False)
+        self.video.setFont(font)
+        self.video.setStyleSheet("border:none;\n color:  rgba(11, 131, 120, 219);")
+        self.video.setText("")
+        self.video.setPixmap(QtGui.QPixmap(":/background/Images/loading.png"))
+        self.video.setScaledContents(False)
         self.video.setAlignment(QtCore.Qt.AlignCenter)
-        self.video.setObjectName("label")
-        self.video.setStyleSheet("color: white;\n""")
+        self.video.setObjectName("video")
+        self.horizontalLayout.addWidget(self.video)
+        
         # face status
         self.status = QtWidgets.QLabel(self)
-        self.status.setGeometry(QtCore.QRect(10, 420, 511, 41))
+        self.status.setGeometry(QtCore.QRect(0, 0, 801, 51))
+        font = QtGui.QFont()
+        font.setFamily("Segoe UI")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        font.setStrikeOut(False)
+        self.status.setFont(font)
+        self.status.setStyleSheet("color:  rgba(11, 131, 120, 219)")
+        self.status.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.status.setAlignment(QtCore.Qt.AlignCenter)
-        self.status.setObjectName("label_2")
-        self.status.setStyleSheet("color: white;\n""")
+        self.status.setObjectName("status")
 
         # back to mainmenu button
-        self.backToMainMeneButton = QtWidgets.QPushButton(self)
-        self.backToMainMeneButton.setGeometry(QtCore.QRect(130, 460, 271, 51))
-        self.backToMainMeneButton.setObjectName("pushButton")
-        self.backToMainMeneButton.setStyleSheet("color: white;\n""")
+        self.back = QtWidgets.QPushButton(self)
+        self.back.setGeometry(QtCore.QRect(0, 0, 51, 41))
+        font = QtGui.QFont()
+        font.setFamily("Segoe UI")
+        font.setPointSize(12)
+        self.back.setFont(font)
+        self.back.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.back.setAutoFillBackground(False)
+        self.back.setStyleSheet("border:none;\n")
+        self.back.setText("")
+        icon1 = QtGui.QIcon()
+        icon1.addPixmap(QtGui.QPixmap(":/background/Images/return.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.back.setIcon(icon1)
+        self.back.setIconSize(QtCore.QSize(42, 42))
+        self.back.setObjectName("back")
+        self.back.clicked.connect(self.backTomain)
+        
         # connect the close event to the method
+        
+        # pincode
+        self.label_2 = QtWidgets.QLabel(self)
+        self.label_2.setGeometry(QtCore.QRect(290, 410, 161, 61))
+        font = QtGui.QFont()
+        font.setFamily("Segoe UI")
+        font.setPointSize(10)
+        font.setStrikeOut(False)
+        self.label_2.setFont(font)
+        self.label_2.setStyleSheet("color:  rgba(11, 131, 120, 219)")
+        self.label_2.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.label_2.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_2.setObjectName("label_2")
 
+            # pincode icon
+        self.pincode = QtWidgets.QPushButton(self)
+        self.pincode.setGeometry(QtCore.QRect(430, 415, 51, 51))
+        font = QtGui.QFont()
+        font.setFamily("Segoe UI")
+        font.setPointSize(12)
+        self.pincode.setFont(font)
+        self.pincode.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.pincode.setAutoFillBackground(False)
+        self.pincode.setStyleSheet("border: 2px solid #3D989A;\n"
+        "border-radius: 20px;\n"
+        "color: white;\n"
+        "padding:10px;")
+        self.pincode.setText("")
+        icon2 = QtGui.QIcon()
+        icon2.addPixmap(QtGui.QPixmap(":/background/Images/lock-pattern.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.pincode.setIcon(icon2)
+        self.pincode.setIconSize(QtCore.QSize(35, 35))
+        self.pincode.setObjectName("pincode")
+            
         # Timer
         self.timer = QtCore.QTimer(self)
         self.timer.timeout.connect(self.videoStreaming)
         self.last_recognition_time = time.time()
         self.timer.start(30)
 
+        self.label_2.raise_()
+        self.pincode.raise_()
+        self.status.raise_()
+        self.back.raise_()
+        self.widget.raise_()
+        
         self.retranslateUi()
         QtCore.QMetaObject.connectSlotsByName(self)
 
     def retranslateUi(self):
         _translate = QtCore.QCoreApplication.translate
-        self.setWindowTitle(_translate("Frame", "Frame"))
+        self.setWindowTitle(_translate("facialLogin", "Frame"))
+        self.label_2.setText(_translate("facialLogin", "can\'t recognize ?"))
+        self.status.setText(_translate("facialLogin", "<html><head/><body><p>Please wait, camera is loading.</p></body></html>"))
 
-        # video frame
-        self.video.setText(_translate("Frame", "Loading..."))
-
-        # frame status
-        self.status.setText(_translate("Frame", "status"))
-
-        # back to main Menu
-        self.backToMainMeneButton.setText(_translate("Frame", "back to mainMenu"))
-        self.backToMainMeneButton.clicked.connect(self.backTomain)
 
     def backTomain(self):
         from pages.Main_Menu import MainWindow
         
         print("go back to main menu")
 
-        self.resize(555, 495)
+        self.resize(800, 480)
         MainWindow(self).show()
 
         self.videoStream.release()
@@ -177,6 +263,7 @@ class FacialLogin(QtWidgets.QFrame):
         ret, frame = self.videoStream.read()
 
         if not ret:
+            self.status.setText("Please go back to mainmenu")
             self.video.setText("Camera wont load")
             return
         
@@ -349,7 +436,7 @@ class FacialLogin(QtWidgets.QFrame):
 
 if __name__ == "__main__":
 
-    import sys,res
+    import sys,background
     # Create a new QApplication object
     app = QApplication(sys.argv)
 
