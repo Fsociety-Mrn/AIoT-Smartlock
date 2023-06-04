@@ -142,7 +142,7 @@ class FacialLogin(QtWidgets.QFrame):
         self.label_2.setAlignment(QtCore.Qt.AlignCenter)
         self.label_2.setObjectName("label_2")
 
-            # pincode icon
+        # pincode icon
         self.pincode = QtWidgets.QPushButton(self)
         self.pincode.setGeometry(QtCore.QRect(430, 415, 51, 51))
         font = QtGui.QFont()
