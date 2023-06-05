@@ -172,6 +172,7 @@ class MainWindow(QtWidgets.QFrame):
         self.setWindowTitle(_translate("mainMenu", "Frame"))
         
         self.facialRegister.setText(_translate("mainMenu", "Facial Register"))
+        self.facialRegister.clicked.connect(self.openFacialRegister)
         
         self.facialLogin.setText(_translate("mainMenu", "Facial Login"))
         self.facialLogin.clicked.connect(self.openFacialLogin)
@@ -207,26 +208,26 @@ class MainWindow(QtWidgets.QFrame):
 
     #     # ===================== open Facial Register ===================== #
 
-    # def openFacialRegister(self):
+    def openFacialRegister(self):
 
-    #     self.FacialRegisterButton.setText("Loading..............")
-    #     self.FaceLoginButton.isEnabled = False
-    #     self.FacialRegisterButton.isEnabled = False
+        self.facialRegister.setText("Loading..............")
+        self.facialLogin.isEnabled = False
+        self.facialLogin.isEnabled = False
 
-    #     # Delay the creation of the FacialLogin object by 100 milliseconds
-    #     QtCore.QTimer.singleShot(100, self.clickFacialRegister)
+        # Delay the creation of the FacialLogin object by 100 milliseconds
+        QtCore.QTimer.singleShot(100, self.clickFacialRegister)
 
-    # def clickFacialRegister(self):
-    #     print("start loading")
-    #     from pages.Facial_Register import facialRegister
-    #     print("start loading")
+    def clickFacialRegister(self):
+        print("start loading")
+        from pages.Token_Form import TokenForm
+        print("start loading")
 
 
-    #     self.resize(533, 643)
-    #     Register = facialRegister(self)
+        self.resize(800, 480)
+        Token = TokenForm(self)
 
-    #     Register.show()
-    #     self.FacialRegisterButton.setText("Facial Register")
+        Token.show()
+        self.facialRegister.setText("Facial Register")
       
 
     # # when close the frame

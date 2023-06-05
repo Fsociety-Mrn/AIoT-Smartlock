@@ -17,13 +17,72 @@ class TokenForm(QtWidgets.QFrame):
         "background-image: url(:/background/Images/background-removebg-preview.png);\n"
         "background-position: center;\n")
         
-    def retranslateUi(self, Tokenfield):
-        _translate = QtCore.QCoreApplication.translate
-        # Tokenfield.setWindowTitle(_translate("Tokenfield", "Frame"))
-        # self.TokenID.setText(_translate("Tokenfield", "Token ID"))
-        # self.Continue.setText(_translate("Tokenfield", "Continue"))
-        # self.Cancel.setText(_translate("Tokenfield", "Cancel"))
+        # Token Field
+        self.TokenID = QtWidgets.QLineEdit(self)
+        self.TokenID.setGeometry(QtCore.QRect(110, 180, 581, 81))
+        font = QtGui.QFont()
+        font.setFamily("Segoe UI")
+        font.setPointSize(30)
+        self.TokenID.setFont(font)
+        self.TokenID.setStyleSheet("background: transparents;\n"
+        "color: rgb(156, 156, 156);\n"
+        "background-color: rgb(255, 255, 255);\n"
+        "border: 2px solid #3D989A;\n"
+        "border-radius: 40px;")
+        self.TokenID.setAlignment(QtCore.Qt.AlignCenter)
+        self.TokenID.setObjectName("TokenID")
         
+        # continue
+        self.Continue = QtWidgets.QPushButton(self)
+        self.Continue.setGeometry(QtCore.QRect(420, 290, 181, 51))
+        font = QtGui.QFont()
+        font.setFamily("Segoe UI")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.Continue.setFont(font)
+        self.Continue.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.Continue.setStyleSheet("border: none;\n"
+        "background: qlineargradient(spread:pad, x1:0, y1:0.505682, x2:1, y2:0.477, stop:0 rgba(11, 131, 120, 219), stop:1 rgba(85, 98, 112, 226));\n"
+        "border-radius: 25px;\n"
+        "color: white;")
+        self.Continue.setObjectName("Continue")
+        
+        # cancel
+        self.Cancel = QtWidgets.QPushButton(self)
+        self.Cancel.setGeometry(QtCore.QRect(220, 290, 181, 51))
+        font = QtGui.QFont()
+        font.setFamily("Segoe UI")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.Cancel.setFont(font)
+        self.Cancel.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.Cancel.setStyleSheet("border: 2px solid #3D989A;\n"
+        "border-radius: 25px;\n"
+        "color: #3D989A;")
+        self.Cancel.setObjectName("Cancel")
+        
+        self.retranslateUi()
+        QtCore.QMetaObject.connectSlotsByName(self)
+        
+    def retranslateUi(self):
+        _translate = QtCore.QCoreApplication.translate
+        self.setWindowTitle(_translate("Tokenfield", "Frame"))
+        self.TokenID.setText(_translate("Tokenfield", "Token ID"))
+        self.Continue.setText(_translate("Tokenfield", "Continue"))
+        self.Cancel.setText(_translate("Tokenfield", "Cancel"))
+        self.Cancel.clicked.connect(self.backTomain)
+
+    
+    def backTomain(self):
+        from pages.Main_Menu import MainWindow
+        
+        print("go back to main menu")
+
+        self.resize(800, 480)
+        MainWindow(self).show()
+        self.close()
         
 if __name__ == "__main__":
     
