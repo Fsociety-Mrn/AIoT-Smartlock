@@ -1,16 +1,6 @@
 <RCC>
-  <qresource prefix="background">
-    <file>Images/capture.png</file>
-    <file>Images/lock-pattern.png</file>
-    <file>Images/return.png</file>
-    <file>Images/pincode.png</file>
-    <file>Images/loading.png</file>
-    <file>Images/loading.png</file>
-    <file>Images/info.png</file>
-    <file>Images/setting.png</file>
-    <file>Images/logo192x192.png</file>
-    <file>Images/logo515x512.png</file>
-    <file>Images/background.jpg</file>
-    <file>Images/background-removebg-preview.png</file>
+  <qresource prefix="images">
+    <file>return.png</file>
+    <file>../Known_Faces/Art Lisboa/2.png</file>
   </qresource>
 </RCC>

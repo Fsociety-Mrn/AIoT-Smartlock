@@ -122,7 +122,7 @@ class facialRegister(QtWidgets.QFrame):
             # open camera
             self.cap = cv2.VideoCapture(1) if cv2.VideoCapture(1).isOpened() else cv2.VideoCapture(0)
             self.cap.set(4, 1080)
-
+            
             # face detector: Haar, dlib,landmark
             self.face_detector = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
             self.dlib_faceDetcetoor = dlib.get_frontal_face_detector()
@@ -208,16 +208,14 @@ class facialRegister(QtWidgets.QFrame):
         frame = cv2.flip(frame, 1)
 
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        
-        
-
+    
 
         # load facial detector haar
         faces = self.face_detector.detectMultiScale(gray,
-                                                            scaleFactor=1.1,
-                                                            minNeighbors=20,
-                                                            minSize=(100, 100),
-                                                            flags=cv2.CASCADE_SCALE_IMAGE)
+                                                    scaleFactor=1.1,
+                                                    minNeighbors=20,
+                                                    minSize=(100, 100),
+                                                    flags=cv2.CASCADE_SCALE_IMAGE)
         current_time = time.time()
 
         if self.cameraStat:
@@ -266,6 +264,17 @@ class facialRegister(QtWidgets.QFrame):
         qImg = QtGui.QImage(frame.data, width, height, bytesPerLine, QtGui.QImage.Format_BGR888)
         pixmap = QtGui.QPixmap.fromImage(qImg)
         self.video.setPixmap(pixmap)
+        
+        # # Apply border-radius effect to the image
+        # border_radius = 50  # Set the border-radius value
+        # radius = border_radius + 10
+        # gradient = QtGui.QRadialGradient(width / 2, height / 2, radius, width / 2, height / 2)
+        # gradient.setColorAt(0, QtGui.QColor(0, 0, 0, 0))
+        # gradient.setColorAt(1, QtGui.QColor(0, 0, 0, 255))
+        # effect = QtWidgets.QGraphicsBlurEffect()
+        # effect.setBlurRadius(border_radius)
+        # # effect.setGraphicsEffect(effect)
+        # self.video.setGraphicsEffect(effect)
 
             # message box
     # def messageBoxShow(self, icon=None, title=None, text=None, buttons=None):

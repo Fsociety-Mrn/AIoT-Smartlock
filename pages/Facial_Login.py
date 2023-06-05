@@ -65,13 +65,14 @@ class FacialLogin(QtWidgets.QFrame):
         "")
         # video framing
         self.widget = QtWidgets.QWidget(self)
-        self.widget.setGeometry(QtCore.QRect(70, 50, 661, 351))
+        # self.widget.setGeometry(QtCore.QRect(70, 50, 661, 351))
+        self.widget.setGeometry(QtCore.QRect(140, 50, 511, 351))
         self.widget.setStyleSheet("border: 2px solid rgb(61, 152, 154) ;\n"
         "border-radius: 50px;")
         self.widget.setObjectName("widget")
         
         self.horizontalLayoutWidget = QtWidgets.QWidget(self.widget)
-        self.horizontalLayoutWidget.setGeometry(QtCore.QRect(20, 10, 621, 331))
+        self.horizontalLayoutWidget.setGeometry(QtCore.QRect(20, 10, 471, 331))
         self.horizontalLayoutWidget.setObjectName("horizontalLayoutWidget")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget)
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
@@ -111,14 +112,16 @@ class FacialLogin(QtWidgets.QFrame):
 
         # back to mainmenu button
         self.back = QtWidgets.QPushButton(self)
-        self.back.setGeometry(QtCore.QRect(0, 0, 51, 41))
+        self.back.setGeometry(QtCore.QRect(0, 0, 101, 41))
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(12)
         self.back.setFont(font)
         self.back.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.back.setAutoFillBackground(False)
-        self.back.setStyleSheet("border:none;\n")
+        self.back.setStyleSheet("border:none;\n"
+                "color:  rgba(11, 131, 120, 219);\n"
+                "padding:10px")
         self.back.setText("")
         icon1 = QtGui.QIcon()
         icon1.addPixmap(QtGui.QPixmap(":/background/Images/return.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
@@ -182,7 +185,7 @@ class FacialLogin(QtWidgets.QFrame):
         self.setWindowTitle(_translate("facialLogin", "Frame"))
         self.label_2.setText(_translate("facialLogin", "can\'t recognize ?"))
         self.status.setText(_translate("facialLogin", "<html><head/><body><p>Please wait, camera is loading.</p></body></html>"))
-
+        self.back.setText(_translate("facialLogin", "Back "))
 
     def backTomain(self):
         from pages.Main_Menu import MainWindow
@@ -198,16 +201,18 @@ class FacialLogin(QtWidgets.QFrame):
 
     #  for facial recognition
     def FacialRecognition(self, frame):
-        result = Jolo().Face_Compare(frame,threshold=0.7)
+        result = Jolo().Face_Compare(frame)
 
         if result[0] == 'No match detected':
-
+            print(result[0])
             self.matchs = str(result[0])
+            # self.status.setText(result[0])
             self.R = 255
             self.G = 0
             self.B = 0
         else:
             self.matchs = str(result[0])
+            # self.status.setText(result[0])
             self.R = 0
             self.G = 255
             self.B = 0
@@ -272,37 +277,37 @@ class FacialLogin(QtWidgets.QFrame):
 
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         
-        # check if the frame is dark
-        mean_value = cv2.mean(gray)[0]
+        # # check if the frame is dark
+        # mean_value = cv2.mean(gray)[0]
 
-        if mean_value < 50:
+        # if mean_value < 80:
             
-            self.status.setText("It is too dark.")
+        #     self.status.setText("It is too dark.")
             
-            # display the frame on the label
-            height, width, channel = frame.shape
-            bytesPerLine = channel * width
-            qImg = QtGui.QImage(frame.data, width, height, bytesPerLine, QtGui.QImage.Format_BGR888)
-            pixmap = QtGui.QPixmap.fromImage(qImg)
-            self.video.setPixmap(pixmap)
+        #     # display the frame on the label
+        #     height, width, channel = frame.shape
+        #     bytesPerLine = channel * width
+        #     qImg = QtGui.QImage(frame.data, width, height, bytesPerLine, QtGui.QImage.Format_BGR888)
+        #     pixmap = QtGui.QPixmap.fromImage(qImg)
+        #     self.video.setPixmap(pixmap)
            
             
             
-            return
+        #     return
         
-        # check if the frame is Bright
-        if mean_value > 100:
+        # # check if the frame is Bright
+        # if mean_value > 100:
             
-            self.status.setText("It is too bright.")
+        #     self.status.setText("It is too bright.")
             
-            # display the frame on the label
-            height, width, channel = frame.shape
-            bytesPerLine = channel * width
-            qImg = QtGui.QImage(frame.data, width, height, bytesPerLine, QtGui.QImage.Format_BGR888)
-            pixmap = QtGui.QPixmap.fromImage(qImg)
-            self.video.setPixmap(pixmap)
+        #     # display the frame on the label
+        #     height, width, channel = frame.shape
+        #     bytesPerLine = channel * width
+        #     qImg = QtGui.QImage(frame.data, width, height, bytesPerLine, QtGui.QImage.Format_BGR888)
+        #     pixmap = QtGui.QPixmap.fromImage(qImg)
+        #     self.video.setPixmap(pixmap)
     
-            return
+        #     return
 
         # load facial detector haar
         faces = self.face_detector.detectMultiScale(gray,
@@ -375,7 +380,7 @@ class FacialLogin(QtWidgets.QFrame):
             self.update_blink_count_and_status(ear)
 
             # display blink count, EAR, and eye status on frame
-            self.display_stats_on_frame(frame, ear)
+            # self.display_stats_on_frame(frame, ear)
 
         return self.blink
 

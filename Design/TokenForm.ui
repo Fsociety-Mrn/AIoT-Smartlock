@@ -20,7 +20,7 @@
    <string>Frame</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../background.qrc">
+   <iconset>
     <normaloff>:/background/Images/logo192x192.png</normaloff>:/background/Images/logo192x192.png</iconset>
   </property>
   <property name="styleSheet">
@@ -111,9 +111,49 @@ color: #3D989A;</string>
     <string>Cancel</string>
    </property>
   </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>90</x>
+     <y>20</y>
+     <width>551</width>
+     <height>381</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 2px solid rgb(61, 152, 154) ;
+border-radius: 50px;
+position: relative;
+z-index: 1;</string>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::Box</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Plain</enum>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap resource="background.qrc">:/images/Known_Faces/Art Lisboa/2.png</pixmap>
+   </property>
+   <property name="scaledContents">
+    <bool>true</bool>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+   <property name="wordWrap">
+    <bool>false</bool>
+   </property>
+   <property name="margin">
+    <number>0</number>
+   </property>
+  </widget>
  </widget>
  <resources>
-  <include location="../background.qrc"/>
+  <include location="background.qrc"/>
  </resources>
  <connections/>
 </ui>
