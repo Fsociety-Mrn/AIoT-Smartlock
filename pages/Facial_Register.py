@@ -57,7 +57,20 @@ class facialRegister(QtWidgets.QFrame):
             "background-image: url(:/background/Images/background-removebg-preview.png);\n"
             "background-position: center;\n"
             "")
-        
+
+            # user name
+            self.Name = QtWidgets.QLabel(self)
+            self.Name.setGeometry(QtCore.QRect(0, 10, 211, 41))
+            font = QtGui.QFont()
+            font.setFamily("Segoe UI")
+            font.setPointSize(12)
+            font.setBold(True)
+            font.setWeight(75)
+            self.Name.setFont(font)
+            self.Name.setStyleSheet("color: #3D989A")
+            self.Name.setAlignment(QtCore.Qt.AlignCenter)
+            self.Name.setObjectName("Name")
+            
             #camera
             self.widget = QtWidgets.QWidget(self)
             self.widget.setGeometry(QtCore.QRect(61, 60, 671, 361))
@@ -143,7 +156,7 @@ class facialRegister(QtWidgets.QFrame):
         self.setWindowTitle(_translate("facialRegistration", "Frame"))
         self.capture.setText(_translate("facialRegistration", "0"))
         self.status.setText(_translate("facialRegistration", "Please align your face properly"))
-
+        self.Name.setText(_translate("facialRegistration", "FirstName LastName"))
 
 
     # # capture and Train Images

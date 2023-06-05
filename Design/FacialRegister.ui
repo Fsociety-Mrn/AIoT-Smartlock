@@ -141,11 +141,41 @@ border-radius: 50px;</string>
     <set>Qt::AlignCenter</set>
    </property>
   </widget>
+  <widget class="QLabel" name="Name">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>13</y>
+     <width>211</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Segoe UI</family>
+     <pointsize>12</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: #3D989A</string>
+   </property>
+   <property name="text">
+    <string>First Name, Last Name</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+   <property name="margin">
+    <number>0</number>
+   </property>
+  </widget>
  </widget>
  <resources>
   <include location="background.qrc"/>
   <include location="background.qrc"/>
-  <include location="../background.qrc"/>
+  <include location="background.qrc"/>
  </resources>
  <connections/>
 </ui>

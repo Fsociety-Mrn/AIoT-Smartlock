@@ -16,6 +16,9 @@
     <pointsize>36</pointsize>
    </font>
   </property>
+  <property name="focusPolicy">
+   <enum>Qt::StrongFocus</enum>
+  </property>
   <property name="windowTitle">
    <string>Frame</string>
   </property>
@@ -46,16 +49,19 @@ background-position: center;
    </property>
    <property name="styleSheet">
     <string notr="true">background: transparents;
-color: rgb(156, 156, 156);
+color: #3D989A;
 background-color: rgb(255, 255, 255);
 border: 2px solid #3D989A;
 border-radius: 40px;</string>
    </property>
    <property name="text">
-    <string>Token ID</string>
+    <string/>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>
+   </property>
+   <property name="placeholderText">
+    <string>Token ID</string>
    </property>
   </widget>
   <widget class="QPushButton" name="Continue">
@@ -74,6 +80,9 @@ border-radius: 40px;</string>
      <weight>75</weight>
      <bold>true</bold>
     </font>
+   </property>
+   <property name="focusPolicy">
+    <enum>Qt::NoFocus</enum>
    </property>
    <property name="styleSheet">
     <string notr="true">border: none;
@@ -111,41 +120,32 @@ color: #3D989A;</string>
     <string>Cancel</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label">
+  <widget class="QLabel" name="greetings">
    <property name="geometry">
     <rect>
-     <x>90</x>
-     <y>20</y>
-     <width>551</width>
-     <height>381</height>
+     <x>200</x>
+     <y>80</y>
+     <width>421</width>
+     <height>81</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <family>Segoe UI</family>
+     <pointsize>21</pointsize>
+     <weight>50</weight>
+     <bold>false</bold>
+    </font>
+   </property>
    <property name="styleSheet">
-    <string notr="true">border: 2px solid rgb(61, 152, 154) ;
-border-radius: 50px;
-position: relative;
-z-index: 1;</string>
-   </property>
-   <property name="frameShape">
-    <enum>QFrame::Box</enum>
-   </property>
-   <property name="frameShadow">
-    <enum>QFrame::Plain</enum>
+    <string notr="true">color: #3D989A</string>
    </property>
    <property name="text">
-    <string/>
-   </property>
-   <property name="pixmap">
-    <pixmap resource="background.qrc">:/images/Known_Faces/Art Lisboa/2.png</pixmap>
-   </property>
-   <property name="scaledContents">
-    <bool>true</bool>
+    <string>Hello Friend,
+Please enter your Token ID below</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>
-   </property>
-   <property name="wordWrap">
-    <bool>false</bool>
    </property>
    <property name="margin">
     <number>0</number>
