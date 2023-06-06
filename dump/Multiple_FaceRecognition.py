@@ -48,7 +48,7 @@ for box in boxes:
     # c+=1
 
 # resize the image
-resized_image = cv2.resize(image, (800, 600))
+resized_image = cv2.resize(image, (800, 900))
 
 # Convert the image back to BGR format
 image = cv2.cvtColor(resized_image, cv2.COLOR_RGB2BGR)

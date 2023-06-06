@@ -138,6 +138,7 @@ class facialRegister(QtWidgets.QFrame):
             self.timer = QtCore.QTimer(self)
             self.timer.timeout.connect(self.videoStreaming)
             self.last_recognition_time = time.time()
+            self.start_start = time.time()
             self.timer.start(30)
 
             self.retranslateUi()
@@ -147,7 +148,7 @@ class facialRegister(QtWidgets.QFrame):
         _translate = QtCore.QCoreApplication.translate
         self.setWindowTitle(_translate("facialRegistration", "Frame"))
         self.capture.setText(_translate("facialRegistration", "0"))
-        self.status.setText(_translate("facialRegistration", "Please align your face properly"))
+        self.status.setText(_translate("facialRegistration", "Please be ready at 5"))
         self.Name.setText(_translate("facialRegistration", "Art Lisboa"))
 
     # receivce data from Token Form
@@ -155,42 +156,45 @@ class facialRegister(QtWidgets.QFrame):
         self.Name.setText(data)
 
     # capture and Train Images
-    def captureSave(self, current_time=None, frame=None):
+    def captureSave(self, current_time=None, frame=None, cropFrame=None):
 
 
         # self.status.setText("Please blink" if self.capture >= 20 else "Face capture left" + str(21 - self.captureStat))
         
-        self.capture.setText(str(self.captureStat))
+        self.capture.setText(str(21-self.captureStat))
         
         if self.captureStat >= 20:
             self.status.setText("Please blink")
             
         # Set time delay to avoid over capturing
-        if current_time - self.last_recognition_time <= 0.2:
+        if current_time - self.last_recognition_time <= 1:
             return
 
         self.last_recognition_time = current_time
-
-
-
-        
-
+    
         # Save captured images if capture count is less than 20
         if self.captureStat <= 20:
 
             path = f"Known_Faces/{self.Name.text()}/{self.captureStat}.png"
             
-            # remove the current image and replace new one
-            # if os.path.exists(path):
-            #     os.remove(path)
-            #     cv2.imwrite(path, frame)
-            # else:
-            #     cv2.imwrite(path, frame)
-            
             cv2.imwrite(path, frame)
             self.captureStat += 1
+            self.status.setText("Please align your face properly")
             
-            print("nag save")
+            # check if the frame is blured
+             # check blurednmess
+            # laplacian_var = cv2.Laplacian(cropFrame, cv2.CV_64F).var()
+            
+            
+            # print("Blurered level",laplacian_var)
+            # if laplacian_var < 100:
+            #     self.status.setText("cant capture it is blured")
+                
+            # else:
+            #     cv2.imwrite(path, frame)
+            #     self.captureStat += 1
+            
+            #     self.status.setText("Please align your face properly")
             return False
         else:
             return True
@@ -235,10 +239,29 @@ class facialRegister(QtWidgets.QFrame):
                                                     minNeighbors=20,
                                                     minSize=(100, 100),
                                                     flags=cv2.CASCADE_SCALE_IMAGE)
+        
+        
+        # laplacian_var = cv2.Laplacian(gray, cv2.CV_64F).var()
+        # print("bluredness level ", laplacian_var)
+
         current_time = time.time()
         # check if the frame is dark
         mean_value = cv2.mean(gray)[0]
-        # print(mean_value)
+        
+        if current_time - self.start_start <= 6:
+            
+            self.status.setText(f"please be ready at {current_time - self.start_start}")
+            height, width, channel = frame.shape
+            bytesPerLine = channel * width
+            qImg = QtGui.QImage(frame.data, width, height, bytesPerLine, QtGui.QImage.Format_BGR888)
+            pixmap = QtGui.QPixmap.fromImage(qImg)
+            self.video.setPixmap(pixmap)
+            return
+        
+        # self.start_start = current_time
+            
+        
+        # print("brightness value ", mean_value)
         
         if mean_value < 35:
                 
@@ -268,28 +291,30 @@ class facialRegister(QtWidgets.QFrame):
         #     return
         
         if len(faces) == 1:
-            
-            
 
             
-            
                     #             # if not self.eyeBlink(frame=frame,gray=gray):
-                    # statusCap = self.captureSave(current_time=current_time, frame=frame, gray=gray)
+            # statusCap = self.captureSave(current_time=current_time, frame=frame, gray=gray)
 
                     # if statusCap:
                     #     if not self.eyeBlink(frame=frame,gray=gray):
                     #         self.facialTraining()
             
             x, y, w, h = faces[0]
-            cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
             
-            # self.captureSave(current_time=current_time, frame=notFlip)
 
+            cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+
+            faceCrop = notFlip[y:y+h, x:x+w]
+            face_gray = cv2.cvtColor(faceCrop, cv2.COLOR_BGR2GRAY)
+            
+            self.captureSave(current_time=current_time, frame=notFlip,cropFrame=face_gray)
+            
         elif len(faces) >= 1:
             self.status.setText("Multiple face is detected")
         else:
             self.status.setText("No face is detected")
-
+    
         height, width, channel = frame.shape
         bytesPerLine = channel * width
         qImg = QtGui.QImage(frame.data, width, height, bytesPerLine, QtGui.QImage.Format_BGR888)
