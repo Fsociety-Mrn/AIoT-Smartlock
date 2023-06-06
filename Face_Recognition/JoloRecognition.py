@@ -14,7 +14,7 @@ class JoloRecognition:
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         
         # face detection
-        self.mtcnn  = MTCNN(image_size=160, margin=0, min_face_size=40,select_largest=False, device=self.device)
+        self.mtcnn  = MTCNN(image_size=160, margin=0, min_face_size=50,select_largest=False, device=self.device)
         
         # facial recognition
         self.facenet = InceptionResnetV1(pretrained='vggface2').eval().to(self.device)
@@ -25,13 +25,13 @@ class JoloRecognition:
         self.Name_List = self.Saved_Data[1]
     
     # for face recognition
-    def Face_Compare(self, face, threshold=0.6):
+    def Face_Compare(self, face, threshold=0.8):
         try:
             return self.FaceCompare(face,threshold=threshold)
         except:
             return ('No match detected', None)
             
-    def FaceCompare(self, face, threshold=0.6):
+    def FaceCompare(self, face, threshold=0.8):
     
         with torch.no_grad():
             
@@ -54,7 +54,7 @@ class JoloRecognition:
 
                     # torch.dist = is use to compare the face detected into batch of faceas in self embediing
                     dist = torch.dist(emb, emb_db).item()
-                    print(dist)
+                    # print(dist)
                       
                     # append the comparing result
                     match_list.append(dist)
@@ -70,7 +70,7 @@ class JoloRecognition:
                     # threshold is the bias point number for accuracy
                     # in this if statment we set a threshold value of 0.6
                     # meaning all the result of comparing faces should atleast 0.6 value in order to recognize people
-                    print("threshold value: ",min_dist )
+                    # print("threshold value: ",min_dist )
                     if min_dist < threshold:
                         
                         idx_min = match_list.index(min_dist)
@@ -86,6 +86,15 @@ class JoloRecognition:
                 
             else:
                 return ('No match detected', None)
+            
+    # Multiple Face Compare
+    def Face_Multiple_Compare(self,face):
+        with torch.no_grad():
+            
+            # Run face detection
+            boxes, probs = self.mtcnn.detect(face)
+            
+            print(probs)
     
     # training from dataset
     def Face_Train(self, Dataset_Folder="Known_Faces", location="Model"):
