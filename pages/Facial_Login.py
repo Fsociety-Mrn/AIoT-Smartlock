@@ -65,7 +65,6 @@ class FacialLogin(QtWidgets.QFrame):
         "")
         # video framing
         self.widget = QtWidgets.QWidget(self)
-        # self.widget.setGeometry(QtCore.QRect(70, 50, 661, 351))
         self.widget.setGeometry(QtCore.QRect(140, 50, 511, 351))
         self.widget.setStyleSheet("border: 2px solid rgb(61, 152, 154) ;\n"
         "border-radius: 50px;")

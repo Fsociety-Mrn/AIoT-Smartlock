@@ -127,53 +127,53 @@ class TokenForm(QtWidgets.QFrame):
         
     def continueTo(self):
 
-        # check if TokenID is not empty
-        if not self.TokenID.text():
-            return self.messageBoxShow(
-                icon=self.MessageBox.Warning,
-                title="AIoT Smartlock",
-                text="Name cannot be empty",
-                buttons=self.MessageBox.Ok)
+        # # check if TokenID is not empty
+        # if not self.TokenID.text():
+        #     return self.messageBoxShow(
+        #         icon=self.MessageBox.Warning,
+        #         title="AIoT Smartlock",
+        #         text="Name cannot be empty",
+        #         buttons=self.MessageBox.Ok)
             
         
-        # Define the path for the known faces folder
-        path = f"Known_Faces/{self.TokenID.text()}"
+        # # Define the path for the known faces folder
+        # path = f"Known_Faces/{self.TokenID.text()}"
         
-        if os.path.exists(path):
+        # if os.path.exists(path):
             
-        # NOTE: if exist ask the user if wanted to updated the faces or proceed to updated
+        # # NOTE: if exist ask the user if wanted to updated the faces or proceed to updated
             
-            # Show a message box indicating that the folder already exists
-            self.messageBoxShow(
-                icon=self.MessageBox.Warning,
-                title="AIoT Smartlock",
-                text="Folder already exists",
-                buttons=self.MessageBox.Ok
-            )
+        #     # Show a message box indicating that the folder already exists
+        #     self.messageBoxShow(
+        #         icon=self.MessageBox.Warning,
+        #         title="AIoT Smartlock",
+        #         text="Folder already exists",
+        #         buttons=self.MessageBox.Ok
+        #     )
 
 
-        else:
+        # else:
 
-            # Create the known faces folder if it doesn't exist
-            os.makedirs(path, exist_ok=True)
+        #     # Create the known faces folder if it doesn't exist
+        #     os.makedirs(path, exist_ok=True)
 
-            # Show a message box indicating that the folder has been created
-            self.messageBoxShow(
-                icon=self.MessageBox.Information,
-                title="AIoT Smartlock",
-                text="Folder Created please align your face to camera properly",
-                buttons=self.MessageBox.Ok
-            )
+        #     # Show a message box indicating that the folder has been created
+        #     self.messageBoxShow(
+        #         icon=self.MessageBox.Information,
+        #         title="AIoT Smartlock",
+        #         text="Folder Created please align your face to camera properly",
+        #         buttons=self.MessageBox.Ok
+        #     )
             
 
             # pass the {self.TokenID.text()} into facialRegister username label
-            self.Continue.setText("Loading..............")   
+        self.Continue.setText("Loading..............")   
         
-            self.Continue.isEnabled = False
-            self.Cancel.isEnabled = False
+        self.Continue.isEnabled = False
+        self.Cancel.isEnabled = False
             
             # Delay the creation of the toFacialRegister object by 100 milliseconds
-            QtCore.QTimer.singleShot(100, self.toFacialRegister)
+        QtCore.QTimer.singleShot(100, self.toFacialRegister)
             
     def toFacialRegister(self):
         

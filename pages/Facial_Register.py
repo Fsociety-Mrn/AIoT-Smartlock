@@ -65,12 +65,14 @@ class facialRegister(QtWidgets.QFrame):
             
             #camera
             self.widget = QtWidgets.QWidget(self)
-            self.widget.setGeometry(QtCore.QRect(61, 60, 671, 361))
+            self.widget.setGeometry(QtCore.QRect(140, 60, 511, 351))
             self.widget.setStyleSheet("border: 2px solid rgb(61, 152, 154) ;\n"
             "border-radius: 50px;")
             self.widget.setObjectName("widget")
+            
             self.horizontalLayoutWidget = QtWidgets.QWidget(self.widget)
-            self.horizontalLayoutWidget.setGeometry(QtCore.QRect(20, 20, 631, 321))
+            # self.horizontalLayoutWidget.setGeometry(QtCore.QRect(20, 20, 631, 321))
+            self.horizontalLayoutWidget.setGeometry(QtCore.QRect(20, 10, 471, 331))
             self.horizontalLayoutWidget.setObjectName("horizontalLayoutWidget")
             self.horizontalLayout = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget)
             self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
@@ -87,10 +89,8 @@ class facialRegister(QtWidgets.QFrame):
             self.horizontalLayout.addWidget(self.video)
         
 
-            self.cameraStat = False
-            self.capture = 1
-            
-            
+            self.captureStat = 1
+              
             # camera capture
             self.label = QtWidgets.QLabel(self)
             self.label.setGeometry(QtCore.QRect(370, 10, 41, 41))
@@ -148,41 +148,52 @@ class facialRegister(QtWidgets.QFrame):
         self.setWindowTitle(_translate("facialRegistration", "Frame"))
         self.capture.setText(_translate("facialRegistration", "0"))
         self.status.setText(_translate("facialRegistration", "Please align your face properly"))
-        self.Name.setText(_translate("facialRegistration", "FirstName LastName"))
+        self.Name.setText(_translate("facialRegistration", "Art Lisboa"))
 
     # receivce data from Token Form
     def receive(self,data):
         self.Name.setText(data)
 
-    # # capture and Train Images
-    # def captureSave(self, current_time=None, frame=None,gray=None):
+    # capture and Train Images
+    def captureSave(self, current_time=None, frame=None):
 
-    #     # Check if camera is enabled
-    #     if not self.cameraStat:
-    #         return
 
-    #     self.status.setText("Please blink" if self.capture >= 20 else "Face capture left " + str(21 - self.capture))
+        # self.status.setText("Please blink" if self.capture >= 20 else "Face capture left" + str(21 - self.captureStat))
+        
+        self.capture.setText(str(self.captureStat))
+        
+        if self.captureStat >= 20:
+            self.status.setText("Please blink")
+            
+        # Set time delay to avoid over capturing
+        if current_time - self.last_recognition_time <= 0.2:
+            return
+
+        self.last_recognition_time = current_time
+
 
 
         
-        
-    #     # Set time delay to avoid over capturing
-    #     if current_time - self.last_recognition_time <= 0.2:
-    #         return
 
-    #     self.last_recognition_time = current_time
+        # Save captured images if capture count is less than 20
+        if self.captureStat <= 20:
 
-
-    #             # Save captured images if capture count is less than 20
-    #     if self.capture <= 20:
-
-    #         path = f"Known_Faces/{self.textboxName.text()}/{self.capture}.png"
-    #         cv2.imwrite(path, frame)
-    #         self.capture += 1
-                    
-    #         return False
-    #     else:
-    #         return True
+            path = f"Known_Faces/{self.Name.text()}/{self.captureStat}.png"
+            
+            # remove the current image and replace new one
+            # if os.path.exists(path):
+            #     os.remove(path)
+            #     cv2.imwrite(path, frame)
+            # else:
+            #     cv2.imwrite(path, frame)
+            
+            cv2.imwrite(path, frame)
+            self.captureStat += 1
+            
+            print("nag save")
+            return False
+        else:
+            return True
 
     # def facialTraining(self):
 
@@ -206,14 +217,14 @@ class facialRegister(QtWidgets.QFrame):
 
     # video Streaming
     def videoStreaming(self):
-        ret, frame = self.cap.read()
+        ret, notFlip = self.cap.read()
 
         if not ret:
             self.status.setText("Camera wont load")
             return
 
         # process the frame
-        frame = cv2.flip(frame, 1)
+        frame = cv2.flip(notFlip, 1)
 
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     
@@ -225,42 +236,54 @@ class facialRegister(QtWidgets.QFrame):
                                                     minSize=(100, 100),
                                                     flags=cv2.CASCADE_SCALE_IMAGE)
         current_time = time.time()
-
-        if self.cameraStat:
-            
-            # check if the frame is dark
-            mean_value = cv2.mean(gray)[0]
-            print(mean_value)
-            if mean_value < 50:
+        # check if the frame is dark
+        mean_value = cv2.mean(gray)[0]
+        # print(mean_value)
+        
+        if mean_value < 35:
                 
-                self.status.setText("It is too dark.")
+            self.status.setText("It is too dark.")
                     
-                height, width, channel = frame.shape
-                bytesPerLine = channel * width
-                qImg = QtGui.QImage(frame.data, width, height, bytesPerLine, QtGui.QImage.Format_BGR888)
-                pixmap = QtGui.QPixmap.fromImage(qImg)
-                self.video.setPixmap(pixmap)
-                return
-        
-            # check if the frame is Bright
-            if mean_value > 100:
-                self.status.setText("It is too bright.")
-                
-                height, width, channel = frame.shape
-                bytesPerLine = channel * width
-                qImg = QtGui.QImage(frame.data, width, height, bytesPerLine, QtGui.QImage.Format_BGR888)
-                pixmap = QtGui.QPixmap.fromImage(qImg)
-                self.video.setPixmap(pixmap)
-                return
-        
-        # if facial training is true
-        if self.status.text() == "facial training":
-            self.facialTraining()
+            height, width, channel = frame.shape
+            bytesPerLine = channel * width
+            qImg = QtGui.QImage(frame.data, width, height, bytesPerLine, QtGui.QImage.Format_BGR888)
+            pixmap = QtGui.QPixmap.fromImage(qImg)
+            self.video.setPixmap(pixmap)
             return
         
+        # check if the frame is Bright
+        if mean_value > 70:
+            self.status.setText("It is too bright.")
+                
+            height, width, channel = frame.shape
+            bytesPerLine = channel * width
+            qImg = QtGui.QImage(frame.data, width, height, bytesPerLine, QtGui.QImage.Format_BGR888)
+            pixmap = QtGui.QPixmap.fromImage(qImg)
+            self.video.setPixmap(pixmap)
+            return
+        
+        # if facial training is true
+        # if self.status.text() == "facial training":
+        #     self.facialTraining()
+        #     return
+        
         if len(faces) == 1:
+            
+            
+
+            
+            
+                    #             # if not self.eyeBlink(frame=frame,gray=gray):
+                    # statusCap = self.captureSave(current_time=current_time, frame=frame, gray=gray)
+
+                    # if statusCap:
+                    #     if not self.eyeBlink(frame=frame,gray=gray):
+                    #         self.facialTraining()
+            
             x, y, w, h = faces[0]
             cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+            
+            # self.captureSave(current_time=current_time, frame=notFlip)
 
         elif len(faces) >= 1:
             self.status.setText("Multiple face is detected")
@@ -272,19 +295,8 @@ class facialRegister(QtWidgets.QFrame):
         qImg = QtGui.QImage(frame.data, width, height, bytesPerLine, QtGui.QImage.Format_BGR888)
         pixmap = QtGui.QPixmap.fromImage(qImg)
         self.video.setPixmap(pixmap)
-        
-        # # Apply border-radius effect to the image
-        # border_radius = 50  # Set the border-radius value
-        # radius = border_radius + 10
-        # gradient = QtGui.QRadialGradient(width / 2, height / 2, radius, width / 2, height / 2)
-        # gradient.setColorAt(0, QtGui.QColor(0, 0, 0, 0))
-        # gradient.setColorAt(1, QtGui.QColor(0, 0, 0, 255))
-        # effect = QtWidgets.QGraphicsBlurEffect()
-        # effect.setBlurRadius(border_radius)
-        # # effect.setGraphicsEffect(effect)
-        # self.video.setGraphicsEffect(effect)
 
-            # message box
+    # message box
     # def messageBoxShow(self, icon=None, title=None, text=None, buttons=None):
 
     #             # Set the window icon, title, and text

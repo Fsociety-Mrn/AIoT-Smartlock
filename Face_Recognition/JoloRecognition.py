@@ -51,15 +51,14 @@ class JoloRecognition:
                 # self.Embeding_List is the load data.pt 
                 
                 for idx, emb_db in enumerate(self.Embeding_List):
-                    try:
-                        # torch.dist = is use to compare the face detected into batch of faceas in self embediing
-                        dist = torch.dist(emb, emb_db).item()
-                        
+
+                    # torch.dist = is use to compare the face detected into batch of faceas in self embediing
+                    dist = torch.dist(emb, emb_db).item()
+                    print(dist)
                       
-                        # append the comparing result
-                        match_list.append(dist)
-                    except:
-                        break
+                    # append the comparing result
+                    match_list.append(dist)
+
                 
                 # check if there is recognize faces               
                 if len(match_list) > 0:
