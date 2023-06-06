@@ -2,7 +2,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-# from Face_Recognition.JoloRecognition import JoloRecognition as JL
+from Face_Recognition.JoloRecognition import JoloRecognition as JL
 
 import os
 import cv2
@@ -90,7 +90,6 @@ class facialRegister(QtWidgets.QFrame):
         
 
             self.captureStat = 1
-              
             # camera capture
             self.label = QtWidgets.QLabel(self)
             self.label.setGeometry(QtCore.QRect(370, 10, 41, 41))
@@ -167,7 +166,7 @@ class facialRegister(QtWidgets.QFrame):
             self.status.setText("Please blink")
             
         # Set time delay to avoid over capturing
-        if current_time - self.last_recognition_time <= 1:
+        if current_time - self.last_recognition_time <= 0.2:
             return
 
         self.last_recognition_time = current_time
@@ -182,10 +181,7 @@ class facialRegister(QtWidgets.QFrame):
             self.status.setText("Please align your face properly")
             
             # check if the frame is blured
-             # check blurednmess
             # laplacian_var = cv2.Laplacian(cropFrame, cv2.CV_64F).var()
-            
-            
             # print("Blurered level",laplacian_var)
             # if laplacian_var < 100:
             #     self.status.setText("cant capture it is blured")
@@ -195,29 +191,24 @@ class facialRegister(QtWidgets.QFrame):
             #     self.captureStat += 1
             
             #     self.status.setText("Please align your face properly")
+            
             return False
         else:
             return True
 
-    # def facialTraining(self):
+    def facialTraining(self):
 
-    #     # Train the facial recognition model
-    #     message = JL().Face_Train()
+        # Train the facial recognition model
+        message = JL().Face_Train()
 
-    #             # Show the result
-    #     title = "Facial Registration"
-    #     text = "Facial training complete" if message == "Successfully trained" else message
-    #     icon = self.MessageBox.Information if message == "Successfully trained" else self.MessageBox.Warning
-    #     self.messageBoxShow(title=title, text=text, buttons=self.MessageBox.Ok, icon=icon)
-    #     self.status.setText("Please create folder first")
+                # Show the result
+        title = "Facial Registration"
+        text = "Facial training complete" if message == "Successfully trained" else message
+        icon = self.MessageBox.Information if message == "Successfully trained" else self.MessageBox.Warning
+        self.messageBoxShow(title=title, text=text, buttons=self.MessageBox.Ok, icon=icon)
 
-    #     self.textboxName.setText("")
 
-    #     self.create.setEnabled(True)
-    #     self.textboxName.setReadOnly(False)
-
-    #     self.cameraStat = False
-    #     self.capture = 1
+        self.capture = 1
 
     # video Streaming
     def videoStreaming(self):
@@ -250,7 +241,7 @@ class facialRegister(QtWidgets.QFrame):
         
         if current_time - self.start_start <= 6:
             
-            self.status.setText(f"please be ready at {current_time - self.start_start}")
+            self.status.setText(f"please be ready at {int(6)-int(current_time - self.start_start)}")
             height, width, channel = frame.shape
             bytesPerLine = channel * width
             qImg = QtGui.QImage(frame.data, width, height, bytesPerLine, QtGui.QImage.Format_BGR888)
@@ -285,20 +276,9 @@ class facialRegister(QtWidgets.QFrame):
             self.video.setPixmap(pixmap)
             return
         
-        # if facial training is true
-        # if self.status.text() == "facial training":
-        #     self.facialTraining()
-        #     return
+
         
         if len(faces) == 1:
-
-            
-                    #             # if not self.eyeBlink(frame=frame,gray=gray):
-            # statusCap = self.captureSave(current_time=current_time, frame=frame, gray=gray)
-
-                    # if statusCap:
-                    #     if not self.eyeBlink(frame=frame,gray=gray):
-                    #         self.facialTraining()
             
             x, y, w, h = faces[0]
             
@@ -308,8 +288,11 @@ class facialRegister(QtWidgets.QFrame):
             faceCrop = notFlip[y:y+h, x:x+w]
             face_gray = cv2.cvtColor(faceCrop, cv2.COLOR_BGR2GRAY)
             
-            self.captureSave(current_time=current_time, frame=notFlip,cropFrame=face_gray)
+            statusCap = self.captureSave(current_time=current_time, frame=notFlip,cropFrame=face_gray)
             
+            if statusCap:
+                if not self.eyeBlink(frame=frame):
+                    self.facialTraining()
         elif len(faces) >= 1:
             self.status.setText("Multiple face is detected")
         else:
@@ -322,168 +305,95 @@ class facialRegister(QtWidgets.QFrame):
         self.video.setPixmap(pixmap)
 
     # message box
-    # def messageBoxShow(self, icon=None, title=None, text=None, buttons=None):
+    def messageBoxShow(self, icon=None, title=None, text=None, buttons=None):
 
-    #             # Set the window icon, title, and text
-    #             self.MessageBox.setIcon(icon)
-    #             self.MessageBox.setWindowTitle(title)
-    #             self.MessageBox.setText(text)
+                # Set the window icon, title, and text
+                self.MessageBox.setIcon(icon)
+                self.MessageBox.setWindowTitle(title)
+                self.MessageBox.setText(text)
 
-    #             # Set the window size
-    #             self.MessageBox.setFixedWidth(400)
+                # Set the window size
+                self.MessageBox.setFixedWidth(400)
 
-    #             # Set the standard buttons
-    #             self.MessageBox.setStandardButtons(buttons)
+                # Set the standard buttons
+                self.MessageBox.setStandardButtons(buttons)
 
-    #             result = self.MessageBox.exec_()
+                result = self.MessageBox.exec_()
 
-    #             self.MessageBox.close()
-    #             # Show the message box and return the result
-    #             return result
+                self.MessageBox.close()
+                # Show the message box and return the result
+                return result
 
-    #         # create folder
-    # def createButton(self):
+            # =================== for eye blinking detection functions =================== #
+    def eyeBlink(self, gray):
 
-    #             # Define the path for the known faces folder
-    #             path = f"Known_Faces/{self.textboxName.text()}"
+        # detect eyes using dlib
+        faces = self.dlib_faceDetcetoor(gray, 0)
+        # status = None
+        for face in faces:
+            landmarks = self.landmark_detector(gray, face)
 
-    #             if not self.textboxName.text():
-    #                 self.messageBoxShow(
-    #                     icon=self.MessageBox.Warning,
-    #                     title="Facial Recognition",
-    #                     text="Name cannot be empty",
-    #                     buttons=self.MessageBox.Ok
-    #                 )
-    #                 return
+            # extract eye coordinates from facial landmarks
+            left_eye, right_eye = self.extract_eye_coordinates(landmarks)
 
-    #             # Check if the folder already exists
-    #             if os.path.exists(path):
-    #                 # Show a message box indicating that the folder already exists
-    #                 self.messageBoxShow(
-    #                     icon=self.MessageBox.Warning,
-    #                     title="Facial Recognition",
-    #                     text="Folder already exists",
-    #                     buttons=self.MessageBox.Ok
-    #                 )
+            # calculate eye aspect ratio
+            ear = self.calculate_ear(left_eye, right_eye)
 
-    #                 # Disable the push button and plain text edit
-    #                 pushButtonEnabled = False
-    #                 plainTextEditEnabled = False
-
-    #                 # Set the camera status to true
-    #                 self.cameraStat = False
-    #             else:
-
-    #                 # Create the known faces folder if it doesn't exist
-    #                 os.makedirs(path, exist_ok=True)
-
-    #                 # Show a message box indicating that the folder has been created
-    #                 self.messageBoxShow(
-    #                     icon=self.MessageBox.Information,
-    #                     title="Facial Recognition",
-    #                     text="Folder Created please align your face to camera properly",
-    #                     buttons=self.MessageBox.Ok
-    #                 )
-
-    #                 # Enable the camera and plain text edit
-    #                 pushButtonEnabled = False
-    #                 plainTextEditEnabled = True
-
-    #                 # Set the camera status to true
-    #                 self.cameraStat = True
-
-    #             # Update the enabled status of the push button and plain text edit
-    #             self.create.setEnabled(pushButtonEnabled)
-    #             self.textboxName.setReadOnly(plainTextEditEnabled)
-
-    #         # =================== for eye blinking detection functions =================== #
-    # def eyeBlink(self, gray, frame):
-
-    #     # detect eyes using dlib
-    #     faces = self.dlib_faceDetcetoor(gray, 0)
-    #     status = None
-    #     for face in faces:
-    #         landmarks = self.landmark_detector(gray, face)
-
-    #         # extract eye coordinates from facial landmarks
-    #         left_eye, right_eye = self.extract_eye_coordinates(landmarks)
-
-    #         # calculate eye aspect ratio
-    #         ear = self.calculate_ear(left_eye, right_eye)
-
-    #         # update blink count and status
-    #         status = self.update_blink_count_and_status(ear)
+            # update blink count and status
+            status = self.update_blink_count_and_status(ear)
 
 
-    #     return self.blink
+        return self.blink
 
-    # def extract_eye_coordinates(self, landmarks):
-    #     left_eye = []
-    #     right_eye = []
+    def extract_eye_coordinates(self, landmarks):
+        left_eye = []
+        right_eye = []
 
-    #     for i in range(36, 42):
-    #         left_eye.append((landmarks.part(i).x, landmarks.part(i).y))
+        for i in range(36, 42):
+            left_eye.append((landmarks.part(i).x, landmarks.part(i).y))
 
-    #     for i in range(42, 48):
-    #         right_eye.append((landmarks.part(i).x, landmarks.part(i).y))
+        for i in range(42, 48):
+            right_eye.append((landmarks.part(i).x, landmarks.part(i).y))
 
-    #     return left_eye, right_eye
+        return left_eye, right_eye
 
-    # def EAR_cal(self, eye):
-    #     eye = torch.from_numpy(np.array(eye)).float()
+    def EAR_cal(self, eye):
+        eye = torch.from_numpy(np.array(eye)).float()
 
-    #     # ------- verticle ------- #
-    #     v1 = torch.dist(eye[1], eye[5])
-    #     v2 = torch.dist(eye[2], eye[4])
+        # ------- verticle ------- #
+        v1 = torch.dist(eye[1], eye[5])
+        v2 = torch.dist(eye[2], eye[4])
 
-    #     # ------- horizontal ------- #
-    #     h1 = torch.dist(eye[0], eye[3])
+        # ------- horizontal ------- #
+        h1 = torch.dist(eye[0], eye[3])
 
-    #     ear = (v1 + v2) / h1
-    #     return ear
+        ear = (v1 + v2) / h1
+        return ear
 
-    # def calculate_ear(self, left_eye, right_eye):
+    def calculate_ear(self, left_eye, right_eye):
 
-    #     LEFT = self.EAR_cal(left_eye)
-    #     RIGHT = self.EAR_cal(right_eye)
+        LEFT = self.EAR_cal(left_eye)
+        RIGHT = self.EAR_cal(right_eye)
 
-    #     EAR = float((LEFT + RIGHT) / 2.0)
+        EAR = float((LEFT + RIGHT) / 2.0)
 
-    #     return round(EAR, 2)
+        return round(EAR, 2)
 
-    # def update_blink_count_and_status(self, ear):
-    #     if ear < self.blink_threshold:
+    def update_blink_count_and_status(self, ear):
+        if ear < self.blink_threshold:
 
-    #         # if eye is once Open
-    #         if self.blink:
-    #             self.blink_counter += 1
-    #             self.blink = False
+            # if eye is once Open
+            if self.blink:
+                self.blink_counter += 1
+                self.blink = False
 
-    #             self.status.setText("Facial Training")
-    #             return False
-    #         else:
-    #             # if eye is open
-    #             self.status.setText("Please Blink")
-    #             self.blink = True
-    #             return True
-
-
-
-    # # when close the frame
-    # def closeEvent(self, event):
-    #     from pages.Main_Menu import MainWindow
-    #     print("go back to main menu")
-
-    #     self.resize(555, 495)
-        
-    #     self.cap.release()
-    #     cv2.destroyAllWindows()
-    #     MainWindow(self).show()
-        
-        
-    #     self.close()
-
-
+                self.status.setText("Facial Training")
+                return False
+            else:
+                # if eye is open
+                self.status.setText("Please Blink")
+                self.blink = True
+                return True
 
 
 if __name__ == "__main__":

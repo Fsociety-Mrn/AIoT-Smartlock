@@ -19,7 +19,7 @@ class MainWindow(QtWidgets.QFrame):
         self.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.setLineWidth(2)
         
-        # self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
+        self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         # self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
         
         self.horizontalLayout = QtWidgets.QHBoxLayout(self)

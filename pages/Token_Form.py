@@ -127,13 +127,13 @@ class TokenForm(QtWidgets.QFrame):
         
     def continueTo(self):
 
-        # # check if TokenID is not empty
-        # if not self.TokenID.text():
-        #     return self.messageBoxShow(
-        #         icon=self.MessageBox.Warning,
-        #         title="AIoT Smartlock",
-        #         text="Name cannot be empty",
-        #         buttons=self.MessageBox.Ok)
+        # check if TokenID is not empty
+        if not self.TokenID.text():
+            return self.messageBoxShow(
+                icon=self.MessageBox.Warning,
+                title="AIoT Smartlock",
+                text="Name cannot be empty",
+                buttons=self.MessageBox.Ok)
             
         
         # # Define the path for the known faces folder
