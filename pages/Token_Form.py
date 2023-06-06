@@ -1,9 +1,13 @@
-import typing
+import os
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import *
 from PyQt5.QtWidgets import QWidget
-
+from PyQt5.QtCore import pyqtSignal
+        
+        
 class TokenForm(QtWidgets.QFrame):
+    data_passed = pyqtSignal(str)
+    
     def __init__(self, parent=None):
         super().__init__(parent)
         
@@ -122,36 +126,86 @@ class TokenForm(QtWidgets.QFrame):
         self.close()
         
     def continueTo(self):
-        
+
         # check if TokenID is not empty
         if not self.TokenID.text():
+            return self.messageBoxShow(
+                icon=self.MessageBox.Warning,
+                title="AIoT Smartlock",
+                text="Name cannot be empty",
+                buttons=self.MessageBox.Ok)
+            
+        
+        # Define the path for the known faces folder
+        path = f"Known_Faces/{self.TokenID.text()}"
+        
+        if os.path.exists(path):
+            
+        # NOTE: if exist ask the user if wanted to updated the faces or proceed to updated
+            
+            # Show a message box indicating that the folder already exists
             self.messageBoxShow(
                 icon=self.MessageBox.Warning,
-                title="Facial Recognition",
-                text="Name cannot be empty",
+                title="AIoT Smartlock",
+                text="Folder already exists",
                 buttons=self.MessageBox.Ok
-                )
-            return
-    
+            )
+
+
+        else:
+
+            # Create the known faces folder if it doesn't exist
+            os.makedirs(path, exist_ok=True)
+
+            # Show a message box indicating that the folder has been created
+            self.messageBoxShow(
+                icon=self.MessageBox.Information,
+                title="AIoT Smartlock",
+                text="Folder Created please align your face to camera properly",
+                buttons=self.MessageBox.Ok
+            )
+            
+
+            # pass the {self.TokenID.text()} into facialRegister username label
+            self.Continue.setText("Loading..............")   
+        
+            self.Continue.isEnabled = False
+            self.Cancel.isEnabled = False
+            
+            # Delay the creation of the toFacialRegister object by 100 milliseconds
+            QtCore.QTimer.singleShot(100, self.toFacialRegister)
+            
+    def toFacialRegister(self):
+        
+        from pages.Facial_Register import facialRegister
+        
+        FacialRegister = facialRegister(self)
+        
+        self.data_passed.connect(FacialRegister.receive)
+        self.data_passed.emit(self.TokenID.text())
+        
+        FacialRegister.show()
+        self.Continue.setText("Continue")
+        # self.close()
     
     def messageBoxShow(self, icon=None, title=None, text=None, buttons=None):
 
-                # Set the window icon, title, and text
-                self.MessageBox.setIcon(icon)
-                self.MessageBox.setWindowTitle(title)
-                self.MessageBox.setText(text)
+        # Set the window icon, title, and text
+        self.MessageBox.setIcon(icon)
+        self.MessageBox.setWindowTitle(title)
+        self.MessageBox.setText(text)
 
-                # Set the window size
-                self.MessageBox.setFixedWidth(400)
+        # Set the window size
+        self.MessageBox.setFixedWidth(400)
 
-                # Set the standard buttons
-                self.MessageBox.setStandardButtons(buttons)
+        # Set the standard buttons
+        self.MessageBox.setStandardButtons(buttons)
 
-                result = self.MessageBox.exec_()
+        result = self.MessageBox.exec_()
 
-                self.MessageBox.close()
-                # Show the message box and return the result
-                return result
+        self.MessageBox.close()
+        # Show the message box and return the result
+        return result
         
 if __name__ == "__main__":
     

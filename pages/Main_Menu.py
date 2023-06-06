@@ -212,7 +212,7 @@ class MainWindow(QtWidgets.QFrame):
 
         self.facialRegister.setText("Loading..............")
         self.facialLogin.isEnabled = False
-        self.facialLogin.isEnabled = False
+        self.facialRegister.isEnabled = False
 
         # Delay the creation of the FacialLogin object by 100 milliseconds
         QtCore.QTimer.singleShot(100, self.clickFacialRegister)
@@ -228,7 +228,12 @@ class MainWindow(QtWidgets.QFrame):
 
         Token.show()
         self.facialRegister.setText("Facial Register")
-      
+
+        
+        # from pages.Facial_Register import facialRegister
+        
+        # FacialRegister = facialRegister(self)
+        # FacialRegister.show()
 
     # # when close the frame
     # def clickback(self):
