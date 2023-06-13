@@ -71,11 +71,14 @@ border-radius: 50px;</string>
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>370</x>
-     <y>10</y>
+     <x>350</x>
+     <y>430</y>
      <width>41</width>
      <height>41</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color:rgb(85, 170, 255)</string>
    </property>
    <property name="text">
     <string/>
@@ -90,8 +93,8 @@ border-radius: 50px;</string>
   <widget class="QLabel" name="capture">
    <property name="geometry">
     <rect>
-     <x>410</x>
-     <y>14</y>
+     <x>390</x>
+     <y>435</y>
      <width>21</width>
      <height>31</height>
     </rect>
@@ -117,9 +120,9 @@ border-radius: 50px;</string>
   <widget class="QLabel" name="status">
    <property name="geometry">
     <rect>
-     <x>-10</x>
-     <y>430</y>
-     <width>811</width>
+     <x>-30</x>
+     <y>10</y>
+     <width>821</width>
      <height>31</height>
     </rect>
    </property>

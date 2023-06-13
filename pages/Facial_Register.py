@@ -92,14 +92,14 @@ class facialRegister(QtWidgets.QFrame):
             self.captureStat = 1
             # camera capture
             self.label = QtWidgets.QLabel(self)
-            self.label.setGeometry(QtCore.QRect(370, 10, 41, 41))
+            self.label.setGeometry(QtCore.QRect(370, 430, 41, 41))
             self.label.setText("")
             self.label.setPixmap(QtGui.QPixmap(":/background/Images/capture.png"))
             self.label.setAlignment(QtCore.Qt.AlignCenter)
             self.label.setObjectName("label")
         
             self.capture = QtWidgets.QLabel(self)
-            self.capture.setGeometry(QtCore.QRect(410, 14, 21, 31))
+            self.capture.setGeometry(QtCore.QRect(410, 435, 21, 31))
             font = QtGui.QFont()
             font.setFamily("Segoe UI")
             font.setPointSize(12)
@@ -112,7 +112,7 @@ class facialRegister(QtWidgets.QFrame):
             
             # status
             self.status = QtWidgets.QLabel(self)
-            self.status.setGeometry(QtCore.QRect(-10, 430, 811, 31))
+            self.status.setGeometry(QtCore.QRect(-10, 10, 811, 31))
             font = QtGui.QFont()
             font.setFamily("Segoe UI")
             font.setPointSize(12)
@@ -201,14 +201,27 @@ class facialRegister(QtWidgets.QFrame):
         # Train the facial recognition model
         message = JL().Face_Train()
 
-                # Show the result
+        # Show the result
         title = "Facial Registration"
         text = "Facial training complete" if message == "Successfully trained" else message
         icon = self.MessageBox.Information if message == "Successfully trained" else self.MessageBox.Warning
         self.messageBoxShow(title=title, text=text, buttons=self.MessageBox.Ok, icon=icon)
 
 
-        self.capture = 1
+        from pages.Main_Menu import MainWindow
+        from pages.Token_Form import TokenForm
+        
+        print("go back to main menu")
+
+        self.resize(800, 480)
+        TokenForm(self).close()
+        self.close()
+        MainWindow(self).show()
+
+        
+        self.cap.release()
+        cv2.destroyAllWindows()
+        self.close()
 
     # video Streaming
     def videoStreaming(self):
@@ -291,7 +304,7 @@ class facialRegister(QtWidgets.QFrame):
             statusCap = self.captureSave(current_time=current_time, frame=notFlip,cropFrame=face_gray)
             
             if statusCap:
-                if not self.eyeBlink(frame=frame):
+                if not self.eyeBlink(gray=gray):
                     self.facialTraining()
         elif len(faces) >= 1:
             self.status.setText("Multiple face is detected")

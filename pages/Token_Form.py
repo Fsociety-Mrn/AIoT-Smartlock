@@ -186,7 +186,7 @@ class TokenForm(QtWidgets.QFrame):
         
         FacialRegister.show()
         self.Continue.setText("Continue")
-        # self.close()
+
     
     def messageBoxShow(self, icon=None, title=None, text=None, buttons=None):
 
