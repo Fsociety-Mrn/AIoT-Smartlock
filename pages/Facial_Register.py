@@ -255,6 +255,11 @@ class facialRegister(QtWidgets.QFrame):
         if current_time - self.start_start <= 6:
             
             self.status.setText(f"please be ready at {int(6)-int(current_time - self.start_start)}")
+            
+            if len(faces) == 1:  
+                x, y, w, h = faces[0]
+                cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+                
             height, width, channel = frame.shape
             bytesPerLine = channel * width
             qImg = QtGui.QImage(frame.data, width, height, bytesPerLine, QtGui.QImage.Format_BGR888)
@@ -279,15 +284,15 @@ class facialRegister(QtWidgets.QFrame):
             return
         
         # check if the frame is Bright
-        # if mean_value > 70:
-        #     self.status.setText("It is too bright.")
+        if mean_value > 100:
+            self.status.setText("It is too bright.")
                 
-        #     height, width, channel = frame.shape
-        #     bytesPerLine = channel * width
-        #     qImg = QtGui.QImage(frame.data, width, height, bytesPerLine, QtGui.QImage.Format_BGR888)
-        #     pixmap = QtGui.QPixmap.fromImage(qImg)
-        #     self.video.setPixmap(pixmap)
-        #     return
+            height, width, channel = frame.shape
+            bytesPerLine = channel * width
+            qImg = QtGui.QImage(frame.data, width, height, bytesPerLine, QtGui.QImage.Format_BGR888)
+            pixmap = QtGui.QPixmap.fromImage(qImg)
+            self.video.setPixmap(pixmap)
+            return
         
 
         
@@ -306,6 +311,7 @@ class facialRegister(QtWidgets.QFrame):
             if statusCap:
                 if not self.eyeBlink(gray=gray):
                     self.facialTraining()
+                    
         elif len(faces) >= 1:
             self.status.setText("Multiple face is detected")
         else:
