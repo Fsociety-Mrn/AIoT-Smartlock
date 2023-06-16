@@ -1,43 +1,46 @@
-from PyQt5 import QtCore, QtGui, QtWidgets
+import sys
+from PyQt5.QtCore import Qt, QPoint
+from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel
 from PyQt5.QtWidgets import *
 
 
+class cssden(QMainWindow):
+    def __init__(self):
+        super().__init__()
 
-Dialog = QDialog()
-Dialog.setWindowTitle("Pin Code Dialog")
-Dialog.setModal(True)  # Make the dialog modal
-        
-Dialog.resize(461, 307)
-Dialog.setStyleSheet("background-image:url(Images/background-removebg-preview.png);\n"
-        "background-color: rgb(231, 229, 213);")
+        # <MainWindow Properties>
+        self.setFixedSize(320, 450)
+        self.setStyleSheet("QMainWindow{background-color: darkgray;border: 1px solid black}")
+        self.setWindowFlags(Qt.FramelessWindowHint)
+        self.center()
+        # </MainWindow Properties>
 
-username = QtWidgets.QLineEdit(Dialog)
-username.setGeometry(QtCore.QRect(30, 60, 401, 51))
-font = QtGui.QFont()
-font.setFamily("Segoe UI")
-font.setPointSize(14)
-username.setFont(font)
-username.setStyleSheet("background: transparents;\n"
-"color: #3D989A;\n"
-"background-color: rgb(255, 255, 255);\n"
-"border: 1px solid #3D989A;\n"
-"border-radius: 25px;")
-username.setAlignment(QtCore.Qt.AlignCenter)
-username.setObjectName("username")
-username.setPlaceholderText("Email")
-        
-        # layout = QVBoxLayout(Dialog)
-        # Dialog.setLayout(layout)
+        # <Label Properties>
+        self.lbl = QLabel(self)
+        self.lbl.setText("test")
+        self.lbl.setStyleSheet("QLabel{background-color: rgb(0,0,0); border: 1px solid red; color: rgb(255,255,255); font: bold italic 20pt 'Times New Roman';}")
+        self.lbl.setGeometry(5, 5, 60, 40)
+        # </Label Properties>
 
-        # label = QLabel("Enter your pin code:", Dialog)
-        # layout.addWidget(label)
+        self.oldPos = self.pos()
+        self.show()
 
-        # pincode_edit = QLineEdit(Dialog)
-        # layout.addWidget(pincode_edit)
+    def center(self):
+        qr = self.frameGeometry()
+        cp = QDesktopWidget().availableGeometry().center()
+        qr.moveCenter(cp)
+        self.move(qr.topLeft())
 
-        # button_box = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel, Dialog)
-        # button_box.accepted.connect(Dialog.accept)
-        # button_box.rejected.connect(Dialog.reject)
-        # layout.addWidget(button_box)
-        
-Dialog.exec_()
+    def mousePressEvent(self, event):
+        self.oldPos = event.globalPos()
+
+    def mouseMoveEvent(self, event):
+        delta = QPoint (event.globalPos() - self.oldPos)
+        self.move(self.x() + delta.x(), self.y() + delta.y())
+        self.oldPos = event.globalPos()
+
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    ex = cssden()
+    sys.exit(app.exec_())

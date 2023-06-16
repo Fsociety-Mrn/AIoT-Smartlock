@@ -112,7 +112,7 @@ class MainWindow(QtWidgets.QFrame):
         
         # paro paro g
         self.label = QtWidgets.QLabel(self.widget_2)
-        self.label.setGeometry(QtCore.QRect(100, 420, 211, 20))
+        self.label.setGeometry(QtCore.QRect(100, 25, 211, 20))
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(10)

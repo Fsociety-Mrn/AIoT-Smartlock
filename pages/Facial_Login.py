@@ -4,6 +4,7 @@ import dlib
 import numpy as np
 import torch
 
+from PyQt5.QtCore import Qt, QPoint, QPropertyAnimation
 from Face_Recognition.JoloRecognition import JoloRecognition as Jolo
 
 from PyQt5 import QtCore, QtGui, QtWidgets
@@ -160,6 +161,8 @@ class FacialLogin(QtWidgets.QFrame):
         self.label_2.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.label_2.setAlignment(QtCore.Qt.AlignCenter)
         self.label_2.setObjectName("label_2")
+        
+        self.pinCodeShown = False
 
         # pincode icon
         self.pincode = QtWidgets.QPushButton(self)
@@ -242,19 +245,29 @@ class FacialLogin(QtWidgets.QFrame):
     
     # pincode show
     def pinCodeShow(self):
+        
+        
+        if self.pinCodeShown:
+            return  # Exit if the pinCode form is already shown
+
+        self.videoStream.release()
+
+        
         Dialog = QDialog(self)
         Dialog.setWindowTitle("Pin Code Dialog")
-        Dialog.setModal(True)  # Make the dialog modal
+        # Dialog.setModal(True)  # Make the dialog modal
         
         Dialog.resize(461, 307)
         Dialog.setStyleSheet("background-image:url(Images/background-removebg-preview.png);\n"
             "background-color: rgb(231, 229, 213);")
         Dialog.setWindowFlags(QtCore.Qt.FramelessWindowHint)
+
         
-        qtRectangle = self.frameGeometry()
-        centerPoint = QDesktopWidget().availableGeometry().center()
-        qtRectangle.moveCenter(centerPoint)
-        Dialog.move(qtRectangle.topLeft())
+        frame_rect = self.rect()
+        dialog_rect = Dialog.rect()
+        dialog_x = frame_rect.x() + (frame_rect.width() - dialog_rect.width()) // 2
+        dialog_y = frame_rect.y() + (frame_rect.height() - dialog_rect.height()) // 2
+        Dialog.move(dialog_x, dialog_y)
 
         # cautions
         label = QtWidgets.QLabel(Dialog)
@@ -328,6 +341,8 @@ class FacialLogin(QtWidgets.QFrame):
         cancelButton.setObjectName("cancelButon")
         cancelButton.setText("Cancel")
         cancelButton.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        cancelButton.clicked.connect(Dialog.reject)
+        cancelButton.clicked.connect(self.openCameraWait)
         
         # layout = QVBoxLayout(Dialog)
         # Dialog.setLayout(layout)
@@ -342,6 +357,21 @@ class FacialLogin(QtWidgets.QFrame):
         # button_box.accepted.connect(Dialog.accept)
         # button_box.rejected.connect(Dialog.reject)
         # layout.addWidget(button_box)
+       
+    
+        # Define mouse press and move event methods
+        # def mousePressEvent(event):
+        #     Dialog.oldPos = event.globalPos()
+
+        # def mouseMoveEvent(event):
+        #     delta = QPoint(event.globalPos() - Dialog.oldPos)
+        #     Dialog.move(Dialog.x() + delta.x(), Dialog.y() + delta.y())
+        #     Dialog.oldPos = event.globalPos()
+
+        # Dialog.mousePressEvent = mousePressEvent
+        # Dialog.mouseMoveEvent = mouseMoveEvent
+
+        self.pinCodeShown = True
         
         Dialog.exec_()
 
@@ -350,6 +380,21 @@ class FacialLogin(QtWidgets.QFrame):
         #     print("Entered pin code:", pin_code)
         # else:
         #     print("Pin code entry canceled")
+    
+    
+    
+    # Function to open the camera
+    
+    def openCameraWait(self):
+
+        # Delay the creation of the FacialLogin object by 100 milliseconds
+        QtCore.QTimer.singleShot(100, self.openCamera)
+    
+    def openCamera(self):
+        
+        self.pinCodeShown = False
+        # Open camera capture
+        self.videoStream.open(0)
     
     #  for facial recognition
     def FacialRecognition(self, frame):
