@@ -129,7 +129,7 @@ class FacialLogin(QtWidgets.QFrame):
 
         # back to mainmenu button
         self.back = QtWidgets.QPushButton(self)
-        self.back.setGeometry(QtCore.QRect(0, 0, 101, 41))
+        self.back.setGeometry(QtCore.QRect(10, 10, 101, 41))
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(12)
@@ -174,9 +174,9 @@ class FacialLogin(QtWidgets.QFrame):
         self.pincode.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.pincode.setAutoFillBackground(False)
         self.pincode.setStyleSheet("border: 2px solid #3D989A;\n"
-        "border-radius: 20px;\n"
-        "color: white;\n"
-        "padding:10px;")
+            "border-radius: 20px;\n"
+            "color: white;\n"
+            "padding:10px;")
         self.pincode.setText("")
         icon2 = QtGui.QIcon()
         icon2.addPixmap(QtGui.QPixmap(":/background/Images/lock-pattern.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
@@ -321,9 +321,9 @@ class FacialLogin(QtWidgets.QFrame):
         font.setPointSize(12)
         enterButton.setFont(font)
         enterButton.setStyleSheet("border: none;\n"
-        "background: qlineargradient(spread:pad, x1:0, y1:0.505682, x2:1, y2:0.477, stop:0 rgba(11, 131, 120, 219), stop:1 rgba(85, 98, 112, 226));\n"
-        "border-radius: 20px;\n"
-        "color: white;")
+            "background: qlineargradient(spread:pad, x1:0, y1:0.505682, x2:1, y2:0.477, stop:0 rgba(11, 131, 120, 219), stop:1 rgba(85, 98, 112, 226));\n"
+            "border-radius: 20px;\n"
+            "color: white;")
         enterButton.setObjectName("enterButton")
         enterButton.setText("Enter")
         enterButton.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
@@ -370,6 +370,16 @@ class FacialLogin(QtWidgets.QFrame):
 
         # Dialog.mousePressEvent = mousePressEvent
         # Dialog.mouseMoveEvent = mouseMoveEvent
+        
+        # email and password validation
+        def emailAndPassword():
+            from Validation.validation import validate_credentials
+
+            print(validate_credentials(email=username.text(),password=password.text()))
+            
+           
+        enterButton.clicked.connect(emailAndPassword)
+    
 
         self.pinCodeShown = True
         
@@ -382,9 +392,7 @@ class FacialLogin(QtWidgets.QFrame):
         #     print("Pin code entry canceled")
     
     
-    
     # Function to open the camera
-    
     def openCameraWait(self):
 
         # Delay the creation of the FacialLogin object by 100 milliseconds
@@ -408,10 +416,12 @@ class FacialLogin(QtWidgets.QFrame):
             self.G = 0
             self.B = 0
             
+            
+            
             self.messageBoxShow(
                 icon=self.MessageBox.Information,
                 title="Facial Recognition",
-                text="Access Denied! use pinCode if you cant recognize",
+                text="Access Denied!\nuse pinCode if you cant recognize",
                 buttons=self.MessageBox.Ok
             )
             
@@ -422,13 +432,15 @@ class FacialLogin(QtWidgets.QFrame):
             self.messageBoxShow(
                 icon=self.MessageBox.Information,
                 title="Facial Recognition",
-                text="Access Granted! Art Lisboa",
+                text="Access Granted!" + str(result[0]),
                 buttons=self.MessageBox.Ok
             )
             # self.status.setText(result[0])
             self.R = 0
             self.G = 255
             self.B = 0
+            
+            self.status.setText("Good day! " + str(result[0]))
             
       
     
@@ -483,8 +495,9 @@ class FacialLogin(QtWidgets.QFrame):
         ret, frame = self.videoStream.read()
 
         if not ret:
-            self.status.setText("Please go back to mainmenu")
-            self.video.setText("Camera wont load")
+            self.status.setText("Please wait camera is loading")
+            # self.video.setText("Camera wont load")
+            self.video.setPixmap(QtGui.QPixmap(":/background/Images/loading.png"))
             return
         
         # process the frame

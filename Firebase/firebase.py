@@ -1,4 +1,4 @@
-import pyrebase 
+import pyrebase
 import os
 import requests
 

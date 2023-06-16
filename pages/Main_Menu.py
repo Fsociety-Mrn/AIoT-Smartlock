@@ -80,7 +80,7 @@ class MainWindow(QtWidgets.QFrame):
 
         # facial register
         self.facialRegister = QtWidgets.QPushButton(self.widget_2)
-        self.facialRegister.setGeometry(QtCore.QRect(60, 260, 291, 51))
+        self.facialRegister.setGeometry(QtCore.QRect(60, 260 + 40, 291, 51))
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(12)
@@ -96,7 +96,7 @@ class MainWindow(QtWidgets.QFrame):
         
         # facial login
         self.facialLogin = QtWidgets.QPushButton(self.widget_2)
-        self.facialLogin.setGeometry(QtCore.QRect(60, 200, 291, 51))
+        self.facialLogin.setGeometry(QtCore.QRect(60, 200 + 40, 291, 51))
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(12)
@@ -164,7 +164,7 @@ class MainWindow(QtWidgets.QFrame):
         
         # time
         self.label_2 = QtWidgets.QLabel(self.widget_2)
-        self.label_2.setGeometry(QtCore.QRect(0, 80, 401, 61))
+        self.label_2.setGeometry(QtCore.QRect(0, 80 + 40, 401, 61))
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(42)
@@ -177,7 +177,7 @@ class MainWindow(QtWidgets.QFrame):
         
         # date
         self.label_3 = QtWidgets.QLabel(self.widget_2)
-        self.label_3.setGeometry(QtCore.QRect(90, 150, 211, 20))
+        self.label_3.setGeometry(QtCore.QRect(90, 150 + 40, 211, 20))
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(13)
@@ -192,6 +192,7 @@ class MainWindow(QtWidgets.QFrame):
         self.timer.timeout.connect(self.update_time)
         self.timer.start(1000)
         
+        self.closeEvent = self.closeEvent
         self.horizontalLayout.addWidget(self.widget_2)
         self.retranslateUi()
         QtCore.QMetaObject.connectSlotsByName(self)
@@ -215,6 +216,7 @@ class MainWindow(QtWidgets.QFrame):
         self.label_3.setText(_translate("mainMenu", "Wed,Jun 3 2023"))
         
         # self.checkOnline.setText(_translate("mainMenu", "Online"))
+        self.settings.clicked.connect(self.closeEvent)
 
     # check time
     def update_time(self):
@@ -231,9 +233,10 @@ class MainWindow(QtWidgets.QFrame):
         try:
             # Attempt to create a socket connection to a known server (e.g., Google DNS)
             socket.create_connection(("8.8.8.8", 53))
-            self.label.setText("AIoT Smartlock is online")
+            self.label.setText("<html><head/><body><p>AIoT Smartlock is <Strong>online<strong/></p></body></html>")
+            
         except OSError:
-            self.label.setText("No Internet Connection")
+            self.label.setText("<html><head/><body><p><Strong>No Internet<strong/> Connection</p></body></html>")
     
     # ===================== open facial Login ===================== #
 
@@ -285,21 +288,25 @@ class MainWindow(QtWidgets.QFrame):
         # FacialRegister = facialRegister(self)
         # FacialRegister.show()
 
-    # # when close the frame
-    # def clickback(self):
-    #     QtWidgets.qApp.quit()
+    # when close the frame
+    def close(self):
+        QtWidgets.qApp.quit()
 
-    # def closeEvent(self, event):
-    #     # show a message box asking for confirmation
-    #     reply = QtWidgets.QMessageBox.question(None, 'Smart AIoT ito sya',
-    #                                            "Are you sure you want to exit?", QtWidgets.QMessageBox.Yes |
-    #                                            QtWidgets.QMessageBox.No, QtWidgets.QMessageBox.No)
+    def closeEvent(self, event):
+        # show a message box asking for confirmation
+        message_box = QtWidgets.QMessageBox(None)
+        message_box.setWindowTitle('AIoT Smartlock')
+        message_box.setText("Are you sure you want to exit?")
+        message_box.setStandardButtons(QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+        message_box.setDefaultButton(QtWidgets.QMessageBox.No)
 
-    #     # if the user confirms, exit the application
-    #     if reply == QtWidgets.QMessageBox.Yes:
-    #         QtWidgets.qApp.quit()
-    #     else:
-    #         event.ignore()
+        reply = message_box.exec_()
+        # if the user confirms, exit the application
+        if reply == QtWidgets.QMessageBox.Yes:
+            QtWidgets.qApp.quit()
+        else:
+            message_box.close()
+    
 #error dito
 
 # if __name__ == "__main__":
