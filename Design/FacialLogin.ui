@@ -19,7 +19,7 @@
   </property>
   <property name="styleSheet">
    <string notr="true">background-color: rgb(231, 229, 213);
-background-image: url(:/background/Images/background-removebg-preview.png);
+background-image: url(:/images/background.jpg);
 background-position: center;
 
 </string>
@@ -27,8 +27,8 @@ background-position: center;
   <widget class="QPushButton" name="back">
    <property name="geometry">
     <rect>
-     <x>0</x>
-     <y>0</y>
+     <x>10</x>
+     <y>10</y>
      <width>101</width>
      <height>41</height>
     </rect>
@@ -56,7 +56,7 @@ padding:10px</string>
     <string>Back </string>
    </property>
    <property name="icon">
-    <iconset resource="Design/background.qrc">
+    <iconset>
      <normaloff>:/images/return.png</normaloff>:/images/return.png</iconset>
    </property>
    <property name="iconSize">
@@ -75,7 +75,7 @@ padding:10px</string>
   <widget class="QLabel" name="label_2">
    <property name="geometry">
     <rect>
-     <x>290</x>
+     <x>300</x>
      <y>410</y>
      <width>161</width>
      <height>61</height>
@@ -104,7 +104,7 @@ padding:10px</string>
   <widget class="QPushButton" name="pincode">
    <property name="geometry">
     <rect>
-     <x>430</x>
+     <x>440</x>
      <y>415</y>
      <width>51</width>
      <height>51</height>
@@ -133,7 +133,7 @@ padding:10px;</string>
    </property>
    <property name="icon">
     <iconset>
-     <normaloff>:/background/Images/lock-pattern.png</normaloff>:/background/Images/lock-pattern.png</iconset>
+     <normaloff>:/images/lock-pattern.png</normaloff>:/images/lock-pattern.png</iconset>
    </property>
    <property name="iconSize">
     <size>
@@ -145,7 +145,7 @@ padding:10px;</string>
   <widget class="QLabel" name="status">
    <property name="geometry">
     <rect>
-     <x>0</x>
+     <x>10</x>
      <y>0</y>
      <width>801</width>
      <height>51</height>
@@ -176,7 +176,7 @@ padding:10px;</string>
   <widget class="QWidget" name="widget" native="true">
    <property name="geometry">
     <rect>
-     <x>140</x>
+     <x>150</x>
      <y>50</y>
      <width>511</width>
      <height>351</height>
@@ -225,7 +225,7 @@ border-radius: 50px;</string>
   <zorder>widget</zorder>
  </widget>
  <resources>
-  <include location="Design/background.qrc"/>
+  <include location="background.qrc"/>
  </resources>
  <connections/>
 </ui>

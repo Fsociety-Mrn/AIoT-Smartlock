@@ -19,7 +19,7 @@
   </property>
   <property name="styleSheet">
    <string notr="true">background-color: rgb(231, 229, 213);
-background-image: url(:/background/Images/background-removebg-preview.png);
+background-image:url(:/images/background.jpg);
 background-position: center;
 </string>
   </property>
@@ -71,7 +71,7 @@ border-radius: 50px;</string>
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>350</x>
+     <x>360</x>
      <y>430</y>
      <width>41</width>
      <height>41</height>
@@ -84,7 +84,7 @@ border-radius: 50px;</string>
     <string/>
    </property>
    <property name="pixmap">
-    <pixmap>:/background/Images/capture.png</pixmap>
+    <pixmap resource="background.qrc">:/images/capture.png</pixmap>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>
@@ -93,7 +93,7 @@ border-radius: 50px;</string>
   <widget class="QLabel" name="capture">
    <property name="geometry">
     <rect>
-     <x>390</x>
+     <x>400</x>
      <y>435</y>
      <width>21</width>
      <height>31</height>
@@ -176,8 +176,6 @@ border-radius: 50px;</string>
   </widget>
  </widget>
  <resources>
-  <include location="background.qrc"/>
-  <include location="background.qrc"/>
   <include location="background.qrc"/>
  </resources>
  <connections/>

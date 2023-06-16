@@ -28,7 +28,7 @@
   </property>
   <property name="styleSheet">
    <string notr="true">background-color: rgb(231, 229, 213);
-background-image: url(:/background/Images/background-removebg-preview.png);
+background-image: url(:/images/background.jpg);
 background-position: center;
 </string>
   </property>

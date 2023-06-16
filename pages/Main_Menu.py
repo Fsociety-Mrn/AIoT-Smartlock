@@ -1,6 +1,6 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import *
-
+import socket
 
 class MainWindow(QtWidgets.QFrame):
     def __init__(self,parent=None):
@@ -64,6 +64,20 @@ class MainWindow(QtWidgets.QFrame):
         "")
         self.widget_2.setObjectName("widget_2")
         
+        # # check online status
+        # self.checkOnline = QtWidgets.QLabel(self.widget_2)
+        # self.checkOnline.setGeometry(QtCore.QRect(15, 20, 131, 31))
+        # font = QtGui.QFont()
+        # font.setFamily("Segoe UI")
+        # font.setPointSize(10)
+        # font.setStrikeOut(False)
+        # self.checkOnline.setFont(font)
+        # self.checkOnline.setStyleSheet("color:  rgba(11, 131, 120, 219)")
+        # self.checkOnline.setFrameShape(QtWidgets.QFrame.NoFrame)
+        # self.checkOnline.setAlignment(QtCore.Qt.AlignCenter)
+        # self.checkOnline.setObjectName("checkOnline")
+        
+
         # facial register
         self.facialRegister = QtWidgets.QPushButton(self.widget_2)
         self.facialRegister.setGeometry(QtCore.QRect(60, 260, 291, 51))
@@ -108,6 +122,19 @@ class MainWindow(QtWidgets.QFrame):
         self.label.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.label.setAlignment(QtCore.Qt.AlignCenter)
         self.label.setObjectName("label")
+        
+        
+        # self.onlineStat = QtWidgets.QPushButton(self.widget_2)
+        # self.onlineStat.setEnabled(True)
+        # self.onlineStat.setGeometry(QtCore.QRect(280, 412, 41, 41))
+        # self.onlineStat.setStyleSheet("border-radius: 100px;")
+        # self.onlineStat.setText("")
+        # icon3 = QtGui.QIcon()
+        # icon3.addPixmap(QtGui.QPixmap("Images/online.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        # self.onlineStat.setIcon(icon3)
+        # self.onlineStat.setIconSize(QtCore.QSize(10, 10))
+        # self.onlineStat.setObjectName("onlineStat")
+        
         
         # settings
         self.settings = QtWidgets.QPushButton(self.widget_2)
@@ -161,6 +188,10 @@ class MainWindow(QtWidgets.QFrame):
         self.label_3.setAlignment(QtCore.Qt.AlignCenter)
         self.label_3.setObjectName("label_3")
         
+        self.timer = QtCore.QTimer(self)
+        self.timer.timeout.connect(self.update_time)
+        self.timer.start(1000)
+        
         self.horizontalLayout.addWidget(self.widget_2)
         self.retranslateUi()
         QtCore.QMetaObject.connectSlotsByName(self)
@@ -182,9 +213,28 @@ class MainWindow(QtWidgets.QFrame):
         self.label_2.setText(_translate("mainMenu", "12:00 PM"))
         
         self.label_3.setText(_translate("mainMenu", "Wed,Jun 3 2023"))
+        
+        # self.checkOnline.setText(_translate("mainMenu", "Online"))
 
-
-
+    # check time
+    def update_time(self):
+        current_date = QtCore.QDate.currentDate().toString("ddd, MMM d yyyy")
+        
+        current_time = QtCore.QTime.currentTime().toString("h:mm AP")
+        
+        self.check_internet_connection()
+        self.label_2.setText(current_time)
+        self.label_3.setText(current_date)
+        
+    # check internet
+    def check_internet_connection(self):
+        try:
+            # Attempt to create a socket connection to a known server (e.g., Google DNS)
+            socket.create_connection(("8.8.8.8", 53))
+            self.label.setText("AIoT Smartlock is online")
+        except OSError:
+            self.label.setText("No Internet Connection")
+    
     # ===================== open facial Login ===================== #
 
     def openFacialLogin(self):
@@ -253,6 +303,7 @@ class MainWindow(QtWidgets.QFrame):
 #error dito
 
 # if __name__ == "__main__":
+    
 #     # Create a new QApplication object
 #     app = QApplication(sys.argv)
 

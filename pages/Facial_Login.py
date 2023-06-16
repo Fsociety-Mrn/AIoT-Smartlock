@@ -16,6 +16,23 @@ class FacialLogin(QtWidgets.QFrame):
         # for video streaming variable
         self.videoStream = cv2.VideoCapture(1) if cv2.VideoCapture(1).isOpened() else cv2.VideoCapture(0)
         self.videoStream.set(4, 1080)
+        
+        
+        # message box
+        self.MessageBox = QtWidgets.QMessageBox()
+        self.MessageBox.setStyleSheet("""
+                  QMessageBox { 
+                      text-align: center;
+                  }
+                  QMessageBox::icon {
+                      subcontrol-position: center;
+                  }
+                  QPushButton { 
+                      width: 250px; 
+                      height: 30px; 
+                      font-size: 15px;
+                  }
+        """)
 
         # ========= for facial detection ========= #
 
@@ -59,15 +76,15 @@ class FacialLogin(QtWidgets.QFrame):
         icon.addPixmap(QtGui.QPixmap(":/background/Images/logo192x192.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.setWindowIcon(icon)
         self.setStyleSheet("background-color: rgb(231, 229, 213);\n"
-        "background-image: url(:/background/Images/background-removebg-preview.png);\n"
-        "background-position: center;\n"
-        "\n"
-        "")
+            "background-image: url(:/background/Images/background-removebg-preview.png);\n"
+            "background-position: center;\n"
+            "\n"
+            "")
         # video framing
         self.widget = QtWidgets.QWidget(self)
         self.widget.setGeometry(QtCore.QRect(140, 50, 511, 351))
         self.widget.setStyleSheet("border: 2px solid rgb(61, 152, 154) ;\n"
-        "border-radius: 50px;")
+            "border-radius: 50px;")
         self.widget.setObjectName("widget")
         
         self.horizontalLayoutWidget = QtWidgets.QWidget(self.widget)
@@ -185,6 +202,8 @@ class FacialLogin(QtWidgets.QFrame):
         self.label_2.setText(_translate("facialLogin", "can\'t recognize ?"))
         self.status.setText(_translate("facialLogin", "<html><head/><body><p>Please wait, camera is loading.</p></body></html>"))
         self.back.setText(_translate("facialLogin", "Back "))
+        
+        self.pincode.clicked.connect(self.pinCodeShow)
 
     def backTomain(self):
         from pages.Main_Menu import MainWindow
@@ -198,6 +217,140 @@ class FacialLogin(QtWidgets.QFrame):
         cv2.destroyAllWindows()
         self.close()
 
+    
+    
+    # message box
+    def messageBoxShow(self, icon=None, title=None, text=None, buttons=None):
+
+        # Set the window icon, title, and text
+        self.MessageBox.setIcon(icon)
+        self.MessageBox.setWindowTitle(title)
+        self.MessageBox.setText(text)
+
+        # Set the window size
+        self.MessageBox.setFixedWidth(400)
+
+        # Set the standard buttons
+        self.MessageBox.setStandardButtons(buttons)
+
+        result = self.MessageBox.exec_()
+
+        self.MessageBox.close()
+        
+        # Show the message box and return the result
+        return result
+    
+    # pincode show
+    def pinCodeShow(self):
+        Dialog = QDialog(self)
+        Dialog.setWindowTitle("Pin Code Dialog")
+        Dialog.setModal(True)  # Make the dialog modal
+        
+        Dialog.resize(461, 307)
+        Dialog.setStyleSheet("background-image:url(Images/background-removebg-preview.png);\n"
+            "background-color: rgb(231, 229, 213);")
+        Dialog.setWindowFlags(QtCore.Qt.FramelessWindowHint)
+        
+        qtRectangle = self.frameGeometry()
+        centerPoint = QDesktopWidget().availableGeometry().center()
+        qtRectangle.moveCenter(centerPoint)
+        Dialog.move(qtRectangle.topLeft())
+
+        # cautions
+        label = QtWidgets.QLabel(Dialog)
+        label.setGeometry(QtCore.QRect(90, 20, 281, 31))
+        font = QtGui.QFont()
+        font.setFamily("Segoe UI")
+        font.setPointSize(12)
+        label.setFont(font)
+        label.setStyleSheet("color: #3D989A;\n")
+        label.setAlignment(QtCore.Qt.AlignCenter)
+        label.setObjectName("label")
+        label.setText("Please enter your email and password")
+        
+        # email 
+        username = QtWidgets.QLineEdit(Dialog)
+        username.setGeometry(QtCore.QRect(30, 60, 401, 51))
+        font = QtGui.QFont()
+        font.setFamily("Segoe UI")
+        font.setPointSize(14)
+        username.setFont(font)
+        username.setStyleSheet("background: transparents;\n"
+            "color: #3D989A;\n"
+            "background-color: rgb(255, 255, 255);\n"
+            "border: 1px solid #3D989A;\n"
+            "border-radius: 25px;")
+        username.setAlignment(QtCore.Qt.AlignCenter)
+        username.setObjectName("username")
+        username.setPlaceholderText("Email")
+        
+        # password
+        password = QtWidgets.QLineEdit(Dialog)
+        password.setGeometry(QtCore.QRect(30, 120, 401, 51))
+        font = QtGui.QFont()
+        font.setFamily("Segoe UI")
+        font.setPointSize(14)
+        password.setFont(font)
+        password.setStyleSheet("background: transparents;\n"
+            "color: #3D989A;\n"
+            "background-color: rgb(255, 255, 255);\n"
+            "border: 1px solid #3D989A;\n"
+            "border-radius: 25px;")
+        password.setAlignment(QtCore.Qt.AlignCenter)
+        password.setObjectName("password")
+        password.setPlaceholderText("Password")
+        
+        # enter button
+        enterButton = QtWidgets.QPushButton(Dialog)
+        enterButton.setGeometry(QtCore.QRect(120, 190, 221, 41))
+        font = QtGui.QFont()
+        font.setFamily("Segoe UI")
+        font.setPointSize(12)
+        enterButton.setFont(font)
+        enterButton.setStyleSheet("border: none;\n"
+        "background: qlineargradient(spread:pad, x1:0, y1:0.505682, x2:1, y2:0.477, stop:0 rgba(11, 131, 120, 219), stop:1 rgba(85, 98, 112, 226));\n"
+        "border-radius: 20px;\n"
+        "color: white;")
+        enterButton.setObjectName("enterButton")
+        enterButton.setText("Enter")
+        enterButton.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        
+        # cancel button
+        cancelButton = QtWidgets.QPushButton(Dialog)
+        cancelButton.setGeometry(QtCore.QRect(120, 240, 221, 41))
+        font = QtGui.QFont()
+        font.setFamily("Segoe UI")
+        font.setPointSize(12)
+        cancelButton.setFont(font)
+        cancelButton.setStyleSheet("border: 2px solid #3D989A;\n"
+            "border-radius: 20px;\n"
+            "color: #3D989A;")
+        cancelButton.setObjectName("cancelButon")
+        cancelButton.setText("Cancel")
+        cancelButton.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        
+        # layout = QVBoxLayout(Dialog)
+        # Dialog.setLayout(layout)
+
+        # label = QLabel("Enter your pin code:", Dialog)
+        # layout.addWidget(label)
+
+        # pincode_edit = QLineEdit(Dialog)
+        # layout.addWidget(pincode_edit)
+
+        # button_box = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel, Dialog)
+        # button_box.accepted.connect(Dialog.accept)
+        # button_box.rejected.connect(Dialog.reject)
+        # layout.addWidget(button_box)
+        
+        Dialog.exec_()
+
+        # if Dialog.exec_() == QDialog.Accepted:
+        #     pin_code = pincode_edit.text()
+        #     print("Entered pin code:", pin_code)
+        # else:
+        #     print("Pin code entry canceled")
+    
     #  for facial recognition
     def FacialRecognition(self, frame):
         result = Jolo().Face_Compare(frame)
@@ -209,12 +362,30 @@ class FacialLogin(QtWidgets.QFrame):
             self.R = 255
             self.G = 0
             self.B = 0
+            
+            self.messageBoxShow(
+                icon=self.MessageBox.Information,
+                title="Facial Recognition",
+                text="Access Denied! use pinCode if you cant recognize",
+                buttons=self.MessageBox.Ok
+            )
+            
+
         else:
             self.matchs = str(result[0])
+            
+            self.messageBoxShow(
+                icon=self.MessageBox.Information,
+                title="Facial Recognition",
+                text="Access Granted! Art Lisboa",
+                buttons=self.MessageBox.Ok
+            )
             # self.status.setText(result[0])
             self.R = 0
             self.G = 255
             self.B = 0
+            
+      
     
     # for facial detection
     def curveBox(self,frame=None,p1=None,p2=None,curvedRadius=30):

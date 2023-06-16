@@ -343,7 +343,7 @@ class facialRegister(QtWidgets.QFrame):
                 # Show the message box and return the result
                 return result
 
-            # =================== for eye blinking detection functions =================== #
+    # =================== for eye blinking detection functions =================== #
     def eyeBlink(self, gray):
 
         # detect eyes using dlib

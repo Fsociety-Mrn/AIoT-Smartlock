@@ -20,8 +20,8 @@
    <string>Frame</string>
   </property>
   <property name="windowIcon">
-   <iconset>
-    <normaloff>../Images/logo192x192.png</normaloff>../Images/logo192x192.png</iconset>
+   <iconset resource="background.qrc">
+    <normaloff>:/images/logo515x512.png</normaloff>:/images/logo515x512.png</iconset>
   </property>
   <property name="autoFillBackground">
    <bool>false</bool>
@@ -76,7 +76,7 @@ border-top-left-radius: 50px;</string>
            <string/>
           </property>
           <property name="pixmap">
-           <pixmap resource="../background.qrc">:/background/Images/logo192x192.png</pixmap>
+           <pixmap resource="background.qrc">:/images/logo192x192.png</pixmap>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -94,8 +94,7 @@ border-top-left-radius: 50px;</string>
       <bool>false</bool>
      </property>
      <property name="styleSheet">
-      <string notr="true">
-background-image:url(:/background/Images/background.jpg);
+      <string notr="true">background-image:url(:/images/background.jpg);
 background-color:rgb(255, 255, 255);
 border-bottom-right-radius: 50px;
 
@@ -213,8 +212,8 @@ color: white;
        <string/>
       </property>
       <property name="icon">
-       <iconset resource="../background.qrc">
-        <normaloff>:/background/Images/setting.png</normaloff>:/background/Images/setting.png</iconset>
+       <iconset resource="background.qrc">
+        <normaloff>:/images/setting.png</normaloff>:/images/setting.png</iconset>
       </property>
       <property name="iconSize">
        <size>
@@ -242,8 +241,8 @@ color: white;
        <string/>
       </property>
       <property name="icon">
-       <iconset resource="../background.qrc">
-        <normaloff>:/background/Images/info.png</normaloff>:/background/Images/info.png</iconset>
+       <iconset resource="background.qrc">
+        <normaloff>:/images/info.png</normaloff>:/images/info.png</iconset>
       </property>
       <property name="iconSize">
        <size>
@@ -310,11 +309,99 @@ color: white;
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
+     <widget class="QLabel" name="checkOnline">
+      <property name="geometry">
+       <rect>
+        <x>15</x>
+        <y>20</y>
+        <width>131</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Segoe UI</family>
+        <pointsize>10</pointsize>
+        <strikeout>false</strikeout>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color:  rgba(11, 131, 120, 219)</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::NoFrame</enum>
+      </property>
+      <property name="text">
+       <string>Online</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="onlineStat">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>16</y>
+        <width>41</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border-radius: 100px;</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="icon">
+       <iconset resource="background.qrc">
+        <normaloff>:/images/online.png</normaloff>:/images/online.png</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>15</width>
+        <height>15</height>
+       </size>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="onlineStat_2">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>110</x>
+        <y>20</y>
+        <width>41</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border-radius: 100px;</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="icon">
+       <iconset resource="background.qrc">
+        <normaloff>:/images/offline.png</normaloff>:/images/offline.png</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>15</width>
+        <height>15</height>
+       </size>
+      </property>
+     </widget>
     </widget>
    </item>
   </layout>
  </widget>
  <resources>
+  <include location="background.qrc"/>
   <include location="../background.qrc"/>
  </resources>
  <connections/>
