@@ -12,3 +12,4 @@
 /build
 /.env
 /.github
+/Validation/__pycache__
