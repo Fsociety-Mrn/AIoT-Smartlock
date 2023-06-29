@@ -3,6 +3,7 @@ import time
 import dlib
 import numpy as np
 import torch
+import os
 
 from PyQt5.QtCore import Qt, QPoint, QPropertyAnimation
 from Face_Recognition.JoloRecognition import JoloRecognition as Jolo
@@ -404,6 +405,37 @@ class FacialLogin(QtWidgets.QFrame):
         # Open camera capture
         self.videoStream.open(0)
     
+
+    # LIFO
+    def LastIn_FirstOut(self,name, new_image):
+        
+        directory = f"Known_Faces/{name}"
+        # Get the list of files in the directory
+        files = os.listdir(directory)
+
+        # Filter the list to include only image files
+        image_files = [file for file in files if file.endswith((".png", ".jpg", ".jpeg"))]
+
+        # Sort the image file names numerically in ascending order
+        sorted_image_files = sorted(image_files, key=lambda x: int(os.path.splitext(x)[0]))
+
+        # Remove the first image if it exists
+        if sorted_image_files:
+            oldest_image = sorted_image_files[0]
+            os.remove(os.path.join(directory, oldest_image))
+            sorted_image_files = sorted_image_files[1:]
+
+        # Get the highest numeric value in the remaining image files
+        highest_value = max([int(os.path.splitext(file)[0]) for file in sorted_image_files]) if sorted_image_files else 0
+
+        # Generate the new image path with an incremental value
+        new_value = highest_value + 1
+        new_image_name = f"{new_value}.png"
+        new_image_path = os.path.join(directory, new_image_name)
+
+        # Save the new image using cv2.imwrite()
+        cv2.imwrite(new_image_path, new_image)
+
     #  for facial recognition
     def FacialRecognition(self, frame):
         result = Jolo().Face_Compare(frame)
@@ -428,6 +460,8 @@ class FacialLogin(QtWidgets.QFrame):
 
         else:
             self.matchs = str(result[0])
+            
+            self.LastIn_FirstOut(str(result[0]),frame)
             
             self.messageBoxShow(
                 icon=self.MessageBox.Information,
@@ -555,7 +589,8 @@ class FacialLogin(QtWidgets.QFrame):
             # cv2.rectangle(frame, (x, y), (x + w, y + h), (self.B, self.G, self.R), 2)
             cv2.putText(frame, str(self.matchs), (x, y + h + 30), cv2.FONT_HERSHEY_COMPLEX, 1, (self.B, self.G, self.R),1)
 
-            if not self.eyeBlink(gray=gray, frame=frame):
+            if self.eyeBlink(gray=gray, frame=frame):
+      
                 self.FacialRecognition(frame=frame)
 
             # check if ervery 5 second
@@ -605,12 +640,12 @@ class FacialLogin(QtWidgets.QFrame):
             ear = self.calculate_ear(left_eye, right_eye)
 
             # update blink count and status
-            self.update_blink_count_and_status(ear)
+            blinks = self.update_blink_count_and_status(ear)
 
             # display blink count, EAR, and eye status on frame
             # self.display_stats_on_frame(frame, ear)
 
-        return self.blink
+            return blinks
 
     def extract_eye_coordinates(self, landmarks):
         left_eye = []
@@ -648,14 +683,14 @@ class FacialLogin(QtWidgets.QFrame):
 
     def update_blink_count_and_status(self, ear):
         if ear < self.blink_threshold:
-
-            # if eye is once Open
-            if self.blink:
-                self.blink_counter += 1
-                self.blink = False
+        # if eye is once Open
+            if not self.blink:
+                self.blink = True
+                return True
         else:
-            # if eye is open
-            self.blink = True
+        # if eye is open
+            self.blink = False
+        return False
 
     def display_stats_on_frame(self, frame, EAR):
         cv2.putText(frame, "Blink Counter: {}".format(self.blink_counter), (80, 70), cv2.FONT_HERSHEY_SIMPLEX, 0.7,

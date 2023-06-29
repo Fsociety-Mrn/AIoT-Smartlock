@@ -26,8 +26,6 @@ def firebaseReadChild(keyName,valueName):
     except requests.ConnectionError:
         print("Walang Internet")
         return False
-        
-    
 
 # update the current data
 def firebaseUpdate(keyName, value):
