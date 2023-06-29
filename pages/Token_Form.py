@@ -1,4 +1,6 @@
 import os
+import shutil
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import *
 from PyQt5.QtWidgets import QWidget
@@ -137,25 +139,23 @@ class TokenForm(QtWidgets.QFrame):
             
         
         # # Define the path for the known faces folder
-        # path = f"Known_Faces/{self.TokenID.text()}"
+        path = f"Known_Faces/{self.TokenID.text()}"
         
-        # if os.path.exists(path):
+        if os.path.exists(path):
             
-        # # NOTE: if exist ask the user if wanted to updated the faces or proceed to updated
+        # NOTE: if exist ask the user if wanted to updated the faces or proceed to updated
             
-        #     # Show a message box indicating that the folder already exists
-        #     self.messageBoxShow(
-        #         icon=self.MessageBox.Warning,
-        #         title="AIoT Smartlock",
-        #         text="Folder already exists",
-        #         buttons=self.MessageBox.Ok
-        #     )
+            
+            # Show a message box indicating that the folder already exists
+            # Remove all contents of the folder
+            shutil.rmtree(path)
+            os.makedirs(path, exist_ok=True)
 
 
-        # else:
+        else:
 
-        #     # Create the known faces folder if it doesn't exist
-        #     os.makedirs(path, exist_ok=True)
+            # Create the known faces folder if it doesn't exist
+            os.makedirs(path, exist_ok=True)
 
         #     # Show a message box indicating that the folder has been created
         #     self.messageBoxShow(
@@ -185,6 +185,7 @@ class TokenForm(QtWidgets.QFrame):
         self.data_passed.emit(self.TokenID.text())
         
         FacialRegister.show()
+        self.TokenID.setText("")
         self.Continue.setText("Continue")
 
     
