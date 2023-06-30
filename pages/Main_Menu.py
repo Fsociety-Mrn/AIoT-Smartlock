@@ -5,6 +5,23 @@ import socket
 class MainWindow(QtWidgets.QFrame):
     def __init__(self,parent=None):
         super().__init__(parent)
+        
+        # message box
+        self.MessageBox = QtWidgets.QMessageBox()
+        self.MessageBox.setStyleSheet("""
+                  QMessageBox { 
+                      text-align: center;
+                  }
+                  QMessageBox::icon {
+                      subcontrol-position: center;
+                  }
+                  QPushButton { 
+                      width: 250px; 
+                      height: 30px; 
+                      font-size: 15px;
+                  }
+        """)
+
 
         # frame
         self.setObjectName("mainMenu")
@@ -197,6 +214,15 @@ class MainWindow(QtWidgets.QFrame):
         self.retranslateUi()
         QtCore.QMetaObject.connectSlotsByName(self)
         
+        # main menu
+        self.menu = QMenu(self)
+        # self.menu.addAction(QAction("Option 1", self, triggered=self.option1_action))
+        # self.menu.addAction(QAction("Option 2", self, triggered=self.option2_action))
+        # self.menu.addAction(QAction("Option 3", self, triggered=self.option3_action))
+        self.menu.addAction(QAction("Update Face Recognition", self, triggered=self.updateFace))
+        self.menu.addAction(QAction("turn off", self, triggered=self.closeEvent))
+
+        
 
     def retranslateUi(self):
         _translate = QtCore.QCoreApplication.translate
@@ -216,7 +242,57 @@ class MainWindow(QtWidgets.QFrame):
         self.label_3.setText(_translate("mainMenu", "Wed,Jun 3 2023"))
         
         # self.checkOnline.setText(_translate("mainMenu", "Online"))
-        self.settings.clicked.connect(self.closeEvent)
+        self.settings.clicked.connect(self.showMenu)
+    
+    # message box
+    def messageBoxShow(self, icon=None, title=None, text=None, buttons=None):
+
+        # Set the window icon, title, and text
+        self.MessageBox.setIcon(icon)
+        self.MessageBox.setWindowTitle(title)
+        self.MessageBox.setText(text)
+
+        # Set the window size
+        self.MessageBox.setFixedWidth(400)
+
+        # Set the standard buttons
+        self.MessageBox.setStandardButtons(buttons)
+
+        result = self.MessageBox.exec_()
+
+        self.MessageBox.close()
+        
+        # Show the message box and return the result
+        return result
+    
+    def updateFace(self):
+        
+        self.facialLogin.setText("Face Recognition is Updating")
+        self.facialRegister.setText("Please bear with me")
+        self.facialLogin.isEnabled = False
+        self.facialRegister.isEnabled = False
+
+        # Delay the creation of the FacialLogin object by 100 milliseconds
+        QtCore.QTimer.singleShot(100, self.update_face)
+    
+    # update facial recognition
+    def update_face(self):
+
+        from Face_Recognition.JoloRecognition import JoloRecognition
+        JoloRecognition().Face_Train()
+        
+        self.messageBoxShow(
+                icon=self.MessageBox.Information,
+                title="AIoT Smartlock",
+                text="Facial Updating is done",
+                buttons=self.MessageBox.Ok
+            )
+        
+        self.facialRegister.setText("Facial Register")
+        self.facialLogin.setText("Facial Login")
+        
+        self.facialLogin.isEnabled = True
+        self.facialRegister.isEnabled = True
 
     # check time
     def update_time(self):
@@ -306,6 +382,10 @@ class MainWindow(QtWidgets.QFrame):
             QtWidgets.qApp.quit()
         else:
             message_box.close()
+            
+    def showMenu(self):
+        self.menu.exec_(self.settings.mapToGlobal(self.settings.rect().bottomLeft()))
+
     
 #error dito
 

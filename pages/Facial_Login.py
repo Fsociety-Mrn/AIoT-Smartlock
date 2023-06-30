@@ -438,7 +438,7 @@ class FacialLogin(QtWidgets.QFrame):
         cv2.imwrite(new_image_path, new_image)
 
     #  for facial recognition
-    def FacialRecognition(self, frame):
+    def FacialRecognition(self, frame, save):
         result = Jolo().Face_Compare(frame)
 
         if result[0] == 'No match detected':
@@ -449,12 +449,10 @@ class FacialLogin(QtWidgets.QFrame):
             self.G = 0
             self.B = 0
             
-            
-            
             self.messageBoxShow(
                 icon=self.MessageBox.Information,
                 title="Facial Recognition",
-                text="Access Denied!\nuse pinCode if you cant recognize",
+                text="Access Denied!\nuse pinCode if you are not recognize",
                 buttons=self.MessageBox.Ok
             )
             
@@ -462,12 +460,12 @@ class FacialLogin(QtWidgets.QFrame):
         else:
             self.matchs = str(result[0])
             
-            self.LastIn_FirstOut(str(result[0]),frame)
+            self.LastIn_FirstOut(str(result[0]),save)
             
             self.messageBoxShow(
                 icon=self.MessageBox.Information,
                 title="Facial Recognition",
-                text="Access Granted!" + str(result[0]),
+                text="Access Granted!\n" + str(result[0]),
                 buttons=self.MessageBox.Ok
             )
             # self.status.setText(result[0])
@@ -476,6 +474,8 @@ class FacialLogin(QtWidgets.QFrame):
             self.B = 0
             
             self.status.setText("Good day! " + str(result[0]))
+            
+            self.backTomain()
             
       
     
@@ -528,6 +528,8 @@ class FacialLogin(QtWidgets.QFrame):
     # for video streaming
     def videoStreaming(self):
         ret, frame = self.videoStream.read()
+        
+        frames = frame
 
         if not ret:
             self.status.setText("Please wait camera is loading")
@@ -591,7 +593,7 @@ class FacialLogin(QtWidgets.QFrame):
             cv2.putText(frame, str(self.matchs), (x, y + h + 30), cv2.FONT_HERSHEY_COMPLEX, 1, (self.B, self.G, self.R),1)
 
             if self.eyeBlink(gray=gray, frame=frame):
-                self.FacialRecognition(frame=frame)
+                self.FacialRecognition(frame=frame,save=frames)
   
 
             # check if ervery 5 second

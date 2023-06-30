@@ -1,17 +1,32 @@
-import os
+import sys
+from PyQt5.QtWidgets import QApplication, QMainWindow, QMenu, QAction, QPushButton
 
-# Specify the directory path
-directory = "Known_Faces/Art Lisboa"  # Replace with the actual path to your folder
 
-# Get the list of files in the directory
-files = os.listdir(directory)
+class MainWindow(QMainWindow):
+    def __init__(self):
+        super().__init__()
 
-# Filter the list to include only image files
-image_files = [file for file in files if file.endswith((".png", ".jpg", ".jpeg"))]
+        self.initUI()
 
-# Sort the image file names numerically
-sorted_image_files = sorted(image_files, key=lambda x: int(os.path.splitext(x)[0]))
+    def initUI(self):
+        self.setWindowTitle("Menu Example")
+        self.setGeometry(300, 300, 400, 300)
 
-# Print the sorted image file names
-for image_file in sorted_image_files:
-    print(image_file)
+        self.settings_btn = QPushButton("Settings", self)
+        self.settings_btn.setGeometry(10, 10, 80, 30)
+        self.settings_btn.clicked.connect(self.showMenu)
+
+        self.menu = QMenu(self)
+        self.menu.addAction(QAction("Option 1", self))
+        self.menu.addAction(QAction("Option 2", self))
+        self.menu.addAction(QAction("Option 3", self))
+
+    def showMenu(self):
+        self.menu.exec_(self.settings_btn.mapToGlobal(self.settings_btn.rect().bottomLeft()))
+
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    mainWindow = MainWindow()
+    mainWindow.show()
+    sys.exit(app.exec_())
