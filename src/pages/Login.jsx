@@ -26,7 +26,7 @@ import {
 import { LoginSession } from '../Authentication/Authentication';
 
 // icons
-import GoogleIcon from '@mui/icons-material/Google';
+// import GoogleIcon from '@mui/icons-material/Google';
 import ICON from '../Images/logo512.png'
 
 
@@ -161,10 +161,10 @@ const Mobile = () => {
           sx={{
             width: '90vw',
             height: '80vh',
-            backgroundColor: 'primary.dark',
+            // backgroundColor: 'primary.dark',
             borderTopLeftRadius: '50px',
             // backgroundColor: "white",
-            background: 'linear-gradient(to right, rgb(61, 152, 154) 0%, rgb(12, 14, 36) 100%)',
+            // background: 'linear-gradient(to right, rgb(61, 152, 154) 0%, rgb(12, 14, 36) 100%)',
             // backgroundSize: '200% 200%',
             // backgroundPosition: 'left',
             display: 'flex', 
@@ -185,7 +185,8 @@ const Mobile = () => {
               sizes='40px'
               sx={{ 
                 bgcolor: "#e7e5d6b5",
-                height: '150px', width: '150px'
+                height: '150px', width: '150px',
+                border: "2px solid rgb(61, 152, 154)"
               }}
               
               src={ICON}>S</Avatar>
@@ -228,7 +229,7 @@ const Mobile = () => {
                 underline="always" 
                 fontFamily={'sans-serif'}
                   style={{
-                    color: 'white',
+                    // color: 'white',
                     marginTop:'15px',
                     marginBottom: '20px'
                   }} >Forgot Password</Link>
@@ -240,7 +241,7 @@ const Mobile = () => {
                 style={{
                   // background: 'linear-gradient(to right, rgb(11, 131, 120) 0%, #e7e5d6b5 100%)',
                   marginBottom: '15px',
-                  background: 'linear-gradient(to right, rgb(11, 131, 120) 0%, rgb(85, 98, 112) 100%)',
+                  background: 'linear-gradient(to right, rgb(61, 152, 154) 0%, rgb(12, 14, 36) 100%)',
                   textTransform: 'none',
                   fontFamily: 'sans-serif',
                   borderRadius: 25,
@@ -262,8 +263,8 @@ const Mobile = () => {
                     <Typography
                       fontFamily={'sans-serif'}
                       style={{
-                      color: '#FFFFFF'
-                      }}>Or</Typography>
+                      // color: '#FFFFFF'
+                      }}>Don't have an account ?</Typography>
                     </Divider>
                 </Grid>
 
@@ -274,29 +275,20 @@ const Mobile = () => {
                 spacing={2}
                 marginTop={1}
                 >
-                  <Button variant='contained' fullWidth
-                  startIcon={<GoogleIcon />}
-                  style={{
-                    color: 'rgb(11, 131, 120)',
-                    backgroundColor: "white",
-                    textTransform: 'none',
-                    fontFamily: 'sans-serif',
-                    width: '250px',
-                    padding: '8px',
-                    borderRadius: 25,
-                  boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.25)',
-                  fontWeight: 'bold',
-  
-                  transition: 'background-color 0.3s ease',
-                  // Mobile-specific styles
-                  '@media (maxWidth: 700px)': {
-                    fontSize: '14px',
-                    padding: '10px 16px',
-                  },
-                  }}
-                  // onClick={()=> console.log(isAdmin()) }
-                  >Login with Google</Button>
+            
+
+                  {/* Signup Account */}
+                  <Typography noWrap>
+                    <Link 
+                  href="/otp"
+                    style={{ cursor: 'pointer' }}> 
+                      <strong> Sign up here!</strong>
+                    </Link> 
+                  </Typography>
                 </Stack>
+
+                
+  
 
               </Grid>
 
@@ -469,8 +461,8 @@ const Desktop = () => {
               elevation={0}
               > 
 
-              <Typography>Hello Friend!</Typography>
-              <Typography>This is AIoT Smartlock where you manage you locker Online</Typography>
+              {/* <Typography>Hello Friend!</Typography>
+              <Typography>This is AIoT Smartlock where you manage you locker Online</Typography> */}
 
                 {/* email */}
                 <DesktopTextbox 
@@ -546,10 +538,6 @@ const Desktop = () => {
     
                   >Log In</Button>
 
-                  {/* <Fab variant="extended">
-                    Login
-                  </Fab> */}
-
                 </Stack>
 
                 <Divider orientation='horizontal' color='rgb(12, 14, 36)'>
@@ -557,33 +545,28 @@ const Desktop = () => {
                   fontFamily={'sans-serif'} 
                   style={{
                     color: 'rgb(61, 152, 154)'
-                  }}>Or Log in with</Typography>
+                  }}>Don't have an account ?</Typography>
                 </Divider>
 
                 <Stack
                 direction="column"
                 justifyContent="center"
                 alignItems="center"
-                padding={3}
+                paddingY={1}
                 spacing={1}
                 >
-                  <Button variant='contained' fullWidth
-                  startIcon={<GoogleIcon />}
-                  style={{
-                    color: 'rgb(61, 152, 154)',
-                    border: 'solid 2px rgb(61, 152, 154)',
-                    backgroundColor: "white",
-                    textTransform: 'none',
-                    fontFamily: 'sans-serif',
-                    borderRadius: 25,
-                    boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.25)', // Added a subtle shadow for depth
-                    fontWeight: 'bold', // Added bold font weight
-                    fontSize: '16px', // Adjusted font size for better readability
-                    padding: '5px', // Adjusted padding for more comfortable touch interaction
-                    transition: 'background-color 0.3s ease', 
-                  }}
-                  >Google</Button>
+                    {/* Signup Account */}
+                    <Typography noWrap>
+                      <Link 
+                      href="/otp"
+                      style={{ cursor: 'pointer' }}>   
+                       Sign up here!
+                      </Link> 
+                    </Typography>
+
                 </Stack>
+
+               
 
               </Paper>
 
