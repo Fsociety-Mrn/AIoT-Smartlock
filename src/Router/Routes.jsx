@@ -50,6 +50,7 @@ const Routess = () => {
 
 // import LoginPage from '../pages/Login'
 const LoginPage = React.lazy(()=> import('../pages/Login'))
+const Signup = React.lazy(()=> import('../pages/signup/Otp_SignIn'))
 const Login = () => {
     return (
       <React.Suspense fallback={<Loading/>}>
@@ -57,6 +58,7 @@ const Login = () => {
           <Routes>
 
             <Route path="/Login" element={<LoginPage/>}/>
+            <Route path="/otp" element={<Signup/>}/>
             <Route path="*" element={<Navigate to="/Login"/>}/>
 
           </Routes> 
