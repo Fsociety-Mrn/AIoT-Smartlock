@@ -3,6 +3,8 @@ import { initializeApp } from "firebase/app";
 // import { getAnalytics } from "firebase/analytics";
 import { getAuth, onAuthStateChanged } from "firebase/auth"
 import { getFirestore } from "firebase/firestore";
+import { getDatabase } from "firebase/database";
+
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -28,6 +30,9 @@ export const auth = getAuth(app);
 
 // for firesstore database
 export const Fdb  = getFirestore(app);
+
+// for realtime database
+export const RTdb = getDatabase(app);
 
 // check the login status
 export const statusLogin = () => {

@@ -1,3 +1,4 @@
+import React from 'react'
 import { 
     Avatar,
     Button,
@@ -6,18 +7,44 @@ import {
     Typography,
     Link
 } from '@mui/material'
-import React from 'react'
+
 
 import { DesktopTextbox } from '../../Components/Textfield';
-
 import ICON from '../../Images/logo512.png'
+
+// realtime database
+import { verifyToken } from '../../firebase/Realtime_Db'
 
 
 const Otp_SignIn = () => {
     const [showEmail, setShowEmail] = React.useState(true);
+    const [error, setError] = React.useState(false);
+    const [tokenField, setTokenField] = React.useState("");
+
+    // token field 
+    const token = e =>{
+        setTokenField(e.target.value)
+    }
+
+
+    // verify button
+    const verifyButton = e =>{
+        e.preventDefault();
+        // setShowEmail(false);
+        verifyToken(tokenField)
+        .then(e=>{
+                setShowEmail(!e);
+                setError(!e);
+            }
+        );
+    }
+
+
   return (
     <>
     {showEmail ? 
+
+    /* For verify email */
         (<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             <Grid 
             container   
@@ -51,7 +78,14 @@ const Otp_SignIn = () => {
                         src={ICON}>S</Avatar>
                         
                         {/* OTP code textbox */}
-                        <DesktopTextbox fullWidth placeholder='Please type the OTP code'/>
+                        <DesktopTextbox 
+                        fullWidth 
+                        placeholder='Please type the OTP code'
+                        value={tokenField}
+                        onChange={token}
+                        error={error}
+                        helperText={error ? "invalid token" : ""}
+                        />
 
                         {/* Buttons for verify cancel */}
                         <Stack
@@ -110,7 +144,7 @@ const Otp_SignIn = () => {
                                 width: '120px',
                                 height: '50px',
                             }}
-                            onClick={()=>setShowEmail(false)}
+                            onClick={e=>{verifyButton(e)}}
                             >Verify</Button>
 
                             
@@ -123,6 +157,8 @@ const Otp_SignIn = () => {
 
             </Grid>
         </div>) : 
+
+        /* setup email and password */
         (<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             <Grid 
             container   
