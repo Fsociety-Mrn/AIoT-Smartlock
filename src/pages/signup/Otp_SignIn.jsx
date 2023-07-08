@@ -14,10 +14,10 @@ import ICON from '../../Images/logo512.png'
 
 // realtime database
 import { verifyToken } from '../../firebase/Realtime_Db'
-
+import { createAccount } from '../../Authentication/Authentication'
 
 const Otp_SignIn = () => {
-    const [showEmail, setShowEmail] = React.useState(true);
+    const [showEmail, setShowEmail] = React.useState(false);
     const [error, setError] = React.useState(false);
     const [tokenField, setTokenField] = React.useState("");
 
@@ -37,6 +37,12 @@ const Otp_SignIn = () => {
                 setError(!e);
             }
         );
+    }
+
+    // create account
+    const createAccounts = e =>{
+        e.preventDefault();
+        createAccount("2019-201745@rttu.edu.ph", "taylor123")
     }
 
 
@@ -273,7 +279,7 @@ const Otp_SignIn = () => {
                                 width: '120px',
                                 height: '50px',
                             }}
-                            onClick={()=>setShowEmail(true)}
+                            onClick={e=>createAccounts(e)}
                             >Create</Button>
 
                             

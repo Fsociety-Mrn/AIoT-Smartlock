@@ -4,6 +4,7 @@ import {
     signInWithEmailAndPassword, 
     browserSessionPersistence,
     signOut,
+    createUserWithEmailAndPassword,
 } from "firebase/auth";
 
 import { auth } from '../firebase/FirebaseConfig'
@@ -47,4 +48,15 @@ export const LogoutSession = async () => {
     }).catch((err)=>console.log(err))
   
 }
-  
+
+  // create account
+export const createAccount = async (email, password) =>{
+  await createUserWithEmailAndPassword(auth,email,password)
+  .then(res=>{
+    console.log(res.user.uid);
+  })
+  .catch(
+    error=> console.log(error)
+  )
+}
+
