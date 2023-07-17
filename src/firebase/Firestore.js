@@ -1,4 +1,4 @@
-import { collection,getDocs, doc, setDoc } from "firebase/firestore";
+import { collection,getDocs, doc, setDoc, getDoc } from "firebase/firestore";
 import { Fdb } from './FirebaseConfig'
 
 const collectionRef = collection(Fdb, "users");
@@ -43,11 +43,26 @@ export const userData = async () => {
 
 // create collection
 export const createUserData = async (UID) =>{
+
+
   // Add a new document in collection "cities"
   await setDoc(doc(Fdb, "users", UID), {
-    isActive: "Los Angeles",
-    isAdmin: "CA",
-    photoUrl: "USA",
-    user: "Lisboa, Artmillen C"
-  });
+    isActive: true,
+    isAdmin: "false",
+    photoUrl: "",
+    user: "first user, user"
+  })
+  .then(test=>{
+    console.log(test);
+    window.location.reload();
+  })
+  .catch(err=>console.log(err));
+  
+
+}
+
+// get user name
+
+export const getUserName = async (UID) =>{
+  await getDoc(ref);
 }

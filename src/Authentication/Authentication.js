@@ -8,7 +8,7 @@ import {
 } from "firebase/auth";
 
 import { auth } from '../firebase/FirebaseConfig'
-
+import { createUserData } from '../firebase/Firestore'
 
 // Login 
 export const LoginSession = (user) => {
@@ -51,9 +51,12 @@ export const LogoutSession = async () => {
 
   // create account
 export const createAccount = async (email, password) =>{
+
   await createUserWithEmailAndPassword(auth,email,password)
   .then(res=>{
     console.log(res.user.uid);
+    createUserData(res.user.uid);
+    
   })
   .catch(
     error=> console.log(error)

@@ -30,7 +30,7 @@ const Routess = () => {
         isAdmin(user.uid)
           .then(data=>{
             sessionStorage.setItem('isAdmin', data.isAdmin ? "true" : "false");  
-          }).catch(error=> alert(error))
+          }).catch(error=> console.log(error))
         }).catch(error=> console.log(error))
 
     

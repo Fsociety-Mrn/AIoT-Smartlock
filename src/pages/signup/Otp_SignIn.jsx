@@ -42,8 +42,10 @@ const Otp_SignIn = () => {
     // create account
     const createAccounts = e =>{
         e.preventDefault();
-        createAccount("2019-201745@rttu.edu.ph", "taylor123")
+        createAccount("test@rtu.edu.ph", "taylor123");
+        // window.location.reload();
     }
+
 
 
   return (

@@ -2,8 +2,28 @@ import { Avatar, Fab, Grid, Stack, Typography } from '@mui/material'
 import React from 'react'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import ICON from '../Images/logo512.png'
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from '../firebase/FirebaseConfig';
+
 
 const Welcome = () => {
+  const [currentUser, setCurrentUser] = React.useState(null);
+
+  React.useEffect(() => {
+    // Firebase auth listener to check for changes in user authentication status
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in
+        setCurrentUser(user.uid);
+      } else {
+        // User is signed out
+        setCurrentUser(null);
+      }
+    });
+
+    // Clean up the listener when the component unmounts
+    return () => unsubscribe();
+  }, []);
 
   return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
@@ -33,6 +53,14 @@ const Welcome = () => {
             border: "3px solid rgb(61, 152, 154)" }}
           >H</Avatar>
           
+          <Typography variant='h4' 
+          style={{ 
+            backgroundImage: 'linear-gradient(to right, rgb(11, 131, 120) 0%, rgb(85, 98, 112) 100%)', 
+            WebkitBackgroundClip: 'text', 
+            WebkitTextFillColor: 'transparent' 
+          }}
+          >Hello Friend</Typography>
+
           {/* Greetings */}
           <Typography variant='h3' 
           style={{ 
@@ -40,7 +68,7 @@ const Welcome = () => {
             WebkitBackgroundClip: 'text', 
             WebkitTextFillColor: 'transparent' 
           }}
-          >Hello Friend!</Typography>
+          >{currentUser}</Typography>
 
 
         {/* Continue Button */}
