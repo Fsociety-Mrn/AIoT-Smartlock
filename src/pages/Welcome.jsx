@@ -4,26 +4,43 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import ICON from '../Images/logo512.png'
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../firebase/FirebaseConfig';
-
+import { getUserName } from '../firebase/Firestore';
 
 const Welcome = () => {
   const [currentUser, setCurrentUser] = React.useState(null);
+  const [screenWidth, setScreenWidth] = React.useState(window.innerWidth);
+
+   // Function to update the screen width state on window resize
+   const handleResize = () => {
+    setScreenWidth(window.innerWidth);
+  };
+
 
   React.useEffect(() => {
     // Firebase auth listener to check for changes in user authentication status
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        // User is signed in
-        setCurrentUser(user.uid);
+
+        getUserName(user.uid)
+        .then(result=>setCurrentUser(result))
+        .catch(err=>alert(err));
+
       } else {
         // User is signed out
         setCurrentUser(null);
       }
     });
 
+    window.addEventListener("resize", handleResize);
+    
+
     // Clean up the listener when the component unmounts
-    return () => unsubscribe();
+    return () => {unsubscribe();  window.removeEventListener("resize", handleResize);};
   }, []);
+
+    // Determine the variant based on the screen width
+    const variant = screenWidth < 700 ? 'h5' : 'h4';
+    const variantWelcome = screenWidth < 700 ? 'h4' : 'h3';
 
   return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
@@ -53,16 +70,22 @@ const Welcome = () => {
             border: "3px solid rgb(61, 152, 154)" }}
           >H</Avatar>
           
-          <Typography variant='h4' 
+          {/* Greetings */}
+          <Typography 
+          variant={variantWelcome} 
+          // variant='h3'
           style={{ 
             backgroundImage: 'linear-gradient(to right, rgb(11, 131, 120) 0%, rgb(85, 98, 112) 100%)', 
             WebkitBackgroundClip: 'text', 
             WebkitTextFillColor: 'transparent' 
           }}
           >Hello Friend</Typography>
-
-          {/* Greetings */}
-          <Typography variant='h3' 
+          
+          {/* Username */}
+          <Typography 
+          variant={variant}  
+          // variant='h4'
+          noWrap
           style={{ 
             backgroundImage: 'linear-gradient(to right, rgb(11, 131, 120) 0%, rgb(85, 98, 112) 100%)', 
             WebkitBackgroundClip: 'text', 

@@ -62,7 +62,20 @@ export const createUserData = async (UID) =>{
 }
 
 // get user name
-
 export const getUserName = async (UID) =>{
-  await getDoc(ref);
+  try {
+    const docRef = doc(Fdb, "users", UID); // Assuming Fdb is properly defined elsewhere
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      console.log(data.user);
+      return data.user; // You can return the data or do whatever you want with it
+    } else {
+      console.log("User document does not exist!");
+      return null; // Or handle the non-existence case accordingly
+    }
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+    throw error; // Rethrow the error or handle it gracefully
+  }
 }
