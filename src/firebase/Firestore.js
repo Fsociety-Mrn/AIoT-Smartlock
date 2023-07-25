@@ -50,7 +50,7 @@ export const createUserData = async (UID) =>{
     isActive: true,
     isAdmin: "false",
     photoUrl: "",
-    user: "first user, user"
+    user: "first name, last name"
   })
   .then(test=>{
     console.log(test);
