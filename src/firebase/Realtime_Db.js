@@ -46,6 +46,7 @@ export const verifyToken = (TOKENs) => {
     });
   };
 
+  // remove token Key
 const removeKey = (key) => {
     const keyRef = ref(RTdb, `GenerateToken_User/${key}`);
   

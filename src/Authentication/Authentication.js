@@ -50,16 +50,23 @@ export const LogoutSession = async () => {
 }
 
   // create account
-export const createAccount = async (email, password) =>{
+  export const createAccount = (email, password) => {
+    return new Promise((resolve, reject) => {
+      createUserWithEmailAndPassword(auth, email, password)
+        .then((res) => {
+          console.log(res.user.uid);
+          createUserData(res.user.uid);
+          resolve(res); // Resolve the promise with the response from createUserWithEmailAndPassword
+        })
+        .catch((error) => {
+          console.log(error);
 
-  await createUserWithEmailAndPassword(auth,email,password)
-  .then(res=>{
-    console.log(res.user.uid);
-    createUserData(res.user.uid);
-    
-  })
-  .catch(
-    error=> console.log(error)
-  )
-}
+          console.log(error);
+          const errorMessage = error.message.match(/\((.*?)\)/)[1];
+          const errorMessages = errorMessage.replace('auth/', '').replace(/-/g, ' ');
+
+          reject(errorMessages); // Reject the promise with the error from createUserWithEmailAndPassword
+        });
+    });
+  };
 
