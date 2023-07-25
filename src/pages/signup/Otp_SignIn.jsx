@@ -16,10 +16,14 @@ import ICON from '../../Images/logo512.png'
 import { verifyToken } from '../../firebase/Realtime_Db'
 import { createAccount } from '../../Authentication/Authentication'
 
+// validation
+import { SignUp_userSchema } from '../../Authentication/Validation'
 const Otp_SignIn = () => {
     const [showEmail, setShowEmail] = React.useState(false);
     const [error, setError] = React.useState(false);
     const [tokenField, setTokenField] = React.useState("");
+
+
 
     // token field 
     const token = e =>{
@@ -39,10 +43,103 @@ const Otp_SignIn = () => {
         );
     }
 
+
+    // =============================== signup account
+
+
+    const [user, setUser] = React.useState({
+        email: "",
+        password: "",
+        confirmPassword: ""
+      })
+    
+      const [errorSignUp, setErrorSignUp] = React.useState({
+        email: false,
+        emailError: "",
+        password: false,
+        passwordError: "",
+        confirmPassword: false,
+        confirmPasswordError: ""
+      })
+    
     // create account
     const createAccounts = e =>{
         e.preventDefault();
-        createAccount("2019-201745@rttu.edu.ph", "taylor123")
+
+        isValid(user.email,user.password,user.confirmPassword);
+
+        // createAccount("test@rtu.edu.ph", "taylor123");
+        // window.location.reload();
+    }
+
+    // validation
+    const isValid = async(Email,Password,ConfirmPassword) =>{
+        try{
+
+            // validate
+            await SignUp_userSchema.validate({ email: Email, password: Password , confirmPassword: ConfirmPassword}, { abortEarly: false });
+            
+            createAccount(Email, ConfirmPassword)
+            .then(res=>{
+
+                console.log("Create Account Succesfull");
+                setErrorSignUp({
+                    email: false,
+                    emailError: "",
+        
+                    password: false,
+                    passwordError: "",
+        
+                    confirmPassword: false,
+                    confirmPasswordError: "",
+                });
+            })
+            .catch(err=>{
+                setErrorSignUp({
+                    email: true,
+                    emailError: "",
+        
+                    password: true,
+                    passwordError: "",
+
+                    confirmPassword: true,
+                    confirmPasswordError: err,
+                  });
+            })
+
+
+        }catch(validationError){
+
+            // Extract specific er ror messages for email and password
+            const emailError = validationError.inner.find((error) => error.path === 'email');
+            const passwordError = validationError.inner.find((error) => error.path === 'password');
+            const confirmPasswordError = validationError.inner.find((error) => error.path === 'confirmPassword');
+
+            // If validation errors occur
+            setErrorSignUp({
+                email: !!emailError,
+                emailError: emailError && emailError.message,
+
+                password: !!passwordError,
+                passwordError: passwordError && passwordError.message,
+
+                confirmPassword: !!confirmPasswordError,
+                confirmPasswordError: confirmPasswordError && confirmPasswordError.message,
+            });
+        }
+    }
+
+    // Signup Details
+    const Email = (e) => {
+        setUser({...user, email: e.target.value})
+    }
+
+    const Password = (e) => {
+        setUser({...user, password: e.target.value})
+    }
+
+    const ConfirmPassword = (e) => {
+        setUser({...user, confirmPassword: e.target.value})
     }
 
 
@@ -209,15 +306,45 @@ const Otp_SignIn = () => {
 
                         {/* Email */}
                         <Typography> <strong>Email</strong></Typography>
-                        <DesktopTextbox fullWidth placeholder='please enter a valid email address'/>
+                        <DesktopTextbox 
+                        fullWidth 
+                        type='email' 
+                        placeholder='please enter a valid email address'
+
+                        value={user.email}
+                        onChange={Email}
+
+                        error={errorSignUp.email}
+                        helperText={errorSignUp.emailError}
+                        />
 
                         {/* enter password */}
                         <Typography><strong>Create password</strong></Typography>
-                        <DesktopTextbox fullWidth placeholder='create a password should be 6 char long'/>
+                        <DesktopTextbox 
+                        fullWidth 
+                        type='password' 
+                        placeholder='create a password should be 6 char long'
+
+                        value={user.password}
+                        onChange={Password}
+ 
+                        error={errorSignUp.password}
+                        helperText={errorSignUp.passwordError}
+                        />
 
                         {/* confirm password */}
                         <Typography><strong>Confirm password</strong></Typography>
-                        <DesktopTextbox fullWidth placeholder='confirm your password'/>
+                        <DesktopTextbox 
+                        fullWidth 
+                        type='password' 
+                        placeholder='confirm your password'
+
+                        value={user.confirmPassword}
+                        onChange={ConfirmPassword}    
+
+                        error={errorSignUp.confirmPassword}
+                        helperText={errorSignUp.confirmPasswordError}
+                        />
 
      
                     </Stack>

@@ -1,4 +1,4 @@
-import { collection,getDocs, doc, setDoc } from "firebase/firestore";
+import { collection,getDocs, doc, setDoc, getDoc } from "firebase/firestore";
 import { Fdb } from './FirebaseConfig'
 
 const collectionRef = collection(Fdb, "users");
@@ -43,11 +43,39 @@ export const userData = async () => {
 
 // create collection
 export const createUserData = async (UID) =>{
+
+
   // Add a new document in collection "cities"
   await setDoc(doc(Fdb, "users", UID), {
-    isActive: "Los Angeles",
-    isAdmin: "CA",
-    photoUrl: "USA",
-    user: "Lisboa, Artmillen C"
-  });
+    isActive: true,
+    isAdmin: "false",
+    photoUrl: "",
+    user: "first user, user"
+  })
+  .then(test=>{
+    console.log(test);
+    window.location.reload();
+  })
+  .catch(err=>console.log(err));
+  
+
+}
+
+// get user name
+export const getUserName = async (UID) =>{
+  try {
+    const docRef = doc(Fdb, "users", UID); // Assuming Fdb is properly defined elsewhere
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      console.log(data.user);
+      return data.user; // You can return the data or do whatever you want with it
+    } else {
+      console.log("User document does not exist!");
+      return null; // Or handle the non-existence case accordingly
+    }
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+    throw error; // Rethrow the error or handle it gracefully
+  }
 }

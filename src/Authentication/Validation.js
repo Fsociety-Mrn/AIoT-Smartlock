@@ -22,3 +22,22 @@ export const userSchema = yup.object().shape({
             .required("Please enter a password")
             .min(6,"Password should be 6 char long")
 });
+
+
+//Email and password validation
+export const SignUp_userSchema = yup.object().shape({
+        email : yup.string()
+                .email("Incorrect email format")
+                .required("Please fill out the email field"),
+    
+        password: yup.string()
+                // .matches(passwordRules, { message: "Please create a stronger password" })
+                .required("Please enter a password")
+                .min(6,"Password should be 6 char long"),
+
+        confirmPassword: yup.string()
+                // .matches(passwordRules, { message: "Please create a stronger password" })
+                .required("Please enter a password")
+                .min(6,"Password should be 6 char long")
+                .oneOf([yup.ref('password'), null], 'Passwords must match')
+    });
