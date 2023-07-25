@@ -19,7 +19,7 @@ import { createAccount } from '../../Authentication/Authentication'
 // validation
 import { SignUp_userSchema } from '../../Authentication/Validation'
 const Otp_SignIn = () => {
-    const [showEmail, setShowEmail] = React.useState(false);
+    const [showEmail, setShowEmail] = React.useState(true);
     const [error, setError] = React.useState(false);
     const [tokenField, setTokenField] = React.useState("");
 
