@@ -1,4 +1,4 @@
-import { collection,getDocs, doc, setDoc, getDoc } from "firebase/firestore";
+import { collection,getDocs, doc, setDoc, getDoc,updateDoc  } from "firebase/firestore";
 import { Fdb } from './FirebaseConfig'
 
 const collectionRef = collection(Fdb, "users");
@@ -78,4 +78,17 @@ export const getUserName = async (UID) =>{
     console.error("Error fetching user data:", error);
     throw error; // Rethrow the error or handle it gracefully
   }
+}
+
+// update a username
+export const updateName = async (UID,Name) =>{
+
+ 
+    await updateDoc(doc(Fdb, "users", UID), {
+      user: Name
+    })
+    .then(test=>{
+      console.log(test);
+    })
+    .catch(err=>console.log(err));
 }
