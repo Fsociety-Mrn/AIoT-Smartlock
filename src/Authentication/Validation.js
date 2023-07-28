@@ -41,3 +41,14 @@ export const SignUp_userSchema = yup.object().shape({
                 .min(6,"Password should be 6 char long")
                 .oneOf([yup.ref('password'), null], 'Passwords must match')
     });
+
+// Name Validation
+export const Name_Schema = yup.object().shape({
+        firstName: yup.string()
+            .matches(/^[a-zA-Z\s]+$/, "Letters and spaces only")
+            .required("First name required"),
+        lastName: yup.string()
+            .matches(/^[a-zA-Z\s]+$/, "Letters and spaces only")
+            .required("Last name required"),
+    });
+    

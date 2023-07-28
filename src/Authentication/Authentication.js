@@ -56,6 +56,8 @@ export const LogoutSession = async () => {
         .then((res) => {
           console.log(res.user.uid);
           createUserData(res.user.uid);
+
+  
           resolve(res); // Resolve the promise with the response from createUserWithEmailAndPassword
         })
         .catch((error) => {

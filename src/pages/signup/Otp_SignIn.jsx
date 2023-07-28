@@ -18,10 +18,15 @@ import { createAccount } from '../../Authentication/Authentication'
 
 // validation
 import { SignUp_userSchema } from '../../Authentication/Validation'
+
+// import { useNavigate } from "react-router-dom";
+
 const Otp_SignIn = () => {
     const [showEmail, setShowEmail] = React.useState(true);
     const [error, setError] = React.useState(false);
     const [tokenField, setTokenField] = React.useState("");
+
+    // const navigate = useNavigate();
 
 
 
@@ -29,7 +34,6 @@ const Otp_SignIn = () => {
     const token = e =>{
         setTokenField(e.target.value)
     }
-
 
     // verify button
     const verifyButton = e =>{
@@ -67,9 +71,6 @@ const Otp_SignIn = () => {
         e.preventDefault();
 
         isValid(user.email,user.password,user.confirmPassword);
-
-        // createAccount("test@rtu.edu.ph", "taylor123");
-        // window.location.reload();
     }
 
     // validation

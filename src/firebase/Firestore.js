@@ -1,4 +1,4 @@
-import { collection,getDocs, doc, setDoc, getDoc } from "firebase/firestore";
+import { collection,getDocs, doc, setDoc, getDoc,updateDoc  } from "firebase/firestore";
 import { Fdb } from './FirebaseConfig'
 
 const collectionRef = collection(Fdb, "users");
@@ -48,7 +48,7 @@ export const createUserData = async (UID) =>{
   // Add a new document in collection "cities"
   await setDoc(doc(Fdb, "users", UID), {
     isActive: true,
-    isAdmin: "false",
+    isAdmin: false,
     photoUrl: "",
     user: "first name, last name"
   })
@@ -78,4 +78,18 @@ export const getUserName = async (UID) =>{
     console.error("Error fetching user data:", error);
     throw error; // Rethrow the error or handle it gracefully
   }
+}
+
+// update a username
+export const updateName = async (UID,Name) =>{
+
+ 
+    await updateDoc(doc(Fdb, "users", UID), {
+      user: Name
+    })
+    .then(test=>{
+      console.log(test);
+      window.location.reload();
+    })
+    .catch(err=>console.log(err));
 }
