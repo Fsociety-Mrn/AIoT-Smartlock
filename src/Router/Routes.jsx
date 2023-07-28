@@ -29,6 +29,7 @@ const Routess = () => {
         // verify Admin
         isAdmin(user.uid)
           .then(data=>{
+            console.log(data.isAdmin);
             sessionStorage.setItem('isAdmin', data.isAdmin ? "true" : "false");  
           }).catch(error=> console.log(error))
         }).catch(error=> console.log(error))
@@ -75,8 +76,10 @@ const WelcomePage = React.lazy(()=> import('../pages/Welcome'))
 const Mainpage = ({ isAdminS }) =>{
 
   if (isAdminS === "true"){
+    console.log("admin")
     return <Admin/>
   }else if(isAdminS === "false"){
+    console.log("user")
     return <User/>
   }else{
     return <WelcomePage />
