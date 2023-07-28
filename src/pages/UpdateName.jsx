@@ -23,10 +23,10 @@ const UpdateName = ({UID}) => {
     // validataion name
     const isValid = async() =>{
         try{
-            await Name_Schema.validate({FirstName: name.FirstName,LastName: name.LastName});
+            await Name_Schema.validate({firstName: name.FirstName, lastName: name.LastName}, { abortEarly: false });
             
-            // updateName(UID, String(name.LastName + "," + name.FirstName));
-            alert("goods");
+            updateName(UID, String(name.LastName + "," + name.FirstName));
+ 
             setError({
                 Firstname: "",
                 FirstName_Error: false,
@@ -37,21 +37,20 @@ const UpdateName = ({UID}) => {
         }catch(validationError){
 
             // Extract specific er ror messages for email and password
-            const FirstName = validationError.inner.find((error) => error.path === 'FirstName');
-            const LastName = validationError.inner.find((error) => error.path === 'LastName');
+            const FirstName = validationError.inner.find((error) => error.path === 'firstName');
+            const LastName = validationError.inner.find((error) => error.path === 'lastName');
+
+            validationError.inner.find((error) => console.log(error))
 
             setError({
 
-                Firstname: !!FirstName,
-                FirstName_Error: FirstName && FirstName.message,
-                Lastname: !!LastName,
-                LastName_Error: LastName && LastName.message,
-            })
-            
-            alert("not goods");
+              Firstname: !!FirstName,
+              FirstName_Error: FirstName && FirstName.message,
+              Lastname: !!LastName,
+              LastName_Error: LastName && LastName.message,
+          })
         }
-   
-        
+
     }
   
     // uddate buton

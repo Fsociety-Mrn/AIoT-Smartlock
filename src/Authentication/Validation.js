@@ -44,13 +44,11 @@ export const SignUp_userSchema = yup.object().shape({
 
 // Name Validation
 export const Name_Schema = yup.object().shape({
-        FirstName : yup
-                .string()
-                .required("Please fill out the First name"),
-                //.matches(/^[a-zA-Z\s]+$/, "First name should contain only letters and spaces"),
-
-        LastName: yup
-                .string()
-                .required("Please fill out the Last name"),
-                //.matches(/^[a-zA-Z\s]+$/, "First name should contain only letters and spaces"),
+        firstName: yup.string()
+            .matches(/^[a-zA-Z\s]+$/, "Letters and spaces only")
+            .required("First name required"),
+        lastName: yup.string()
+            .matches(/^[a-zA-Z\s]+$/, "Letters and spaces only")
+            .required("Last name required"),
     });
+    
