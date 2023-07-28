@@ -22,7 +22,7 @@ import { SignUp_userSchema } from '../../Authentication/Validation'
 // import { useNavigate } from "react-router-dom";
 
 const Otp_SignIn = () => {
-    const [showEmail, setShowEmail] = React.useState(false);
+    const [showEmail, setShowEmail] = React.useState(true);
     const [error, setError] = React.useState(false);
     const [tokenField, setTokenField] = React.useState("");
 
