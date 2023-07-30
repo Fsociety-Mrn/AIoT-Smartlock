@@ -13,7 +13,7 @@ import { DesktopTextbox } from '../../Components/Textfield';
 import ICON from '../../Images/logo512.png'
 
 // realtime database
-import { verifyToken } from '../../firebase/Realtime_Db'
+import { verifyToken, generateToken} from '../../firebase/Realtime_Db'
 import { createAccount } from '../../Authentication/Authentication'
 
 // validation
@@ -143,7 +143,18 @@ const Otp_SignIn = () => {
         setUser({...user, confirmPassword: e.target.value})
     }
 
+    // generate token
+    const [temporaryToken, setTemporarytoken] = React.useState("")
 
+    const generateOTP = () => {
+        var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        var otp = '';
+        for (var i = 0; i < 6; i++) {
+            var index = Math.floor(Math.random() * characters.length);
+            otp += characters.charAt(index);
+        }
+        return otp;
+    }
   return (
     <>
     {showEmail ? 
@@ -253,6 +264,19 @@ const Otp_SignIn = () => {
 
                             
                         </Stack>
+
+                        <br/>
+                        
+                        <Typography variant='h6'>This token generator is temporary</Typography>
+                        <Typography><strong>{temporaryToken}</strong></Typography>
+                        
+                        <Button variant="contained" onClick={e=>{
+                            e.preventDefault();
+
+                            const tokens = generateOTP();
+                            setTemporarytoken(tokens);
+                            generateToken(tokens);
+                        }}>Generate Token</Button>
 
                     </Stack>
                 </Grid>

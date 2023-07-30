@@ -1,10 +1,9 @@
 import { RTdb } from "./FirebaseConfig"
 import { 
-    ref, 
-    // get, 
+    ref,  
     onValue, 
-    remove 
-    // update 
+    remove,
+    set
 } from "firebase/database";
 
 
@@ -47,7 +46,7 @@ export const verifyToken = (TOKENs) => {
   };
 
   // remove token Key
-const removeKey = (key) => {
+export const removeKey = (key) => {
     const keyRef = ref(RTdb, `GenerateToken_User/${key}`);
   
     remove(keyRef)
@@ -58,3 +57,33 @@ const removeKey = (key) => {
         console.error(`Error removing key "${key}":`, error);
       });
   };
+
+  // generate a token
+export const generateToken = async (uniqueID) => {
+  try {
+    const tokensList = await getListOFTokens(); // Assuming getListOFTokens() returns a list of tokens
+    set(ref(RTdb, 'GenerateToken_User/' + tokensList),String(uniqueID));
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+const getListOFTokens = () => {
+  const dbRef = ref(RTdb, 'GenerateToken_User');
+
+  return new Promise((resolve, reject) => {
+    onValue(dbRef, (snapshot) => {
+      const data = snapshot.val();
+      if (data && typeof data === 'object') {
+        const numberOfTokens = Object.keys(data).length;
+        resolve(numberOfTokens);
+      } else {
+        // Handle the case when data is null or not an object
+        resolve(0); // Return 0 tokens or any default value as per your requirement
+      }
+    }, (error) => {
+      reject(error);
+    });
+  });
+  
+}
