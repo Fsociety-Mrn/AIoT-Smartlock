@@ -58,3 +58,27 @@ def firebaseCreate(keyName, value):
 
 # firebaseCreate("Smartlock Status", True)
 
+# verify token User
+def firebaseTokenVerify(token):
+    try:
+        # Read the 'GenerateToken_FacialUpdate' node and check if the token exists
+        token_ref = db.child("GenerateToken_FacialUpdate")
+        snapshot = token_ref.get()
+
+        if snapshot.exists():
+            data = snapshot.val()
+            # Check if the token exists in the database
+            return data
+            # if token in data.values():
+            #     # If the token matches, get the name
+            #     name = [name for name, tk in data.items() if tk == token][0]
+            #     return name
+            # else:
+            #     return None
+        else:
+            return None
+    except Exception as e:
+        print(f"Error: {e}")
+        return None
+
+print(firebaseTokenVerify("swIHY4"))
