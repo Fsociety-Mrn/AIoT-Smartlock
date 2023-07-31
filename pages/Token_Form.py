@@ -5,6 +5,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import *
 from PyQt5.QtWidgets import QWidget
 from PyQt5.QtCore import pyqtSignal
+
         
         
 class TokenForm(QtWidgets.QFrame):
@@ -12,6 +13,9 @@ class TokenForm(QtWidgets.QFrame):
     
     def __init__(self, parent=None):
         super().__init__(parent)
+        
+        # name
+        self.rearranged_string = ""
         
         # message box
         self.MessageBox = QtWidgets.QMessageBox()
@@ -126,8 +130,11 @@ class TokenForm(QtWidgets.QFrame):
         self.resize(800, 480)
         MainWindow(self).show()
         self.close()
-        
+    
     def continueTo(self):
+        
+        from Firebase.firebase import firebaseTokenVerify
+        
 
         # check if TokenID is not empty
         if not self.TokenID.text():
@@ -136,10 +143,24 @@ class TokenForm(QtWidgets.QFrame):
                 title="AIoT Smartlock",
                 text="Name cannot be empty",
                 buttons=self.MessageBox.Ok)
-            
         
+        result = firebaseTokenVerify(self.TokenID.text())  
+        
+        if result == None:
+            formatted_text = "<b>Invalid Token Detected!</b>"
+            return self.messageBoxShow(
+                icon=self.MessageBox.Warning,
+                title="AIoT Smartlock",
+                text=formatted_text + " To perform Facial Updates/Facial Register, you must generate a valid token from the AIoT Smartlock webApp.",
+                buttons=self.MessageBox.Ok)
+        
+
+        words = str(result).split(',')
+        self.rearranged_string = f"{words[1]} {words[0]}"
+        print(self.rearranged_string)
+
         # # Define the path for the known faces folder
-        path = f"Known_Faces/{self.TokenID.text()}"
+        path = f"Known_Faces/{self.rearranged_string}"
         
         if os.path.exists(path):
             
@@ -182,7 +203,7 @@ class TokenForm(QtWidgets.QFrame):
         FacialRegister = facialRegister(self)
         
         self.data_passed.connect(FacialRegister.receive)
-        self.data_passed.emit(self.TokenID.text())
+        self.data_passed.emit(self.rearranged_string)
         
         FacialRegister.show()
         self.TokenID.setText("")
