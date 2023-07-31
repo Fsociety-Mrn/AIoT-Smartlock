@@ -58,3 +58,24 @@ def firebaseCreate(keyName, value):
 
 # firebaseCreate("Smartlock Status", True)
 
+# verify token User
+def firebaseTokenVerify(token):
+    try:
+        data = db.child("GenerateToken_FacialUpdate").get().val()
+        
+              
+        # If the token matches, get the name
+        name = [name for name, tk in data.items() if tk == token][0]
+        return name
+        
+    except Exception as e:
+        print(f"Error: {e}")
+        return None
+
+# print("Name: ",firebaseTokenVerify("MggPBs"))
+
+# result = firebaseTokenVerify("MggPBss")
+# if not result == None:
+#     print("goods")
+# else:
+#     print("not goods")
