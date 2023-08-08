@@ -19,10 +19,7 @@ const Dashboard = () => {
     <br/>
     <h1>Dashboard</h1>
 
-    <button onClick={(e)=>{
-      LogoutSession();
-      window.location.reload();
-      }}>Logout</button>
+   
     
     </div>
   )

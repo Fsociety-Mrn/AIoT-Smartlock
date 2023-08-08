@@ -394,7 +394,6 @@ useEffect(() => {
             }}
             paddingTop={5}
           >
-            {/* ... (rest of the code remains unchanged) ... */}
           </Grid>
         </div>
       )}

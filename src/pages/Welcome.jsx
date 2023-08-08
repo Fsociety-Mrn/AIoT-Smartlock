@@ -14,7 +14,6 @@ const Welcome = () => {
   const [UID,setUID] = React.useState(null);
 
   React.useEffect(() => {
-    
     // Firebase auth listener to check for changes in user authentication status
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
