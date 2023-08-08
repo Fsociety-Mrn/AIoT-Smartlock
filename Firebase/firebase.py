@@ -56,8 +56,6 @@ def firebaseUpdateChild(keyName,keyChild,value):
 def firebaseCreate(keyName, value):
     return db.child(keyName).set(value)
 
-# firebaseCreate("Smartlock Status", True)
-
 # verify token User
 def firebaseTokenVerify(token):
     try:
@@ -72,6 +70,32 @@ def firebaseTokenVerify(token):
         print(f"Error: {e}")
         return None
 
+# delete token after it verify
+def firebaseDeleteVerifiedToken(name=None):
+    try:
+        # Delete the specific field
+        db.child("GenerateToken_FacialUpdate").child(name).remove()
+        print("field deleted successfully.")
+    except Exception as e:
+        print("An error occurred:", e)
+
+
+def firebaseHistory(name=None, date=None, time=None, access_type=None):
+    
+    try:
+         # Format the data for the new entry
+        entry = {
+            "access_type": access_type
+        }
+    
+        # Push the new entry to the database under the specified name, date, and time
+        db.child("History").child(name).child(date).child(time).set(access_type)
+
+        return True
+    except:
+        return False
+
+
 # print("Name: ",firebaseTokenVerify("MggPBs"))
 
 # result = firebaseTokenVerify("MggPBss")
@@ -79,3 +103,9 @@ def firebaseTokenVerify(token):
 #     print("goods")
 # else:
 #     print("not goods")
+
+# res = update_realtime_database(name="Lisboa,Art", date="June 19 2023", time="7:07 AM", access_type="ACCESS DENIED")
+# print(res)
+
+
+# firebaseDeleteVerifiedToken("For,Testing")

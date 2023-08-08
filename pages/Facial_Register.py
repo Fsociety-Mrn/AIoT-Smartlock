@@ -207,6 +207,8 @@ class facialRegister(QtWidgets.QFrame):
         icon = self.MessageBox.Information if message == "Successfully trained" else self.MessageBox.Warning
         self.messageBoxShow(title=title, text=text, buttons=self.MessageBox.Ok, icon=icon)
 
+        print(self.Name.text())
+        
 
         from pages.Main_Menu import MainWindow
         from pages.Token_Form import TokenForm

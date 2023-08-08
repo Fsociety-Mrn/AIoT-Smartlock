@@ -11,6 +11,7 @@ from Face_Recognition.JoloRecognition import JoloRecognition as Jolo
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import *
 
+from Firebase.firebase import firebaseHistory
 
 class FacialLogin(QtWidgets.QFrame):
     def __init__(self,parent=None):
@@ -221,9 +222,7 @@ class FacialLogin(QtWidgets.QFrame):
         self.videoStream.release()
         cv2.destroyAllWindows()
         self.close()
-
-    
-    
+  
     # message box
     def messageBoxShow(self, icon=None, title=None, text=None, buttons=None):
 
@@ -440,6 +439,10 @@ class FacialLogin(QtWidgets.QFrame):
     #  for facial recognition
     def FacialRecognition(self, frame, save):
         result = Jolo().Face_Compare(frame)
+        
+        current_date = QtCore.QDate.currentDate().toString("MMM d yyyy")
+        
+        current_time = QtCore.QTime.currentTime().toString("h:mm AP")
 
         if result[0] == 'No match detected':
             print(result[0])
@@ -455,7 +458,13 @@ class FacialLogin(QtWidgets.QFrame):
                 text="Access Denied!\nuse pinCode if you are not recognize",
                 buttons=self.MessageBox.Ok
             )
-            
+
+        
+            # update history firebase
+            firebaseHistory(name=str(result[0]),
+                            access_type="Access Denied",
+                            date=str(current_date),
+                            time=str(current_time))
 
         else:
             self.matchs = str(result[0])
@@ -465,7 +474,7 @@ class FacialLogin(QtWidgets.QFrame):
             self.messageBoxShow(
                 icon=self.MessageBox.Information,
                 title="Facial Recognition",
-                text="Access Granted!\n" + str(result[0]),
+                text="Welcome " + str(result[0]) + "!",
                 buttons=self.MessageBox.Ok
             )
             # self.status.setText(result[0])
@@ -475,10 +484,17 @@ class FacialLogin(QtWidgets.QFrame):
             
             self.status.setText("Good day! " + str(result[0]))
             
-            self.backTomain()
+            # update history firebase
+            words = str(result[0]).split(' ')
+            rearranged_string = f"{words[1]},{words[0]}"
             
-      
-    
+            firebaseHistory(name=rearranged_string,
+                            access_type="Access Granted",
+                            date=str(current_date),
+                            time=str(current_time))
+            
+            self.backTomain()
+
     # for facial detection
     def curveBox(self,frame=None,p1=None,p2=None,curvedRadius=30):
     

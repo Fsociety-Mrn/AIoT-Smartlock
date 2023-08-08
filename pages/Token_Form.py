@@ -133,7 +133,7 @@ class TokenForm(QtWidgets.QFrame):
     
     def continueTo(self):
         
-        from Firebase.firebase import firebaseTokenVerify
+        from Firebase.firebase import firebaseTokenVerify,firebaseDeleteVerifiedToken
         
 
         # check if TokenID is not empty
@@ -192,6 +192,8 @@ class TokenForm(QtWidgets.QFrame):
         
         self.Continue.isEnabled = False
         self.Cancel.isEnabled = False
+        
+        firebaseDeleteVerifiedToken(str(result))
             
             # Delay the creation of the toFacialRegister object by 100 milliseconds
         QtCore.QTimer.singleShot(100, self.toFacialRegister)
