@@ -13,3 +13,4 @@
 /.env
 /.github
 /Validation/__pycache__
+/Firebase/__pycache__
