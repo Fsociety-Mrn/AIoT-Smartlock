@@ -160,24 +160,37 @@ class MainWindow(QtWidgets.QFrame):
         self.settings.setStyleSheet("border-radius: 100px;")
         self.settings.setText("")
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap(":/background/Images/setting.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon1.addPixmap(QtGui.QPixmap("Images/user-avatar.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.settings.setIcon(icon1)
         self.settings.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.settings.setIconSize(QtCore.QSize(32, 32))
         self.settings.setObjectName("settings")
         
+        # turn Off
+        self.turnOff = QtWidgets.QPushButton(self.widget_2)
+        self.turnOff.setEnabled(True)
+        self.turnOff.setGeometry(QtCore.QRect(330, 50, 51, 51))
+        self.turnOff.setStyleSheet("border-radius: 100px;")
+        self.turnOff.setText("")
+        icon1 = QtGui.QIcon()
+        icon1.addPixmap(QtGui.QPixmap("Images/power-button.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.turnOff.setIcon(icon1)
+        self.turnOff.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.turnOff.setIconSize(QtCore.QSize(32, 32))
+        self.turnOff.setObjectName("settings")
+        
         # about
-        self.about = QtWidgets.QPushButton(self.widget_2)
-        self.about.setEnabled(True)
-        self.about.setGeometry(QtCore.QRect(10, 410, 41, 41))
-        self.about.setStyleSheet("border-radius: 100px;")
-        self.about.setText("")
-        icon2 = QtGui.QIcon()
-        icon2.addPixmap(QtGui.QPixmap(":/background/Images/info.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.about.setIcon(icon2)
-        self.about.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.about.setIconSize(QtCore.QSize(24, 24))
-        self.about.setObjectName("about")
+        # self.about = QtWidgets.QPushButton(self.widget_2)
+        # self.about.setEnabled(True)
+        # self.about.setGeometry(QtCore.QRect(10, 410, 41, 41))
+        # self.about.setStyleSheet("border-radius: 100px;")
+        # self.about.setText("")
+        # icon2 = QtGui.QIcon()
+        # icon2.addPixmap(QtGui.QPixmap(":/background/Images/info.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        # self.about.setIcon(icon2)
+        # self.about.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        # self.about.setIconSize(QtCore.QSize(24, 24))
+        # self.about.setObjectName("about")
         
         # time
         self.label_2 = QtWidgets.QLabel(self.widget_2)
@@ -222,8 +235,6 @@ class MainWindow(QtWidgets.QFrame):
         self.menu.addAction(QAction("Update Face Recognition", self, triggered=self.updateFace))
         self.menu.addAction(QAction("turn off", self, triggered=self.closeEvent))
 
-        
-
     def retranslateUi(self):
         _translate = QtCore.QCoreApplication.translate
         
@@ -242,7 +253,9 @@ class MainWindow(QtWidgets.QFrame):
         self.label_3.setText(_translate("mainMenu", "Wed,Jun 3 2023"))
         
         # self.checkOnline.setText(_translate("mainMenu", "Online"))
-        self.settings.clicked.connect(self.showMenu)
+        self.settings.clicked.connect(self.updateFace)
+        
+        self.turnOff.clicked.connect(self.closeEvent)
     
     # message box
     def messageBoxShow(self, icon=None, title=None, text=None, buttons=None):
@@ -385,16 +398,3 @@ class MainWindow(QtWidgets.QFrame):
             
     def showMenu(self):
         self.menu.exec_(self.settings.mapToGlobal(self.settings.rect().bottomLeft()))
-
-    
-#error dito
-
-# if __name__ == "__main__":
-    
-#     # Create a new QApplication object
-#     app = QApplication(sys.argv)
-
-#     New_menu = MainWindow()
-#     New_menu.show()
-
-#     sys.exit(app.exec_())

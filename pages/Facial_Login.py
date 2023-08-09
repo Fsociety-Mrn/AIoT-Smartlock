@@ -11,7 +11,7 @@ from Face_Recognition.JoloRecognition import JoloRecognition as Jolo
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import *
 
-from Firebase.firebase import firebaseHistory
+from Firebase.firebase import firebaseHistory,firebaseVerifyPincode
 
 class FacialLogin(QtWidgets.QFrame):
     def __init__(self,parent=None):
@@ -83,6 +83,8 @@ class FacialLogin(QtWidgets.QFrame):
             "background-position: center;\n"
             "\n"
             "")
+        
+        
         # video framing
         self.widget = QtWidgets.QWidget(self)
         self.widget.setGeometry(QtCore.QRect(140, 50, 511, 351))
@@ -262,7 +264,6 @@ class FacialLogin(QtWidgets.QFrame):
         Dialog.setStyleSheet("background-image:url(Images/background-removebg-preview.png);\n"
             "background-color: rgb(231, 229, 213);")
         Dialog.setWindowFlags(QtCore.Qt.FramelessWindowHint)
-
         
         frame_rect = self.rect()
         dialog_rect = Dialog.rect()
@@ -280,9 +281,9 @@ class FacialLogin(QtWidgets.QFrame):
         label.setStyleSheet("color: #3D989A;\n")
         label.setAlignment(QtCore.Qt.AlignCenter)
         label.setObjectName("label")
-        label.setText("Please enter your email and password")
+        label.setText("Please enter your username and pincode")
         
-        # email 
+        # username 
         username = QtWidgets.QLineEdit(Dialog)
         username.setGeometry(QtCore.QRect(30, 60, 401, 51))
         font = QtGui.QFont()
@@ -296,7 +297,7 @@ class FacialLogin(QtWidgets.QFrame):
             "border-radius: 25px;")
         username.setAlignment(QtCore.Qt.AlignCenter)
         username.setObjectName("username")
-        username.setPlaceholderText("Email")
+        username.setPlaceholderText("username")
         
         # password
         password = QtWidgets.QLineEdit(Dialog)
@@ -312,11 +313,36 @@ class FacialLogin(QtWidgets.QFrame):
             "border-radius: 25px;")
         password.setAlignment(QtCore.Qt.AlignCenter)
         password.setObjectName("password")
-        password.setPlaceholderText("Password")
+        password.setPlaceholderText("PIN")
+        password.setValidator(QtGui.QIntValidator())
         
+        # show password
+        show_password_checkbox = QtWidgets.QCheckBox("Show Password", Dialog)
+        show_password_checkbox.setGeometry(QtCore.QRect(40, 180, 401, 31))
+        show_password_checkbox.setCheckable(True)
+        # Set font and color
+        font = QtGui.QFont()
+        font.setFamily("Segoe UI")
+        show_password_checkbox.setFont(font)
+        show_password_checkbox.setStyleSheet("""
+                                                QCheckBox {
+                                                    color: #3D989A;
+                                                }
+                                                QCheckBox::indicator:checked {
+                                                    background-color: #3D989A;
+                                                    border: 1px solid #3D989A;
+                                                }
+                                                QCheckBox::indicator:unchecked {
+                                                    background-color: transparent;
+                                                    border: 1px solid #3D989A;
+                                                }
+                                            """)
+        show_password_checkbox.setChecked(False)
+        password.setEchoMode(QtWidgets.QLineEdit.Password)
+         
         # enter button
         enterButton = QtWidgets.QPushButton(Dialog)
-        enterButton.setGeometry(QtCore.QRect(120, 190, 221, 41))
+        enterButton.setGeometry(QtCore.QRect(230, 220, 211, 41))
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(12)
@@ -331,7 +357,7 @@ class FacialLogin(QtWidgets.QFrame):
         
         # cancel button
         cancelButton = QtWidgets.QPushButton(Dialog)
-        cancelButton.setGeometry(QtCore.QRect(120, 240, 221, 41))
+        cancelButton.setGeometry(QtCore.QRect(10, 220, 211, 41))
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(12)
@@ -345,43 +371,59 @@ class FacialLogin(QtWidgets.QFrame):
         cancelButton.clicked.connect(Dialog.reject)
         cancelButton.clicked.connect(self.openCameraWait)
         
-        # layout = QVBoxLayout(Dialog)
-        # Dialog.setLayout(layout)
-
-        # label = QLabel("Enter your pin code:", Dialog)
-        # layout.addWidget(label)
-
-        # pincode_edit = QLineEdit(Dialog)
-        # layout.addWidget(pincode_edit)
-
-        # button_box = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel, Dialog)
-        # button_box.accepted.connect(Dialog.accept)
-        # button_box.rejected.connect(Dialog.reject)
-        # layout.addWidget(button_box)
-       
+      
     
-        # Define mouse press and move event methods
-        # def mousePressEvent(event):
-        #     Dialog.oldPos = event.globalPos()
-
-        # def mouseMoveEvent(event):
-        #     delta = QPoint(event.globalPos() - Dialog.oldPos)
-        #     Dialog.move(Dialog.x() + delta.x(), Dialog.y() + delta.y())
-        #     Dialog.oldPos = event.globalPos()
-
-        # Dialog.mousePressEvent = mousePressEvent
-        # Dialog.mouseMoveEvent = mouseMoveEvent
-        
         # email and password validation
         def emailAndPassword():
-            from Validation.validation import validate_credentials
+            current_date = QtCore.QDate.currentDate().toString("MMM d yyyy")
+            current_time = QtCore.QTime.currentTime().toString("h:mm AP")
+            result = firebaseVerifyPincode(username=username.text(),pincode=password.text())
 
-            print(validate_credentials(email=username.text(),password=password.text()))
+            if not result == None:
+                self.messageBoxShow(
+                    icon=self.MessageBox.Information,
+                    title="Facial Recognition",
+                    text="Welcome " + str(result) + "!",
+                    buttons=self.MessageBox.Ok
+                )
+                
+                self.status.setText("Good day! " + str(result))
+            
+                 # update history firebase
+                words = str(result).split(',')
+                rearranged_string = f"{words[0]},{words[1]}"
+            
+                firebaseHistory(name=rearranged_string,
+                            access_type="pincode Login",
+                            date=str(current_date),
+                            time=str(current_time))
+            
+                return self.backTomain()
+
+            self.messageBoxShow(
+                icon=self.MessageBox.Information,
+                title="Facial Recognition",
+                text="Access Denied!\nplease use AIoT webApp, and update your face and pincode",
+                buttons=self.MessageBox.Ok
+            )
+            
+            # update history firebase
+            firebaseHistory(name='No match detected',
+                            access_type="Access Denied pincode",
+                            date=str(current_date),
+                            time=str(current_time))
+                
+            
+        def toggle_password_visibility(state):
+            if state != show_password_checkbox.isChecked():
+                password.setEchoMode(QtWidgets.QLineEdit.Normal)
+            else:
+                password.setEchoMode(QtWidgets.QLineEdit.Password)
             
            
         enterButton.clicked.connect(emailAndPassword)
-    
-
+        show_password_checkbox.stateChanged.connect(toggle_password_visibility)
+        
         self.pinCodeShown = True
         
         Dialog.exec_()
@@ -441,7 +483,6 @@ class FacialLogin(QtWidgets.QFrame):
         result = Jolo().Face_Compare(frame)
         
         current_date = QtCore.QDate.currentDate().toString("MMM d yyyy")
-        
         current_time = QtCore.QTime.currentTime().toString("h:mm AP")
 
         if result[0] == 'No match detected':
@@ -489,7 +530,7 @@ class FacialLogin(QtWidgets.QFrame):
             rearranged_string = f"{words[1]},{words[0]}"
             
             firebaseHistory(name=rearranged_string,
-                            access_type="Access Granted",
+                            access_type="Facial Login",
                             date=str(current_date),
                             time=str(current_time))
             

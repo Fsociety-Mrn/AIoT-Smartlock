@@ -79,21 +79,32 @@ def firebaseDeleteVerifiedToken(name=None):
     except Exception as e:
         print("An error occurred:", e)
 
-
+# add Facial/ Pincode Login
 def firebaseHistory(name=None, date=None, time=None, access_type=None):
     
-    try:
-         # Format the data for the new entry
-        entry = {
-            "access_type": access_type
-        }
-    
+    try:    
         # Push the new entry to the database under the specified name, date, and time
         db.child("History").child(name).child(date).child(time).set(access_type)
 
         return True
     except:
         return False
+
+# verify pincode
+def firebaseVerifyPincode(username=None, pincode=None):
+    try:
+        user_data = db.child("PIN").get().val()
+        for key, value in user_data.items():
+            if str(value["username"]) == username and str(value["pincode"]) == pincode:
+                return key  # Ibalik ang pangalan ng key (hal. "Name" o "Name2") na nauugnay sa username at pincode
+        
+        return None
+    except Exception as e:
+        print("Error:", e)
+        return None
+
+
+# print(firebaseVerifyPincode(username="artlisboa", pincode="1010"))
 
 
 # print("Name: ",firebaseTokenVerify("MggPBs"))
