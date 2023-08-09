@@ -74,7 +74,7 @@ const Desktop = () =>{
       }
     };
     fetchData();
-    console.log(dataUser)
+
   }, [dataUser]);
 
   return(

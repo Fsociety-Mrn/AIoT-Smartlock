@@ -1,5 +1,4 @@
 import React from 'react'
-import { LogoutSession } from '../../Authentication/Authentication'
 
 const Dashboard = () => {
     

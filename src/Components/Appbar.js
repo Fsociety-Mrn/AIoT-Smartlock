@@ -1,6 +1,8 @@
 import { 
     AppBar, 
     Avatar, 
+    BottomNavigation, 
+    BottomNavigationAction, 
     // BottomNavigation, 
     Box, 
     Divider, 
@@ -98,13 +100,13 @@ const MobileAppbar = () => {
                 navigate("/Admin/");
             break;
             case 1:
-                navigate("/Admin/LockerAvailable");
+                navigate("/Admin/MyLocker");
             break;
             case 2:
                 navigate("/Admin/ManageLocker");
             break;
             case 3:
-                navigate("/Admin/MyAccount");
+                navigate("/Admin/ProfileSettings");
             break;
 
             default:
@@ -151,8 +153,25 @@ const MobileAppbar = () => {
                     </Typography>
 
                 </Toolbar>
-                <Box sx={{ marginTop: -1 }}>
-                <Tabs 
+                <Box sx={{ marginTop: -1 }}                 
+                >
+                    <BottomNavigation 
+                    sx={{ backgroundImage: 'linear-gradient(to right, rgb(61, 152, 154) 50%, rgb(12, 14, 36) 100%)',
+                        '& .Mui-selected': {
+                            color: 'white', // Color when an item is clicked
+                            '& .MuiSvgIcon-root': {
+                                color: 'white', // Icon color when an item is clicked
+                            },
+                        }, 
+                    }} 
+                    value={value} 
+                onChange={handleChange}  >
+                        <BottomNavigationAction icon={<DashboardIcon />}  />
+                        <BottomNavigationAction icon={<LockPersonIcon />} />
+                        <BottomNavigationAction icon={<PeopleIcon />} />
+                        <BottomNavigationAction icon={<ManageAccountsIcon />} />
+                    </BottomNavigation>
+                {/* <Tabs 
                 value={value} 
                 onChange={handleChange}        
                 indicatorColor='secondary'  
@@ -164,12 +183,13 @@ const MobileAppbar = () => {
                 centered>
 
       
-                    <Tab icon={<HomeRoundedIcon />} />
-                    <Tab icon={<AccountCircleIcon />}  />
-                    <Tab icon={<HomeRepairServiceIcon />}  />
-                    <Tab icon={<AccountCircleIcon />}  />
+                    <Tab icon={<DashboardIcon />} />
+                    <Tab icon={<LockPersonIcon />}  />
+                    <Tab icon={<PeopleIcon />}  />
+                    <Tab icon={<ManageAccountsIcon />}  />
+         
  
-                </Tabs>
+                </Tabs> */}
                 </Box>
          
             </AppBar>
@@ -272,6 +292,14 @@ const DrawerHeaderCustom = styled('div')(({ theme }) => ({
         setOpen(false);
       };
 
+    const [colorClick, setColorClick] = React.useState({
+        dashboard: "rgb(23, 44, 62)",
+        myLocker: "rgb(61, 152, 154)",
+        lockerAvail: "rgb(61, 152, 154)",
+        manageLocker: "rgb(61, 152, 154)",
+        profileSettings: "rgb(61, 152, 154)",
+        settings: "rgb(61, 152, 154)"
+    })
     return (
         <div>
 
@@ -328,7 +356,6 @@ const DrawerHeaderCustom = styled('div')(({ theme }) => ({
             <DrawerCustom
             variant="permanent"
             open={open}
-
             >
 
             <DrawerHeaderCustom>
@@ -347,25 +374,38 @@ const DrawerHeaderCustom = styled('div')(({ theme }) => ({
                      <ListItem disablePadding sx={{ display: 'block' }}>
                             <ListItemButton 
                             sx={{
-                                color: "rgb(61, 152, 154)",
+                                color: "rgb(23, 44, 62)",
                                 minHeight: 48,
                                 justifyContent: open ? 'initial' : 'center',
                                 px: 2.5,
                             }} 
-                            onClick={()=>navigate("/Admin/")}
+                            onClick={()=>{
+                                navigate("/Admin/");
+                                setColorClick({
+                                    dashboard: "rgb(23, 44, 62)", //DARK color
+                                    myLocker: "rgb(61, 152, 154)",
+                                    lockerAvail: "rgb(61, 152, 154)",
+                                    manageLocker: "rgb(61, 152, 154)",
+                                    profileSettings: "rgb(61, 152, 154)",
+                                    settings: "rgb(61, 152, 154)"
+                                });
+                            }}
                             >
                   
                                 <ListItemIcon
                                 sx={{
-                                color: "rgb(61, 152, 154)",
-                                minWidth: 0,
+                                    color: colorClick.dashboard,
+                                    minWidth: 0,
                                     mr: open ? 3 : 'auto',
                                     justifyContent: 'center',
-                            }}>
+                                }}>
                                     <DashboardIcon /> 
                                 </ListItemIcon>
 
-                                <ListItemText primary="Dashboard" sx={{ opacity: open ? 1 : 0 }} />
+                                <ListItemText color='white' primary="Dashboard" sx={{ 
+                                    opacity: open ? 1 : 0,
+        
+                                    }} />
                             </ListItemButton>
                         </ListItem>
 
@@ -378,12 +418,22 @@ const DrawerHeaderCustom = styled('div')(({ theme }) => ({
                                 justifyContent: open ? 'initial' : 'center',
                                 px: 2.5,
                             }} 
-                            onClick={()=>navigate("/Admin/MyLocker")}
+                            onClick={()=>{
+                                navigate("/Admin/MyLocker");
+                                setColorClick({
+                                    dashboard: "rgb(61, 152, 154)",
+                                    myLocker: "rgb(23, 44, 62)", //DARK color
+                                    lockerAvail: "rgb(61, 152, 154)",
+                                    manageLocker: "rgb(61, 152, 154)",
+                                    profileSettings: "rgb(61, 152, 154)",
+                                    settings: "rgb(61, 152, 154)"
+                                });
+                                }}
                             >
                   
                                 <ListItemIcon
                                 sx={{
-                                color: "rgb(61, 152, 154)",
+                                color: colorClick.myLocker,
                                 minWidth: 0,
                                     mr: open ? 3 : 'auto',
                                     justifyContent: 'center',
@@ -404,12 +454,22 @@ const DrawerHeaderCustom = styled('div')(({ theme }) => ({
                                 justifyContent: open ? 'initial' : 'center',
                                 px: 2.5,
                             }}
-                            onClick={()=>navigate("/Admin/LockerAvailable")}
+                            onClick={()=>{
+                                navigate("/Admin/LockerAvailable");
+                                setColorClick({
+                                    dashboard: "rgb(61, 152, 154)",
+                                    myLocker: "rgb(61, 152, 154)",
+                                    lockerAvail: "rgb(23, 44, 62)", //DARK color
+                                    manageLocker: "rgb(61, 152, 154)",
+                                    profileSettings: "rgb(61, 152, 154)",
+                                    settings: "rgb(61, 152, 154)"
+                                });
+                            }}
                             >
 
                                 <ListItemIcon 
                                 sx={{
-                                    color: "rgb(61, 152, 154)",
+                                    color: colorClick.lockerAvail,
                                     minWidth: 0,
                                     mr: open ? 3 : 'auto',
                                     justifyContent: 'center',
@@ -430,12 +490,22 @@ const DrawerHeaderCustom = styled('div')(({ theme }) => ({
                                 justifyContent: open ? 'initial' : 'center',
                                 px: 2.5,
                             }}
-                            onClick={()=>navigate("/Admin/ManageLocker")}
+                            onClick={()=>{
+                                navigate("/Admin/ManageLocker");
+                                setColorClick({
+                                    dashboard: "rgb(61, 152, 154)",
+                                    myLocker: "rgb(61, 152, 154)",
+                                    lockerAvail: "rgb(61, 152, 154)", 
+                                    manageLocker: "rgb(23, 44, 62)", //DARK color
+                                    profileSettings: "rgb(61, 152, 154)", 
+                                    settings: "rgb(61, 152, 154)"
+                                });
+                            }}
                             >
 
                                 <ListItemIcon 
                                 sx={{
-                                    color: "rgb(61, 152, 154)",
+                                    color: colorClick.manageLocker,
                                     minWidth: 0,
                                     mr: open ? 3 : 'auto',
                                     justifyContent: 'center',
@@ -456,12 +526,22 @@ const DrawerHeaderCustom = styled('div')(({ theme }) => ({
                                 justifyContent: open ? 'initial' : 'center',
                                 px: 2.5,
                             }}
-                            onClick={()=>navigate("/Admin/ProfileSettings")}
+                            onClick={()=>{
+                                navigate("/Admin/ProfileSettings");
+                                setColorClick({
+                                    dashboard: "rgb(61, 152, 154)",
+                                    myLocker: "rgb(61, 152, 154)",
+                                    lockerAvail: "rgb(61, 152, 154)", 
+                                    manageLocker: "rgb(61, 152, 154)",
+                                    profileSettings: "rgb(23, 44, 62)", //DARK color
+                                    settings: "rgb(61, 152, 154)",
+                                });
+                            }}
                             >
 
                                 <ListItemIcon 
                                 sx={{
-                                    color: "rgb(61, 152, 154)",
+                                    color: colorClick.profileSettings,
                                     minWidth: 0,
                                     mr: open ? 3 : 'auto',
                                     justifyContent: 'center',
@@ -482,12 +562,22 @@ const DrawerHeaderCustom = styled('div')(({ theme }) => ({
                                 justifyContent: open ? 'initial' : 'center',
                                 px: 2.5,
                             }}
-                            onClick={()=>navigate("/Admin/Settings")}
+                            onClick={()=>{
+                                navigate("/Admin/Settings");
+                                setColorClick({
+                                    dashboard: "rgb(61, 152, 154)",
+                                    myLocker: "rgb(61, 152, 154)",
+                                    lockerAvail: "rgb(61, 152, 154)", 
+                                    manageLocker: "rgb(61, 152, 154)",
+                                    profileSettings: "rgb(61, 152, 154)",
+                                    settings: "rgb(23, 44, 62)", //DARK color
+                                });
+                            }}
                             >
 
                                 <ListItemIcon 
                                 sx={{
-                                    color: "rgb(61, 152, 154)",
+                                    color: colorClick.settings,
                                     minWidth: 0,
                                     mr: open ? 3 : 'auto',
                                     justifyContent: 'center',

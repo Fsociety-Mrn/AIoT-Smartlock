@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import './Account.css'; // Link to your CSS file
 import { LogoutSession } from '../../Authentication/Authentication'
 
-
 const Account = () => {
   const [name, setName] = useState('');
   const [contact, setContact] = useState('');
@@ -29,7 +28,9 @@ const Account = () => {
   };
 
   return (
+
     <div className="account-container">
+
       <div className="account-card">
         <h1>Profile Settings</h1>
         <form onSubmit={handleFormSubmit}>
@@ -54,6 +55,8 @@ const Account = () => {
       
       </div>
 
+      
+
 
       {isChangePasswordOpen && (
         <div className="modal">
@@ -71,7 +74,10 @@ const Account = () => {
           </div>
         </div>
       )}
+
+      {/* </Grid> */}
     </div>
+
   );
 }
 

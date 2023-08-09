@@ -58,7 +58,7 @@ const PersonList = [
     {
       photoURL: '/person.png',
       user: 'Name of person 10',
-      LockerNumber: 'Locker Number of person 10',
+      LockerNumber: 'Not Assigned',
       isActive: 'active',
     },
   ];
