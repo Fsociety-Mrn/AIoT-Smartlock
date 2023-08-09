@@ -58,7 +58,7 @@ export const removeKey = (key) => {
       });
   };
 
-// generate a token
+  // generate a token
 export const generateToken = async (uniqueID) => {
   try {
     const tokensList = await getListOFTokens(); // Assuming getListOFTokens() returns a list of tokens
@@ -86,17 +86,4 @@ const getListOFTokens = () => {
     });
   });
   
-}
-
-
-// generate a token for Facial
-export const generateToken_Facial = (Name, uniqueID) => {
-  try {
-    set(ref(RTdb, 'GenerateToken_FacialUpdate/' + Name),String(uniqueID))
-    .then(res=>console.log(res))
-    .catch(err=>console.log(err));
-    
-  } catch (err) {
-    console.error(err);
-  }
 }
