@@ -9,6 +9,7 @@ import Button from '@mui/material/Button';
 import PersonList from './Datas' ; // Import the PersonList data from the new file
 
 
+//  user cards
 const Card = ({ imgSrc, title, description, user, LockerNumber, isActive }) => {
   const [open, setOpen] = useState(false);
 
@@ -22,15 +23,20 @@ const Card = ({ imgSrc, title, description, user, LockerNumber, isActive }) => {
 
   return (
     <StyledCard>
+
       {isActive === 'active' && <StatusDot status="green" />}
       {isActive === 'inactive' && <StatusDot status="red" />}
+
       <CardImage src={imgSrc} alt={title} />
+
       <CardContent>
         <h4>{user}</h4>
         <BtnGroup>
           <Button onClick={handleClickOpen}>Details</Button>
         </BtnGroup>
       </CardContent>
+
+      {/* when user is clicked details */}
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>{user}</DialogTitle>
         <DialogContent>
@@ -41,6 +47,7 @@ const Card = ({ imgSrc, title, description, user, LockerNumber, isActive }) => {
           <Button onClick={handleClose}>Close</Button>
         </DialogActions>
       </Dialog>
+
     </StyledCard>
   );
 };
@@ -78,6 +85,8 @@ const StatusDot = styled.div`
   display: inline-block;
 `;
 
+
+
 const homepage = () => {
   return (
     <div
@@ -92,6 +101,8 @@ const homepage = () => {
         paddingLeft: '100px', // Adjust this value based on your side app bar's width
       }}
     >
+
+    {/* Person List  */}
       {PersonList.map((person, index) => (
         <Card
           key={index}
