@@ -3,14 +3,10 @@ import {
     Avatar, 
     BottomNavigation, 
     BottomNavigationAction, 
-    // BottomNavigation, 
     Box, 
     Divider, 
-
     IconButton, 
-    List, 
-    Tab, 
-    Tabs, 
+    List,
     Typography
 } from '@mui/material'
 import Toolbar from '@mui/material/Toolbar';
@@ -27,12 +23,6 @@ import MuiAppBar from '@mui/material/AppBar';
 // import MuiBottomNavigationAction from "@mui/material/BottomNavigationAction";
 
 // icons
-// import SmartToyOutlinedIcon from '@mui/icons-material/SmartToyOutlined';
-// import InfoIcon from '@mui/icons-material/Info';
-// import MenuIcon from '@mui/icons-material/Menu';
-import HomeRepairServiceIcon from '@mui/icons-material/HomeRepairService';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import ChecklistRtlIcon from '@mui/icons-material/ChecklistRtl';
 import LockPersonIcon from '@mui/icons-material/LockPerson';
@@ -71,21 +61,11 @@ export const Appbar = () => {
     <div>
 
         {state ? <MobileAppbar />  : <DesktopAppbar />} 
-        {/* <DesktopAppbar /> */}
     </div>
   )
 }
 
 
-// Mobile mode
-
-// for button custom button navigation
-// const BottomNavigationAction = styled(MuiBottomNavigationAction)(`
-//   color: rgb(12, 14, 36);
-//   &.Mui-selected {
-//     color: white;
-//   }
-// `);
 
 const MobileAppbar = () => {
 
@@ -115,8 +95,6 @@ const MobileAppbar = () => {
 
          }
       };
-
-
 
     // for swipe
     return (
@@ -171,25 +149,6 @@ const MobileAppbar = () => {
                         <BottomNavigationAction icon={<PeopleIcon />} />
                         <BottomNavigationAction icon={<ManageAccountsIcon />} />
                     </BottomNavigation>
-                {/* <Tabs 
-                value={value} 
-                onChange={handleChange}        
-                indicatorColor='secondary'  
-                textColor='inherit'
-                sx={{ 
-                    backgroundImage: 'linear-gradient(to right, rgb(61, 152, 154) 50%, rgb(12, 14, 36) 100%)',
-                    border: 'none', // Remove the bottom border
-                }}
-                centered>
-
-      
-                    <Tab icon={<DashboardIcon />} />
-                    <Tab icon={<LockPersonIcon />}  />
-                    <Tab icon={<PeopleIcon />}  />
-                    <Tab icon={<ManageAccountsIcon />}  />
-         
- 
-                </Tabs> */}
                 </Box>
          
             </AppBar>
