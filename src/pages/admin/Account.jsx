@@ -1,21 +1,35 @@
 import React, { useState } from 'react';
 import './Account.css'; // Link to your CSS file
 import { LogoutSession } from '../../Authentication/Authentication'
+import { 
+  getUserName,
+  getUserDetails,
+  imageUpload, 
+  updateDetails 
+} from '../../firebase/Firestore'
+import { statusLogin } from '../../firebase/FirebaseConfig'
+import { 
+  Avatar,
+  Fab  
+} from '@mui/material';
+import { Stack } from '@mui/system';
+import EditIcon from '@mui/icons-material/Edit';
+import defaultImage from "../../Images/logo512.png"
+
 
 const Account = () => {
-  const [name, setName] = useState('');
-  const [contact, setContact] = useState('');
-  const [communication, setCommunication] = useState('');
+
+
+  const [name, setName] = useState({
+    uid: "",
+    firstName: "",
+    lastName: ""
+  });
+
   const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
 
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
-    console.log('Name:', name);
-    console.log('Contact:', contact);
-    console.log('Communication:', communication);
-  };
 
   const handlePasswordChange = () => {
     setIsChangePasswordOpen(true);
@@ -27,35 +41,146 @@ const Account = () => {
     setNewPassword('');
   };
 
+
+  // get username in firestore
+  React.useEffect(()=>{
+    let isMounted = true;
+
+    const fetchUserStatus = async () => {
+      try {
+        const user = await statusLogin();
+        if (isMounted) {
+
+          const details = await getUserDetails(user.uid)
+
+          // const name = await getUserName(user.uid);
+
+          console.log(details)
+
+          const [lastName, firstName] = details.user.split(",");
+          setName({
+            uid:user.uid,
+            firstName: firstName,
+            lastName: lastName
+          });
+
+          details.photoUrl ? setImage(details.photoUrl) : setImage(image)
+
+
+           
+        }
+      } catch (error) {
+        console.error('Error fetching user status:', error);
+      }
+    };
+
+    fetchUserStatus();
+
+    return () => {
+      isMounted = false;
+    };
+  },[])
+
+
+  // upload images
+  const [image,setImage] = useState(defaultImage) //image
+  const [dataImage, setDataImage] = useState() //Data Image
+
+  const uploadImage = e => {
+    let fileReader = new FileReader();
+    setDataImage(e.target.files[0])
+    fileReader.readAsDataURL(e.target.files[0]);
+
+    fileReader.onload = (event) => {
+      setImage(event.target.result)
+    }
+
+  }
+
+
+
+  // save changes
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    // update dateils included images
+  //  const result = await imageUpload(dataImage)
+
+  if (dataImage) {
+    imageUpload(dataImage,name.uid).then(url=>{
+      updateDetails(
+        name.uid, 
+        String(name.lastName + "," + name.firstName),
+        url);
+    })
+  }else{
+    updateDetails(name.uid,String(name.lastName + "," + name.firstName));
+  }
+ 
+  };
+
   return (
 
     <div className="account-container">
 
       <div className="account-card">
+
         <h1>Profile Settings</h1>
+
         <form onSubmit={handleFormSubmit}>
-          <label htmlFor="name">Name:</label>
-          <input type="text" id="name" value={name} onChange={(e) => setName(e.target.value)} required />
+          <Stack spacing={1}>
 
-          <label htmlFor="contact">Contact Details:</label>
-          <input type="text" id="contact" value={contact} onChange={(e) => setContact(e.target.value)} required />
+            <Stack 
+            spacing={2}   
+            direction="column"
+            justifyContent="center"
+            alignItems="center">
 
-          <label htmlFor="communication">Preferred Communication:</label>
-          <input type="text" id="communication" value={communication} onChange={(e) => setCommunication(e.target.value)} required />
+              <Avatar
+              // alt={title}
+              src={image}
+              sx={{ width: 200, height: 200, border: "2px solid rgb(61, 152, 154)" }}
+              >A</Avatar>
 
-          <button type="submit">Save Changes</button>
+              <label htmlFor="contained-button-file" >
+                <input 
+                accept="image/*" 
+                id="contained-button-file" 
+                type="file" 
+                onChange={uploadImage}
+                hidden/>
+                  <Fab color='primary' variant='extended' 
+                  component="span" 
+                  sx={{
+                    textTransform: 'capitalize',
+                    gap: 1
+                  }}>
+                    <EditIcon/>
+                    Edit Image
+                  </Fab>
+              </label>
+      
+           </Stack>
+
+            <label htmlFor="name">First name:</label>
+            <input type="text" id="name" value={name.firstName} onChange={(e) => setName({...name, firstName:e.target.value})} required />
+          
+            <label htmlFor="name">Last name:</label>
+            <input type="text" id="name" value={name.lastName} onChange={(e) => setName({...name, lastName: e.target.value})} required />
+
+      
+            <button type="submit">Save Changes</button>
+          </Stack>
         </form>
 
-        <div className="links">
-          <button onClick={handlePasswordChange}>Change Password</button>
-        </div>
-        <div className="links">
-        <button onClick={() => {LogoutSession();window.location.reload(); }}>Logout</button>
-        </div>
+          <div className="links">
+            <button onClick={handlePasswordChange}>Change Password</button>
+          </div>
+
+          <div className="links">
+            <button onClick={() => {LogoutSession();window.location.reload(); }}>Logout</button>
+          </div>
       
       </div>
-
-      
 
 
       {isChangePasswordOpen && (
@@ -75,7 +200,6 @@ const Account = () => {
         </div>
       )}
 
-      {/* </Grid> */}
     </div>
 
   );

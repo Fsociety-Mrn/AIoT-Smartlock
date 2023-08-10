@@ -130,7 +130,7 @@ const DesktopView = ()=>{
    const [dataUser, setDataUser] = React.useState([])
 
    React.useEffect(() => {
- 
+    let isMounted = true;
      // fetch the user List
      const fetchData = async () => {
        try {
@@ -152,7 +152,11 @@ const DesktopView = ()=>{
        }
      };
        fetchData();
-       console.log(dataUser)
+
+
+    return () => {
+      isMounted = false;
+    };
  
    }, [dataUser]);
  
@@ -163,16 +167,16 @@ const DesktopView = ()=>{
       <Grid
       container
       direction="row"
-      justifyContent="flex-end"
-      alignItems="flex-start"
+      justifyContent="center"
+      alignItems="center"
       paddingLeft={12}
       paddingTop={10}>
 
         <Grid
         container
         direction="row"
-        justifyContent="flex-end"
-        alignItems="flex-start"
+        justifyContent="center"
+        alignItems="center"
         spacing={1}
         style={{ 
           minHeight: "100vh",
@@ -203,36 +207,40 @@ const DesktopView = ()=>{
 // Mobile View
 const MobileView = () => {
 
- // for data user
-  const [dataUser, setDataUser] = React.useState([])
+   // for data user
+   const [dataUser, setDataUser] = React.useState([])
 
-  React.useEffect(() => {
+   React.useEffect(() => {
+    let isMounted = true;
+     // fetch the user List
+     const fetchData = async () => {
+       try {
+         const data = await userData();
+   
+         data.forEach((item) => {
+           setDataUser((prevData) => {
+             // Check if the item already exists in the dataUser state
+             if (!prevData.some((dataItem) => dataItem.id === item.id)) {
+               return [...prevData, item]; // Add the item if it doesn't exist
+             }
+             return prevData; // Return the existing state if the item already exists
+           });
+         });
+   
+ 
+       } catch (error) {
+         console.error(error);
+       }
+     };
+       fetchData();
 
-    // fetch the user List
-    const fetchData = async () => {
-      try {
-        const data = await userData();
-  
-        data.forEach((item) => {
-          setDataUser((prevData) => {
-            // Check if the item already exists in the dataUser state
-            if (!prevData.some((dataItem) => dataItem.id === item.id)) {
-              return [...prevData, item]; // Add the item if it doesn't exist
-            }
-            return prevData; // Return the existing state if the item already exists
-          });
-        });
-  
 
-      } catch (error) {
-        console.error(error);
-      }
+    return () => {
+      isMounted = false;
     };
-      fetchData();
-      console.log(dataUser)
-
-  }, [dataUser]);
-
+ 
+   }, [dataUser]);
+ 
   return(
     <div >
       <Grid
