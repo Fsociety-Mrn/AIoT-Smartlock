@@ -284,11 +284,11 @@ const Mobile = () =>{
     direction="row"
     justifyContent="flex-start"
     alignItems="flex-start"
-    spacing={2}
+    // spacing={1}
     style={{ 
       marginTop: '100px' 
     }}
-    padding={2}
+    // padding={2}
     >
       {/* Title page */}
       <Grid item xs={12} md={12}>

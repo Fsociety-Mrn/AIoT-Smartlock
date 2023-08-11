@@ -11,9 +11,6 @@ import {
 import { statusLogin } from '../firebase/FirebaseConfig'
 import { isAdmin } from '../firebase/Firestore'
 
-
-
-
 // for Login
 const Routess = () => {
 
@@ -33,9 +30,7 @@ const Routess = () => {
             sessionStorage.setItem('isAdmin', data.isAdmin ? "true" : "false");  
           }).catch(error=> console.log(error))
         }).catch(error=> console.log(error))
-
-    
-  },[])
+    },[])
   return (
  
     <div>
@@ -85,13 +80,6 @@ const Mainpage = ({ isAdminS }) =>{
     return <WelcomePage />
   }
   
-
-  // return (
-  //   <div>
-  //     {isAdminS === "true" ? <Admin/> : <User/>}
-  //   </div>
-  // )
-
 }
 
 const Header = () => {
@@ -111,8 +99,6 @@ const CheckLocker  = React.lazy(()=> import('../pages/admin/LockerAvailable'))
 const ManageLocker = React.lazy(()=> import('../pages/admin/ManageLocker'))
 const SettingsConfig = React.lazy(()=> import('../pages/admin/SetingsAndConfig'))
 const Admin = () =>{
-
-
   return (
     <div>      
       <React.Suspense fallback={<Loading/>}>

@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 // import { getAnalytics } from "firebase/analytics";
-import { getAuth, onAuthStateChanged } from "firebase/auth"
+import { EmailAuthProvider, getAuth, onAuthStateChanged, reauthenticateWithCredential, updatePassword } from "firebase/auth"
 import { getFirestore } from "firebase/firestore";
 import { getDatabase } from "firebase/database";
 
@@ -52,5 +52,45 @@ export const statusLogin = () => {
   });
 };
 
+// change password
+export function changing_password(CurrentPass = null, NewPassword = null) {
+
+  return new Promise((resolve, reject) => {
+    const credential = EmailAuthProvider.credential(auth.currentUser.email, CurrentPass);
+
+    reauthenticateWithCredential(auth.currentUser, credential)
+      .then(() => {
+        updatePassword(auth.currentUser, NewPassword)
+          .then(() => {
+            console.log("Password changed successfully");
+            resolve({
+              oldPassword: false,
+              oldPasswordMessage: "Invalid password",
+              newPassword: false,
+              newPasswordMessage: ""
+            });
+          })
+          .catch((error) => {
+            console.error("Error updating password:");
+            resolve({
+              oldPassword: true,
+              oldPasswordMessage: "",
+              newPassword: true,
+              newPasswordMessage: "An error occurred while updating the password."
+              
+            });
+          });
+      })
+      .catch((error) => {
+
+        resolve({
+          oldPassword: true,
+          oldPasswordMessage: "Invalid password",
+          newPassword: true,
+          newPasswordMessage: ""
+        });
+      });
+  });
+}
 
 

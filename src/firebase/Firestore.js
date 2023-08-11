@@ -1,6 +1,14 @@
 import { collection,getDocs, doc, setDoc, getDoc,updateDoc  } from "firebase/firestore";
 import { Fdb } from './FirebaseConfig'
+import { 
+  getDownloadURL, 
+  getStorage, 
+  ref, 
+  uploadBytes
+} from "firebase/storage";
 
+
+const storage = getStorage();
 const collectionRef = collection(Fdb, "users");
 
 // verify if admin or user
@@ -65,10 +73,14 @@ export const createUserData = async (UID) =>{
 export const getUserName = async (UID) =>{
   try {
     const docRef = doc(Fdb, "users", UID); // Assuming Fdb is properly defined elsewhere
+
     const docSnap = await getDoc(docRef);
+
     if (docSnap.exists()) {
       const data = docSnap.data();
+
       console.log(data.user);
+
       return data.user; // You can return the data or do whatever you want with it
     } else {
       console.log("User document does not exist!");
@@ -92,4 +104,70 @@ export const updateName = async (UID,Name) =>{
       window.location.reload();
     })
     .catch(err=>console.log(err));
+}
+
+// Upload image
+export async function imageUpload(file,UID){
+
+  const imag = ref(storage,`userProfile/${UID}`)
+  return await uploadBytes(imag,file)
+  .then(()=> 
+  {
+     return getDownloadURL(imag);   
+  })
+
+}
+
+// url
+export const url = async (file) => {
+  const imag = ref(storage,`userProfile/${file.name }`)
+  await getDownloadURL(imag).then(e=>{return e})
+}
+
+// update a details
+export const updateDetails = async (UID=null, Name=null, File=null) =>{
+
+  if (File) {
+    await updateDoc(doc(Fdb, "users", UID), {
+      photoUrl: File,
+      user: Name
+    })
+    .then(test=>{
+      console.log(test);
+      window.location.reload();
+    })
+    .catch(err=>console.log(err));
+  }else{
+    await updateDoc(doc(Fdb, "users", UID), {
+
+      user: Name
+    })
+    .then(test=>{
+      console.log(test);
+      window.location.reload();
+    })
+    .catch(err=>console.log(err));
+  }
+
+}
+
+// get userDetails
+export const getUserDetails = async (UID) =>{
+  try {
+    const docRef = doc(Fdb, "users", UID); // Assuming Fdb is properly defined elsewhere
+
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+
+      return data; // You can return the data or do whatever you want with it
+    } else {
+      console.log("User document does not exist!");
+      return null; // Or handle the non-existence case accordingly
+    }
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+    throw error; // Rethrow the error or handle it gracefully
+  }
 }
