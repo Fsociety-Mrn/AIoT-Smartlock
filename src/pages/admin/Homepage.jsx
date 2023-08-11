@@ -130,12 +130,14 @@ const DesktopView = ()=>{
    const [dataUser, setDataUser] = React.useState([])
 
    React.useEffect(() => {
+
     let isMounted = true;
      // fetch the user List
      const fetchData = async () => {
        try {
-         const data = await userData();
-   
+        const data = await userData();
+        
+        if (isMounted) {
          data.forEach((item) => {
            setDataUser((prevData) => {
              // Check if the item already exists in the dataUser state
@@ -145,7 +147,7 @@ const DesktopView = ()=>{
              return prevData; // Return the existing state if the item already exists
            });
          });
-   
+        }
  
        } catch (error) {
          console.error(error);
@@ -215,8 +217,9 @@ const MobileView = () => {
      // fetch the user List
      const fetchData = async () => {
        try {
-         const data = await userData();
-   
+        const data = await userData();
+
+         if (isMounted) {
          data.forEach((item) => {
            setDataUser((prevData) => {
              // Check if the item already exists in the dataUser state
@@ -227,7 +230,7 @@ const MobileView = () => {
            });
          });
    
- 
+         }
        } catch (error) {
          console.error(error);
        }

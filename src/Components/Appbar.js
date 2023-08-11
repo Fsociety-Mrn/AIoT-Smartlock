@@ -32,7 +32,9 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import PeopleIcon from '@mui/icons-material/People';
 import SettingsIcon from '@mui/icons-material/Settings';
 
-
+import defaultImage from "../Images/logo512.png"
+import { statusLogin } from '../firebase/FirebaseConfig'
+import { getUserDetails } from '../firebase/Firestore'
 
 // import { styled } from "@mui/material/styles";
 import ICON from '../Images/logo512.png'
@@ -259,6 +261,37 @@ const DrawerHeaderCustom = styled('div')(({ theme }) => ({
         profileSettings: "rgb(61, 152, 154)",
         settings: "rgb(61, 152, 154)"
     })
+
+
+    // update profile
+    const [image,setImage] = React.useState(defaultImage) //image
+
+  React.useEffect(()=>{
+    let isMounted = true;
+
+    const fetchUserStatus = async () => {
+      try {
+        const user = await statusLogin();
+        if (isMounted) {
+
+          const details = await getUserDetails(user.uid)
+
+
+          details.photoUrl ? setImage(details.photoUrl) : setImage(image)
+
+        }
+      } catch (error) {
+        console.error('Error fetching user status:', error);
+      }
+    };
+
+    fetchUserStatus();
+
+        return () => {
+            isMounted = false;
+        };
+    },[])
+
     return (
         <div>
 
@@ -300,6 +333,7 @@ const DrawerHeaderCustom = styled('div')(({ theme }) => ({
                     color="inherit"
                     > 
                         <Avatar alt="Remy Sharp"
+                        src={image}
                         sx={{
                             border: "2px solid rgb(61, 152, 154)"
                         }}

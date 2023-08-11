@@ -80,13 +80,6 @@ const Mainpage = ({ isAdminS }) =>{
     return <WelcomePage />
   }
   
-
-  // return (
-  //   <div>
-  //     {isAdminS === "true" ? <Admin/> : <User/>}
-  //   </div>
-  // )
-
 }
 
 const Header = () => {
@@ -106,8 +99,6 @@ const CheckLocker  = React.lazy(()=> import('../pages/admin/LockerAvailable'))
 const ManageLocker = React.lazy(()=> import('../pages/admin/ManageLocker'))
 const SettingsConfig = React.lazy(()=> import('../pages/admin/SetingsAndConfig'))
 const Admin = () =>{
-
-
   return (
     <div>      
       <React.Suspense fallback={<Loading/>}>

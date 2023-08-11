@@ -161,8 +161,6 @@ export const getUserDetails = async (UID) =>{
     if (docSnap.exists()) {
       const data = docSnap.data();
 
-      console.log(data);
-
       return data; // You can return the data or do whatever you want with it
     } else {
       console.log("User document does not exist!");
