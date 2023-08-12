@@ -64,4 +64,11 @@ export const Change_password = yup.object().shape({
                 .required("Please enter your new password")
                 .min(6,"Password should be 6 char long")
     });
+
+// Password Validation
+export const Email_validation = yup.object().shape({
+        email : yup.string()
+                .email("Incorrect email format")
+                .required("Please fill out the email field"),
+    });
     

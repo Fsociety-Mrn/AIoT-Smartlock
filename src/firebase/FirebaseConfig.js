@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 // import { getAnalytics } from "firebase/analytics";
-import { EmailAuthProvider, getAuth, onAuthStateChanged, reauthenticateWithCredential, updatePassword } from "firebase/auth"
+import { EmailAuthProvider, getAuth, onAuthStateChanged, reauthenticateWithCredential, sendPasswordResetEmail, updatePassword } from "firebase/auth"
 import { getFirestore } from "firebase/firestore";
 import { getDatabase } from "firebase/database";
 
@@ -53,7 +53,7 @@ export const statusLogin = () => {
 };
 
 // change password
-export function changing_password(CurrentPass = null, NewPassword = null) {
+export const changing_password = (CurrentPass = null, NewPassword = null) => {
 
   return new Promise((resolve, reject) => {
     const credential = EmailAuthProvider.credential(auth.currentUser.email, CurrentPass);
@@ -93,4 +93,32 @@ export function changing_password(CurrentPass = null, NewPassword = null) {
   });
 }
 
+// forgot Password
+export const ForgotPasswords = (email) => {
+  return new Promise((resolve, reject) => {
+    sendPasswordResetEmail(auth, email)
+      .then(() => {
+        // Password reset email sent successfully
+        resolve({
+          message: "Password reset email sent!",
+          error: false
+        });
+      })
+      .catch((error) => {
+
+        // An error occurred
+        reject({
+          message:error
+          .message    
+          .replace("Firebase: Error", "")
+          .replace("auth/","")
+          .replace("(","")
+          .replace(")","")
+          .replace("-", " ")
+          .replace("-", " "),
+          error: true
+        });
+      });
+  });
+};
 

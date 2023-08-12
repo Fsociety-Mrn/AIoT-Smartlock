@@ -4,8 +4,7 @@ import {
     Button,
     Grid, 
     Stack, 
-    Typography,
-    Link
+    Typography
 } from '@mui/material'
 
 
@@ -18,10 +17,12 @@ import { createAccount } from '../../Authentication/Authentication'
 
 // validation
 import { SignUp_userSchema } from '../../Authentication/Validation'
+import { useNavigate } from 'react-router-dom';
 
 // import { useNavigate } from "react-router-dom";
 
 const Otp_SignIn = () => {
+    let navigate = useNavigate();
     const [showEmail, setShowEmail] = React.useState(true);
     const [error, setError] = React.useState(false);
     const [tokenField, setTokenField] = React.useState("");
@@ -230,12 +231,14 @@ const Otp_SignIn = () => {
                                 height: '50px',
                                
                             }}
+                            onClick={e=>{
+                                e.preventDefault();
+                                navigate("/")
+                            }}
                             >
-                            <Link href="/" sx={{
-                                textDecoration: 'none'
-                            }}>
+       
                                 Cancel
-                            </Link>
+           
                             
                             </Button>
 
@@ -404,12 +407,14 @@ const Otp_SignIn = () => {
                                 height: '50px',
                                
                             }}
+                            onClick={e=>{
+                                e.preventDefault();
+                                navigate("/")
+                            }}
                             > 
-                            <Link href="/" sx={{
-                                textDecoration: 'none'
-                            }}>
+                       
                                 Cancel
-                            </Link></Button>
+                            </Button>
 
                             <Button 
                             

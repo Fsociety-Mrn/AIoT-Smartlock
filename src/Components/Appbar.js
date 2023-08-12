@@ -24,13 +24,12 @@ import MuiAppBar from '@mui/material/AppBar';
 
 // icons
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
-import ChecklistRtlIcon from '@mui/icons-material/ChecklistRtl';
 import LockPersonIcon from '@mui/icons-material/LockPerson';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import PeopleIcon from '@mui/icons-material/People';
-import SettingsIcon from '@mui/icons-material/Settings';
+// import SettingsIcon from '@mui/icons-material/Settings';
 
 import defaultImage from "../Images/logo512.png"
 import { statusLogin } from '../firebase/FirebaseConfig'
@@ -85,7 +84,7 @@ const MobileAppbar = () => {
                 navigate("/Admin/MyLocker");
             break;
             case 2:
-                navigate("/Admin/ManageLocker");
+                navigate("/Admin/ManageLockerAccess");
             break;
             case 3:
                 navigate("/Admin/ProfileSettings");
@@ -438,7 +437,8 @@ const DrawerHeaderCustom = styled('div')(({ theme }) => ({
                             </ListItemButton>
                         </ListItem>
                         
-                        {/* Locker availability */}
+                  
+                        {/* Manage Locker Access */}
                         <ListItem disablePadding sx={{ display: 'block' }}>
                             <ListItemButton 
                             sx={{
@@ -448,43 +448,7 @@ const DrawerHeaderCustom = styled('div')(({ theme }) => ({
                                 px: 2.5,
                             }}
                             onClick={()=>{
-                                navigate("/Admin/LockerAvailable");
-                                setColorClick({
-                                    dashboard: "rgb(61, 152, 154)",
-                                    myLocker: "rgb(61, 152, 154)",
-                                    lockerAvail: "rgb(23, 44, 62)", //DARK color
-                                    manageLocker: "rgb(61, 152, 154)",
-                                    profileSettings: "rgb(61, 152, 154)",
-                                    settings: "rgb(61, 152, 154)"
-                                });
-                            }}
-                            >
-
-                                <ListItemIcon 
-                                sx={{
-                                    color: colorClick.lockerAvail,
-                                    minWidth: 0,
-                                    mr: open ? 3 : 'auto',
-                                    justifyContent: 'center',
-                                }}>
-                                    <ChecklistRtlIcon /> 
-                                </ListItemIcon>
-
-                                <ListItemText primary="Locker availability" sx={{ opacity: open ? 1 : 0 }} />
-                            </ListItemButton>
-                        </ListItem>
-
-                        {/* Smartlocker Users */}
-                        <ListItem disablePadding sx={{ display: 'block' }}>
-                            <ListItemButton 
-                            sx={{
-                                color: "rgb(61, 152, 154)",
-                                minHeight: 48,
-                                justifyContent: open ? 'initial' : 'center',
-                                px: 2.5,
-                            }}
-                            onClick={()=>{
-                                navigate("/Admin/ManageLocker");
+                                navigate("/Admin/ManageLockerAccess");
                                 setColorClick({
                                     dashboard: "rgb(61, 152, 154)",
                                     myLocker: "rgb(61, 152, 154)",
@@ -506,7 +470,7 @@ const DrawerHeaderCustom = styled('div')(({ theme }) => ({
                                     <PeopleIcon /> 
                                 </ListItemIcon>
 
-                                <ListItemText primary="Manage Access & Users" sx={{ opacity: open ? 1 : 0 }}/>
+                                <ListItemText primary="Manage Locker Access" sx={{ opacity: open ? 1 : 0 }}/>
                             </ListItemButton>
                         </ListItem>
 
@@ -547,7 +511,7 @@ const DrawerHeaderCustom = styled('div')(({ theme }) => ({
                         </ListItem>
 
                         {/* Smartlocker Settings */}
-                        <ListItem disablePadding sx={{ display: 'block' }}>
+                        {/* <ListItem disablePadding sx={{ display: 'block' }}>
                             <ListItemButton 
                             sx={{
                                 color: "rgb(61, 152, 154)",
@@ -583,7 +547,7 @@ const DrawerHeaderCustom = styled('div')(({ theme }) => ({
 
 
 
-                        </ListItem>
+                        </ListItem> */}
 
 
                     </List>
