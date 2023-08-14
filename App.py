@@ -11,5 +11,5 @@ if __name__ == "__main__":
 
     New_menu = MainWindow()
     New_menu.show()
-# asdasd
+
     sys.exit(app.exec_())
