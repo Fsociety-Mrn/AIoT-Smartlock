@@ -51,7 +51,7 @@ const ContinueToMain = ({currentUser}) =>{
             width: 100, 
             height: 100,
             border: "3px solid rgb(61, 152, 154)" }}
-          >H</Avatar>
+          >A</Avatar>
           
           {/* Greetings */}
           <Typography 

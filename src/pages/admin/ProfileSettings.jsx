@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './Account.css'; // Link to your CSS file
+import './ProfileSettings.css'; // Link to your CSS file
 import { LogoutSession } from '../../Authentication/Authentication'
 import { Change_password } from '../../Authentication/Validation'
 import { 

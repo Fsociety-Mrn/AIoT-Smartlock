@@ -47,6 +47,7 @@ const Routess = () => {
 // import LoginPage from '../pages/Login'
 const LoginPage = React.lazy(()=> import('../pages/Login'))
 const Signup = React.lazy(()=> import('../pages/signup/Otp_SignIn'))
+const ForgotPassword = React.lazy(()=> import('../pages/ForgotPassword'))
 const Login = () => {
     return (
       <React.Suspense fallback={<Loading/>}>
@@ -55,6 +56,7 @@ const Login = () => {
 
             <Route path="/Login" element={<LoginPage/>}/>
             <Route path="/otp" element={<Signup/>}/>
+            <Route path="/ForgotPassword" element={<ForgotPassword/>}/>
             <Route path="*" element={<Navigate to="/Login"/>}/>
 
           </Routes> 
@@ -93,11 +95,10 @@ const Header = () => {
 
 // Admin Page
 const Dashboard = React.lazy(()=> import('../pages/admin/Dashboard'))
-const Homepage = React.lazy(()=> import('../pages/admin/Homepage'))
-const MyAccount = React.lazy(()=> import('../pages/admin/Account'))
-const CheckLocker  = React.lazy(()=> import('../pages/admin/LockerAvailable'))
-const ManageLocker = React.lazy(()=> import('../pages/admin/ManageLocker'))
-const SettingsConfig = React.lazy(()=> import('../pages/admin/SetingsAndConfig'))
+const MyLocker = React.lazy(()=> import('../pages/admin/MyLocker'))
+const ProfileSettings = React.lazy(()=> import('../pages/admin/ProfileSettings'))
+const ManageLockerAccess = React.lazy(()=> import('../pages/admin/ManageLockerAccess'))
+// const SettingsConfig = React.lazy(()=> import('../pages/admin/SetingsAndConfig'))
 const Admin = () =>{
   return (
     <div>      
@@ -109,19 +110,16 @@ const Admin = () =>{
             <Route path="/Admin/" element={<Dashboard/>}/> 
 
              {/* My Locker  */}
-            <Route path="/Admin/MyLocker" element={<Homepage/>}/>
+            <Route path="/Admin/MyLocker" element={<MyLocker/>}/>
 
-            {/* Locker Available */}
-            <Route path="/Admin/LockerAvailable" element={<CheckLocker/>}/>
-
-            {/* Manage Locker */}
-            <Route path="/Admin/ManageLocker" element={<ManageLocker/>}/>
+            {/* Manage Locker Access*/}
+            <Route path="/Admin/ManageLockerAccess" element={<ManageLockerAccess/>}/>
 
             {/* Profile Settings */}
-            <Route path="/Admin/ProfileSettings" element={<MyAccount/>}/>
+            <Route path="/Admin/ProfileSettings" element={<ProfileSettings/>}/>
 
             {/* Settings */}
-            <Route path="/Admin/Settings" element={<SettingsConfig/>}/>
+            {/* <Route path="/Admin/Settings" element={<SettingsConfig/>}/> */}
 
             <Route path="*" element={<Navigate to="/Admin/"/>}/>
 

@@ -225,14 +225,14 @@ const Mobile = () => {
                 helperText={error.passwordError}
                 />
                 
-                <Link href="#" 
+                <Link href="/ForgotPassword" 
                 underline="always" 
                 fontFamily={'sans-serif'}
                   style={{
                     // color: 'white',
                     marginTop:'15px',
                     marginBottom: '20px'
-                  }} >Forgot Password</Link>
+                  }} ><strong>Forgot Password</strong></Link>
                  
             {/* Login */}
                 <Button 
@@ -468,8 +468,8 @@ const Desktop = () => {
                 <DesktopTextbox 
                 type='email' 
                 margin='dense' 
-                label='Email'
-                placeholder='you@gmail.com' 
+                // label='Email'
+                placeholder='Email'
                 InputLabelProps={{
                   shrink: true,
                   style: {
@@ -490,8 +490,8 @@ const Desktop = () => {
                 <DesktopTextbox 
                 type='password' 
                 margin='dense' 
-                placeholder='At least 6 Characters' 
-                label='Password'
+                placeholder='Password' 
+                // label='Password'
      
                 InputLabelProps={{
                   shrink: true,
@@ -515,10 +515,10 @@ const Desktop = () => {
                 padding={2}
                 spacing={2}
                 >
-                  <Link href="#" fontFamily={'sans-serif'} 
+                  <Link href="/ForgotPassword" fontFamily={'sans-serif'} 
                   style={{
                     color: 'rgb(11, 131, 120)'
-                  }} >Forgot Password</Link>
+                  }} > <strong>Forgot Password</strong></Link>
 
                   {/* click Login */}
                   <Button variant='contained' fullWidth  
@@ -560,7 +560,7 @@ const Desktop = () => {
                       <Link 
                       href="/otp"
                       style={{ cursor: 'pointer' }}>   
-                       Sign up here!
+                       <strong>Sign up here!</strong>
                       </Link> 
                     </Typography>
 
