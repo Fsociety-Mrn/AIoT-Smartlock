@@ -131,7 +131,7 @@ const Admin = () =>{
 }
 
 // User Page
-const HomepageUser = React.lazy(()=> import('../pages/user/Homepage'))
+const HomepageUser = React.lazy(()=> import('../pages/user/MyLocker_user'))
 const User = ()=>{
 
   return(
