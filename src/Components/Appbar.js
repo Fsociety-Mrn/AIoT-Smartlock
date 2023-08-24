@@ -562,119 +562,45 @@ const DrawerHeaderCustom = styled('div')(({ theme }) => ({
 
 // user Appbar
 export const UserApbbar = () => {
-    return (<div>Hello Friend</div>)
+    return (<div><DesktopAppbarUser/></div>)
 }
 
 
 // =========================== Desktop mode =========================== //
 
-const DesktopAppbar_User = () => {
+const DesktopAppbarUser = () => {
 
-
-    const drawerWidth = 260;
-
-const openedMixin = (theme) => ({
-    width: drawerWidth,
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-    overflowX: 'hidden',
-  });
-  
-  const closedMixin = (theme) => ({
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    overflowX: 'hidden',
-    width: `calc(${theme.spacing(7)} + 1px)`,
-    [theme.breakpoints.up('sm')]: {
-      width: `calc(${theme.spacing(8)} + 1px)`,
-    },
-  });
-
-
-
-// Drawer Header
-const DrawerHeaderCustom = styled('div')(({ theme }) => ({
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    padding: theme.spacing(0, 1),
-    // necessary for content to be below app bar
-    ...theme.mixins.toolbar,
-  }));
-  
-  
   // Appbar
   const AppBarCustom = styled(MuiAppBar, {
     shouldForwardProp: (prop) => prop !== 'open',
-  })(({ theme, open }) => ({
+  })(({ theme }) => ({
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
-    }),
-    ...(open && {
-      marginLeft: drawerWidth,
-      width: `calc(100% - ${drawerWidth}px)`,
-      transition: theme.transitions.create(['width', 'margin'], {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
-    }),
+    })
   }));
   
-  // drawer
-  const DrawerCustom = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
-    ({ theme, open }) => ({
-      width: drawerWidth,
-      flexShrink: 0,
-      whiteSpace: 'nowrap',
-      boxSizing: 'border-box',
-      ...(open && {
-        ...openedMixin(theme),
-        '& .MuiDrawer-paper': openedMixin(theme),
-      }),
-      ...(!open && {
-        ...closedMixin(theme),
-        '& .MuiDrawer-paper': closedMixin(theme),
-      }),
-    }),
-  );
-
-
-    let navigate = useNavigate()
-
-
-    const [open, setOpen] = React.useState(false);
-
  
     // update profile
     const [image,setImage] = React.useState(defaultImage) //image
 
-  React.useEffect(()=>{
-    let isMounted = true;
+    React.useEffect(()=>{
+        let isMounted = true;
 
-    const fetchUserStatus = async () => {
-      try {
-        const user = await statusLogin();
-        if (isMounted) {
+        const fetchUserStatus = async () => {
+            try {
+                const user = await statusLogin();
+                    if (isMounted) {
+                        const details = await getUserDetails(user.uid)
+                        details.photoUrl ? setImage(details.photoUrl) : setImage(image)
+                    }
+                    } catch (error) {
+                        console.error('Error fetching user status:', error);
+                    }
+        };
 
-          const details = await getUserDetails(user.uid)
-
-
-          details.photoUrl ? setImage(details.photoUrl) : setImage(image)
-
-        }
-      } catch (error) {
-        console.error('Error fetching user status:', error);
-      }
-    };
-
-    fetchUserStatus();
-
+        fetchUserStatus();
         return () => {
             isMounted = false;
         };
@@ -686,8 +612,7 @@ const DrawerHeaderCustom = styled('div')(({ theme }) => ({
             <AppBarCustom
             position="fixed"
             sx={{ 
-                backgroundImage: 'linear-gradient(to right, rgb(61, 152, 154) ,rgb(12, 14, 36))',
-                // zIndex: (theme) => theme.zIndex.drawer + 1 
+                backgroundImage: 'linear-gradient(to right, rgb(61, 152, 154) ,rgb(12, 14, 36))'
             }}
             >
                 <Toolbar variant="regular">
@@ -711,22 +636,19 @@ const DrawerHeaderCustom = styled('div')(({ theme }) => ({
                     {/* account button */}
                     <IconButton
                     size="large"
-                    color="inherit"
-                    > 
+                    color="inherit"> 
                         <Avatar alt="Remy Sharp"
                         src={image}
                         sx={{
-                            border: "2px solid rgb(61, 152, 154)"
+                            border: "2px solid rgb(61, 152, 154)",
+                            height: '50px', width: '50px'
                         }}
                         >A</Avatar>
                     </IconButton> 
 
                 </Toolbar>
-
             </AppBarCustom>
-
-
-
+            
         </div>
     )
 }

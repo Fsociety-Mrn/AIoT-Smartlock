@@ -29,3 +29,5 @@ yarn-error.log*
 /src/firebase/Firebase.js
 /.firebase
 /.env
+/background.py
+/compose.yaml
