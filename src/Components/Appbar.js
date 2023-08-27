@@ -42,6 +42,8 @@ import { useNavigate } from 'react-router-dom';
 
 // import { useTheme } from '@emotion/react';
 
+
+// admin Appbar
 export const Appbar = () => {
 
   // get windows screen
@@ -66,7 +68,7 @@ export const Appbar = () => {
   )
 }
 
-
+// =========================== Mobile mode =========================== //
 
 const MobileAppbar = () => {
 
@@ -553,6 +555,100 @@ const DrawerHeaderCustom = styled('div')(({ theme }) => ({
                     </List>
             
             </DrawerCustom>
+        </div>
+    )
+}
+
+
+// user Appbar
+export const UserApbbar = () => {
+    return (<div><DesktopAppbarUser/></div>)
+}
+
+
+// =========================== Desktop mode =========================== //
+
+const DesktopAppbarUser = () => {
+
+  // Appbar
+  const AppBarCustom = styled(MuiAppBar, {
+    shouldForwardProp: (prop) => prop !== 'open',
+  })(({ theme }) => ({
+    zIndex: theme.zIndex.drawer + 1,
+    transition: theme.transitions.create(['width', 'margin'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    })
+  }));
+  
+ 
+    // update profile
+    const [image,setImage] = React.useState(defaultImage) //image
+
+    React.useEffect(()=>{
+        let isMounted = true;
+
+        const fetchUserStatus = async () => {
+            try {
+                const user = await statusLogin();
+                    if (isMounted) {
+                        const details = await getUserDetails(user.uid)
+                        details.photoUrl ? setImage(details.photoUrl) : setImage(image)
+                    }
+                    } catch (error) {
+                        console.error('Error fetching user status:', error);
+                    }
+        };
+
+        fetchUserStatus();
+        return () => {
+            isMounted = false;
+        };
+    },[])
+
+    return (
+        <div>
+
+            <AppBarCustom
+            position="fixed"
+            sx={{ 
+                backgroundImage: 'linear-gradient(to right, rgb(61, 152, 154) ,rgb(12, 14, 36))'
+            }}
+            >
+                <Toolbar variant="regular">
+                         
+                    <IconButton edge="start" color="inherit">
+
+                    <Avatar alt="Remy Sharp"
+                        sx={{
+                            border: "2px solid rgb(61, 152, 154)",
+                            height: '55px', width: '55px'
+                        }}
+                        src={ICON}
+                        >S</Avatar>
+                    </IconButton>
+                    
+                    <Typography variant="h6" color="inherit" component="div" sx={{ flexGrow: 1 }}>
+                        AIoT Smartlock
+                    </Typography>
+
+
+                    {/* account button */}
+                    <IconButton
+                    size="large"
+                    color="inherit"> 
+                        <Avatar alt="Remy Sharp"
+                        src={image}
+                        sx={{
+                            border: "2px solid rgb(61, 152, 154)",
+                            height: '50px', width: '50px'
+                        }}
+                        >A</Avatar>
+                    </IconButton> 
+
+                </Toolbar>
+            </AppBarCustom>
+            
         </div>
     )
 }

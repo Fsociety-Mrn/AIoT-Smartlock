@@ -1,5 +1,5 @@
 import React from 'react'
-import { Appbar } from '../Components/Appbar'
+import { Appbar,UserApbbar } from '../Components/Appbar'
 import Loading from '../pages/Loading'
 import { 
     Navigate, 
@@ -131,19 +131,28 @@ const Admin = () =>{
 }
 
 // User Page
-const HomepageUser = React.lazy(()=> import('../pages/user/Homepage'))
+const HomepageUser = React.lazy(()=> import('../pages/user/MyLocker_user'))
 const User = ()=>{
+
+  const HeaderUser = () => {
+    return(
+      <>
+        <UserApbbar/>
+        <Outlet />
+      </>
+    )
+  }
 
   return(
   <div>
       <React.Suspense fallback={<Loading/>}>
         <Routes>
-          {/* <Route element={<Header/>}> */}
+          <Route element={<HeaderUser/>}>
 
             <Route path="/User/" element={<HomepageUser/>}/>
             <Route path="*" element={<Navigate to="/User/"/>}/>
 
-          {/* </Route> */}
+          </Route>
         </Routes> 
       </React.Suspense>
   </div>
