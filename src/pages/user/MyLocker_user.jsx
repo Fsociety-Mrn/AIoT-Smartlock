@@ -48,7 +48,7 @@ const Homepage = () => {
 
         {/* History */}
         <Grid item xs={12} md={5}>
-          <h1>User</h1>
+          <h1>History of Login User</h1>
           <button onClick={(e)=>{
             LogoutSession();
             window.location.reload();
