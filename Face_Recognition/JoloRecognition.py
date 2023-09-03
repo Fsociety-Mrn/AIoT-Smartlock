@@ -1,5 +1,6 @@
 import torch
 import torchvision.transforms as transforms
+import math 
 
 from torchvision import datasets
 from torch.utils.data import DataLoader
@@ -23,6 +24,17 @@ class JoloRecognition:
         self.Saved_Data = torch.load('Model/data.pt', map_location='cpu')
         self.Embeding_List = self.Saved_Data[0]
         self.Name_List = self.Saved_Data[1]
+    
+        # convert threshold to percent 
+    def __thresh_to_percent(self,face_distance, face_match_threshold):
+        if face_distance > face_match_threshold:
+            range = (1.0 - face_match_threshold)
+            linear_val = (1.0 - face_distance) / (range * 2.0)
+            return linear_val
+        else:
+            range = face_match_threshold
+            linear_val = 1.0 - (face_distance / (range * 2.0))
+            return linear_val + ((1.0 - linear_val) * math.pow((linear_val - 0.5) * 2, 0.2)) 
     
     # for face recognition
     def Face_Compare(self, face, threshold=0.8):
@@ -88,7 +100,7 @@ class JoloRecognition:
                 return ('No match detected', None)
             
     # Multiple Face Compare
-    def Face_Multiple_Compare(self,face):
+    def __Face_Multiple_Compare(self,face):
         with torch.no_grad():
             
             # Run face detection
