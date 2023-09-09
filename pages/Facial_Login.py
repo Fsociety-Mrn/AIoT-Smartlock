@@ -447,7 +447,6 @@ class FacialLogin(QtWidgets.QFrame):
         # Open camera capture
         self.videoStream.open(0)
     
-
     # LIFO
     def LastIn_FirstOut(self,name, new_image):
         
@@ -703,7 +702,9 @@ class FacialLogin(QtWidgets.QFrame):
             blinks = self.update_blink_count_and_status(ear)
 
             # display blink count, EAR, and eye status on frame
-            # self.display_stats_on_frame(frame, ear)
+            self.display_stats_on_frame(frame, ear)
+            
+            # print(f"left eye:{left_eye} right eye:{right_eye}")
 
             return blinks
 
