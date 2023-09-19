@@ -774,6 +774,6 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
 
     New_menu = FacialLogin()
-    New_menu.show()
+    New_menu.show() 
 
     sys.exit(app.exec_())
