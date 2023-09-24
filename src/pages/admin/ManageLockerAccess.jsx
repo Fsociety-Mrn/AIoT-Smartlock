@@ -1,63 +1,143 @@
-import { 
-  Avatar,
-  Fab, 
-  Grid, 
-  IconButton, 
-  InputAdornment, 
-  Stack, 
-  Typography 
-} from '@mui/material'
-import { DesktopTextboxManage } from '../../Components/Textfield'
-import React from 'react'
-
-
-// icons
-import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
-import SearchIcon from '@mui/icons-material/Search';
-import PendingActionsIcon from '@mui/icons-material/PendingActions';
-// import EditIcon from '@mui/icons-material/Edit';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Button from '@mui/material/Button';
+// import PersonList from './Datas' ; // Import the PersonList data from the new file
+import { Avatar, Grid } from '@mui/material';
 
 // data
 import { userData } from '../../firebase/Firestore'
 
-const ManageLocker = () => {
-    // get windows screen
-    const [state, setState] = React.useState(true);
+//  user cards
+const Card = ({ imgSrc, title, user, LockerNumber, isActive }) => {
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  return (
+    <StyledCard>
+
+      {isActive ? <StatusDot status="green" /> : <StatusDot status="red" />}
+
+
+      {/* <CardImage src={imgSrc} alt={title} /> */}
+
+      <Avatar
+      alt={title}
+      src={imgSrc}
+      sx={{ width: 250, height: 250, border: "2px solid rgb(61, 152, 154)" }}
+      >A</Avatar>
+
+      <CardContent>
+        <h4>{user}</h4>
+        <BtnGroup>
+          <Button onClick={handleClickOpen}>Details</Button>
+        </BtnGroup>
+      </CardContent>
+
+      {/* when user is clicked details */}
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>{user}</DialogTitle>
+
+        <DialogContent>
+          <DialogContentText>{LockerNumber}</DialogContentText>
+
+          <Avatar
+          alt={title}
+          src={imgSrc}
+          sx={{ width: 250, height: 250, border: "2px solid rgb(61, 152, 154)" }}
+          >A</Avatar>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Close</Button>
+        </DialogActions>
+      </Dialog>
+
+    </StyledCard>
+  );
+};
+
+const StyledCard = styled.div`
+  background-color: #f2f2f2;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 20px;
+  width: 300px;
+  margin: 10px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+`;
+
+// const CardImage = styled.img`
+//   max-width: 100%;
+// `;
+
+const CardContent = styled.div`
+  margin-top: 10px;
+`;
+
+const BtnGroup = styled.div`
+  height: 70px;
+  display: flex;
+  align-items: center;
+`;
+
+const StatusDot = styled.div`
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 5px;
+  background-color: ${props => (props.status === 'green' ? 'green' : 'red')};
+  display: inline-block;
+`;
+
+const ManageLockerAccess = () => {
+
+  // get windows screen
+  const [state, setState] = React.useState(true);
     React.useEffect(()=>{
-        const setResponsiveness = () => {
-            return window.innerWidth < 700 ? setState(true) : setState(false);
-        };
-    
-        setResponsiveness();
-            window.addEventListener("resize", () => setResponsiveness());
-        return () => {
-            window.removeEventListener("resize", () => setResponsiveness());
-        };
+      const setResponsiveness = () => {
+        return window.innerWidth < 850 ? setState(true) : setState(false);
+      };
+      
+      setResponsiveness();
+      window.addEventListener("resize", () => setResponsiveness());
+      return () => {
+        window.removeEventListener("resize", () => setResponsiveness());
+      };
     },[])
 
   return (
-
     <div>
-      {state ? <Mobile />  : <Desktop />}
+      {state ? <MobileView />  : <DesktopView />}
     </div>
-     
-
   )
 }
 
-const Desktop = () =>{
+// Desktopview
+const DesktopView = ()=>{
 
   // for data user
   const [dataUser, setDataUser] = React.useState([])
 
   React.useEffect(() => {
 
+   let isMounted = true;
     // fetch the user List
     const fetchData = async () => {
       try {
-        const data = await userData();
-  
+       const data = await userData();
+       
+       if (isMounted) {
         data.forEach((item) => {
           setDataUser((prevData) => {
             // Check if the item already exists in the dataUser state
@@ -67,196 +147,79 @@ const Desktop = () =>{
             return prevData; // Return the existing state if the item already exists
           });
         });
-  
+       }
 
       } catch (error) {
         console.error(error);
       }
     };
-    fetchData();
+      fetchData();
+
+
+   return () => {
+     isMounted = false;
+   };
 
   }, [dataUser]);
 
-  return(
-  <div style={{ overflowX: 'hidden' }} >    
-  <Grid 
-    container   
-    direction="row"
-    justifyContent="flex-start"
-    alignItems="flex-start"
-    spacing={2}
-    style={{ 
-      marginLeft: '30px', marginTop: '35px' 
-    }}
-    padding={5}
-
-    >
-
-    {/* Title page */}
-    <Grid item xs={12} md={12}>
-      <Typography variant='h4' 
-      sx={{
-        background: 'linear-gradient(to left, rgb(61, 152, 154) 70%, rgb(12, 14, 36) 100%)',
-        // backgroundImage: 'linear-gradient(to right, rgb(61, 152, 154) 50%, rgb(12, 14, 36) 100%)',
-        WebkitBackgroundClip: 'text',
-        WebkitTextFillColor: 'transparent',
-      }} >Manage Access & Users</Typography>
-    </Grid>
-    
-    
-    {/* for search and generate token button */}
-    <Grid item xs={12} md={11} >
-
-      <Stack
-      direction="row"
-      justifyContent="center"
-      alignItems="center"
-      spacing={2}
-      > 
-
-        {/* Search Bar */}
-        <DesktopTextboxManage fullWidth placeholder='Search'
-        InputProps={{
-          
-          startAdornment: 
-            <InputAdornment position="start" variant="standard">
-              <SearchIcon fontSize='large' />
-            </InputAdornment>,
-        }}
-
-        sx={{
-          '& .MuiOutlinedInput-root': {
-            borderRadius: '20px', // Adjust the border radius
-          },
-        }}
-        />
-
-
-        {/* generate Tokens */}
-        <IconButton  color="primary" 
-        sx={{
-          border: "2px solid rgb(61, 152, 154)",
-          padding: 1.5,
-        }}
-        >
-          <PersonAddAltIcon fontSize='large' />
-        </IconButton>
-
-        {/* pending Tokens */}
-        <IconButton variant='circular' color="primary" 
-        sx={{
-          border: "2px solid rgb(61, 152, 154)",
-          padding: 1.5,
-        }}
-        >
-          <PendingActionsIcon fontSize='large' />
-        </IconButton>
-
-      </Stack>
-
-    </Grid>
-    
-
-{/* DATA GRID ITO */}
-    {/* user List */}
-    <Grid item xs={11} md={11} margin={2}
-    >
-
-      <Grid 
-      container 
-      overflow={'auto'} 
-      maxHeight={370} 
-      spacing={2}
-      sx={{
-        border:"3px solid rgb(61, 152, 154)",
-        borderRadius:"25px",
-        scrollbarWidth: 'thin', // Add this property
-        '&::-webkit-scrollbar': {
-          width: '0.4em',
-          background: 'transparent',
-        },
-        '&::-webkit-scrollbar-thumb': {
-          backgroundColor: 'transparent',
-        },
-        '&:hover': {
-          '&::-webkit-scrollbar-thumb': {
-            backgroundColor: 'grey.400',
-          },
-        },
-
-      }}
-      padding={1}
-      >
-
-        {dataUser.map(data=>(
-        <Grid item xs={12} key={data.id}   
-        sx={{
-          '&:hover': {
-            background: 'white',
-            boxShadow: '0px 2px 3px rgba(0, 0, 0, 0.2)',
-            borderRadius: '50px',
-          },
-        }} padding={2}>
-          <Stack
-          direction="row"
-          justifyContent="flex-start"
-          alignItems="center"
-          spacing={2}
-          > 
-
-            {/* Profile */}
-            <Avatar  sx={{ width: 56, height: 56 , bgcolor: 'rgb(61, 152, 154)'}} src={data.photoUrl}>A</Avatar>
-            
-            {/* Name */}
-            <Typography variant='h5' component="div" 
-            sx={{ 
-              flexGrow: 1,
-              background: 'linear-gradient(to left, rgb(61, 152, 154) 80%, rgb(12, 14, 36) 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-            }}
-            
-           
-            > {data.user}</Typography>
-          
-
-            <Fab color='error' size='medium'
-              sx={{
-                boxShadow: 'none',    
-                '&:hover': {
-                    boxShadow: 'none',
-                },
-              }} 
-            > <DeleteForeverIcon fontSize='medium' /></Fab>
-
-          </Stack>
-        
-        </Grid>
-        ))}
-        
  
-        
-  
-
-    </Grid>
-
-    </Grid>
-      
  
-    
-  </Grid>
-  </div>
-  )
+ return (
+   <div>
+     <Grid
+     container
+     direction="row"
+     justifyContent="center"
+     alignItems="center"
+     paddingLeft={12}
+     paddingTop={10}>
+
+       <Grid
+       container
+       direction="row"
+       justifyContent="center"
+       alignItems="center"
+       spacing={1}
+       style={{ 
+         minHeight: "100vh",
+       }}>  
+
+         {/* Person List  */}
+         {dataUser.map((person, index) => (
+           <Grid item key={index} xs={12} xl={4} md={4} sm={12}>
+
+             <Card
+             key={index}
+             imgSrc={person.photoURL}
+             user={person.user}
+             LockerNumber={person.LockerNumber}
+             isActive={person.isActive}/>
+
+           </Grid>
+         ))}
+
+
+       </Grid>
+
+     </Grid>
+   </div>
+ );
 }
 
-const Mobile = () =>{
+// Mobile View
+const MobileView = () => {
+
+  // for data user
   const [dataUser, setDataUser] = React.useState([])
 
   React.useEffect(() => {
+   let isMounted = true;
+    // fetch the user List
     const fetchData = async () => {
       try {
-        const data = await userData();
-  
+       const data = await userData();
+
+        if (isMounted) {
         data.forEach((item) => {
           setDataUser((prevData) => {
             // Check if the item already exists in the dataUser state
@@ -267,171 +230,47 @@ const Mobile = () =>{
           });
         });
   
-
+        }
       } catch (error) {
         console.error(error);
       }
     };
-    fetchData();
-    console.log(dataUser)
+      fetchData();
+
+
+   return () => {
+     isMounted = false;
+   };
+
   }, [dataUser]);
 
-  return(
-  <div>
- 
-    <Grid 
-    container   
-    direction="row"
-    justifyContent="flex-start"
-    alignItems="flex-start"
-    // spacing={1}
-    style={{ 
-      marginTop: '100px' 
-    }}
-    // padding={2}
-    >
-      {/* Title page */}
-      <Grid item xs={12} md={12}>
-        <Typography variant='h4' 
-        sx={{
-          background: 'linear-gradient(to left, rgb(61, 152, 154) , rgb(12, 14, 36) )',
-        // backgroundImage: 'linear-gradient(to right, rgb(61, 152, 154) 50%, rgb(12, 14, 36) 100%)',
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent',
-        }} >Manage Access & Users</Typography>
-      </Grid>
+ return(
+   <div >
+     <Grid
+     container
+     direction="row"
+     justifyContent="center"
+     alignItems="center"
+     paddingTop={20}
+     // paddingRight={3}
+     >
 
-      {/* Generate Token and Pending Token */}
-      <Grid item xs={12}>
-        <Stack
-        direction="row"
-        justifyContent="flex-end"
-        alignItems="center"
-        spacing={1}
-        > 
-          {/* generate Tokens */}
-          <IconButton  color="primary" 
-          sx={{
-            border: "2px solid rgb(61, 152, 154)",
-            padding: 1.5,
-          }}
-          >
-            <PersonAddAltIcon fontSize='large' />
-          </IconButton>
+       {/* Person List  */}
+       {dataUser.map((person, index) => (
+         <Grid item key={index} md={12}>
 
-          {/* pending Tokens */}
-          <IconButton variant='circular' color="primary" 
-          sx={{
-            border: "2px solid rgb(61, 152, 154)",
-            padding: 1.5,
-          }}
-          >
-            <PendingActionsIcon fontSize='large' />
-          </IconButton>
+           <Card
+           key={index}
+           imgSrc={person.photoURL}
+           user={person.user}
+           LockerNumber={person.LockerNumber}
+           isActive={person.isActive}/>
 
-        </Stack>
-      </Grid>
-
-      
-      {/* Search bar */}
-      <Grid item xs={12}>
-
-        <DesktopTextboxManage fullWidth placeholder='Search'
-        InputProps={{
-          startAdornment: 
-            <InputAdornment position="start" variant="standard">
-              <SearchIcon fontSize='large' />
-            </InputAdornment>,
-        }}
-        sx={{
-          '& .MuiOutlinedInput-root': {
-            borderRadius: '20px', // Adjust the border radius
-          },
-        }}
-        />
-      </Grid>
-
-      {/* user List */}
-      <Grid item xs={12} marginY={2} marginLeft={2}
-      >
-        <Grid 
-        container 
-        overflow={'auto'} 
-        maxHeight={400} 
-        spacing={2}
-        sx={{
-          border:"3px solid rgb(61, 152, 154)",
-          borderRadius:"25px",
-          scrollbarWidth: 'thin', // Add this property
-          '&::-webkit-scrollbar': {
-            width: '0.4em',
-            background: 'transparent',
-          },
-          '&::-webkit-scrollbar-thumb': {
-            backgroundColor: 'transparent',
-          },
-          '&:hover': {
-            '&::-webkit-scrollbar-thumb': {
-              backgroundColor: 'grey.400',
-            },
-          },
-
-        }}
-        padding={1}
-        >
-          
-          {dataUser.map(data=>(
-          <Grid item xs={12} key={data.id}   
-            sx={{
-            '&:hover': {
-              background: 'white',
-              boxShadow: '0px 2px 3px rgba(0, 0, 0, 0.2)',
-              borderRadius: '50px',
-            },
-            }} 
-          padding={2}>
-
-            <Stack
-            direction="row"
-            justifyContent="flex-start"
-            alignItems="center"
-            spacing={2}
-            > 
-
-              {/* Profile */}
-              <Avatar  sx={{ width: 50, height: 50 , bgcolor: 'rgb(61, 152, 154)'}}>{data.photoUrl} </Avatar>
-
-              {/* Name */}
-              <Typography variant='h6' component="div" 
-              sx={{ 
-                flexGrow: 1,
-                background: 'linear-gradient(to left, rgb(61, 152, 154) 30%, rgb(12, 14, 36) 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-              }}
-              >{data.user}</Typography>
-
-              <Fab color='error' size='small'
-                sx={{
-                  boxShadow: 'none',    
-                  '&:hover': {
-                    boxShadow: 'none',
-                  },
-                }} 
-              > <DeleteForeverIcon fontSize='small' /></Fab>
-
-            </Stack>
-        
-          </Grid>
-        ))}
-
-        </Grid>
-
-      </Grid>
-
-    </Grid>
-  </div>
-  )
+         </Grid>
+       ))}
+     </Grid>
+   </div>
+ )
 }
 
-export default ManageLocker
+export default ManageLockerAccess
