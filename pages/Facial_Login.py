@@ -4,12 +4,17 @@ import dlib
 import numpy as np
 import torch
 import os
+import playsound
+
+import threading
+
 
 from PyQt5.QtCore import Qt, QPoint, QPropertyAnimation
 from Face_Recognition.JoloRecognition import JoloRecognition as Jolo
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import *
+
 
 from Firebase.firebase import firebaseHistory,firebaseVerifyPincode
 
@@ -20,6 +25,8 @@ class FacialLogin(QtWidgets.QFrame):
         self.videoStream = cv2.VideoCapture(1) if cv2.VideoCapture(1).isOpened() else cv2.VideoCapture(0)
         self.videoStream.set(4, 1080)
         
+        # Define a flag to ensure self.aiVoice runs only once
+        self.ai_voice_executed = False
         
         # message box
         self.MessageBox = QtWidgets.QMessageBox()
@@ -205,6 +212,7 @@ class FacialLogin(QtWidgets.QFrame):
         QtCore.QMetaObject.connectSlotsByName(self)
 
     def retranslateUi(self):
+        
         _translate = QtCore.QCoreApplication.translate
         self.setWindowTitle(_translate("facialLogin", "Frame"))
         self.label_2.setText(_translate("facialLogin", "can\'t recognize ?"))
@@ -224,7 +232,11 @@ class FacialLogin(QtWidgets.QFrame):
         self.videoStream.release()
         cv2.destroyAllWindows()
         self.close()
-  
+    
+    # AI voice
+    def aiVoice(self):
+        filename="pages/please blink.mp3" 
+        playsound.playsound(filename)
     # message box
     def messageBoxShow(self, icon=None, title=None, text=None, buttons=None):
 
@@ -433,8 +445,7 @@ class FacialLogin(QtWidgets.QFrame):
         #     print("Entered pin code:", pin_code)
         # else:
         #     print("Pin code entry canceled")
-    
-    
+       
     # Function to open the camera
     def openCameraWait(self):
 
@@ -442,7 +453,6 @@ class FacialLogin(QtWidgets.QFrame):
         QtCore.QTimer.singleShot(100, self.openCamera)
     
     def openCamera(self):
-        
         self.pinCodeShown = False
         # Open camera capture
         self.videoStream.open(0)
@@ -492,6 +502,8 @@ class FacialLogin(QtWidgets.QFrame):
             self.G = 0
             self.B = 0
             
+            playsound.playsound("pages/Access Denied.mp3")
+            
             self.messageBoxShow(
                 icon=self.MessageBox.Information,
                 title="Facial Recognition",
@@ -510,6 +522,10 @@ class FacialLogin(QtWidgets.QFrame):
             self.matchs = str(result[0])
             
             self.LastIn_FirstOut(str(result[0]),save)
+            
+
+            # threading.Thread(target=playsound.playsound, args="pages/Access Granted.mp3").start()
+            playsound.playsound("pages/Access Granted.mp3")
             
             self.messageBoxShow(
                 icon=self.MessageBox.Information,
@@ -638,6 +654,13 @@ class FacialLogin(QtWidgets.QFrame):
                                                     flags=cv2.CASCADE_SCALE_IMAGE)
 
         current_time = time.time()
+
+        self.ai_voice_executed
+        if not self.ai_voice_executed:
+            ai_thread = threading.Thread(target=self.aiVoice)
+            ai_thread.start()
+            self.ai_voice_executed = True
+        
         # display the result
         if len(faces) == 1:
             x, y, w, h = faces[0]
