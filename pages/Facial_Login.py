@@ -28,6 +28,8 @@ class FacialLogin(QtWidgets.QFrame):
         # Define a flag to ensure self.aiVoice runs only once
         self.ai_voice_executed = False
         
+        self.last_dilation_time  = 0
+        
         # message box
         self.MessageBox = QtWidgets.QMessageBox()
         self.MessageBox.setStyleSheet("""
@@ -233,10 +235,17 @@ class FacialLogin(QtWidgets.QFrame):
         cv2.destroyAllWindows()
         self.close()
     
-    # AI voice
+    # Google Voicesss
     def aiVoice(self):
-        filename="pages/please blink.mp3" 
+        filename="Sounds/please blink.mp3" 
         playsound.playsound(filename)
+    
+    def AccessDenied(self):
+        playsound.playsound("Sounds/Access Denied.mp3")
+        
+    def AccessGranted(self):
+        playsound.playsound("Sounds/Access Granted.mp3")
+        
     # message box
     def messageBoxShow(self, icon=None, title=None, text=None, buttons=None):
 
@@ -502,7 +511,7 @@ class FacialLogin(QtWidgets.QFrame):
             self.G = 0
             self.B = 0
             
-            playsound.playsound("pages/Access Denied.mp3")
+            threading.Thread(target=self.AccessDenied).start()
             
             self.messageBoxShow(
                 icon=self.MessageBox.Information,
@@ -524,9 +533,8 @@ class FacialLogin(QtWidgets.QFrame):
             self.LastIn_FirstOut(str(result[0]),save)
             
 
-            # threading.Thread(target=playsound.playsound, args="pages/Access Granted.mp3").start()
-            playsound.playsound("pages/Access Granted.mp3")
-            
+            threading.Thread(target=self.AccessGranted).start()
+    
             self.messageBoxShow(
                 icon=self.MessageBox.Information,
                 title="Facial Recognition",
@@ -655,7 +663,7 @@ class FacialLogin(QtWidgets.QFrame):
 
         current_time = time.time()
 
-        self.ai_voice_executed
+        # play ai voice if its not played
         if not self.ai_voice_executed:
             ai_thread = threading.Thread(target=self.aiVoice)
             ai_thread.start()
@@ -666,8 +674,9 @@ class FacialLogin(QtWidgets.QFrame):
             x, y, w, h = faces[0]
 
             
+
             self.curveBox(frame=frame,p1=(x,y),p2=(x+w,y+h))
-            
+
             # cv2.rectangle(frame, (x, y), (x + w, y + h), (self.B, self.G, self.R), 2)
             cv2.putText(frame, str(self.matchs), (x, y + h + 30), cv2.FONT_HERSHEY_COMPLEX, 1, (self.B, self.G, self.R),1)
 
@@ -695,6 +704,13 @@ class FacialLogin(QtWidgets.QFrame):
                 self.status.setText("Please Blink")
 
         elif len(faces) >= 1:
+            
+            self.B = 0 
+            self.G = 0
+            self.R = 255
+            
+            for (x, y, w, h) in faces:
+                self.curveBox(frame=frame,p1=(x,y),p2=(x+w,y+h))
             self.status.setText("more than 1 faces is detected")
         else:
             self.status.setText("No face is detected")
@@ -717,12 +733,15 @@ class FacialLogin(QtWidgets.QFrame):
 
             # extract eye coordinates from facial landmarks
             left_eye, right_eye = self.extract_eye_coordinates(landmarks)
+            
+            if left_eye and right_eye:
+                print("Gagsti may mata")
 
             # calculate eye aspect ratio
             ear = self.calculate_ear(left_eye, right_eye)
 
             # update blink count and status
-            blinks = self.update_blink_count_and_status(ear)
+            blinks = self.update_blink_count_and_status(ear=ear)
 
             # display blink count, EAR, and eye status on frame
             self.display_stats_on_frame(frame, ear)
@@ -765,27 +784,64 @@ class FacialLogin(QtWidgets.QFrame):
 
         return round(EAR, 2)
 
-    def update_blink_count_and_status(self, ear):
+    def update_blink_count_and_status(self, ear=None):
+
+        if ear < self.blink_threshold:
+            
+            print("eye is closed")
+
+            # set false indication of eyes is closed
+            self.blink = False  
+            
+            # person has blink
+            # return True
         
+        if ear > 0.4:
+
+            print("eye is open")
+            # set true if eye is open
+            self.blink = True
+            
+            # person has not blink
+            return False
+    
+        
+    def update_blink_count_and_status_test(self,ear=None,dilate_threshold=0.1):
+
+    
         if ear < self.blink_threshold:
             
             # if eye is open
-            self.blink = False  # Set blink to False indicating eye is not blinking
-            return False
+            if self.last_dilation_time is None:
+                
+                
+                self.last_dilation_time = time.time()
+                
+                print("mata na naka dilat", self.last_dilation_time)
+                
+            else:
+                current_time = time.time()
+                time_since_dilate = current_time - self.last_dilation_time
+                
+                if time_since_dilate >= dilate_threshold:
+                    self.last_dilation_time = None
+                    self.blink = True
+                    return True
         else:
             
-            # if eye is closed
-            if not self.blink:
-                self.blink = True
-                return True
+            # If eye is closed
+            self.last_dilation_time = None
+            print("matang naka pikit: ",self.last_dilation_time )
+            
+        self.blink = False
         return False
 
 
     def display_stats_on_frame(self, frame, EAR):
-        cv2.putText(frame, "Blink Counter: {}".format(self.blink_counter), (80, 70), cv2.FONT_HERSHEY_SIMPLEX, 0.7,
+        cv2.putText(frame, "Blink Counter: {}".format(self.blink_counter), (80, 90), cv2.FONT_HERSHEY_SIMPLEX, 0.7,
                     (200, 200, 0), 2)
-        cv2.putText(frame, "EAR: {}".format(EAR), (80, 100), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (200, 200, 0), 2)
-        cv2.putText(frame, "Eye Status: {}".format(self.blink), (80, 130), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (200, 200, 0),2)
+        cv2.putText(frame, "E.A.R: {}".format(EAR), (80, 120), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (200, 200, 0), 2)
+        cv2.putText(frame, "Eye Status: {}".format(self.blink), (80, 150), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (200, 200, 0),2)
 
     # when close the frame
 

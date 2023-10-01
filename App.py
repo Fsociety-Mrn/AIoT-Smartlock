@@ -1,9 +1,10 @@
 import sys,background
 
+
 from PyQt5.QtWidgets import QApplication
 from pages.Main_Menu import MainWindow
 
-from PyQt5 import QtCore, QtGui, QtWidgets
+# from PyQt5 import QtCore, QtGui, QtWidgets
 
 if __name__ == "__main__":
     # Create a new QApplication object
@@ -12,4 +13,4 @@ if __name__ == "__main__":
     New_menu = MainWindow()
     New_menu.show()
 
-    sys.exit(app.exec_())
+    sys.exit(app.exec_()) 
