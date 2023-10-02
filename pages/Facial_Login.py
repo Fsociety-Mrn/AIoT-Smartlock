@@ -28,8 +28,6 @@ class FacialLogin(QtWidgets.QFrame):
         # Define a flag to ensure self.aiVoice runs only once
         self.ai_voice_executed = False
         
-        self.last_dilation_time  = 0
-        
         # message box
         self.MessageBox = QtWidgets.QMessageBox()
         self.MessageBox.setStyleSheet("""
@@ -65,6 +63,7 @@ class FacialLogin(QtWidgets.QFrame):
         self.blink_threshold = 0.2
         self.blink_counter = 0
         self.blink = True
+        self.last_dilation_time  = 0
 
         # haar cascade face detection
         self.face_detector = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
@@ -682,15 +681,13 @@ class FacialLogin(QtWidgets.QFrame):
             Face_blurreness = float("{:.2f}".format(variance))
             
 
+            cv2.putText(frame, "Face percentage: " + str(Face_percentage) + "%", (90, 400), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (self.B, self.G, self.R), 1)
+            # cv2.putText(frame, "Face percentage: " + str("{:.2f}".format(40 + Face_percentage)) + "%", (90, 400), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (self.B, self.G, self.R), 1)
+            cv2.putText(frame, "Face Blurreness:" + str(Face_blurreness), (90, 380), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (self.B, self.G, self.R), 1)
             
-            cv2.putText(frame, "Face percentage: " + str(Face_percentage) + "%", (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 1, (self.B, self.G, self.R), 2)
-            cv2.putText(frame, "Face Blurreness: " + str(Face_blurreness) + "%", (x, y - 40), cv2.FONT_HERSHEY_SIMPLEX, 1, (self.B, self.G, self.R), 2)
             
-            
-            if not Face_percentage < 15 and not Face_blurreness < 50:
+            if not Face_percentage < 15 and not Face_blurreness < 60:
              
-            
-
                 self.curveBox(frame=frame,p1=(x,y),p2=(x+w,y+h))
 
             # cv2.rectangle(frame, (x, y), (x + w, y + h), (self.B, self.G, self.R), 2)
@@ -764,7 +761,7 @@ class FacialLogin(QtWidgets.QFrame):
             blinks = self.update_blink_count_and_status_test(ear=ear)
 
             # display blink count, EAR, and eye status on frame
-            # self.display_stats_on_frame(frame, ear)
+            self.display_stats_on_frame(frame, ear)
             
             # print(f"left eye:{left_eye} right eye:{right_eye}")
 
@@ -822,7 +819,7 @@ class FacialLogin(QtWidgets.QFrame):
     #         return False
     
         
-    def update_blink_count_and_status_test(self,ear=None,dilate_threshold=0.01):
+    def update_blink_count_and_status_test(self,ear=None,dilate_threshold=0.1):
 
         if ear < self.blink_threshold:
             
@@ -837,6 +834,8 @@ class FacialLogin(QtWidgets.QFrame):
                 if time_since_dilate >= dilate_threshold:
                     self.last_dilation_time = None
                     self.blink = False
+                    
+                    self.blink_counter = self.blink_counter + 1
                     return True
         else:
             
@@ -849,10 +848,10 @@ class FacialLogin(QtWidgets.QFrame):
 
 
     def display_stats_on_frame(self, frame, EAR):
-        cv2.putText(frame, "Blink Counter: {}".format(self.blink_counter), (85, 95), cv2.FONT_HERSHEY_SIMPLEX, 0.5,
-                    (200, 200, 0),1)
-        cv2.putText(frame, "E.A.R: {}".format(EAR), (85, 125), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (200, 200, 0), 1)
-        cv2.putText(frame, "Eye Status: {}".format(self.blink), (85, 155), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (200, 200, 0),1)
+        cv2.putText(frame, "Blink Counter: {}".format(self.blink_counter), (90, 90), cv2.FONT_HERSHEY_SIMPLEX, 0.5,
+                    (self.B, self.G, self.R),1)
+        cv2.putText(frame, "E.A.R: {}".format(EAR), (90, 110), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (self.B, self.G, self.R), 1)
+        cv2.putText(frame, "Eye Status: {}".format(self.blink), (90, 130), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (self.B, self.G, self.R),1)
 
     # when close the frame
 
