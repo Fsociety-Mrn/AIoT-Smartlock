@@ -9,7 +9,7 @@ from pages.Main_Menu import MainWindow
 if __name__ == "__main__":
     # Create a new QApplication object
     app = QApplication(sys.argv)
-
+ 
     New_menu = MainWindow()
     New_menu.show()
 
