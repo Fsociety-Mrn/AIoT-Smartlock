@@ -25,7 +25,7 @@ class JoloRecognition:
         self.Embeding_List = self.Saved_Data[0]
         self.Name_List = self.Saved_Data[1]
     
-        # convert threshold to percent 
+    # convert threshold to percent 
     def __thresh_to_percent(self,face_distance, face_match_threshold):
         if face_distance > face_match_threshold:
             range = (1.0 - face_match_threshold)
@@ -43,7 +43,7 @@ class JoloRecognition:
         except:
             return ('No match detected', None)
             
-    def FaceCompare(self, face, threshold=0.8):
+    def FaceCompare(self, face, threshold=0.6):
     
         with torch.no_grad():
             
