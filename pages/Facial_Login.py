@@ -658,7 +658,7 @@ class FacialLogin(QtWidgets.QFrame):
         faces = self.face_detector.detectMultiScale(gray,
                                                     scaleFactor=1.1,
                                                     minNeighbors=20,
-                                                    minSize=(100, 100),
+                                                    minSize=(180, 180),
                                                     flags=cv2.CASCADE_SCALE_IMAGE)
 
         current_time = time.time()
@@ -672,36 +672,56 @@ class FacialLogin(QtWidgets.QFrame):
         # display the result
         if len(faces) == 1:
             x, y, w, h = faces[0]
-
+            
+            # Calculate the Laplacian
+            laplacian = cv2.Laplacian(gray, cv2.CV_64F)
+    
+            # Calculate the variance of the Laplacian
+            variance = laplacian.var()
+            
+            Face_percentage = float("{:.2f}".format(100 * (w * h) / (frame.shape[0] * frame.shape[1])))
+            Face_blurreness = float("{:.2f}".format(variance))
             
 
-            self.curveBox(frame=frame,p1=(x,y),p2=(x+w,y+h))
+            
+            cv2.putText(frame, "Face percentage: " + str(Face_percentage) + "%", (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 1, (self.B, self.G, self.R), 2)
+            cv2.putText(frame, "Face Blurreness: " + str(Face_blurreness) + "%", (x, y - 40), cv2.FONT_HERSHEY_SIMPLEX, 1, (self.B, self.G, self.R), 2)
+            
+            
+            if not Face_percentage < 15 and not Face_blurreness < 100:
+             
+            
+
+                self.curveBox(frame=frame,p1=(x,y),p2=(x+w,y+h))
 
             # cv2.rectangle(frame, (x, y), (x + w, y + h), (self.B, self.G, self.R), 2)
-            cv2.putText(frame, str(self.matchs), (x, y + h + 30), cv2.FONT_HERSHEY_COMPLEX, 1, (self.B, self.G, self.R),1)
+                cv2.putText(frame, str(self.matchs), (x, y + h + 30), cv2.FONT_HERSHEY_COMPLEX, 1, (self.B, self.G, self.R),1)
 
-            if self.eyeBlink(gray=gray, frame=frame):
-                self.FacialRecognition(frame=frame,save=frames)
+  
+        
+
+                if self.eyeBlink(gray=gray, frame=frame):
+                    self.FacialRecognition(frame=frame,save=frames)
   
 
             # check if ervery 5 second
-            if current_time - self.last_recognition_time >= 5:
+                if current_time - self.last_recognition_time >= 5:
 
-                self.last_recognition_time = current_time
+                    self.last_recognition_time = current_time
 
-                self.status.setText("Facial Recognition")
-                self.matchs = ""
+                    self.status.setText("Facial Recognition")
+                    self.matchs = ""
                 
                 # self.R = 115
                 # self.G = 115
                 # self.B = 115
                 
                 # yellow
-                self.R = 255
-                self.G = 255
-                self.B = 0
-            else:
-                self.status.setText("Please Blink")
+                    self.R = 255
+                    self.G = 255
+                    self.B = 0
+                else:
+                    self.status.setText("Please Blink")
 
         elif len(faces) >= 1:
             
@@ -734,14 +754,12 @@ class FacialLogin(QtWidgets.QFrame):
             # extract eye coordinates from facial landmarks
             left_eye, right_eye = self.extract_eye_coordinates(landmarks)
             
-            if left_eye and right_eye:
-                print("Gagsti may mata")
 
             # calculate eye aspect ratio
             ear = self.calculate_ear(left_eye, right_eye)
 
             # update blink count and status
-            blinks = self.update_blink_count_and_status(ear=ear)
+            blinks = self.update_blink_count_and_status_test(ear=ear)
 
             # display blink count, EAR, and eye status on frame
             self.display_stats_on_frame(frame, ear)
@@ -806,7 +824,7 @@ class FacialLogin(QtWidgets.QFrame):
             return False
     
         
-    def update_blink_count_and_status_test(self,ear=None,dilate_threshold=0.1):
+    def update_blink_count_and_status_test(self,ear=None,dilate_threshold=0.01):
 
     
         if ear < self.blink_threshold:
