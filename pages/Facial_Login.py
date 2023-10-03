@@ -79,7 +79,7 @@ class FacialLogin(QtWidgets.QFrame):
         # frame
 
         self.setObjectName("Facial Login")
-        self.resize(800, 480)
+        self.resize(1024, 565)
         
         # self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         
@@ -95,13 +95,13 @@ class FacialLogin(QtWidgets.QFrame):
         
         # video framing
         self.widget = QtWidgets.QWidget(self)
-        self.widget.setGeometry(QtCore.QRect(140, 50, 511, 351))
+        self.widget.setGeometry(QtCore.QRect(180, 60, 651, 401))
         self.widget.setStyleSheet("border: 2px solid rgb(61, 152, 154) ;\n"
             "border-radius: 50px;")
         self.widget.setObjectName("widget")
         
         self.horizontalLayoutWidget = QtWidgets.QWidget(self.widget)
-        self.horizontalLayoutWidget.setGeometry(QtCore.QRect(20, 10, 471, 331))
+        self.horizontalLayoutWidget.setGeometry(QtCore.QRect(20, 10, 611, 361 + 20))
         self.horizontalLayoutWidget.setObjectName("horizontalLayoutWidget")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget)
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
@@ -115,6 +115,7 @@ class FacialLogin(QtWidgets.QFrame):
         font.setBold(True)
         font.setWeight(75)
         font.setStrikeOut(False)
+        
         self.video.setFont(font)
         self.video.setStyleSheet("border:none;\n color:  rgba(11, 131, 120, 219);")
         self.video.setText("")
@@ -124,9 +125,12 @@ class FacialLogin(QtWidgets.QFrame):
         self.video.setObjectName("video")
         self.horizontalLayout.addWidget(self.video)
         
+    
+        
+        
         # face status
         self.status = QtWidgets.QLabel(self)
-        self.status.setGeometry(QtCore.QRect(0, 0, 801, 51))
+        self.status.setGeometry(QtCore.QRect(0, 0, 1021, 51))
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(12)
@@ -144,6 +148,7 @@ class FacialLogin(QtWidgets.QFrame):
         self.back.setGeometry(QtCore.QRect(10, 10, 101, 41))
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
+        font.setBold(False)
         font.setPointSize(12)
         self.back.setFont(font)
         self.back.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
@@ -156,14 +161,23 @@ class FacialLogin(QtWidgets.QFrame):
         icon1.addPixmap(QtGui.QPixmap(":/background/Images/return.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.back.setIcon(icon1)
         self.back.setIconSize(QtCore.QSize(42, 42))
+        self.back.setFlat(False)
         self.back.setObjectName("back")
         self.back.clicked.connect(self.backTomain)
         
         # connect the close event to the method
         
+        self.widget = QtWidgets.QWidget(self)
+        self.widget.setGeometry(QtCore.QRect(430, 480, 169, 61))
+        self.widget.setObjectName("widget")
+        
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.widget)
+        self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+        
         # pincode
         self.label_2 = QtWidgets.QLabel(self)
-        self.label_2.setGeometry(QtCore.QRect(290, 410, 161, 61))
+        # self.label_2.setGeometry(QtCore.QRect(290, 410, 161, 61))
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(10)
@@ -174,11 +188,13 @@ class FacialLogin(QtWidgets.QFrame):
         self.label_2.setAlignment(QtCore.Qt.AlignCenter)
         self.label_2.setObjectName("label_2")
         
+        self.horizontalLayout_2.addWidget(self.label_2)
+        
         self.pinCodeShown = False
 
         # pincode icon
         self.pincode = QtWidgets.QPushButton(self)
-        self.pincode.setGeometry(QtCore.QRect(430, 415, 51, 51))
+        # self.pincode.setGeometry(QtCore.QRect(430, 415, 51, 51))
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(12)
@@ -195,6 +211,8 @@ class FacialLogin(QtWidgets.QFrame):
         self.pincode.setIcon(icon2)
         self.pincode.setIconSize(QtCore.QSize(35, 35))
         self.pincode.setObjectName("pincode")
+        
+        self.horizontalLayout_2.addWidget(self.pincode)
             
         # Timer
         self.timer = QtCore.QTimer(self)
@@ -820,10 +838,10 @@ class FacialLogin(QtWidgets.QFrame):
 
 
     def display_stats_on_frame(self, frame, EAR):
-        cv2.putText(frame, "Blink Counter: {}".format(self.blink_counter), (90, 90), cv2.FONT_HERSHEY_SIMPLEX, 0.5,
+        cv2.putText(frame, "Blink Counter: {}".format(self.blink_counter), (30, 90-20), cv2.FONT_HERSHEY_SIMPLEX, 0.5,
                     (self.B, self.G, self.R),1)
-        cv2.putText(frame, "E.A.R: {}".format(EAR), (90, 110), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (self.B, self.G, self.R), 1)
-        cv2.putText(frame, "Eye Status: {}".format(self.blink), (90, 130), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (self.B, self.G, self.R),1)
+        cv2.putText(frame, "E.A.R: {}".format(EAR), (30, 110-20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (self.B, self.G, self.R), 1)
+        cv2.putText(frame, "Eye Status: {}".format(self.blink), (30, 130-20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (self.B, self.G, self.R),1)
 
     # when close the frame
 

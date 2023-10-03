@@ -194,7 +194,7 @@ class MainWindow(QtWidgets.QFrame):
         
         # time
         self.label_2 = QtWidgets.QLabel(self.widget_2)
-        self.label_2.setGeometry(QtCore.QRect(0, 80 + 40, 401, 61))
+        self.label_2.setGeometry(QtCore.QRect(55, 80 + 40, 401, 61))
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(42)
@@ -207,7 +207,7 @@ class MainWindow(QtWidgets.QFrame):
         
         # date
         self.label_3 = QtWidgets.QLabel(self.widget_2)
-        self.label_3.setGeometry(QtCore.QRect(90, 150 + 40, 211, 20))
+        self.label_3.setGeometry(QtCore.QRect(90 + 55, 150 + 40, 211, 20))
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(13)
@@ -343,7 +343,7 @@ class MainWindow(QtWidgets.QFrame):
         from pages.Facial_Login import FacialLogin
         print("start loading")
 
-        self.resize(800, 480)
+        self.resize(1024, 565)
         Facial_Login = FacialLogin(self)
         Facial_Login.show()
         self.facialLogin.setText("Facial Login")
@@ -365,7 +365,7 @@ class MainWindow(QtWidgets.QFrame):
         print("start loading")
 
 
-        self.resize(800, 480)
+        self.resize(1024, 565)
         Token = TokenForm(self)
 
         Token.show()
