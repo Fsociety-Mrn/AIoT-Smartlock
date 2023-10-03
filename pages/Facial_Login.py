@@ -685,7 +685,7 @@ class FacialLogin(QtWidgets.QFrame):
             cv2.putText(frame, "Face Blurreness:" + str(Face_blurreness), (90, 380), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (self.B, self.G, self.R), 1)
             
             
-            if not Face_percentage < 15 and not Face_blurreness < 60:
+            if not Face_percentage < 15 and not Face_blurreness < 100:
              
                 self.curveBox(frame=frame,p1=(x,y),p2=(x+w,y+h))
 
