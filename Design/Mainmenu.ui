@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>480</height>
+    <width>1024</width>
+    <height>565</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -20,7 +20,7 @@
    <string>Frame</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="background.qrc">
+   <iconset>
     <normaloff>:/images/logo515x512.png</normaloff>:/images/logo515x512.png</iconset>
   </property>
   <property name="autoFillBackground">
@@ -76,7 +76,7 @@ border-top-left-radius: 50px;</string>
            <string/>
           </property>
           <property name="pixmap">
-           <pixmap resource="background.qrc">:/images/logo192x192.png</pixmap>
+           <pixmap>:/images/logo192x192.png</pixmap>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -103,7 +103,7 @@ border-bottom-right-radius: 50px;
      <widget class="QPushButton" name="facialRegister">
       <property name="geometry">
        <rect>
-        <x>60</x>
+        <x>120</x>
         <y>260</y>
         <width>291</width>
         <height>51</height>
@@ -135,7 +135,7 @@ border-radius: 25px;
      <widget class="QPushButton" name="facialLogin">
       <property name="geometry">
        <rect>
-        <x>60</x>
+        <x>120</x>
         <y>200</y>
         <width>291</width>
         <height>51</height>
@@ -167,7 +167,7 @@ color: white;
      <widget class="QLabel" name="label">
       <property name="geometry">
        <rect>
-        <x>100</x>
+        <x>190</x>
         <y>420</y>
         <width>211</width>
         <height>20</height>
@@ -212,7 +212,7 @@ color: white;
        <string/>
       </property>
       <property name="icon">
-       <iconset resource="background.qrc">
+       <iconset>
         <normaloff>:/images/setting.png</normaloff>:/images/setting.png</iconset>
       </property>
       <property name="iconSize">
@@ -241,7 +241,7 @@ color: white;
        <string/>
       </property>
       <property name="icon">
-       <iconset resource="background.qrc">
+       <iconset>
         <normaloff>:/images/info.png</normaloff>:/images/info.png</iconset>
       </property>
       <property name="iconSize">
@@ -254,7 +254,7 @@ color: white;
      <widget class="QLabel" name="label_2">
       <property name="geometry">
        <rect>
-        <x>0</x>
+        <x>70</x>
         <y>80</y>
         <width>401</width>
         <height>61</height>
@@ -283,8 +283,8 @@ color: white;
      <widget class="QLabel" name="label_3">
       <property name="geometry">
        <rect>
-        <x>90</x>
-        <y>150</y>
+        <x>160</x>
+        <y>160</y>
         <width>211</width>
         <height>20</height>
        </rect>
@@ -312,7 +312,7 @@ color: white;
      <widget class="QLabel" name="checkOnline">
       <property name="geometry">
        <rect>
-        <x>15</x>
+        <x>200</x>
         <y>20</y>
         <width>131</width>
         <height>31</height>
@@ -344,8 +344,8 @@ color: white;
       </property>
       <property name="geometry">
        <rect>
-        <x>20</x>
-        <y>16</y>
+        <x>120</x>
+        <y>10</y>
         <width>41</width>
         <height>41</height>
        </rect>
@@ -357,7 +357,7 @@ color: white;
        <string/>
       </property>
       <property name="icon">
-       <iconset resource="background.qrc">
+       <iconset>
         <normaloff>:/images/online.png</normaloff>:/images/online.png</iconset>
       </property>
       <property name="iconSize">
@@ -386,7 +386,7 @@ color: white;
        <string/>
       </property>
       <property name="icon">
-       <iconset resource="background.qrc">
+       <iconset>
         <normaloff>:/images/offline.png</normaloff>:/images/offline.png</iconset>
       </property>
       <property name="iconSize">
@@ -402,7 +402,7 @@ color: white;
  </widget>
  <resources>
   <include location="background.qrc"/>
-  <include location="../background.qrc"/>
+  <include location="background.qrc"/>
  </resources>
  <connections/>
 </ui>

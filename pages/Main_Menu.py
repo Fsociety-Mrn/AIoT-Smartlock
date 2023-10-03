@@ -25,7 +25,7 @@ class MainWindow(QtWidgets.QFrame):
 
         # frame
         self.setObjectName("mainMenu")
-        self.resize(800, 480)
+        self.resize(1024, 565)
         
         self.icon = QtGui.QIcon()
         self.icon.addPixmap(QtGui.QPixmap(":/background/Images/logo192x192.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
@@ -97,7 +97,7 @@ class MainWindow(QtWidgets.QFrame):
 
         # facial register
         self.facialRegister = QtWidgets.QPushButton(self.widget_2)
-        self.facialRegister.setGeometry(QtCore.QRect(60, 260 + 40, 291, 51))
+        self.facialRegister.setGeometry(QtCore.QRect(60, 360, 380, 51))
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(12)
@@ -113,7 +113,7 @@ class MainWindow(QtWidgets.QFrame):
         
         # facial login
         self.facialLogin = QtWidgets.QPushButton(self.widget_2)
-        self.facialLogin.setGeometry(QtCore.QRect(60, 200 + 40, 291, 51))
+        self.facialLogin.setGeometry(QtCore.QRect(60, 300, 380, 51))
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(12)
@@ -129,7 +129,7 @@ class MainWindow(QtWidgets.QFrame):
         
         # paro paro g
         self.label = QtWidgets.QLabel(self.widget_2)
-        self.label.setGeometry(QtCore.QRect(100, 25, 211, 20))
+        self.label.setGeometry(QtCore.QRect(140, 25, 211, 20))
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(10)
@@ -156,7 +156,7 @@ class MainWindow(QtWidgets.QFrame):
         # settings
         self.settings = QtWidgets.QPushButton(self.widget_2)
         self.settings.setEnabled(True)
-        self.settings.setGeometry(QtCore.QRect(330, 10, 51, 51))
+        self.settings.setGeometry(QtCore.QRect(440, 10, 51, 51))
         self.settings.setStyleSheet("border-radius: 100px;")
         self.settings.setText("")
         icon1 = QtGui.QIcon()
@@ -169,7 +169,7 @@ class MainWindow(QtWidgets.QFrame):
         # turn Off
         self.turnOff = QtWidgets.QPushButton(self.widget_2)
         self.turnOff.setEnabled(True)
-        self.turnOff.setGeometry(QtCore.QRect(330, 50, 51, 51))
+        self.turnOff.setGeometry(QtCore.QRect(440, 50, 51, 51))
         self.turnOff.setStyleSheet("border-radius: 100px;")
         self.turnOff.setText("")
         icon1 = QtGui.QIcon()
