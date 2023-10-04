@@ -15,6 +15,8 @@ from Face_Recognition.JoloRecognition import JoloRecognition as Jolo
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import *
 
+from pages.Keyboard import QwertyKeyboard 
+
 
 from Firebase.firebase import firebaseHistory,firebaseVerifyPincode
 
@@ -335,6 +337,7 @@ class FacialLogin(QtWidgets.QFrame):
         username.setAlignment(QtCore.Qt.AlignCenter)
         username.setObjectName("username")
         username.setPlaceholderText("username")
+
         
         # password
         password = QtWidgets.QLineEdit(Dialog)
@@ -408,6 +411,13 @@ class FacialLogin(QtWidgets.QFrame):
         cancelButton.clicked.connect(Dialog.reject)
         cancelButton.clicked.connect(self.openCameraWait)
         
+        # Create and add the virtual QWERTY keyboard
+        self.virtual_keyboard = QwertyKeyboard(password)  # Pass the password field to the virtual keyboard
+        keyboard_position_y = password.geometry().bottom() + 10  # Adjust the position as needed
+        self.virtual_keyboard.setGeometry(QtCore.QRect(30, keyboard_position_y, 401, 180))
+
+
+        
       
     
         # email and password validation
@@ -456,6 +466,16 @@ class FacialLogin(QtWidgets.QFrame):
                 password.setEchoMode(QtWidgets.QLineEdit.Normal)
             else:
                 password.setEchoMode(QtWidgets.QLineEdit.Password)
+          
+                
+        self.virtual_keyboard.setVisible(False)  # Initially hide the virtual keyboard
+   
+        def show_keyboard():
+            print("keebs is clicked")
+            # self.virtual_keyboard.setVisible(True)
+
+        username.editingFinished.connect(show_keyboard)
+        password.editingFinished.connect(show_keyboard)
             
            
         enterButton.clicked.connect(emailAndPassword)
@@ -463,7 +483,10 @@ class FacialLogin(QtWidgets.QFrame):
         
         self.pinCodeShown = True
         
+
         Dialog.exec_()
+        
+        self.virtual_keyboard.close()
 
         # if Dialog.exec_() == QDialog.Accepted:
         #     pin_code = pincode_edit.text()
@@ -698,9 +721,9 @@ class FacialLogin(QtWidgets.QFrame):
             Face_blurreness = float("{:.2f}".format(variance))
             
 
-            cv2.putText(frame, "Face percentage: " + str(Face_percentage) + "%", (90, 400), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (self.B, self.G, self.R), 1)
+            cv2.putText(frame, "Face percentage: " + str(Face_percentage) + "%", (30, 420), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (self.B, self.G, self.R), 1)
             # cv2.putText(frame, "Face percentage: " + str("{:.2f}".format(40 + Face_percentage)) + "%", (90, 400), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (self.B, self.G, self.R), 1)
-            cv2.putText(frame, "Face Blurreness:" + str(Face_blurreness), (90, 380), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (self.B, self.G, self.R), 1)
+            cv2.putText(frame, "Face Blurreness:" + str(Face_blurreness), (30, 400), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (self.B, self.G, self.R), 1)
             
             
             if not Face_percentage < 15 and not Face_blurreness < 100:
@@ -838,10 +861,10 @@ class FacialLogin(QtWidgets.QFrame):
 
 
     def display_stats_on_frame(self, frame, EAR):
-        cv2.putText(frame, "Blink Counter: {}".format(self.blink_counter), (30, 90-20), cv2.FONT_HERSHEY_SIMPLEX, 0.5,
+        cv2.putText(frame, "Blink Counter: {}".format(self.blink_counter), (30, 70), cv2.FONT_HERSHEY_SIMPLEX, 0.5,
                     (self.B, self.G, self.R),1)
-        cv2.putText(frame, "E.A.R: {}".format(EAR), (30, 110-20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (self.B, self.G, self.R), 1)
-        cv2.putText(frame, "Eye Status: {}".format(self.blink), (30, 130-20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (self.B, self.G, self.R),1)
+        cv2.putText(frame, "E.A.R: {}".format(EAR), (30, 90), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (self.B, self.G, self.R), 1)
+        cv2.putText(frame, "Eye Status: {}".format(self.blink), (30, 110), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (self.B, self.G, self.R),1)
 
     # when close the frame
 
