@@ -1,15 +1,6 @@
 <RCC>
   <qresource prefix="images">
     <file>background-removebg-preview.png</file>
-    <file>capture.png</file>
-    <file>lock-pattern.png</file>
-    <file>return.png</file>
-    <file>offline.png</file>
-    <file>logo192x192.png</file>
-    <file>online.png</file>
     <file>background.jpg</file>
-    <file>setting.png</file>
-    <file>info.png</file>
-    <file>logo515x512.png</file>
   </qresource>
 </RCC>
