@@ -82,9 +82,17 @@ border-radius: 20px;</string>
     </font>
    </property>
    <property name="styleSheet">
-    <string notr="true">border: 2px solid #3D989A;
-border-radius: 25px;
-color: #3D989A;</string>
+    <string notr="true">QPushButton {
+	background: transparent;
+	background-color: white;
+    border-radius: 25px;
+    color: #23585A;
+    border: 2px solid rgb(61, 152, 154);
+}
+
+QPushButton:hover {
+    background-color: rgb(61, 152, 154);
+}</string>
    </property>
    <property name="text">
     <string>Back</string>
@@ -183,6 +191,9 @@ QPushButton:hover {
       <pointsize>11</pointsize>
      </font>
     </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
     <property name="styleSheet">
      <string notr="true">QPushButton {
 	background: transparent;
@@ -214,6 +225,9 @@ QPushButton:hover {
       <family>Segoe UI</family>
       <pointsize>11</pointsize>
      </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
     </property>
     <property name="styleSheet">
      <string notr="true">QPushButton {
@@ -247,6 +261,9 @@ QPushButton:hover {
       <pointsize>11</pointsize>
      </font>
     </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
     <property name="styleSheet">
      <string notr="true">QPushButton {
 	background: transparent;
@@ -278,6 +295,9 @@ QPushButton:hover {
       <family>Segoe UI</family>
       <pointsize>11</pointsize>
      </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
     </property>
     <property name="styleSheet">
      <string notr="true">QPushButton {
@@ -311,6 +331,9 @@ QPushButton:hover {
       <pointsize>11</pointsize>
      </font>
     </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
     <property name="styleSheet">
      <string notr="true">QPushButton {
 	background: transparent;
@@ -342,6 +365,9 @@ QPushButton:hover {
       <family>Segoe UI</family>
       <pointsize>11</pointsize>
      </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
     </property>
     <property name="styleSheet">
      <string notr="true">QPushButton {
@@ -375,6 +401,9 @@ QPushButton:hover {
       <pointsize>11</pointsize>
      </font>
     </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
     <property name="styleSheet">
      <string notr="true">QPushButton {
 	background: transparent;
@@ -406,6 +435,9 @@ QPushButton:hover {
       <family>Segoe UI</family>
       <pointsize>11</pointsize>
      </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
     </property>
     <property name="styleSheet">
      <string notr="true">QPushButton {
@@ -439,6 +471,9 @@ QPushButton:hover {
       <pointsize>11</pointsize>
      </font>
     </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
     <property name="styleSheet">
      <string notr="true">QPushButton {
 	background: transparent;
@@ -470,6 +505,9 @@ QPushButton:hover {
       <family>Segoe UI</family>
       <pointsize>11</pointsize>
      </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
     </property>
     <property name="styleSheet">
      <string notr="true">QPushButton {
@@ -503,6 +541,9 @@ QPushButton:hover {
       <pointsize>11</pointsize>
      </font>
     </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
     <property name="styleSheet">
      <string notr="true">QPushButton {
 	background: transparent;
@@ -534,6 +575,9 @@ QPushButton:hover {
       <family>Segoe UI</family>
       <pointsize>11</pointsize>
      </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
     </property>
     <property name="styleSheet">
      <string notr="true">QPushButton {
@@ -567,6 +611,9 @@ QPushButton:hover {
       <pointsize>11</pointsize>
      </font>
     </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
     <property name="styleSheet">
      <string notr="true">QPushButton {
 	background: transparent;
@@ -598,6 +645,9 @@ QPushButton:hover {
       <family>Segoe UI</family>
       <pointsize>11</pointsize>
      </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
     </property>
     <property name="styleSheet">
      <string notr="true">QPushButton {
@@ -631,6 +681,9 @@ QPushButton:hover {
       <pointsize>11</pointsize>
      </font>
     </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
     <property name="styleSheet">
      <string notr="true">QPushButton {
 	background: transparent;
@@ -662,6 +715,9 @@ QPushButton:hover {
       <family>Segoe UI</family>
       <pointsize>11</pointsize>
      </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
     </property>
     <property name="styleSheet">
      <string notr="true">QPushButton {
@@ -695,6 +751,9 @@ QPushButton:hover {
       <pointsize>11</pointsize>
      </font>
     </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
     <property name="styleSheet">
      <string notr="true">QPushButton {
 	background: transparent;
@@ -726,6 +785,9 @@ QPushButton:hover {
       <family>Segoe UI</family>
       <pointsize>11</pointsize>
      </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
     </property>
     <property name="styleSheet">
      <string notr="true">QPushButton {
@@ -759,6 +821,9 @@ QPushButton:hover {
       <pointsize>11</pointsize>
      </font>
     </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
     <property name="styleSheet">
      <string notr="true">QPushButton {
 	background: transparent;
@@ -790,6 +855,9 @@ QPushButton:hover {
       <family>Segoe UI</family>
       <pointsize>11</pointsize>
      </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
     </property>
     <property name="styleSheet">
      <string notr="true">QPushButton {
@@ -823,6 +891,9 @@ QPushButton:hover {
       <pointsize>11</pointsize>
      </font>
     </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
     <property name="styleSheet">
      <string notr="true">QPushButton {
 	background: transparent;
@@ -854,6 +925,9 @@ QPushButton:hover {
       <family>Segoe UI</family>
       <pointsize>11</pointsize>
      </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
     </property>
     <property name="styleSheet">
      <string notr="true">QPushButton {
@@ -887,6 +961,9 @@ QPushButton:hover {
       <pointsize>11</pointsize>
      </font>
     </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
     <property name="styleSheet">
      <string notr="true">QPushButton {
 	background: transparent;
@@ -918,6 +995,9 @@ QPushButton:hover {
       <family>Segoe UI</family>
       <pointsize>11</pointsize>
      </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
     </property>
     <property name="styleSheet">
      <string notr="true">QPushButton {
@@ -951,6 +1031,9 @@ QPushButton:hover {
       <pointsize>11</pointsize>
      </font>
     </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
     <property name="styleSheet">
      <string notr="true">QPushButton {
 	background: transparent;
@@ -982,6 +1065,9 @@ QPushButton:hover {
       <family>Segoe UI</family>
       <pointsize>11</pointsize>
      </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
     </property>
     <property name="styleSheet">
      <string notr="true">QPushButton {
@@ -1015,6 +1101,9 @@ QPushButton:hover {
       <pointsize>11</pointsize>
      </font>
     </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
     <property name="styleSheet">
      <string notr="true">QPushButton {
 	background: transparent;
@@ -1046,6 +1135,9 @@ QPushButton:hover {
       <family>Segoe UI</family>
       <pointsize>11</pointsize>
      </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
     </property>
     <property name="styleSheet">
      <string notr="true">QPushButton {
@@ -1079,6 +1171,9 @@ QPushButton:hover {
       <pointsize>11</pointsize>
      </font>
     </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
     <property name="styleSheet">
      <string notr="true">QPushButton {
 	background: transparent;
@@ -1110,6 +1205,9 @@ QPushButton:hover {
       <family>Segoe UI</family>
       <pointsize>11</pointsize>
      </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
     </property>
     <property name="styleSheet">
      <string notr="true">QPushButton {
@@ -1143,6 +1241,9 @@ QPushButton:hover {
       <pointsize>11</pointsize>
      </font>
     </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
     <property name="styleSheet">
      <string notr="true">QPushButton {
 	background: transparent;
@@ -1174,6 +1275,9 @@ QPushButton:hover {
       <family>Segoe UI</family>
       <pointsize>11</pointsize>
      </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
     </property>
     <property name="styleSheet">
      <string notr="true">QPushButton {
@@ -1207,6 +1311,9 @@ QPushButton:hover {
       <pointsize>11</pointsize>
      </font>
     </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
     <property name="styleSheet">
      <string notr="true">QPushButton {
 	background: transparent;
@@ -1238,6 +1345,9 @@ QPushButton:hover {
       <family>Segoe UI</family>
       <pointsize>11</pointsize>
      </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
     </property>
     <property name="styleSheet">
      <string notr="true">QPushButton {
@@ -1271,6 +1381,9 @@ QPushButton:hover {
       <pointsize>11</pointsize>
      </font>
     </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
     <property name="styleSheet">
      <string notr="true">QPushButton {
 	background: transparent;
@@ -1303,6 +1416,9 @@ QPushButton:hover {
       <pointsize>11</pointsize>
      </font>
     </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
     <property name="styleSheet">
      <string notr="true">QPushButton {
 	background: transparent;
@@ -1334,6 +1450,9 @@ QPushButton:hover {
       <family>Segoe UI</family>
       <pointsize>11</pointsize>
      </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
     </property>
     <property name="styleSheet">
      <string notr="true">QPushButton {
@@ -1399,6 +1518,9 @@ QPushButton:hover {
       <family>Segoe UI</family>
       <pointsize>25</pointsize>
      </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
     </property>
     <property name="styleSheet">
      <string notr="true">QPushButton {
