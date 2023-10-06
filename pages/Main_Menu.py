@@ -346,8 +346,9 @@ class MainWindow(QtWidgets.QFrame):
         self.resize(1024, 565)
         Facial_Login = FacialLogin(self)
         Facial_Login.show()
-        self.facialLogin.setText("Facial Login")
 
+        self.facialLogin.setText("Facial Login")
+        # self.hide()
     #     # ===================== open Facial Register ===================== #
 
     def openFacialRegister(self):

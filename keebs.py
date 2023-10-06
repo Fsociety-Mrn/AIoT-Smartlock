@@ -61,6 +61,8 @@ class Ui_MainWindow(object):
 "")
         self.comboBox.setEditable(False)
         self.comboBox.setObjectName("comboBox")
+        
+        
         self.KeyboardContainer_3 = QtWidgets.QWidget(self.frame)
         self.KeyboardContainer_3.setGeometry(QtCore.QRect(610, 170, 261, 341))
         self.KeyboardContainer_3.setStyleSheet("baclground: transparents;\n"
@@ -86,6 +88,8 @@ class Ui_MainWindow(object):
 "    background-color: rgb(61, 152, 154);\n"
 "}")
         self.seven_2.setObjectName("seven_2")
+        
+        
         self.seven_3 = QtWidgets.QPushButton(self.KeyboardContainer_3)
         self.seven_3.setGeometry(QtCore.QRect(100, 20, 61, 61))
         font = QtGui.QFont()
@@ -104,6 +108,8 @@ class Ui_MainWindow(object):
 "    background-color: rgb(61, 152, 154);\n"
 "}")
         self.seven_3.setObjectName("seven_3")
+        
+        
         self.seven_4 = QtWidgets.QPushButton(self.KeyboardContainer_3)
         self.seven_4.setGeometry(QtCore.QRect(180, 20, 61, 61))
         font = QtGui.QFont()
@@ -122,6 +128,8 @@ class Ui_MainWindow(object):
 "    background-color: rgb(61, 152, 154);\n"
 "}")
         self.seven_4.setObjectName("seven_4")
+        
+        
         self.seven_5 = QtWidgets.QPushButton(self.KeyboardContainer_3)
         self.seven_5.setGeometry(QtCore.QRect(100, 100, 61, 61))
         font = QtGui.QFont()
@@ -140,6 +148,7 @@ class Ui_MainWindow(object):
 "    background-color: rgb(61, 152, 154);\n"
 "}")
         self.seven_5.setObjectName("seven_5")
+        
         self.seven_6 = QtWidgets.QPushButton(self.KeyboardContainer_3)
         self.seven_6.setGeometry(QtCore.QRect(20, 100, 61, 61))
         font = QtGui.QFont()
@@ -159,6 +168,7 @@ class Ui_MainWindow(object):
 "    background-color: rgb(61, 152, 154);\n"
 "}")
         self.seven_6.setObjectName("seven_6")
+        
         self.seven_7 = QtWidgets.QPushButton(self.KeyboardContainer_3)
         self.seven_7.setGeometry(QtCore.QRect(180, 100, 61, 61))
         font = QtGui.QFont()
@@ -177,6 +187,7 @@ class Ui_MainWindow(object):
 "    background-color: rgb(61, 152, 154);\n"
 "}")
         self.seven_7.setObjectName("seven_7")
+        
         self.seven_8 = QtWidgets.QPushButton(self.KeyboardContainer_3)
         self.seven_8.setGeometry(QtCore.QRect(180, 180, 61, 61))
         font = QtGui.QFont()
@@ -195,6 +206,8 @@ class Ui_MainWindow(object):
 "    background-color: rgb(61, 152, 154);\n"
 "}")
         self.seven_8.setObjectName("seven_8")
+        
+        
         self.seven_9 = QtWidgets.QPushButton(self.KeyboardContainer_3)
         self.seven_9.setGeometry(QtCore.QRect(20, 180, 61, 61))
         font = QtGui.QFont()
@@ -213,6 +226,7 @@ class Ui_MainWindow(object):
 "    background-color: rgb(61, 152, 154);\n"
 "}")
         self.seven_9.setObjectName("seven_9")
+        
         self.seven_10 = QtWidgets.QPushButton(self.KeyboardContainer_3)
         self.seven_10.setGeometry(QtCore.QRect(100, 180, 61, 61))
         font = QtGui.QFont()
@@ -231,6 +245,7 @@ class Ui_MainWindow(object):
 "    background-color: rgb(61, 152, 154);\n"
 "}")
         self.seven_10.setObjectName("seven_10")
+        
         self.seven_11 = QtWidgets.QPushButton(self.KeyboardContainer_3)
         self.seven_11.setGeometry(QtCore.QRect(180, 260, 61, 61))
         font = QtGui.QFont()
@@ -249,6 +264,7 @@ class Ui_MainWindow(object):
 "    background-color: rgb(61, 152, 154);\n"
 "}")
         self.seven_11.setText("")
+        
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap("../Images/check.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.seven_11.setIcon(icon)
@@ -329,6 +345,7 @@ class Ui_MainWindow(object):
         self.greetings.setStyleSheet("color: #3D989A")
         self.greetings.setAlignment(QtCore.Qt.AlignCenter)
         self.greetings.setObjectName("greetings")
+        
         self.checkBox = QtWidgets.QCheckBox(self.frame)
         self.checkBox.setGeometry(QtCore.QRect(140, 370, 131, 17))
         font = QtGui.QFont()
@@ -346,6 +363,7 @@ class Ui_MainWindow(object):
 "                                                    background-color: transparent;\n"
 "                                                    border: 1px solid #3D989A;\n"
 "                                                }")
+        
         self.checkBox.setObjectName("checkBox")
         self.greetings.raise_()
         self.TokenID_3.raise_()
