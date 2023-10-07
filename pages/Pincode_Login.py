@@ -2,7 +2,8 @@ from PyQt5.QtWidgets import QWidget, QVBoxLayout, QGridLayout, QPushButton, QLin
 from PyQt5.QtWidgets import *
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-class QwertyKeyboard(QtWidgets.QFrame):
+
+class PincodeLogin(QtWidgets.QFrame):
     def __init__(self, parent=None):
         super().__init__(parent)
         
@@ -408,27 +409,47 @@ class QwertyKeyboard(QtWidgets.QFrame):
         self.seven_9.setText(_translate("MainWindow", "7"))
         self.seven_10.setText(_translate("MainWindow", "8"))
         self.seven_13.setText(_translate("MainWindow", "0"))
+        
+        self.seven_12.clicked.connect(self.backspace)
+
+        
+        self.seven_2.clicked.connect(lambda: self.input_digit('1'))
+        self.seven_3.clicked.connect(lambda: self.input_digit('2'))
+        self.seven_4.clicked.connect(lambda: self.input_digit('3'))
+        self.seven_5.clicked.connect(lambda: self.input_digit('4'))
+        self.seven_6.clicked.connect(lambda: self.input_digit('5'))
+        self.seven_7.clicked.connect(lambda: self.input_digit('6'))
+        self.seven_8.clicked.connect(lambda: self.input_digit('7'))
+        self.seven_9.clicked.connect(lambda: self.input_digit('8'))
+        self.seven_10.clicked.connect(lambda: self.input_digit('9'))
+        self.seven_13.clicked.connect(lambda: self.input_digit('0'))
+
 
         self.Cancel_2.setText(_translate("MainWindow", "Cancel"))
 
         self.greetings.setText(_translate("MainWindow", "Hello Friend,\n"
         "\Please choose your name and enter your pincode"))
         self.checkBox.setText(_translate("MainWindow", "Show Password"))
+
+    def input_digit(self, digit):
+        current_text = self.TokenID_3.text()
+        self.TokenID_3.setText(current_text + digit)
         
-    # cancel
+        
+    def backspace(self):
+        current_text = self.TokenID_3.text()
+        if current_text:
+            updated_text = current_text[:-1]  # Remove the last character
+            self.TokenID_3.setText(updated_text)
+            
     def cancel(self):
+        from pages.Main_Menu import MainWindow
+        
+        print("go back to main menu")
 
-        from pages.Facial_Login import FacialLogin
-        print("start loading")
-
-        self.resize(1024, 565)
-        Facial_Login = FacialLogin(self)
-        Facial_Login.close()
-        Facial_Login.show()
+        # self.resize(1024, 565)
+        # MainWindow(self).show()
         self.close()
-
-
-
 
 
 if __name__ == "__main__":
@@ -437,7 +458,7 @@ if __name__ == "__main__":
     # Create a new QApplication object
     app = QApplication(sys.argv)
 
-    New_menu = QwertyKeyboard()
+    New_menu = PincodeLogin()
     New_menu.show() 
 
     sys.exit(app.exec_())

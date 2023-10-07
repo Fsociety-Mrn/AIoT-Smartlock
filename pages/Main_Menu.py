@@ -97,7 +97,7 @@ class MainWindow(QtWidgets.QFrame):
 
         # facial register
         self.facialRegister = QtWidgets.QPushButton(self.widget_2)
-        self.facialRegister.setGeometry(QtCore.QRect(60, 360, 380, 51))
+        self.facialRegister.setGeometry(QtCore.QRect(60, 420 - 40, 380, 51))
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(12)
@@ -113,7 +113,7 @@ class MainWindow(QtWidgets.QFrame):
         
         # facial login
         self.facialLogin = QtWidgets.QPushButton(self.widget_2)
-        self.facialLogin.setGeometry(QtCore.QRect(60, 300, 380, 51))
+        self.facialLogin.setGeometry(QtCore.QRect(60, 300 - 40, 380, 51))
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(12)
@@ -126,6 +126,22 @@ class MainWindow(QtWidgets.QFrame):
         "color: white;\n"
         "padding: 10px;")
         self.facialLogin.setObjectName("facialLogin")
+        
+        # pin code login
+        self.pincodeLogin = QtWidgets.QPushButton(self.widget_2)
+        self.pincodeLogin.setGeometry(QtCore.QRect(60, 360 - 40, 380, 51))
+        font = QtGui.QFont()
+        font.setFamily("Segoe UI")
+        font.setPointSize(12)
+        self.pincodeLogin.setFont(font)
+        self.pincodeLogin.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.pincodeLogin.setAutoFillBackground(False)
+        self.pincodeLogin.setStyleSheet("background: qlineargradient(spread:pad, x1:0, y1:0.505682, x2:1, y2:0.477, stop:0 rgba(11, 131, 120, 219), stop:1 rgba(85, 98, 112, 226));\n"
+        "\n"
+        "border-radius: 25px;\n"
+        "color: white;\n"
+        "padding: 10px;")
+        self.pincodeLogin.setObjectName("pincodeLogin")
         
         # paro paro g
         self.label = QtWidgets.QLabel(self.widget_2)
@@ -245,6 +261,9 @@ class MainWindow(QtWidgets.QFrame):
         
         self.facialLogin.setText(_translate("mainMenu", "Facial Login"))
         self.facialLogin.clicked.connect(self.openFacialLogin)
+
+        self.pincodeLogin.setText(_translate("mainMenu", "Pin Login"))
+        self.pincodeLogin.clicked.connect(self.openPincodeLogin)
         
         self.label.setText(_translate("mainMenu", "paro paro g fly high butterfly"))
         
@@ -282,8 +301,10 @@ class MainWindow(QtWidgets.QFrame):
         
         self.facialLogin.setText("Face Recognition is Updating")
         self.facialRegister.setText("Please bear with me")
+        self.pincodeLogin.setText("............")
         self.facialLogin.isEnabled = False
         self.facialRegister.isEnabled = False
+        self.pincodeLogin.isEnabled = False
 
         # Delay the creation of the FacialLogin object by 100 milliseconds
         QtCore.QTimer.singleShot(100, self.update_face)
@@ -337,11 +358,10 @@ class MainWindow(QtWidgets.QFrame):
         # Delay the creation of the FacialLogin object by 100 milliseconds
         QtCore.QTimer.singleShot(100, self.clickFacialLogin)
 
-
     def clickFacialLogin(self):
 
         from pages.Facial_Login import FacialLogin
-        print("start loading")
+        print("start loading facuial login")
 
         self.resize(1024, 565)
         Facial_Login = FacialLogin(self)
@@ -349,7 +369,7 @@ class MainWindow(QtWidgets.QFrame):
 
         self.facialLogin.setText("Facial Login")
         # self.hide()
-    #     # ===================== open Facial Register ===================== #
+    # ===================== open Facial Register ===================== #
 
     def openFacialRegister(self):
 
@@ -361,23 +381,35 @@ class MainWindow(QtWidgets.QFrame):
         QtCore.QTimer.singleShot(100, self.clickFacialRegister)
 
     def clickFacialRegister(self):
-        print("start loading")
+     
         from pages.Token_Form import TokenForm
-        print("start loading")
-
 
         self.resize(1024, 565)
         Token = TokenForm(self)
 
         Token.show()
         self.facialRegister.setText("Facial Register")
+    
+    # ===================== open Facial Register ===================== #
+    def openPincodeLogin(self):
+    
+        self.pincodeLogin.setText("Loading..............")
+        self.pincodeLogin.isEnabled = False
+        self.pincodeLogin.isEnabled = False
 
-        
-        # from pages.Facial_Register import facialRegister
-        
-        # FacialRegister = facialRegister(self)
-        # FacialRegister.show()
+        # Delay the creation of the FacialLogin object by 100 milliseconds
+        QtCore.QTimer.singleShot(100, self.clickPincodeLogin)
 
+    def clickPincodeLogin(self):
+     
+        from pages.Pincode_Login import PincodeLogin
+
+        self.resize(1024, 565)
+        Token = PincodeLogin(self)
+
+        Token.show()
+        self.pincodeLogin.setText("Pincode Login")
+    
     # when close the frame
     def close(self):
         QtWidgets.qApp.quit()

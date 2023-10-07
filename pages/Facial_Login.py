@@ -96,13 +96,13 @@ class FacialLogin(QtWidgets.QFrame):
         
         # video framing
         self.widget = QtWidgets.QWidget(self)
-        self.widget.setGeometry(QtCore.QRect(180, 60, 651, 401))
+        self.widget.setGeometry(QtCore.QRect(180, 50, 661, 471))
         self.widget.setStyleSheet("border: 2px solid rgb(61, 152, 154) ;\n"
             "border-radius: 50px;")
         self.widget.setObjectName("widget")
         
         self.horizontalLayoutWidget = QtWidgets.QWidget(self.widget)
-        self.horizontalLayoutWidget.setGeometry(QtCore.QRect(20, 10, 611, 361 + 20))
+        self.horizontalLayoutWidget.setGeometry(QtCore.QRect(20, 20, 621, 431))
         self.horizontalLayoutWidget.setObjectName("horizontalLayoutWidget")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget)
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
@@ -168,52 +168,52 @@ class FacialLogin(QtWidgets.QFrame):
         
         # connect the close event to the method
         
-        self.widget = QtWidgets.QWidget(self)
-        self.widget.setGeometry(QtCore.QRect(430, 480, 169, 61))
-        self.widget.setObjectName("widget")
+        # self.widget = QtWidgets.QWidget(self)
+        # self.widget.setGeometry(QtCore.QRect(430, 480, 169, 61))
+        # self.widget.setObjectName("widget")
         
-        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.widget)
-        self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
-        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+        # self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.widget)
+        # self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
+        # self.horizontalLayout_2.setObjectName("horizontalLayout_2")
         
-        # pincode
-        self.label_2 = QtWidgets.QLabel(self)
-        # self.label_2.setGeometry(QtCore.QRect(290, 410, 161, 61))
-        font = QtGui.QFont()
-        font.setFamily("Segoe UI")
-        font.setPointSize(10)
-        font.setStrikeOut(False)
-        self.label_2.setFont(font)
-        self.label_2.setStyleSheet("color:  rgba(11, 131, 120, 219)")
-        self.label_2.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.label_2.setAlignment(QtCore.Qt.AlignCenter)
-        self.label_2.setObjectName("label_2")
+        # # pincode
+        # self.label_2 = QtWidgets.QLabel(self)
+        # # self.label_2.setGeometry(QtCore.QRect(290, 410, 161, 61))
+        # font = QtGui.QFont()
+        # font.setFamily("Segoe UI")
+        # font.setPointSize(10)
+        # font.setStrikeOut(False)
+        # self.label_2.setFont(font)
+        # self.label_2.setStyleSheet("color:  rgba(11, 131, 120, 219)")
+        # self.label_2.setFrameShape(QtWidgets.QFrame.NoFrame)
+        # self.label_2.setAlignment(QtCore.Qt.AlignCenter)
+        # self.label_2.setObjectName("label_2")
         
-        self.horizontalLayout_2.addWidget(self.label_2)
+        # self.horizontalLayout_2.addWidget(self.label_2)
         
-        self.pinCodeShown = False
+        # self.pinCodeShown = False
 
-        # pincode icon
-        self.pincode = QtWidgets.QPushButton(self)
-        # self.pincode.setGeometry(QtCore.QRect(430, 415, 51, 51))
-        font = QtGui.QFont()
-        font.setFamily("Segoe UI")
-        font.setPointSize(12)
-        self.pincode.setFont(font)
-        self.pincode.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.pincode.setAutoFillBackground(False)
-        self.pincode.setStyleSheet("border: 2px solid #3D989A;\n"
-            "border-radius: 20px;\n"
-            "color: white;\n"
-            "padding:10px;")
-        self.pincode.setText("")
-        icon2 = QtGui.QIcon()
-        icon2.addPixmap(QtGui.QPixmap(":/background/Images/lock-pattern.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.pincode.setIcon(icon2)
-        self.pincode.setIconSize(QtCore.QSize(35, 35))
-        self.pincode.setObjectName("pincode")
+        # # pincode icon
+        # self.pincode = QtWidgets.QPushButton(self)
+        # # self.pincode.setGeometry(QtCore.QRect(430, 415, 51, 51))
+        # font = QtGui.QFont()
+        # font.setFamily("Segoe UI")
+        # font.setPointSize(12)
+        # self.pincode.setFont(font)
+        # self.pincode.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        # self.pincode.setAutoFillBackground(False)
+        # self.pincode.setStyleSheet("border: 2px solid #3D989A;\n"
+        #     "border-radius: 20px;\n"
+        #     "color: white;\n"
+        #     "padding:10px;")
+        # self.pincode.setText("")
+        # icon2 = QtGui.QIcon()
+        # icon2.addPixmap(QtGui.QPixmap(":/background/Images/lock-pattern.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        # self.pincode.setIcon(icon2)
+        # self.pincode.setIconSize(QtCore.QSize(35, 35))
+        # self.pincode.setObjectName("pincode")
         
-        self.horizontalLayout_2.addWidget(self.pincode)
+        # self.horizontalLayout_2.addWidget(self.pincode)
             
         # Timer
         self.timer = QtCore.QTimer(self)
@@ -222,8 +222,6 @@ class FacialLogin(QtWidgets.QFrame):
         self.last_check = time.time()
         self.timer.start(30)
 
-        self.label_2.raise_()
-        self.pincode.raise_()
         self.status.raise_()
         self.back.raise_()
         self.widget.raise_()
@@ -235,11 +233,10 @@ class FacialLogin(QtWidgets.QFrame):
         
         _translate = QtCore.QCoreApplication.translate
         self.setWindowTitle(_translate("facialLogin", "Frame"))
-        self.label_2.setText(_translate("facialLogin", "can\'t recognize ?"))
         self.status.setText(_translate("facialLogin", "<html><head/><body><p>Please wait, camera is loading.</p></body></html>"))
         self.back.setText(_translate("facialLogin", "Back "))
         
-        self.pincode.clicked.connect(self.pinCodeShow)
+
 
     def backTomain(self):
         from pages.Main_Menu import MainWindow
@@ -285,225 +282,196 @@ class FacialLogin(QtWidgets.QFrame):
         # Show the message box and return the result
         return result
     
+    def keyboard(self):
+        
+        
+        from pages.Pincode_Login import QwertyKeyboard
+        
+        self.videoStream.release()
+        QwertyKeyboard(self).show()
+        
+        self.pinCodeShown = True
+        
     # pincode show
     def pinCodeShow(self):
         
-        from pages.Keyboard import QwertyKeyboard 
+        if self.pinCodeShown:
+            return  # Exit if the pinCode form is already shown
 
-        
-        # if self.pinCodeShown:
-        #     return  # Exit if the pinCode form is already shown
-
-        # self.videoStream.release()
-        
-
-
-        # self.resize(1024, 565)
-        QwertyKeyboard = QwertyKeyboard(self)
-        QwertyKeyboard.show()
-        
         self.videoStream.release()
-        cv2.destroyAllWindows()
-        # self.hide()
-        
-        # Dialog = QDialog(self)
-        # Dialog.setWindowTitle("Pin Code Dialog")
-        # # Dialog.setModal(True)  # Make the dialog modal
-        
-        # Dialog.resize(461, 307)
-        # Dialog.setStyleSheet("background-image:url(Images/background-removebg-preview.png);\n"
-        #     "background-color: rgb(231, 229, 213);")
-        # Dialog.setWindowFlags(QtCore.Qt.FramelessWindowHint)
-        
-        # frame_rect = self.rect()
-        # dialog_rect = Dialog.rect()
-        # dialog_x = frame_rect.x() + (frame_rect.width() - dialog_rect.width()) // 2
-        # dialog_y = frame_rect.y() + (frame_rect.height() - dialog_rect.height()) // 2
-        # Dialog.move(dialog_x, dialog_y)
-
-        # # cautions
-        # label = QtWidgets.QLabel(Dialog)
-        # label.setGeometry(QtCore.QRect(90, 20, 281, 31))
-        # font = QtGui.QFont()
-        # font.setFamily("Segoe UI")
-        # font.setPointSize(12)
-        # label.setFont(font)
-        # label.setStyleSheet("color: #3D989A;\n")
-        # label.setAlignment(QtCore.Qt.AlignCenter)
-        # label.setObjectName("label")
-        # label.setText("Please enter your username and pincode")
-        
-        # # username 
-        # username = QtWidgets.QLineEdit(Dialog)
-        # username.setGeometry(QtCore.QRect(30, 60, 401, 51))
-        # font = QtGui.QFont()
-        # font.setFamily("Segoe UI")
-        # font.setPointSize(14)
-        # username.setFont(font)
-        # username.setStyleSheet("background: transparents;\n"
-        #     "color: #3D989A;\n"
-        #     "background-color: rgb(255, 255, 255);\n"
-        #     "border: 1px solid #3D989A;\n"
-        #     "border-radius: 25px;")
-        # username.setAlignment(QtCore.Qt.AlignCenter)
-        # username.setObjectName("username")
-        # username.setPlaceholderText("username")
 
         
-        # # password
-        # password = QtWidgets.QLineEdit(Dialog)
-        # password.setGeometry(QtCore.QRect(30, 120, 401, 51))
-        # font = QtGui.QFont()
-        # font.setFamily("Segoe UI")
-        # font.setPointSize(14)
-        # password.setFont(font)
-        # password.setStyleSheet("background: transparents;\n"
-        #     "color: #3D989A;\n"
-        #     "background-color: rgb(255, 255, 255);\n"
-        #     "border: 1px solid #3D989A;\n"
-        #     "border-radius: 25px;")
-        # password.setAlignment(QtCore.Qt.AlignCenter)
-        # password.setObjectName("password")
-        # password.setPlaceholderText("PIN")
-        # password.setValidator(QtGui.QIntValidator())
+        Dialog = QDialog(self)
+        Dialog.setWindowTitle("Pin Code Dialog")
+        # Dialog.setModal(True)  # Make the dialog modal
         
-        # # show password
-        # show_password_checkbox = QtWidgets.QCheckBox("Show Password", Dialog)
-        # show_password_checkbox.setGeometry(QtCore.QRect(40, 180, 401, 31))
-        # show_password_checkbox.setCheckable(True)
-        # # Set font and color
-        # font = QtGui.QFont()
-        # font.setFamily("Segoe UI")
-        # show_password_checkbox.setFont(font)
-        # show_password_checkbox.setStyleSheet("""
-        #                                         QCheckBox {
-        #                                             color: #3D989A;
-        #                                         }
-        #                                         QCheckBox::indicator:checked {
-        #                                             background-color: #3D989A;
-        #                                             border: 1px solid #3D989A;
-        #                                         }
-        #                                         QCheckBox::indicator:unchecked {
-        #                                             background-color: transparent;
-        #                                             border: 1px solid #3D989A;
-        #                                         }
-        #                                     """)
-        # show_password_checkbox.setChecked(False)
-        # password.setEchoMode(QtWidgets.QLineEdit.Password)
+        Dialog.resize(461, 307)
+        Dialog.setStyleSheet("background-image:url(Images/background-removebg-preview.png);\n"
+            "background-color: rgb(231, 229, 213);")
+        Dialog.setWindowFlags(QtCore.Qt.FramelessWindowHint)
+        
+        frame_rect = self.rect()
+        dialog_rect = Dialog.rect()
+        dialog_x = frame_rect.x() + (frame_rect.width() - dialog_rect.width()) // 2
+        dialog_y = frame_rect.y() + (frame_rect.height() - dialog_rect.height()) // 2
+        Dialog.move(dialog_x, dialog_y)
+
+        # cautions
+        label = QtWidgets.QLabel(Dialog)
+        label.setGeometry(QtCore.QRect(90, 20, 281, 31))
+        font = QtGui.QFont()
+        font.setFamily("Segoe UI")
+        font.setPointSize(12)
+        label.setFont(font)
+        label.setStyleSheet("color: #3D989A;\n")
+        label.setAlignment(QtCore.Qt.AlignCenter)
+        label.setObjectName("label")
+        label.setText("Please enter your username and pincode")
+        
+        # username 
+        username = QtWidgets.QLineEdit(Dialog)
+        username.setGeometry(QtCore.QRect(30, 60, 401, 51))
+        font = QtGui.QFont()
+        font.setFamily("Segoe UI")
+        font.setPointSize(14)
+        username.setFont(font)
+        username.setStyleSheet("background: transparents;\n"
+            "color: #3D989A;\n"
+            "background-color: rgb(255, 255, 255);\n"
+            "border: 1px solid #3D989A;\n"
+            "border-radius: 25px;")
+        username.setAlignment(QtCore.Qt.AlignCenter)
+        username.setObjectName("username")
+        username.setPlaceholderText("username")
+        
+        # password
+        password = QtWidgets.QLineEdit(Dialog)
+        password.setGeometry(QtCore.QRect(30, 120, 401, 51))
+        font = QtGui.QFont()
+        font.setFamily("Segoe UI")
+        font.setPointSize(14)
+        password.setFont(font)
+        password.setStyleSheet("background: transparents;\n"
+            "color: #3D989A;\n"
+            "background-color: rgb(255, 255, 255);\n"
+            "border: 1px solid #3D989A;\n"
+            "border-radius: 25px;")
+        password.setAlignment(QtCore.Qt.AlignCenter)
+        password.setObjectName("password")
+        password.setPlaceholderText("PIN")
+        password.setValidator(QtGui.QIntValidator())
+        
+        # show password
+        show_password_checkbox = QtWidgets.QCheckBox("Show Password", Dialog)
+        show_password_checkbox.setGeometry(QtCore.QRect(40, 180, 401, 31))
+        show_password_checkbox.setCheckable(True)
+        # Set font and color
+        font = QtGui.QFont()
+        font.setFamily("Segoe UI")
+        show_password_checkbox.setFont(font)
+        show_password_checkbox.setStyleSheet("""
+                                                QCheckBox {
+                                                    color: #3D989A;
+                                                }
+                                                QCheckBox::indicator:checked {
+                                                    background-color: #3D989A;
+                                                    border: 1px solid #3D989A;
+                                                }
+                                                QCheckBox::indicator:unchecked {
+                                                    background-color: transparent;
+                                                    border: 1px solid #3D989A;
+                                                }
+                                            """)
+        show_password_checkbox.setChecked(False)
+        password.setEchoMode(QtWidgets.QLineEdit.Password)
          
-        # # enter button
-        # enterButton = QtWidgets.QPushButton(Dialog)
-        # enterButton.setGeometry(QtCore.QRect(230, 220, 211, 41))
-        # font = QtGui.QFont()
-        # font.setFamily("Segoe UI")
-        # font.setPointSize(12)
-        # enterButton.setFont(font)
-        # enterButton.setStyleSheet("border: none;\n"
-        #     "background: qlineargradient(spread:pad, x1:0, y1:0.505682, x2:1, y2:0.477, stop:0 rgba(11, 131, 120, 219), stop:1 rgba(85, 98, 112, 226));\n"
-        #     "border-radius: 20px;\n"
-        #     "color: white;")
-        # enterButton.setObjectName("enterButton")
-        # enterButton.setText("Enter")
-        # enterButton.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        # enter button
+        enterButton = QtWidgets.QPushButton(Dialog)
+        enterButton.setGeometry(QtCore.QRect(230, 220, 211, 41))
+        font = QtGui.QFont()
+        font.setFamily("Segoe UI")
+        font.setPointSize(12)
+        enterButton.setFont(font)
+        enterButton.setStyleSheet("border: none;\n"
+            "background: qlineargradient(spread:pad, x1:0, y1:0.505682, x2:1, y2:0.477, stop:0 rgba(11, 131, 120, 219), stop:1 rgba(85, 98, 112, 226));\n"
+            "border-radius: 20px;\n"
+            "color: white;")
+        enterButton.setObjectName("enterButton")
+        enterButton.setText("Enter")
+        enterButton.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         
-        # # cancel button
-        # cancelButton = QtWidgets.QPushButton(Dialog)
-        # cancelButton.setGeometry(QtCore.QRect(10, 220, 211, 41))
-        # font = QtGui.QFont()
-        # font.setFamily("Segoe UI")
-        # font.setPointSize(12)
-        # cancelButton.setFont(font)
-        # cancelButton.setStyleSheet("border: 2px solid #3D989A;\n"
-        #     "border-radius: 20px;\n"
-        #     "color: #3D989A;")
-        # cancelButton.setObjectName("cancelButon")
-        # cancelButton.setText("Cancel")
-        # cancelButton.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        # cancelButton.clicked.connect(Dialog.reject)
-        # cancelButton.clicked.connect(self.openCameraWait)
-        
-        # # Create and add the virtual QWERTY keyboard
-        # self.virtual_keyboard = QwertyKeyboard(password)  # Pass the password field to the virtual keyboard
-        # keyboard_position_y = password.geometry().bottom() + 10  # Adjust the position as needed
-        # self.virtual_keyboard.setGeometry(QtCore.QRect(30, keyboard_position_y, 401, 180))
-
-
+        # cancel button
+        cancelButton = QtWidgets.QPushButton(Dialog)
+        cancelButton.setGeometry(QtCore.QRect(10, 220, 211, 41))
+        font = QtGui.QFont()
+        font.setFamily("Segoe UI")
+        font.setPointSize(12)
+        cancelButton.setFont(font)
+        cancelButton.setStyleSheet("border: 2px solid #3D989A;\n"
+            "border-radius: 20px;\n"
+            "color: #3D989A;")
+        cancelButton.setObjectName("cancelButon")
+        cancelButton.setText("Cancel")
+        cancelButton.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        cancelButton.clicked.connect(Dialog.reject)
+        cancelButton.clicked.connect(self.openCameraWait)
         
       
     
-        # # email and password validation
-        # def emailAndPassword():
-        #     current_date = QtCore.QDate.currentDate().toString("MMM d yyyy")
-        #     current_time = QtCore.QTime.currentTime().toString("h:mm AP")
-        #     result = firebaseVerifyPincode(username=username.text(),pincode=password.text())
+        # email and password validation
+        def emailAndPassword():
+            current_date = QtCore.QDate.currentDate().toString("MMM d yyyy")
+            current_time = QtCore.QTime.currentTime().toString("h:mm AP")
+            result = firebaseVerifyPincode(username=username.text(),pincode=password.text())
 
-        #     if not result == None:
-        #         self.messageBoxShow(
-        #             icon=self.MessageBox.Information,
-        #             title="Facial Recognition",
-        #             text="Welcome " + str(result) + "!",
-        #             buttons=self.MessageBox.Ok
-        #         )
+            if not result == None:
+                self.messageBoxShow(
+                    icon=self.MessageBox.Information,
+                    title="Facial Recognition",
+                    text="Welcome " + str(result) + "!",
+                    buttons=self.MessageBox.Ok
+                )
                 
-        #         self.status.setText("Good day! " + str(result))
+                self.status.setText("Good day! " + str(result))
             
-        #          # update history firebase
-        #         words = str(result).split(',')
-        #         rearranged_string = f"{words[0]},{words[1]}"
+                 # update history firebase
+                words = str(result).split(',')
+                rearranged_string = f"{words[0]},{words[1]}"
             
-        #         firebaseHistory(name=rearranged_string,
-        #                     access_type="pincode Login",
-        #                     date=str(current_date),
-        #                     time=str(current_time))
+                firebaseHistory(name=rearranged_string,
+                            access_type="pincode Login",
+                            date=str(current_date),
+                            time=str(current_time))
             
-        #         return self.backTomain()
+                return self.backTomain()
 
-        #     self.messageBoxShow(
-        #         icon=self.MessageBox.Information,
-        #         title="Facial Recognition",
-        #         text="Access Denied!\nplease use AIoT webApp, and update your face and pincode",
-        #         buttons=self.MessageBox.Ok
-        #     )
+            self.messageBoxShow(
+                icon=self.MessageBox.Information,
+                title="Facial Recognition",
+                text="Access Denied!\nplease use AIoT webApp, and update your face and pincode",
+                buttons=self.MessageBox.Ok
+            )
             
-        #     # update history firebase
-        #     firebaseHistory(name='No match detected',
-        #                     access_type="Access Denied pincode",
-        #                     date=str(current_date),
-        #                     time=str(current_time))
+            # update history firebase
+            firebaseHistory(name='No match detected',
+                            access_type="Access Denied pincode",
+                            date=str(current_date),
+                            time=str(current_time))
                 
             
-        # def toggle_password_visibility(state):
-        #     if state != show_password_checkbox.isChecked():
-        #         password.setEchoMode(QtWidgets.QLineEdit.Normal)
-        #     else:
-        #         password.setEchoMode(QtWidgets.QLineEdit.Password)
-          
-                
-        # self.virtual_keyboard.setVisible(False)  # Initially hide the virtual keyboard
-   
-        # def show_keyboard():
-        #     print("keebs is clicked")
-        #     # self.virtual_keyboard.setVisible(True)
-
-        # username.editingFinished.connect(show_keyboard)
-        # password.editingFinished.connect(show_keyboard)
+        def toggle_password_visibility(state):
+            if state != show_password_checkbox.isChecked():
+                password.setEchoMode(QtWidgets.QLineEdit.Normal)
+            else:
+                password.setEchoMode(QtWidgets.QLineEdit.Password)
             
            
-        # enterButton.clicked.connect(emailAndPassword)
-        # show_password_checkbox.stateChanged.connect(toggle_password_visibility)
+        enterButton.clicked.connect(emailAndPassword)
+        show_password_checkbox.stateChanged.connect(toggle_password_visibility)
         
-        # self.pinCodeShown = True
+        self.pinCodeShown = True
         
-
-        # Dialog.exec_()
-        
-        # self.virtual_keyboard.close()
-
-        # if Dialog.exec_() == QDialog.Accepted:
-        #     pin_code = pincode_edit.text()
-        #     print("Entered pin code:", pin_code)
-        # else:
-        #     print("Pin code entry canceled")
+        Dialog.exec_()
        
     # Function to open the camera
     def openCameraWait(self):
@@ -512,7 +480,6 @@ class FacialLogin(QtWidgets.QFrame):
         QtCore.QTimer.singleShot(100, self.openCamera)
     
     def openCamera(self):
-        self.pinCodeShown = False
         # Open camera capture
         self.videoStream.open(0)
     

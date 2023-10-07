@@ -107,9 +107,9 @@ padding:10px</string>
    <property name="geometry">
     <rect>
      <x>180</x>
-     <y>60</y>
-     <width>651</width>
-     <height>401</height>
+     <y>50</y>
+     <width>661</width>
+     <height>471</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -121,8 +121,8 @@ border-radius: 50px;</string>
      <rect>
       <x>20</x>
       <y>20</y>
-      <width>611</width>
-      <height>361</height>
+      <width>621</width>
+      <height>431</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout">
@@ -148,84 +148,12 @@ border-radius: 50px;</string>
     </layout>
    </widget>
   </widget>
-  <widget class="QWidget" name="">
-   <property name="geometry">
-    <rect>
-     <x>430</x>
-     <y>480</y>
-     <width>169</width>
-     <height>61</height>
-    </rect>
-   </property>
-   <layout class="QHBoxLayout" name="horizontalLayout_2">
-    <item>
-     <widget class="QLabel" name="pincodeLabel">
-      <property name="font">
-       <font>
-        <family>Segoe UI</family>
-        <pointsize>10</pointsize>
-        <strikeout>false</strikeout>
-       </font>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">color:  rgba(11, 131, 120, 219)</string>
-      </property>
-      <property name="frameShape">
-       <enum>QFrame::NoFrame</enum>
-      </property>
-      <property name="text">
-       <string>can't recognize ?</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QPushButton" name="pincodeButton">
-      <property name="font">
-       <font>
-        <family>Segoe UI</family>
-        <pointsize>12</pointsize>
-       </font>
-      </property>
-      <property name="cursor">
-       <cursorShape>PointingHandCursor</cursorShape>
-      </property>
-      <property name="autoFillBackground">
-       <bool>false</bool>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">border: 2px solid #3D989A;
-border-radius: 20px;
-color: white;
-padding:10px;</string>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="icon">
-       <iconset>
-        <normaloff>:/images/lock-pattern.png</normaloff>:/images/lock-pattern.png</iconset>
-      </property>
-      <property name="iconSize">
-       <size>
-        <width>35</width>
-        <height>35</height>
-       </size>
-      </property>
-     </widget>
-    </item>
-   </layout>
-  </widget>
-  <zorder>pincodeLabel</zorder>
-  <zorder>pincodeButton</zorder>
   <zorder>status</zorder>
   <zorder>cameraContainer</zorder>
   <zorder>back</zorder>
  </widget>
  <resources>
-  <include location="background.qrc"/>
+  <include location="Design/background.qrc"/>
  </resources>
  <connections/>
 </ui>
