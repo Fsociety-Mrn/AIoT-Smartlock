@@ -302,6 +302,7 @@ class MainWindow(QtWidgets.QFrame):
         self.facialLogin.setText("Face Recognition is Updating")
         self.facialRegister.setText("Please bear with me")
         self.pincodeLogin.setText("............")
+        
         self.facialLogin.isEnabled = False
         self.facialRegister.isEnabled = False
         self.pincodeLogin.isEnabled = False
@@ -323,10 +324,14 @@ class MainWindow(QtWidgets.QFrame):
             )
         
         self.facialRegister.setText("Facial Register")
+        self.pincodeLogin.setText("Pin Login")
         self.facialLogin.setText("Facial Login")
+        
+        
         
         self.facialLogin.isEnabled = True
         self.facialRegister.isEnabled = True
+        self.pincodeLogin.isEnabled = True
 
     # check time
     def update_time(self):
@@ -354,6 +359,7 @@ class MainWindow(QtWidgets.QFrame):
         self.facialLogin.setText("Loading..........")
         self.facialLogin.isEnabled = False
         self.facialRegister.isEnabled = False
+        self.pincodeLogin.isEnabled = False
 
         # Delay the creation of the FacialLogin object by 100 milliseconds
         QtCore.QTimer.singleShot(100, self.clickFacialLogin)
@@ -376,6 +382,7 @@ class MainWindow(QtWidgets.QFrame):
         self.facialRegister.setText("Loading..............")
         self.facialLogin.isEnabled = False
         self.facialRegister.isEnabled = False
+        self.pincodeLogin.isEnabled = False
 
         # Delay the creation of the FacialLogin object by 100 milliseconds
         QtCore.QTimer.singleShot(100, self.clickFacialRegister)
@@ -395,7 +402,8 @@ class MainWindow(QtWidgets.QFrame):
     
         self.pincodeLogin.setText("Loading..............")
         self.pincodeLogin.isEnabled = False
-        self.pincodeLogin.isEnabled = False
+        self.facialLogin.isEnabled = False
+        self.facialRegister.isEnabled = False
 
         # Delay the creation of the FacialLogin object by 100 milliseconds
         QtCore.QTimer.singleShot(100, self.clickPincodeLogin)

@@ -51,6 +51,8 @@ class FacialLogin(QtWidgets.QFrame):
         self.matchs = ""
         self.validation = ""
         
+        self.failure = 0
+        
         # grey
         # self.R = 115
         # self.G = 115
@@ -79,7 +81,6 @@ class FacialLogin(QtWidgets.QFrame):
         # =============================================================================================================== #
 
         # frame
-
         self.setObjectName("Facial Login")
         self.resize(1024, 565)
         
@@ -188,15 +189,13 @@ class FacialLogin(QtWidgets.QFrame):
         self.status.setText(_translate("facialLogin", "<html><head/><body><p>Please wait, camera is loading.</p></body></html>"))
         self.back.setText(_translate("facialLogin", "Back "))
         
-
-
     def backTomain(self):
-        from pages.Main_Menu import MainWindow
+        # from pages.Main_Menu import MainWindow
         
-        print("go back to main menu")
+        # print("go back to main menu")
 
-        self.resize(1024, 565)
-        MainWindow(self).show()
+        # self.resize(1024, 565)
+        # MainWindow(self).show()
 
         self.videoStream.release()
         cv2.destroyAllWindows()
@@ -304,10 +303,12 @@ class FacialLogin(QtWidgets.QFrame):
                             access_type="Access Denied",
                             date=str(current_date),
                             time=str(current_time))
+            
+            self.failure = self.failure + 1
 
         else:
             self.matchs = str(result[0])
-            
+         
             self.validation = "Authenticated"
             
             # self.LastIn_FirstOut(str(result[0]),save)
@@ -337,8 +338,6 @@ class FacialLogin(QtWidgets.QFrame):
                             date=str(current_date),
                             time=str(current_time))
             
-
-
     # for facial detection
     def curveBox(self,frame=None,p1=None,p2=None,curvedRadius=30):
     
@@ -394,6 +393,11 @@ class FacialLogin(QtWidgets.QFrame):
         if not ret:
             self.status.setText("Please wait camera is loading")
             self.video.setPixmap(QtGui.QPixmap(":/background/Images/loading.png"))
+            return
+        
+        # attempt failure
+        if self.failure == 3:
+            self.backTomain()
             return
         
         # process the frame
