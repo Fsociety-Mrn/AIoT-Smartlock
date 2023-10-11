@@ -37,7 +37,7 @@ class JoloRecognition:
             return linear_val + ((1.0 - linear_val) * math.pow((linear_val - 0.5) * 2, 0.2)) 
     
     # for face recognition
-    def Face_Compare(self, face, threshold=0.8):
+    def Face_Compare(self, face, threshold=0.6):
         try:
             return self.FaceCompare(face,threshold=threshold)
         except:

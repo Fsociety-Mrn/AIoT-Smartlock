@@ -475,7 +475,7 @@ class FacialLogin(QtWidgets.QFrame):
                 self.LastIn_FirstOut(name=str(self.matchs),new_image=framesS)
                 self.backTomain()
                 
-            if not Face_percentage < 15 and not Face_blurreness < 100:
+            if not Face_percentage < 20 and not Face_blurreness < 100:
              
                 self.curveBox(frame=frame,p1=(x,y),p2=(x+w,y+h))
 
