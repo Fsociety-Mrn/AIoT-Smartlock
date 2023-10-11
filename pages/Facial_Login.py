@@ -490,7 +490,7 @@ class FacialLogin(QtWidgets.QFrame):
 
                     self.last_recognition_time = current_time
 
-                    self.status.setText("Facial Recognition")
+                    self.status.setText("please blink")
                     self.matchs = ""
 
                 # yellow
@@ -580,7 +580,7 @@ class FacialLogin(QtWidgets.QFrame):
 
         return round(EAR, 2)
         
-    def update_blink_count_and_status(self,ear=None,dilate_threshold=0.1):
+    def update_blink_count_and_status(self,ear=None,dilate_threshold=0.3):
 
         if ear < self.blink_threshold:
             
