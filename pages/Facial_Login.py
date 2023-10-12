@@ -11,6 +11,7 @@ import threading
 
 from PyQt5.QtCore import Qt, QPoint, QPropertyAnimation
 from Face_Recognition.JoloRecognition import JoloRecognition as Jolo
+from Firebase.Offline import offline_insert
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import *
@@ -397,6 +398,7 @@ class FacialLogin(QtWidgets.QFrame):
         
         # attempt failure
         if self.failure == 3:
+            offline_insert(data={'Fail': "Facial Failure"},TableName="Fail History")
             self.backTomain()
             return
         
@@ -601,7 +603,7 @@ class FacialLogin(QtWidgets.QFrame):
                     self.blink_counter = self.blink_counter + 1
                     return True
                 
-                self.last_dilation_time = None
+                # self.last_dilation_time = None
         else:
             
             # If eye is closed
