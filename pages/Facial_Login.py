@@ -129,9 +129,6 @@ class FacialLogin(QtWidgets.QFrame):
         self.video.setObjectName("video")
         self.horizontalLayout.addWidget(self.video)
         
-    
-        
-        
         # face status
         self.status = QtWidgets.QLabel(self)
         self.status.setGeometry(QtCore.QRect(0, 0, 1021, 51))
@@ -175,7 +172,7 @@ class FacialLogin(QtWidgets.QFrame):
         self.last_recognition_time = time.time()
         self.last_check = time.time()
         self.timer.start(30)
-
+        
         self.status.raise_()
         self.back.raise_()
         self.widget.raise_()

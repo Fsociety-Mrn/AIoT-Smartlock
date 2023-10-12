@@ -1,5 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import *
+
+from Firebase.Offline import total_fail,delete_table
 import socket
 
 class MainWindow(QtWidgets.QFrame):
@@ -221,6 +223,22 @@ class MainWindow(QtWidgets.QFrame):
         self.label_2.setAlignment(QtCore.Qt.AlignCenter)
         self.label_2.setObjectName("label_2")
         
+        # face status
+        self.checkFail = QtWidgets.QLabel(self)
+        self.checkFail.setGeometry(QtCore.QRect(55, 100, 401, 61))
+        font = QtGui.QFont()
+        font.setFamily("Segoe UI")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        font.setStrikeOut(False)
+        self.checkFail.setFont(font)
+        self.checkFail.setStyleSheet("background-color: qlineargradient(spread:pad, x1:0, y1:0.505682, x2:1, y2:0.477, stop:0 rgba(11, 131, 120, 219), stop:1 rgba(85, 98, 112, 226));\n"
+                                     + "color:  white")
+        self.checkFail.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.checkFail.setAlignment(QtCore.Qt.AlignCenter)
+        self.checkFail.setObjectName("status")
+        
         # date
         self.label_3 = QtWidgets.QLabel(self.widget_2)
         self.label_3.setGeometry(QtCore.QRect(90 + 55, 150 + 40, 211, 20))
@@ -237,6 +255,16 @@ class MainWindow(QtWidgets.QFrame):
         self.timer = QtCore.QTimer(self)
         self.timer.timeout.connect(self.update_time)
         self.timer.start(1000)
+    
+        
+        self.failedCountdown = QtCore.QTimer(self)
+        self.failedCountdown.timeout.connect(self.updateCountdown)
+        self.seconds_left = 30
+        
+        self.checkFailDetailsssss = QtCore.QTimer(self)
+        self.checkFailDetailsssss.timeout.connect(self.checkFailss)
+        self.checkFailDetailsssss.start(100)
+
         
         self.closeEvent = self.closeEvent
         self.horizontalLayout.addWidget(self.widget_2)
@@ -271,11 +299,34 @@ class MainWindow(QtWidgets.QFrame):
         
         self.label_3.setText(_translate("mainMenu", "Wed,Jun 3 2023"))
         
+        self.checkFail.setText(_translate("mainMenu", "AIoT is Locked at 30"))
+        
         # self.checkOnline.setText(_translate("mainMenu", "Online"))
         self.settings.clicked.connect(self.updateFace)
         
         self.turnOff.clicked.connect(self.closeEvent)
     
+    
+    def checkFailss(self):
+        
+        print(total_fail("Fail History"))
+
+        if int(total_fail("Fail History")) <= 3:
+            self.failedCountdown.start(1000)
+            self.updateCountdown()
+            self.checkFailDetailsssss.stop()
+    # failed
+    def updateCountdown(self):
+        if self.seconds_left > 0:
+            self.checkFail.setText(f'Time Left: {self.seconds_left} seconds')
+            self.seconds_left -= 1
+        else:
+            self.failedCountdown.stop()
+            self.checkFail.setText('Countdown Finished!')
+            delete_table("Fail History")
+            self.checkFailDetailsssss.start(100)
+            self.failedCountdown.stop()
+            
     # message box
     def messageBoxShow(self, icon=None, title=None, text=None, buttons=None):
 
@@ -343,6 +394,8 @@ class MainWindow(QtWidgets.QFrame):
         self.label_2.setText(current_time)
         self.label_3.setText(current_date)
         
+
+        
     # check internet
     def check_internet_connection(self):
         try:
@@ -374,7 +427,7 @@ class MainWindow(QtWidgets.QFrame):
         Facial_Login.show()
 
         self.facialLogin.setText("Facial Login")
-        # self.hide()
+        self.hide()
     # ===================== open Facial Register ===================== #
 
     def openFacialRegister(self):

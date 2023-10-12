@@ -16,4 +16,35 @@ def offline_insert(TableName, data):
     
     # Offline Insert
     db.close()
+    
+# Function to get print 
+def total_fail(Table_Name):
+    
+    db = TinyDB("Firebase/offline.json")
+    query_result = db.all()
 
+    for item in query_result:
+        fail_history = item.get(Table_Name, {})
+        return len(fail_history)
+    
+    
+    # Offline Insert
+    db.close()
+    
+    return 0
+    
+
+def delete_table(Table_Name):
+    db = TinyDB("Firebase/offline.json")    
+    
+    # Check if the table exists before attempting to delete it
+    if Table_Name in db.tables():
+        
+        print("Ture")
+        
+        # Drop (delete) the specified table
+        db.drop_table(Table_Name)
+    else:
+        print("false")
+        # Close the TinyDB instance
+    db.close()

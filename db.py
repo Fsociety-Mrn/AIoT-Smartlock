@@ -1,5 +1,7 @@
 from tinydb import TinyDB
 
+from Firebase.Offline import delete_table
+
 # Create or open the database
 db = TinyDB('Firebase/offline.json')
 
@@ -14,14 +16,10 @@ db = TinyDB('Firebase/offline.json')
 # db.insert(data)
 
 # Query and print the "Fail" values
-query_result = db.all()
 
-for item in query_result:
-    fail_history = item.get("Fail History", {})
-    for test_num, test_data in fail_history.items():
-        fail_reason = test_data.get("Fail")
-        if fail_reason:
-            print(f"Test {test_num}: {fail_reason}")
+
+
+delete_table("Fail History")
 
 # Close the database
 db.close()
