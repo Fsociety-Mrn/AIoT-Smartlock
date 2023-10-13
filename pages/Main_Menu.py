@@ -260,6 +260,7 @@ class MainWindow(QtWidgets.QFrame):
         self.failedCountdown = QtCore.QTimer(self)
         self.failedCountdown.timeout.connect(self.updateCountdown)
         self.seconds_left = 60
+        self.Fail = False
         
         self.checkFailDetailsssss = QtCore.QTimer(self)
         self.checkFailDetailsssss.timeout.connect(self.checkFailss)
@@ -305,13 +306,13 @@ class MainWindow(QtWidgets.QFrame):
         self.settings.clicked.connect(self.updateFace)
         
         self.turnOff.clicked.connect(self.closeEvent)
-    
-    
+
     def checkFailss(self):
         print("is running")
         if int(total_fail("Fail History")) >= 3:
             self.failedCountdown.start(1000)
             self.updateCountdown()
+            self.checkFailDetailsssss.stop()
 
     # failed
     def updateCountdown(self):
@@ -417,9 +418,6 @@ class MainWindow(QtWidgets.QFrame):
 
         from pages.Facial_Login import FacialLogin
         print("start loading facuial login")
-        
-        # Disable the current form
-        self.setEnabled(False)
 
         self.resize(1024, 565)
         Facial_Login = FacialLogin(self)

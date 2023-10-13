@@ -396,7 +396,10 @@ class FacialLogin(QtWidgets.QFrame):
         # attempt failure
         if self.failure == 3:
             offline_insert(data={'Fail': "Facial Failure"},TableName="Fail History")
-            self.backTomain()
+            self.videoStream.release()
+            cv2.destroyAllWindows()
+            self.close()
+    
             return
         
         # process the frame
