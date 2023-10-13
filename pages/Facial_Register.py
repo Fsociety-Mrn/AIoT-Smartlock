@@ -274,27 +274,27 @@ class facialRegister(QtWidgets.QFrame):
         
         # print("brightness value ", mean_value)
         
-        if mean_value < 35:
+        # if mean_value < 35:
                 
-            self.status.setText("It is too dark.")
+        #     self.status.setText("It is too dark.")
                     
-            height, width, channel = frame.shape
-            bytesPerLine = channel * width
-            qImg = QtGui.QImage(frame.data, width, height, bytesPerLine, QtGui.QImage.Format_BGR888)
-            pixmap = QtGui.QPixmap.fromImage(qImg)
-            self.video.setPixmap(pixmap)
-            return
+        #     height, width, channel = frame.shape
+        #     bytesPerLine = channel * width
+        #     qImg = QtGui.QImage(frame.data, width, height, bytesPerLine, QtGui.QImage.Format_BGR888)
+        #     pixmap = QtGui.QPixmap.fromImage(qImg)
+        #     self.video.setPixmap(pixmap)
+        #     return
         
-        # check if the frame is Bright
-        if mean_value > 100:
-            self.status.setText("It is too bright.")
+        # # check if the frame is Bright
+        # if mean_value > 100:
+        #     self.status.setText("It is too bright.")
                 
-            height, width, channel = frame.shape
-            bytesPerLine = channel * width
-            qImg = QtGui.QImage(frame.data, width, height, bytesPerLine, QtGui.QImage.Format_BGR888)
-            pixmap = QtGui.QPixmap.fromImage(qImg)
-            self.video.setPixmap(pixmap)
-            return
+        #     height, width, channel = frame.shape
+        #     bytesPerLine = channel * width
+        #     qImg = QtGui.QImage(frame.data, width, height, bytesPerLine, QtGui.QImage.Format_BGR888)
+        #     pixmap = QtGui.QPixmap.fromImage(qImg)
+        #     self.video.setPixmap(pixmap)
+        #     return
         
 
         

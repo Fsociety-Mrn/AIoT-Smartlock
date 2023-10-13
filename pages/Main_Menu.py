@@ -259,7 +259,7 @@ class MainWindow(QtWidgets.QFrame):
         
         self.failedCountdown = QtCore.QTimer(self)
         self.failedCountdown.timeout.connect(self.updateCountdown)
-        self.seconds_left = 30
+        self.seconds_left = 60
         
         self.checkFailDetailsssss = QtCore.QTimer(self)
         self.checkFailDetailsssss.timeout.connect(self.checkFailss)
@@ -267,7 +267,7 @@ class MainWindow(QtWidgets.QFrame):
 
         
         self.closeEvent = self.closeEvent
-        self.horizontalLayout.addWidget(self.widget_2)
+        self.horizontalLayout.addWidget(self.widget_2) 
         self.retranslateUi()
         QtCore.QMetaObject.connectSlotsByName(self)
         
@@ -308,13 +308,11 @@ class MainWindow(QtWidgets.QFrame):
     
     
     def checkFailss(self):
-        
-        print(total_fail("Fail History"))
-
-        if int(total_fail("Fail History")) <= 3:
+        print("is running")
+        if int(total_fail("Fail History")) >= 3:
             self.failedCountdown.start(1000)
             self.updateCountdown()
-            self.checkFailDetailsssss.stop()
+
     # failed
     def updateCountdown(self):
         if self.seconds_left > 0:
@@ -393,9 +391,7 @@ class MainWindow(QtWidgets.QFrame):
         self.check_internet_connection()
         self.label_2.setText(current_time)
         self.label_3.setText(current_date)
-        
-
-        
+            
     # check internet
     def check_internet_connection(self):
         try:
@@ -421,13 +417,19 @@ class MainWindow(QtWidgets.QFrame):
 
         from pages.Facial_Login import FacialLogin
         print("start loading facuial login")
+        
+        # Disable the current form
+        self.setEnabled(False)
 
         self.resize(1024, 565)
         Facial_Login = FacialLogin(self)
         Facial_Login.show()
 
         self.facialLogin.setText("Facial Login")
-        self.hide()
+
+    def enableCurrentForm(self):
+        self.setEnabled(True)
+
     # ===================== open Facial Register ===================== #
 
     def openFacialRegister(self):
@@ -470,7 +472,7 @@ class MainWindow(QtWidgets.QFrame):
 
         Token.show()
         self.pincodeLogin.setText("Pincode Login")
-    
+        
     # when close the frame
     def close(self):
         QtWidgets.qApp.quit()

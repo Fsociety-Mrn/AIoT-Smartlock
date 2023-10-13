@@ -21,17 +21,12 @@ def offline_insert(TableName, data):
 def total_fail(Table_Name):
     
     db = TinyDB("Firebase/offline.json")
-    query_result = db.all()
-
-    for item in query_result:
-        fail_history = item.get(Table_Name, {})
-        return len(fail_history)
-    
-    
+    query_result = db.table(Table_Name).all()
+ 
     # Offline Insert
     db.close()
     
-    return 0
+    return len(query_result)
     
 
 def delete_table(Table_Name):
