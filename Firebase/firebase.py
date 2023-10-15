@@ -120,3 +120,14 @@ def firebaseVerifyPincode(username=None, pincode=None):
 
 
 # firebaseDeleteVerifiedToken("For,Testing")
+
+def firebaseHistoryUpdate(key,data):
+    
+    try:    
+        # Push the new entry to the database under the specified name, date, and time
+        db.child("History").child(key).update(data)
+
+        return True
+    except:
+        print("error")
+        return False

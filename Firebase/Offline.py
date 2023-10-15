@@ -1,5 +1,5 @@
 from tinydb import TinyDB, Query
-
+import json
 # Function to create a database and a table
 def __create_database_and_table(table_name):
     db = TinyDB("Firebase/offline.json")
@@ -44,3 +44,39 @@ def delete_table(Table_Name):
         print("false")
         # Close the TinyDB instance
     db.close()
+
+
+def offline_history(name=None, date=None, time=None, access_type=None):
+    db = TinyDB("Firebase/test.json")
+    table = db.table("History")
+    
+    data = {
+        name:{
+            date:{
+                time: access_type
+            }
+        }
+    }
+    
+    table.insert(data)
+    
+    db.close()
+    
+
+def retrieve_data_from_tinydb():
+    db = TinyDB("Firebase/test.json")
+    table = db.table("History")
+
+    # Retrieve all records from the table
+    records = table.all()
+
+    json_data_list = []
+
+    for record in records:
+        json_data_list.append(record)
+        
+
+
+    db.close()
+    
+    return json_data_list
