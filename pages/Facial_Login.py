@@ -18,7 +18,8 @@ from PyQt5.QtWidgets import *
 
 
 
-from Firebase.firebase import firebaseHistory,firebaseVerifyPincode
+from Firebase.firebase import firebaseHistory
+from Firebase.Offline import delete_table
 
 class FacialLogin(QtWidgets.QFrame):
     def __init__(self,parent=None):
@@ -65,7 +66,7 @@ class FacialLogin(QtWidgets.QFrame):
         self.B = 0
 
         # EAR of eye
-        self.blink_threshold = 0.2
+        self.blink_threshold = 0.3
         self.blink_counter = 0
         self.blink = True
         self.last_dilation_time  = 0
@@ -335,6 +336,9 @@ class FacialLogin(QtWidgets.QFrame):
                             access_type="Facial Login",
                             date=str(current_date),
                             time=str(current_time))
+            
+            delete_table("Failed attempt")
+            delete_table("Fail History")
             
     # for facial detection
     def curveBox(self,frame=None,p1=None,p2=None,curvedRadius=30):

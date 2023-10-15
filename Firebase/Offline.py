@@ -16,7 +16,8 @@ def offline_insert(TableName, data):
     
     # Offline Insert
     db.close()
-    
+
+
 # Function to get print 
 def total_fail(Table_Name):
     

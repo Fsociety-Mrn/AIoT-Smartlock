@@ -1,7 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import *
 
-from Firebase.Offline import total_fail,delete_table
+from Firebase.Offline import total_fail,delete_table,offline_insert
 import socket
 
 class MainWindow(QtWidgets.QFrame):
@@ -256,12 +256,14 @@ class MainWindow(QtWidgets.QFrame):
         self.timer.timeout.connect(self.update_time)
         self.timer.start(1000)
     
-        
+        # for countdown
         self.failedCountdown = QtCore.QTimer(self)
         self.failedCountdown.timeout.connect(self.updateCountdown)
-        self.seconds_left = 60
-        self.Fail = False
+        self.seconds_left = 30
+        self.Fail = True
+        self.failedAttempt= 0
         
+        # This timer whether the system is lock or not
         self.checkFailDetailsssss = QtCore.QTimer(self)
         self.checkFailDetailsssss.timeout.connect(self.checkFailss)
         self.checkFailDetailsssss.start(100)
@@ -307,12 +309,65 @@ class MainWindow(QtWidgets.QFrame):
         
         self.turnOff.clicked.connect(self.closeEvent)
 
+
+# ******* LOCK FAILED
+    def __showLocked(self):
+        from pages.Admin_Lock import AdminLock
+        
+        self.timers(isAble=True)
+        
+        self.resize(1024, 565)
+        Token = AdminLock(self)
+
+        Token.show()
+    
+    # to stop the timer and start it again
+    def timers(self, isAble): 
+        if isAble:
+            self.checkFailDetailsssss.stop()
+            self.timer.stop()
+            self.failedCountdown.stop()
+        else:
+            self.checkFailDetailsssss.start()
+            self.timer.start()
+            
+        
     def checkFailss(self):
-        print("is running")
+        
+        self.seconds_left = 30
+
+        if int(total_fail("Failed attempt")) >= 3:
+            self.__showLocked()
+            return 
+        
+
         if int(total_fail("Fail History")) >= 3:
             self.failedCountdown.start(1000)
             self.updateCountdown()
             self.checkFailDetailsssss.stop()
+            
+            self.failedAttempt =  self.failedAttempt + 1
+            
+            offline_insert(TableName="Failed attempt",data={"attempt": int(self.failedAttempt)})
+            
+            self.Fail = False
+            self.disabled(isEnable=False)
+            
+    def disabled(self,isEnable):
+        self.facialLogin.setEnabled(isEnable)
+        self.facialRegister.setEnabled(isEnable)
+        self.pincodeLogin.setEnabled(isEnable)
+        self.settings.setEnabled(isEnable)
+        
+        if not isEnable:
+            self.facialLogin.setText("...........")
+            self.facialRegister.setText("...........")
+            self.pincodeLogin.setText("...........")
+        else:
+            self.facialRegister.setText("Facial Register")
+            self.pincodeLogin.setText("Pin Login")
+            self.facialLogin.setText("Facial Login")
+            
 
     # failed
     def updateCountdown(self):
@@ -325,6 +380,8 @@ class MainWindow(QtWidgets.QFrame):
             delete_table("Fail History")
             self.checkFailDetailsssss.start(100)
             self.failedCountdown.stop()
+            self.Fail = True
+            self.disabled(isEnable=True)
             
     # message box
     def messageBoxShow(self, icon=None, title=None, text=None, buttons=None):
