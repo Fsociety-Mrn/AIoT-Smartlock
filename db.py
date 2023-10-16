@@ -1,22 +1,28 @@
-from tinydb import TinyDB
-from Firebase.firebase import firebaseHistoryUpdate
-from Firebase.Offline import offline_history
+from tinydb import TinyDB,Query
+from Firebase.firebase import firebaseHistoryUpdate,firebaseHistory,firebaseVerifyPincode
+from Firebase.Offline import offline_history,offline_insert,pinCodeLogin
 
-def retrieve_data_from_tinydb():
-    db = TinyDB("Firebase/test.json")
+def updateToDatabase():
+    db = TinyDB("Firebase/offline.json")
     table = db.table("History")
 
     # Retrieve all records from the table
     records = table.all()
     
-    return records
-    
-data = retrieve_data_from_tinydb()
+    for each in records:
+        for name,value in each.items():
+            for date, value in value.items():
+                for time, access_type in value.items():
+                    print("--------------------")
+                    print(name)
+                    print(date)
+                    print(time)
+                    print(access_type)
+                    firebaseHistory(name=name,date=date,time=time,access_type=access_type)
 
-for each in data:
-    for key,value in each.items():
-        print(key, value)
-        firebaseHistoryUpdate(key,value)
-    
+data = pinCodeLogin("00-1010")
 
-# offline_history(name="Lisboa,Art", date="Oct 15 2023", time="7:35 AM", access_type="Access Granted")
+print(data[0],data[1])
+
+
+

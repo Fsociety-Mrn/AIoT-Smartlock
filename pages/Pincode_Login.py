@@ -2,10 +2,31 @@ from PyQt5.QtWidgets import QWidget, QVBoxLayout, QGridLayout, QPushButton, QLin
 from PyQt5.QtWidgets import *
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+from Firebase.firebase import firebaseHistory
+from Firebase.Offline import pinCodeLogin,offline_history,delete_table,offline_insert
+ 
 
 class PincodeLogin(QtWidgets.QFrame):
     def __init__(self, parent=None):
         super().__init__(parent)
+        
+        self.failed = 1
+        
+        # message box
+        self.MessageBox = QtWidgets.QMessageBox()
+        self.MessageBox.setStyleSheet("""
+                  QMessageBox { 
+                      text-align: center;
+                  }
+                  QMessageBox::icon {
+                      subcontrol-position: center;
+                  }
+                  QPushButton { 
+                      width: 250px; 
+                      height: 30px; 
+                      font-size: 15px;
+                  }
+        """)
         
         # frame settings
         self.setObjectName("Facial Login")
@@ -37,7 +58,7 @@ class PincodeLogin(QtWidgets.QFrame):
         
         # show password
         self.checkBox = QtWidgets.QCheckBox(self)
-        self.checkBox.setGeometry(QtCore.QRect(140, 370, 131, 17))
+        self.checkBox.setGeometry(QtCore.QRect(130, 300, 131, 17))
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(11)
@@ -77,26 +98,13 @@ class PincodeLogin(QtWidgets.QFrame):
                 "}")
         self.Cancel_2.setObjectName("Cancel_2")   
         
-        # combobox
-        self.comboBox = QtWidgets.QComboBox(self)
-        self.comboBox.setGeometry(QtCore.QRect(130, 220, 431, 51))
-        font = QtGui.QFont()
-        font.setFamily("Segoe UI")
-        font.setPointSize(15)
-        self.comboBox.setFont(font)
-        self.comboBox.setStyleSheet("background: transparents;\n"
-            "color: #3D989A;\n"
-            "background-color: rgb(255, 255, 255);\n"
-            "border: 1px solid #3D989A;\n"
-        "")
-        self.comboBox.setEditable(False)
-        self.comboBox.setObjectName("comboBox")
-        
+
+        # Token ID
         self.TokenID_3 = QtWidgets.QLineEdit(self)
-        self.TokenID_3.setGeometry(QtCore.QRect(130, 290, 431, 61))
+        self.TokenID_3.setGeometry(QtCore.QRect(130, 230, 431, 61))
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
-        font.setPointSize(14)
+        font.setPointSize(18)
         self.TokenID_3.setFont(font)
         self.TokenID_3.setStyleSheet("background: transparents;\n"
             "color: #3D989A;\n"
@@ -107,14 +115,27 @@ class PincodeLogin(QtWidgets.QFrame):
         self.TokenID_3.setAlignment(QtCore.Qt.AlignCenter)
         self.TokenID_3.setObjectName("TokenID_3")
         
+        # Greetings
+        self.errorMessage = QtWidgets.QLabel(self)
+        self.errorMessage.setGeometry(QtCore.QRect(180, 190, 350, 30))
+        font = QtGui.QFont()
+        font.setFamily("Segoe UI")
+        font.setPointSize(12)
+        font.setBold(False)
+        font.setWeight(10)
+        self.errorMessage.setFont(font)
+        self.errorMessage.setStyleSheet("color: red")
+        self.errorMessage.setAlignment(QtCore.Qt.AlignCenter)
+        self.errorMessage.setObjectName("errorMessage")
+        
         # Keypad
         self.KeyboardContainer_3 = QtWidgets.QWidget(self)
-        self.KeyboardContainer_3.setGeometry(QtCore.QRect(610, 170, 261, 341))
+        self.KeyboardContainer_3.setGeometry(QtCore.QRect(610, 160, 301, 371))
         self.KeyboardContainer_3.setObjectName("KeyboardContainer_3")
         
         # one
         self.seven_2 = QtWidgets.QPushButton(self.KeyboardContainer_3)
-        self.seven_2.setGeometry(QtCore.QRect(20, 20, 61, 61))
+        self.seven_2.setGeometry(QtCore.QRect(20, 20, 70, 70))
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(15)
@@ -135,7 +156,7 @@ class PincodeLogin(QtWidgets.QFrame):
         
         # 2
         self.seven_3 = QtWidgets.QPushButton(self.KeyboardContainer_3)
-        self.seven_3.setGeometry(QtCore.QRect(100, 20, 61, 61))
+        self.seven_3.setGeometry(QtCore.QRect(110, 20, 70, 70))
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(15)
@@ -155,7 +176,7 @@ class PincodeLogin(QtWidgets.QFrame):
         
         # 3
         self.seven_4 = QtWidgets.QPushButton(self.KeyboardContainer_3)
-        self.seven_4.setGeometry(QtCore.QRect(180, 20, 61, 61))
+        self.seven_4.setGeometry(QtCore.QRect(200, 20, 70, 70))
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(15)
@@ -175,7 +196,7 @@ class PincodeLogin(QtWidgets.QFrame):
         
         # 4
         self.seven_5 = QtWidgets.QPushButton(self.KeyboardContainer_3)
-        self.seven_5.setGeometry(QtCore.QRect(100, 100, 61, 61))
+        self.seven_5.setGeometry(QtCore.QRect(110, 100, 70, 70))
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(15)
@@ -195,7 +216,7 @@ class PincodeLogin(QtWidgets.QFrame):
         
         # 5
         self.seven_6 = QtWidgets.QPushButton(self.KeyboardContainer_3)
-        self.seven_6.setGeometry(QtCore.QRect(20, 100, 61, 61))
+        self.seven_6.setGeometry(QtCore.QRect(20, 100, 70, 70))
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(15)
@@ -216,7 +237,7 @@ class PincodeLogin(QtWidgets.QFrame):
         
         # 6
         self.seven_7 = QtWidgets.QPushButton(self.KeyboardContainer_3)
-        self.seven_7.setGeometry(QtCore.QRect(180, 100, 61, 61))
+        self.seven_7.setGeometry(QtCore.QRect(200, 100, 70, 70))
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(15)
@@ -236,7 +257,7 @@ class PincodeLogin(QtWidgets.QFrame):
         
         # 7
         self.seven_8 = QtWidgets.QPushButton(self.KeyboardContainer_3)
-        self.seven_8.setGeometry(QtCore.QRect(180, 180, 61, 61))
+        self.seven_8.setGeometry(QtCore.QRect(200, 180, 70, 70))
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(15)
@@ -256,7 +277,7 @@ class PincodeLogin(QtWidgets.QFrame):
         
         # 8
         self.seven_9 = QtWidgets.QPushButton(self.KeyboardContainer_3)
-        self.seven_9.setGeometry(QtCore.QRect(20, 180, 61, 61))
+        self.seven_9.setGeometry(QtCore.QRect(20, 180, 70, 70))
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(15)
@@ -276,7 +297,7 @@ class PincodeLogin(QtWidgets.QFrame):
         
         # 9
         self.seven_10 = QtWidgets.QPushButton(self.KeyboardContainer_3)
-        self.seven_10.setGeometry(QtCore.QRect(100, 180, 61, 61))
+        self.seven_10.setGeometry(QtCore.QRect(110, 180, 70, 70))
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(15)
@@ -296,7 +317,7 @@ class PincodeLogin(QtWidgets.QFrame):
         
         # delete
         self.seven_11 = QtWidgets.QPushButton(self.KeyboardContainer_3)
-        self.seven_11.setGeometry(QtCore.QRect(180, 260, 61, 61))
+        self.seven_11.setGeometry(QtCore.QRect(200, 260, 70, 70))
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(15)
@@ -320,10 +341,10 @@ class PincodeLogin(QtWidgets.QFrame):
         self.seven_11.setIcon(icon)
         self.seven_11.setIconSize(QtCore.QSize(20, 20))
         self.seven_11.setObjectName("seven_11")
-        
+
         # eneter
         self.seven_12 = QtWidgets.QPushButton(self.KeyboardContainer_3)
-        self.seven_12.setGeometry(QtCore.QRect(20, 260, 61, 61))
+        self.seven_12.setGeometry(QtCore.QRect(20, 260, 70, 70))
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(15)
@@ -350,7 +371,7 @@ class PincodeLogin(QtWidgets.QFrame):
         
         # 0
         self.seven_13 = QtWidgets.QPushButton(self.KeyboardContainer_3)
-        self.seven_13.setGeometry(QtCore.QRect(100, 260, 61, 61))
+        self.seven_13.setGeometry(QtCore.QRect(110, 260, 70, 70))
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(15)
@@ -389,15 +410,16 @@ class PincodeLogin(QtWidgets.QFrame):
 "}")
         self.Cancel_2.setObjectName("Cancel_2")
         self.Cancel_2.clicked.connect(self.cancel)
+        
+        self.state = True
 
         self.retranslateUi()
         QtCore.QMetaObject.connectSlotsByName(self)
-        
-        
+           
     def retranslateUi(self):
         _translate = QtCore.QCoreApplication.translate
         self.setWindowTitle(_translate("Pincode", "Frame"))
-        self.TokenID_3.setPlaceholderText(_translate("MainWindow", "eg: XXXXXX"))
+        self.TokenID_3.setPlaceholderText(_translate("MainWindow", "eg: EE-XXXX"))
 
         self.seven_2.setText(_translate("MainWindow", "1"))
         self.seven_3.setText(_translate("MainWindow", "2"))
@@ -409,7 +431,7 @@ class PincodeLogin(QtWidgets.QFrame):
         self.seven_9.setText(_translate("MainWindow", "7"))
         self.seven_10.setText(_translate("MainWindow", "8"))
         self.seven_13.setText(_translate("MainWindow", "0"))
-        
+
         self.seven_12.clicked.connect(self.backspace)
 
         
@@ -423,17 +445,39 @@ class PincodeLogin(QtWidgets.QFrame):
         self.seven_9.clicked.connect(lambda: self.input_digit('8'))
         self.seven_10.clicked.connect(lambda: self.input_digit('9'))
         self.seven_13.clicked.connect(lambda: self.input_digit('0'))
+        
+        self.TokenID_3.setEchoMode(QLineEdit.Password)
+        
+        self.checkBox.setChecked(False)
+        self.checkBox.stateChanged.connect(self.toggle_password_visibility)
 
+        # enter
+        self.seven_11.clicked.connect(self.enterPINcode)
 
         self.Cancel_2.setText(_translate("MainWindow", "Cancel"))
 
         self.greetings.setText(_translate("MainWindow", "Hello Friend,\n"
-        "\Please choose your name and enter your pincode"))
+        "Please choose your name and enter your pincode"))
         self.checkBox.setText(_translate("MainWindow", "Show Password"))
+             
+    def toggle_password_visibility(self,state):
+      
+        if state != self.checkBox.isChecked():
+                self.TokenID_3.setEchoMode(QtWidgets.QLineEdit.Normal)
+        else:
+                self.TokenID_3.setEchoMode(QtWidgets.QLineEdit.Password)
+                
+        # self.TokenID_3.setEchoMode(QtWidgets.QLineEdit.Password if state else QtWidgets.QLineEdit.Normal)
 
     def input_digit(self, digit):
+            
+        self.errorMessage.setText("")
         current_text = self.TokenID_3.text()
-        self.TokenID_3.setText(current_text + digit)
+        if len(current_text) == 2:
+                current_text = current_text + "-"
+                
+        if len(current_text) != 7:   
+                self.TokenID_3.setText(current_text + digit)
         
         
     def backspace(self):
@@ -443,15 +487,96 @@ class PincodeLogin(QtWidgets.QFrame):
             self.TokenID_3.setText(updated_text)
             
     def cancel(self):
-        from pages.Main_Menu import MainWindow
-        
-        print("go back to main menu")
-
-        # self.resize(1024, 565)
-        # MainWindow(self).show()
         self.close()
+        
+    def enterPINcode(self):
+            
+        self.checkFail()
+        
+        current_date = QtCore.QDate.currentDate().toString("MMM d yyyy")
+        current_time = QtCore.QTime.currentTime().toString("h:mm AP")
+        
+        data = pinCodeLogin(pin=self.TokenID_3.text())
+        
+        
+        self.errorMessage.setText("")
+        
+        if data[0] == None:
+                
+           self.errorMessage.setText("Wrong PIN, please try again.")
+           self.TokenID_3.setText("")
+           result = firebaseHistory(
+                        name="No match detected",
+                        date=current_date,
+                        time=current_time,
+                        access_type="PIN Login denied")
+            
+        
+           if not result:
+                offline_history(
+                        name="No match detected",
+                        date=current_date,
+                        time=current_time,
+                        access_type="PIN Login denied")
+                
+           self.failed = self.failed + 1
+                
+           
+        else:
+            
+            result = firebaseHistory(
+                        name=data[0],
+                        date=current_date,
+                        time=current_time,
+                        access_type="PIN Login granted")
+            
+        
+            if not result:
+                offline_history(  
+                        name=data[0],
+                        date=current_date,
+                        time=current_time,
+                        access_type="PIN Login granted")
+                
+            self.messageBoxShow(
+                icon=self.MessageBox.Information,
+                title="PIN LOGIN",
+                text="Welcome " + str(data[0]) + "!",
+                buttons=self.MessageBox.Ok
+            )
+            
+                    
+            print("Open Locker", data[1])
+            
+            delete_table("Failed attempt")
+            delete_table("Fail History")
+            self.cancel()
+                    
+    # message box
+    def messageBoxShow(self, icon=None, title=None, text=None, buttons=None):
 
+        # Set the window icon, title, and text
+        self.MessageBox.setIcon(icon)
+        self.MessageBox.setWindowTitle(title)
+        self.MessageBox.setText(text)
 
+        # Set the window size
+        self.MessageBox.setFixedWidth(400)
+
+        # Set the standard buttons
+        self.MessageBox.setStandardButtons(buttons)
+
+        result = self.MessageBox.exec_()
+
+        self.MessageBox.close()
+        
+        # Show the message box and return the result
+        return result
+
+    def checkFail(self):
+        if self.failed == 3:
+           offline_insert(data={'Fail': "Wrong PIN"},TableName= "Fail History")
+           self.cancel()
 if __name__ == "__main__":
     
     import sys,background

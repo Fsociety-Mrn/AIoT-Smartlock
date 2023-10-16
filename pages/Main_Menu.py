@@ -1,7 +1,8 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import *
 
-from Firebase.Offline import total_fail,delete_table,offline_insert
+from Firebase.Offline import total_fail,delete_table,offline_insert,updateToDatabase
+from Firebase.firebase import firebaseVerifyPincode
 import socket
 
 class MainWindow(QtWidgets.QFrame):
@@ -302,13 +303,12 @@ class MainWindow(QtWidgets.QFrame):
         
         self.label_3.setText(_translate("mainMenu", "Wed,Jun 3 2023"))
         
-        self.checkFail.setText(_translate("mainMenu", "AIoT is Locked at 30"))
+        # self.checkFail.setText(_translate("mainMenu", ""))
         
         # self.checkOnline.setText(_translate("mainMenu", "Online"))
         self.settings.clicked.connect(self.updateFace)
         
         self.turnOff.clicked.connect(self.closeEvent)
-
 
 # ******* LOCK FAILED
     def __showLocked(self):
@@ -330,8 +330,7 @@ class MainWindow(QtWidgets.QFrame):
         else:
             self.checkFailDetailsssss.start()
             self.timer.start()
-            
-        
+                
     def checkFailss(self):
         
         self.seconds_left = 30
@@ -340,6 +339,10 @@ class MainWindow(QtWidgets.QFrame):
             self.__showLocked()
             return 
         
+        if int(total_fail("Fail History")) >= 1:
+            attempLeft = 3 - int(total_fail("Fail History"))
+            self.checkFail.setText(f'you have {attempLeft} attempt left')
+            
 
         if int(total_fail("Fail History")) >= 3:
             self.failedCountdown.start(1000)
@@ -352,6 +355,8 @@ class MainWindow(QtWidgets.QFrame):
             
             self.Fail = False
             self.disabled(isEnable=False)
+        
+        
             
     def disabled(self,isEnable):
         self.facialLogin.setEnabled(isEnable)
@@ -368,15 +373,14 @@ class MainWindow(QtWidgets.QFrame):
             self.pincodeLogin.setText("Pin Login")
             self.facialLogin.setText("Facial Login")
             
-
     # failed
     def updateCountdown(self):
         if self.seconds_left > 0:
-            self.checkFail.setText(f'Time Left: {self.seconds_left} seconds')
+            self.checkFail.setText(f'AIoT Smartlock is disabled\nTry again in {self.seconds_left} seconds')
             self.seconds_left -= 1
         else:
             self.failedCountdown.stop()
-            self.checkFail.setText('Countdown Finished!')
+            self.checkFail.setText('')
             delete_table("Fail History")
             self.checkFailDetailsssss.start(100)
             self.failedCountdown.stop()
@@ -449,14 +453,24 @@ class MainWindow(QtWidgets.QFrame):
         self.check_internet_connection()
         self.label_2.setText(current_time)
         self.label_3.setText(current_date)
+    
+    # download pincode
+    def pinCode(self):
+        data = firebaseVerifyPincode()
+        
+        if not data == None:
+            delete_table("PIN")
+            for key in data:
+                offline_insert(TableName="PIN", data=key)
             
     # check internet
     def check_internet_connection(self):
         try:
+            self.pinCode()
             # Attempt to create a socket connection to a known server (e.g., Google DNS)
             socket.create_connection(("8.8.8.8", 53))
             self.label.setText("<html><head/><body><p>AIoT Smartlock is <Strong>online<strong/></p></body></html>")
-            
+            updateToDatabase()
         except OSError:
             self.label.setText("<html><head/><body><p><Strong>No Internet<strong/> Connection</p></body></html>")
     
@@ -479,6 +493,8 @@ class MainWindow(QtWidgets.QFrame):
         self.resize(1024, 565)
         Facial_Login = FacialLogin(self)
         Facial_Login.show()
+        
+
 
         self.facialLogin.setText("Facial Login")
 
@@ -503,6 +519,8 @@ class MainWindow(QtWidgets.QFrame):
 
         self.resize(1024, 565)
         Token = TokenForm(self)
+        
+
 
         Token.show()
         self.facialRegister.setText("Facial Register")
@@ -521,8 +539,7 @@ class MainWindow(QtWidgets.QFrame):
     def clickPincodeLogin(self):
      
         from pages.Pincode_Login import PincodeLogin
-
-        self.resize(1024, 565)
+        
         Token = PincodeLogin(self)
 
         Token.show()

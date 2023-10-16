@@ -1,11 +1,11 @@
 from tinydb import TinyDB, Query
+from Firebase.firebase import firebaseHistory
 import json
 # Function to create a database and a table
 def __create_database_and_table(table_name):
     db = TinyDB("Firebase/offline.json")
     table = db.table(table_name)
     return db, table
-
 
 # Function to insert data into the table
 def offline_insert(TableName, data):
@@ -16,7 +16,6 @@ def offline_insert(TableName, data):
     
     # Offline Insert
     db.close()
-
 
 # Function to get print 
 def total_fail(Table_Name):
@@ -29,25 +28,24 @@ def total_fail(Table_Name):
     
     return len(query_result)
     
-
 def delete_table(Table_Name):
     db = TinyDB("Firebase/offline.json")    
     
     # Check if the table exists before attempting to delete it
     if Table_Name in db.tables():
         
-        print("Ture")
+        print("wala kuys")
         
         # Drop (delete) the specified table
         db.drop_table(Table_Name)
     else:
-        print("false")
+        print("may error")
         # Close the TinyDB instance
     db.close()
 
-
+# ******* for History
 def offline_history(name=None, date=None, time=None, access_type=None):
-    db = TinyDB("Firebase/test.json")
+    db = TinyDB("Firebase/offline.json")
     table = db.table("History")
     
     data = {
@@ -62,21 +60,43 @@ def offline_history(name=None, date=None, time=None, access_type=None):
     
     db.close()
     
-
-def retrieve_data_from_tinydb():
-    db = TinyDB("Firebase/test.json")
+def updateToDatabase():
+    db = TinyDB("Firebase/offline.json")
     table = db.table("History")
 
     # Retrieve all records from the table
     records = table.all()
-
-    json_data_list = []
-
-    for record in records:
-        json_data_list.append(record)
-        
-
-
-    db.close()
     
-    return json_data_list
+    for each in records:
+        for name,value in each.items():
+            for date, value in value.items():
+                for time, access_type in value.items():
+                    firebaseHistory(name=name,date=date,time=time,access_type=access_type)
+                
+        delete_table("History")
+        
+# ************** PIN LOGIN ************** #
+def pinCodeLogin(pin):
+    db = TinyDB("Firebase/offline.json")
+    table = db.table("PIN")
+
+    # Retrieve all records from the table
+    records = table.all()
+
+    pins = pin.split("-")
+    
+    # Initialize variables to store the name and the first part of the pin
+    name_found = None
+    first_pin_part = None
+    
+    for each in records:
+        for name,value in each.items():
+            for key,values in value.items():
+                if (values == pin):
+                    
+                    name_found = name
+                    first_pin_part = pins[0]
+                    break  # Exit the innermost loop once we've found a match
+
+    return name_found, first_pin_part
+

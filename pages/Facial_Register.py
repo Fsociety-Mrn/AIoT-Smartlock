@@ -166,7 +166,7 @@ class facialRegister(QtWidgets.QFrame):
             self.status.setText("Please blink")
             
         # Set time delay to avoid over capturing
-        if current_time - self.last_recognition_time <= 0.2:
+        if current_time - self.last_recognition_time <= 0.5:
             return
 
         self.last_recognition_time = current_time
@@ -217,13 +217,9 @@ class facialRegister(QtWidgets.QFrame):
 
         self.resize(800, 480)
         TokenForm(self).close()
-        self.close()
-        MainWindow(self).show()
-
         
         self.cap.release()
         cv2.destroyAllWindows()
-        self.close()
 
     # video Streaming
     def videoStreaming(self):
@@ -254,7 +250,7 @@ class facialRegister(QtWidgets.QFrame):
         # check if the frame is dark
         mean_value = cv2.mean(gray)[0]
         
-        if current_time - self.start_start <= 6:
+        if current_time - self.start_start <= 16:
             
             self.status.setText(f"please be ready at {int(6)-int(current_time - self.start_start)}")
             

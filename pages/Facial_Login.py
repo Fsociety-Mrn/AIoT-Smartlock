@@ -19,7 +19,7 @@ from PyQt5.QtWidgets import *
 
 
 from Firebase.firebase import firebaseHistory
-from Firebase.Offline import delete_table
+from Firebase.Offline import delete_table,offline_history
 
 class FacialLogin(QtWidgets.QFrame):
     def __init__(self,parent=None):
@@ -189,12 +189,9 @@ class FacialLogin(QtWidgets.QFrame):
         self.back.setText(_translate("facialLogin", "Back "))
         
     def backTomain(self):
-        # from pages.Main_Menu import MainWindow
+        from pages.Main_Menu import MainWindow
         
-        # print("go back to main menu")
-
-        # self.resize(1024, 565)
-        # MainWindow(self).show()
+        MainWindow(self).timers(isAble=False)
 
         self.videoStream.release()
         cv2.destroyAllWindows()
@@ -298,10 +295,11 @@ class FacialLogin(QtWidgets.QFrame):
 
         
             # update history firebase
-            firebaseHistory(name=str(result[0]),
+            results = firebaseHistory(name=str(result[0]),
                             access_type="Access Denied",
                             date=str(current_date),
                             time=str(current_time))
+            
             
             self.failure = self.failure + 1
 
@@ -311,8 +309,7 @@ class FacialLogin(QtWidgets.QFrame):
             self.validation = "Authenticated"
             
             # self.LastIn_FirstOut(str(result[0]),save)
-            
-
+        
             threading.Thread(target=self.AccessGranted).start()
     
             self.messageBoxShow(
@@ -321,6 +318,8 @@ class FacialLogin(QtWidgets.QFrame):
                 text="Welcome " + str(result[0]) + "!",
                 buttons=self.MessageBox.Ok
             )
+            
+            
             # self.status.setText(result[0])
             self.R = 0
             self.G = 255
@@ -332,7 +331,13 @@ class FacialLogin(QtWidgets.QFrame):
             words = str(result[0]).split(' ')
             rearranged_string = f"{words[1]},{words[0]}"
             
-            firebaseHistory(name=rearranged_string,
+            results = firebaseHistory(name=rearranged_string,
+                            access_type="Facial Login",
+                            date=str(current_date),
+                            time=str(current_time))
+            
+            if not results:
+                offline_history(name=rearranged_string,
                             access_type="Facial Login",
                             date=str(current_date),
                             time=str(current_time))
@@ -477,11 +482,12 @@ class FacialLogin(QtWidgets.QFrame):
             # cv2.putText(frame, "Face percentage: " + str("{:.2f}".format(40 + Face_percentage)) + "%", (90, 400), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (self.B, self.G, self.R), 1)
             cv2.putText(frame, "Face Blurreness:" + str(Face_blurreness), (30, 400), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (self.B, self.G, self.R), 1)
             
-            if self.validation == "Authenticated" :
-                self.LastIn_FirstOut(name=str(self.matchs),new_image=framesS)
-                self.backTomain()
                 
-            if not Face_percentage < 20 and not Face_blurreness < 100:
+            if not Face_percentage < 15 and not Face_blurreness < 100:
+                
+                if self.validation == "Authenticated" :
+                    self.LastIn_FirstOut(name=str(self.matchs),new_image=framesS)
+                    self.backTomain()
              
                 self.curveBox(frame=frame,p1=(x,y),p2=(x+w,y+h))
 
@@ -491,7 +497,7 @@ class FacialLogin(QtWidgets.QFrame):
                 if self.eyeBlink(gray=gray, frame=frame):
                     self.FacialRecognition(frame=frame,save=frames)
   
-            # check if ervery 5 second
+                # check if ervery 5 second
                 if current_time - self.last_recognition_time >= 5:
 
                     self.last_recognition_time = current_time
@@ -503,9 +509,11 @@ class FacialLogin(QtWidgets.QFrame):
                     self.R = 255
                     self.G = 255
                     self.B = 0
+                    
+                self.status.setText("please blink")
 
             else:
-                self.status.setText("Facial cannot recognize")     
+                self.status.setText("Please come closer")     
             
 
         elif len(faces) >= 1:

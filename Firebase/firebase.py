@@ -2,6 +2,8 @@ import pyrebase
 import os
 import requests
 
+
+
 timeout = 1
 
 # firebase API keys
@@ -88,6 +90,7 @@ def firebaseHistory(name=None, date=None, time=None, access_type=None):
 
         return True
     except:
+        # offline_history(name=None, date=None, time=None, access_type=None)
         return False
 
 # verify pincode
@@ -99,6 +102,20 @@ def firebaseVerifyPincode(username=None, pincode=None):
                 return key  # Ibalik ang pangalan ng key (hal. "Name" o "Name2") na nauugnay sa username at pincode
         
         return None
+    except Exception as e:
+        print("Error:", e)
+        return None
+    
+# verify pincode
+def firebaseVerifyPincode():
+    try:
+        user_data = db.child("PIN").get().val()
+        data = []
+        for name,valuesss in user_data.items():
+
+            data.append({name:valuesss})
+        return data
+            
     except Exception as e:
         print("Error:", e)
         return None
