@@ -2,7 +2,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-from Face_Recognition.JoloRecognition import JoloRecognition as JL
+# from Face_Recognition.JoloRecognition import JoloRecognition as JL
 
 import os
 import cv2
@@ -41,7 +41,7 @@ class facialRegister(QtWidgets.QFrame):
 
             #frame
             self.setObjectName("facialRegistration")
-            self.resize(800, 480)
+            self.resize(1024, 565)
             icon = QtGui.QIcon()
             icon.addPixmap(QtGui.QPixmap(":/background/Images/logo192x192.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
             self.setWindowIcon(icon)
@@ -65,14 +65,14 @@ class facialRegister(QtWidgets.QFrame):
             
             #camera
             self.widget = QtWidgets.QWidget(self)
-            self.widget.setGeometry(QtCore.QRect(140, 60, 511, 351))
+            self.widget.setGeometry(QtCore.QRect(180, 50, 661, 471))
             self.widget.setStyleSheet("border: 2px solid rgb(61, 152, 154) ;\n"
             "border-radius: 50px;")
             self.widget.setObjectName("widget")
             
             self.horizontalLayoutWidget = QtWidgets.QWidget(self.widget)
             # self.horizontalLayoutWidget.setGeometry(QtCore.QRect(20, 20, 631, 321))
-            self.horizontalLayoutWidget.setGeometry(QtCore.QRect(20, 10, 471, 331))
+            self.horizontalLayoutWidget.setGeometry(QtCore.QRect(20, 20, 621, 431))
             self.horizontalLayoutWidget.setObjectName("horizontalLayoutWidget")
             self.horizontalLayout = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget)
             self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
@@ -92,14 +92,14 @@ class facialRegister(QtWidgets.QFrame):
             self.captureStat = 1
             # camera capture
             self.label = QtWidgets.QLabel(self)
-            self.label.setGeometry(QtCore.QRect(370, 430, 41, 41))
+            self.label.setGeometry(QtCore.QRect(600, 5, 41, 41))
             self.label.setText("")
             self.label.setPixmap(QtGui.QPixmap(":/background/Images/capture.png"))
             self.label.setAlignment(QtCore.Qt.AlignCenter)
             self.label.setObjectName("label")
         
             self.capture = QtWidgets.QLabel(self)
-            self.capture.setGeometry(QtCore.QRect(410, 435, 21, 31))
+            self.capture.setGeometry(QtCore.QRect(640, 10, 21, 31))
             font = QtGui.QFont()
             font.setFamily("Segoe UI")
             font.setPointSize(12)
@@ -112,7 +112,7 @@ class facialRegister(QtWidgets.QFrame):
             
             # status
             self.status = QtWidgets.QLabel(self)
-            self.status.setGeometry(QtCore.QRect(-10, 10, 811, 31))
+            self.status.setGeometry(QtCore.QRect(350, 10, 200, 31))
             font = QtGui.QFont()
             font.setFamily("Segoe UI")
             font.setPointSize(12)
@@ -199,7 +199,8 @@ class facialRegister(QtWidgets.QFrame):
     def facialTraining(self):
 
         # Train the facial recognition model
-        message = JL().Face_Train()
+        # message = JL().Face_Train()
+        message = ""
 
         # Show the result
         title = "Facial Registration"
@@ -250,7 +251,7 @@ class facialRegister(QtWidgets.QFrame):
         # check if the frame is dark
         mean_value = cv2.mean(gray)[0]
         
-        if current_time - self.start_start <= 16:
+        if current_time - self.start_start <= 26:
             
             self.status.setText(f"please be ready at {int(6)-int(current_time - self.start_start)}")
             
