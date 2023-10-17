@@ -466,12 +466,16 @@ class MainWindow(QtWidgets.QFrame):
     # check internet
     def check_internet_connection(self):
         try:
-            
+            self.facialRegister.setEnabled(True)
+            self.facialRegister.setText("Facial Register")
             # Attempt to create a socket connection to a known server (e.g., Google DNS)
             socket.create_connection(("8.8.8.8", 53))
             self.label.setText("<html><head/><body><p>AIoT Smartlock is <Strong>online<strong/></p></body></html>")
             updateToDatabase()
         except OSError:
+            
+            self.facialRegister.setEnabled(False)
+            self.facialRegister.setText(".......")
             self.label.setText("<html><head/><body><p><Strong>No Internet<strong/> Connection</p></body></html>")
     
     # ===================== open facial Login ===================== #
