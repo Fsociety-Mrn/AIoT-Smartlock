@@ -2,7 +2,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-# from Face_Recognition.JoloRecognition import JoloRecognition as JL
+from Face_Recognition.JoloRecognition import JoloRecognition as JL
 
 import os
 import cv2
@@ -147,7 +147,7 @@ class facialRegister(QtWidgets.QFrame):
         _translate = QtCore.QCoreApplication.translate
         self.setWindowTitle(_translate("facialRegistration", "Frame"))
         self.capture.setText(_translate("facialRegistration", "0"))
-        self.status.setText(_translate("facialRegistration", "Please be ready at 5"))
+        self.status.setText(_translate("facialRegistration", "Please be ready at 16"))
         self.Name.setText(_translate("facialRegistration", "Art Lisboa"))
 
     # receivce data from Token Form
@@ -176,21 +176,21 @@ class facialRegister(QtWidgets.QFrame):
 
             path = f"Known_Faces/{self.Name.text()}/{self.captureStat}.png"
             
-            cv2.imwrite(path, frame)
-            self.captureStat += 1
-            self.status.setText("Please align your face properly")
+            # cv2.imwrite(path, frame)
+            # self.captureStat += 1
+            # self.status.setText("Please align your face properly")
             
             # check if the frame is blured
-            # laplacian_var = cv2.Laplacian(cropFrame, cv2.CV_64F).var()
-            # print("Blurered level",laplacian_var)
-            # if laplacian_var < 100:
-            #     self.status.setText("cant capture it is blured")
+            laplacian_var = cv2.Laplacian(cropFrame, cv2.CV_64F).var()
+            print("Blurered level",laplacian_var)
+            if laplacian_var < 100:
+                self.status.setText("cant capture it is blured")
                 
-            # else:
-            #     cv2.imwrite(path, frame)
-            #     self.captureStat += 1
+            else:
+                cv2.imwrite(path, frame)
+                self.captureStat += 1
             
-            #     self.status.setText("Please align your face properly")
+                self.status.setText("Please align your face properly")
             
             return False
         else:
@@ -199,8 +199,8 @@ class facialRegister(QtWidgets.QFrame):
     def facialTraining(self):
 
         # Train the facial recognition model
-        # message = JL().Face_Train()
-        message = ""
+        message = JL().Face_Train()
+
 
         # Show the result
         title = "Facial Registration"
@@ -210,20 +210,21 @@ class facialRegister(QtWidgets.QFrame):
 
         print(self.Name.text())
         
-
-        from pages.Main_Menu import MainWindow
         from pages.Token_Form import TokenForm
         
         print("go back to main menu")
-
-        self.resize(800, 480)
+        
         TokenForm(self).close()
+        self.close()
         
         self.cap.release()
         cv2.destroyAllWindows()
 
     # video Streaming
     def videoStreaming(self):
+        
+        
+
         ret, notFlip = self.cap.read()
 
         if not ret:
@@ -251,13 +252,28 @@ class facialRegister(QtWidgets.QFrame):
         # check if the frame is dark
         mean_value = cv2.mean(gray)[0]
         
-        if current_time - self.start_start <= 26:
+        if current_time - self.start_start <= 11:
             
-            self.status.setText(f"please be ready at {int(6)-int(current_time - self.start_start)}")
+            self.status.setText(f"please be ready at {int(10)-int(current_time - self.start_start)}")
             
             if len(faces) == 1:  
                 x, y, w, h = faces[0]
                 cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+                
+                # Calculate the Laplacian
+                laplacian = cv2.Laplacian(gray, cv2.CV_64F)
+    
+                # Calculate the variance of the Laplacian
+                variance = laplacian.var()
+            
+                Face_percentage = float("{:.2f}".format(100 * (w * h) / (frame.shape[0] * frame.shape[1])))
+                Face_blurreness = float("{:.2f}".format(variance))
+            
+
+                cv2.putText(frame, "Face percentage: " + str(Face_percentage) + "%", (30, 420), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 255), 1)
+                # cv2.putText(frame, "Face percentage: " + str("{:.2f}".format(40 + Face_percentage)) + "%", (90, 400), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (self.B, self.G, self.R), 1)
+                cv2.putText(frame, "Face Blurreness:" + str(Face_blurreness), (30, 400), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 255), 1)
+            
                 
             height, width, channel = frame.shape
             bytesPerLine = channel * width
@@ -294,7 +310,6 @@ class facialRegister(QtWidgets.QFrame):
         #     return
         
 
-        
         if len(faces) == 1:
             
             x, y, w, h = faces[0]
@@ -305,11 +320,31 @@ class facialRegister(QtWidgets.QFrame):
             faceCrop = notFlip[y:y+h, x:x+w]
             face_gray = cv2.cvtColor(faceCrop, cv2.COLOR_BGR2GRAY)
             
-            statusCap = self.captureSave(current_time=current_time, frame=notFlip,cropFrame=face_gray)
+                    # Calculate the Laplacian
+            laplacian = cv2.Laplacian(gray, cv2.CV_64F)
+    
+            # Calculate the variance of the Laplacian
+            variance = laplacian.var()
             
-            if statusCap:
-                if not self.eyeBlink(gray=gray):
-                    self.facialTraining()
+            Face_percentage = float("{:.2f}".format(100 * (w * h) / (frame.shape[0] * frame.shape[1])))
+            Face_blurreness = float("{:.2f}".format(variance))
+            
+
+            cv2.putText(frame, "Face percentage: " + str(Face_percentage) + "%", (30, 420), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 255), 1)
+            # cv2.putText(frame, "Face percentage: " + str("{:.2f}".format(40 + Face_percentage)) + "%", (90, 400), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (self.B, self.G, self.R), 1)
+            cv2.putText(frame, "Face Blurreness:" + str(Face_blurreness), (30, 400), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 255), 1)
+            
+        
+
+            if not Face_percentage < 15 and not Face_blurreness < 830:
+            
+                statusCap = self.captureSave(current_time=current_time, frame=notFlip,cropFrame=face_gray)
+            
+                if statusCap:
+                    if not self.eyeBlink(gray=gray):
+                        self.facialTraining()
+            else:
+                self.status.setText("unable to capture it is blurr please come closer")
                     
         elif len(faces) >= 1:
             self.status.setText("Multiple face is detected")
