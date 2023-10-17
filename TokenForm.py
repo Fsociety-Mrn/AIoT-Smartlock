@@ -16,7 +16,7 @@ def calculate_blurriness(image_path):
     return variance
 
 def main():
-    image_path = 'Known_Faces/ART LISBOA/1.png'  # Replace with the path to your image
+    image_path = 'Known_Faces/ART LISBOA/14.png'  # Replace with the path to your image
     
     # Calculate the blurriness
     blurriness = calculate_blurriness(image_path)

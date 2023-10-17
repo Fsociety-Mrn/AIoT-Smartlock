@@ -87,6 +87,10 @@ class facialRegister(QtWidgets.QFrame):
             self.video.setAlignment(QtCore.Qt.AlignCenter)
             self.video.setObjectName("video")
             self.horizontalLayout.addWidget(self.video)
+            
+            # Set the default image to your custom image
+            self.default_image = QtGui.QPixmap("Images/loading.png")
+
         
 
             self.captureStat = 1
@@ -99,7 +103,7 @@ class facialRegister(QtWidgets.QFrame):
             self.label.setObjectName("label")
         
             self.capture = QtWidgets.QLabel(self)
-            self.capture.setGeometry(QtCore.QRect(640, 10, 21, 31))
+            self.capture.setGeometry(QtCore.QRect(660, 10, 21, 31))
             font = QtGui.QFont()
             font.setFamily("Segoe UI")
             font.setPointSize(12)
@@ -112,7 +116,7 @@ class facialRegister(QtWidgets.QFrame):
             
             # status
             self.status = QtWidgets.QLabel(self)
-            self.status.setGeometry(QtCore.QRect(350, 10, 200, 31))
+            self.status.setGeometry(QtCore.QRect(200, 10, 400, 31))
             font = QtGui.QFont()
             font.setFamily("Segoe UI")
             font.setPointSize(12)
@@ -183,7 +187,7 @@ class facialRegister(QtWidgets.QFrame):
             # check if the frame is blured
             laplacian_var = cv2.Laplacian(cropFrame, cv2.CV_64F).var()
             print("Blurered level",laplacian_var)
-            if laplacian_var < 100:
+            if laplacian_var < 500:
                 self.status.setText("cant capture it is blured")
                 
             else:
@@ -197,34 +201,43 @@ class facialRegister(QtWidgets.QFrame):
             return True
 
     def facialTraining(self):
-
-        # Train the facial recognition model
-        message = JL().Face_Train()
-
-
-        # Show the result
-        title = "Facial Registration"
-        text = "Facial training complete" if message == "Successfully trained" else message
-        icon = self.MessageBox.Information if message == "Successfully trained" else self.MessageBox.Warning
-        self.messageBoxShow(title=title, text=text, buttons=self.MessageBox.Ok, icon=icon)
-
-        print(self.Name.text())
         
-        from pages.Token_Form import TokenForm
-        
-        print("go back to main menu")
-        
-        TokenForm(self).close()
-        self.close()
+        self.timer.stop()
         
         self.cap.release()
         cv2.destroyAllWindows()
 
-    # video Streaming
-    def videoStreaming(self):
+
+        
+        self.status.setText("Facial training please wait")
+        self.video.setPixmap(self.default_image)
+        
+        self.status.setText("Facial Training please wait")
+        
+        # Delay the creation of the FacialLogin object by 100 milliseconds
+        QtCore.QTimer.singleShot(100, self.startFacialTraining)
+
+   
+        
+    def startFacialTraining(self):
+        
+        # Train the facial recognition model
+        JL().Face_Train()
+        
+        # Show the result
+        title = "Facial Registration"
+        text = "Successfully trained" 
+        icon = self.MessageBox.Information
+        self.messageBoxShow(title=title, text=text, buttons=self.MessageBox.Ok, icon=icon)
+        
+        self.close()
         
         
 
+
+    # video Streaming
+    def videoStreaming(self):
+        
         ret, notFlip = self.cap.read()
 
         if not ret:
@@ -321,7 +334,7 @@ class facialRegister(QtWidgets.QFrame):
             face_gray = cv2.cvtColor(faceCrop, cv2.COLOR_BGR2GRAY)
             
                     # Calculate the Laplacian
-            laplacian = cv2.Laplacian(gray, cv2.CV_64F)
+            laplacian = cv2.Laplacian(face_gray, cv2.CV_64F)
     
             # Calculate the variance of the Laplacian
             variance = laplacian.var()
@@ -334,18 +347,14 @@ class facialRegister(QtWidgets.QFrame):
             # cv2.putText(frame, "Face percentage: " + str("{:.2f}".format(40 + Face_percentage)) + "%", (90, 400), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (self.B, self.G, self.R), 1)
             cv2.putText(frame, "Face Blurreness:" + str(Face_blurreness), (30, 400), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 255), 1)
             
-        
 
-            if not Face_percentage < 15 and not Face_blurreness < 830:
             
-                statusCap = self.captureSave(current_time=current_time, frame=notFlip,cropFrame=face_gray)
+            statusCap = self.captureSave(current_time=current_time, frame=notFlip,cropFrame=face_gray)
             
-                if statusCap:
-                    if not self.eyeBlink(gray=gray):
-                        self.facialTraining()
-            else:
-                self.status.setText("unable to capture it is blurr please come closer")
-                    
+            if statusCap:
+                if not self.eyeBlink(gray=gray):
+                    self.facialTraining() 
+                  
         elif len(faces) >= 1:
             self.status.setText("Multiple face is detected")
         else:

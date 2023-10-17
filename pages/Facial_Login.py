@@ -270,7 +270,7 @@ class FacialLogin(QtWidgets.QFrame):
         cv2.imwrite(new_image_path, new_image)
 
     #  for facial recognition
-    def FacialRecognition(self, frame, save):
+    def FacialRecognition(self, frame):
         result = Jolo().Face_Compare(frame)
         
         current_date = QtCore.QDate.currentDate().toString("MMM d yyyy")
@@ -396,7 +396,8 @@ class FacialLogin(QtWidgets.QFrame):
         ret, frame = self.videoStream.read()
         
         frames = frame
-
+        
+        # if no detected frames
         if not ret:
             self.status.setText("Please wait camera is loading")
             self.video.setPixmap(QtGui.QPixmap(":/background/Images/loading.png"))
@@ -416,39 +417,7 @@ class FacialLogin(QtWidgets.QFrame):
         framesS = cv2.flip(frame, 1)
 
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        
-        # # check if the frame is dark
-        # mean_value = cv2.mean(gray)[0]
-
-        # if mean_value < 80:
-            
-        #     self.status.setText("It is too dark.")
-            
-        #     # display the frame on the label
-        #     height, width, channel = frame.shape
-        #     bytesPerLine = channel * width
-        #     qImg = QtGui.QImage(frame.data, width, height, bytesPerLine, QtGui.QImage.Format_BGR888)
-        #     pixmap = QtGui.QPixmap.fromImage(qImg)
-        #     self.video.setPixmap(pixmap)
-           
-            
-            
-        #     return
-        
-        # # check if the frame is Bright
-        # if mean_value > 100:
-            
-        #     self.status.setText("It is too bright.")
-            
-        #     # display the frame on the label
-        #     height, width, channel = frame.shape    
-        #     bytesPerLine = channel * width
-        #     qImg = QtGui.QImage(frame.data, width, height, bytesPerLine, QtGui.QImage.Format_BGR888)
-        #     pixmap = QtGui.QPixmap.fromImage(qImg)
-        #     self.video.setPixmap(pixmap)
     
-        #     return
-
         # load facial detector haar
         faces = self.face_detector.detectMultiScale(gray,
                                                     scaleFactor=1.1,
@@ -468,26 +437,27 @@ class FacialLogin(QtWidgets.QFrame):
         if len(faces) == 1:
             x, y, w, h = faces[0]
             
+            
+            faceCrop = frame[y:y+h, x:x+w]
+            face_gray = cv2.cvtColor(faceCrop, cv2.COLOR_BGR2GRAY)
+            
             # Calculate the Laplacian
-            laplacian = cv2.Laplacian(gray, cv2.CV_64F)
+            laplacian = cv2.Laplacian(face_gray, cv2.CV_64F)
     
             # Calculate the variance of the Laplacian
             variance = laplacian.var()
             
-            Face_percentage = float("{:.2f}".format(100 * (w * h) / (frame.shape[0] * frame.shape[1])))
             Face_blurreness = float("{:.2f}".format(variance))
             
-
-            cv2.putText(frame, "Face percentage: " + str(Face_percentage) + "%", (30, 420), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (self.B, self.G, self.R), 1)
-            # cv2.putText(frame, "Face percentage: " + str("{:.2f}".format(40 + Face_percentage)) + "%", (90, 400), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (self.B, self.G, self.R), 1)
-            cv2.putText(frame, "Face Blurreness:" + str(Face_blurreness), (30, 400), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (self.B, self.G, self.R), 1)
+            cv2.putText(frame, "Face Blurreness: " + str(Face_blurreness), (30, 440), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (self.B, self.G, self.R), 1)
             
+            if not Face_blurreness < 500:
                 
-            if not Face_percentage < 15 and not Face_blurreness < 100:
-                
+                # if authenticated
                 if self.validation == "Authenticated" :
-                    self.LastIn_FirstOut(name=str(self.matchs),new_image=framesS)
-                    self.backTomain()
+                    if not Face_blurreness < 550:
+                        self.LastIn_FirstOut(name=str(self.matchs),new_image=framesS)
+                        self.backTomain()
              
                 self.curveBox(frame=frame,p1=(x,y),p2=(x+w,y+h))
 
@@ -495,7 +465,7 @@ class FacialLogin(QtWidgets.QFrame):
                 cv2.putText(frame, str(self.matchs), (x, y + h + 30), cv2.FONT_HERSHEY_COMPLEX, 1, (self.B, self.G, self.R),1)
 
                 if self.eyeBlink(gray=gray, frame=frame):
-                    self.FacialRecognition(frame=frame,save=frames)
+                    self.FacialRecognition(frame=frame)
   
                 # check if ervery 5 second
                 if current_time - self.last_recognition_time >= 5:
@@ -513,7 +483,7 @@ class FacialLogin(QtWidgets.QFrame):
                 self.status.setText("please blink")
 
             else:
-                self.status.setText("Please come closer")     
+                self.status.setText("Camera is blurr")     
             
 
         elif len(faces) >= 1:
@@ -525,6 +495,7 @@ class FacialLogin(QtWidgets.QFrame):
             for (x, y, w, h) in faces:
                 self.curveBox(frame=frame,p1=(x,y),p2=(x+w,y+h))
             self.status.setText("more than 1 faces is detected")
+            
         else:
             self.status.setText("No face is detected")
 
@@ -627,8 +598,8 @@ class FacialLogin(QtWidgets.QFrame):
     def display_stats_on_frame(self, frame, EAR):
         cv2.putText(frame, "Blink Counter: {}".format(self.blink_counter), (30, 70), cv2.FONT_HERSHEY_SIMPLEX, 0.5,
                     (self.B, self.G, self.R),1)
-        cv2.putText(frame, "E.A.R: {}".format(EAR), (30, 90), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (self.B, self.G, self.R), 1)
-        cv2.putText(frame, "Eye Status: {}".format(self.blink), (30, 110), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (self.B, self.G, self.R),1)
+        # cv2.putText(frame, "E.A.R: {}".format(EAR), (30, 90), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (self.B, self.G, self.R), 1)
+        cv2.putText(frame, "Eye Status: {}".format("OPEN" if self.blink else "CLOSE"), (30, 420), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (self.B, self.G, self.R),1)
 
     # when close the frame
 

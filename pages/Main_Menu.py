@@ -267,7 +267,7 @@ class MainWindow(QtWidgets.QFrame):
         # This timer whether the system is lock or not
         self.checkFailDetailsssss = QtCore.QTimer(self)
         self.checkFailDetailsssss.timeout.connect(self.checkFailss)
-        self.checkFailDetailsssss.start(100)
+        self.checkFailDetailsssss.start(1000)
 
         
         self.closeEvent = self.closeEvent
@@ -466,7 +466,7 @@ class MainWindow(QtWidgets.QFrame):
     # check internet
     def check_internet_connection(self):
         try:
-            self.pinCode()
+            
             # Attempt to create a socket connection to a known server (e.g., Google DNS)
             socket.create_connection(("8.8.8.8", 53))
             self.label.setText("<html><head/><body><p>AIoT Smartlock is <Strong>online<strong/></p></body></html>")
@@ -533,6 +533,8 @@ class MainWindow(QtWidgets.QFrame):
         self.facialLogin.isEnabled = False
         self.facialRegister.isEnabled = False
 
+        self.pinCode()
+        
         # Delay the creation of the FacialLogin object by 100 milliseconds
         QtCore.QTimer.singleShot(100, self.clickPincodeLogin)
 
