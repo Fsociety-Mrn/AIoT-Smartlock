@@ -11,8 +11,10 @@ from PyQt5.QtCore import pyqtSignal
 class TokenForm(QtWidgets.QFrame):
     data_passed = pyqtSignal(str)
     
-    def __init__(self, parent=None):
+    def __init__(self, parent):
         super().__init__(parent)
+        
+        self.main_menu = parent
         
         # name
         self.rearranged_string = ""
@@ -998,9 +1000,7 @@ class TokenForm(QtWidgets.QFrame):
             self.TokenID.setText(current_text)
                   
     def backTomain(self):
-        from pages.Main_Menu import MainWindow
-        
-        print("go back to main menu")
+        self.main_menu.timers(False)
         self.close()
     
     def continueTo(self):

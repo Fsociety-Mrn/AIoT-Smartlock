@@ -7,8 +7,10 @@ from Firebase.Offline import pinCodeLogin,offline_history,delete_table,offline_i
  
 
 class PincodeLogin(QtWidgets.QFrame):
-    def __init__(self, parent=None):
+    def __init__(self, parent):
         super().__init__(parent)
+        
+        self.main_menu = parent
         
         self.failed = 1
         
@@ -478,8 +480,7 @@ class PincodeLogin(QtWidgets.QFrame):
                 
         if len(current_text) != 7:   
                 self.TokenID_3.setText(current_text + digit)
-        
-        
+
     def backspace(self):
         current_text = self.TokenID_3.text()
         if current_text:
@@ -487,6 +488,7 @@ class PincodeLogin(QtWidgets.QFrame):
             self.TokenID_3.setText(updated_text)
             
     def cancel(self):
+        self.main_menu.timers(False)
         self.close()
         
     def enterPINcode(self):

@@ -216,8 +216,6 @@ class facialRegister(QtWidgets.QFrame):
         
         # Delay the creation of the FacialLogin object by 100 milliseconds
         QtCore.QTimer.singleShot(100, self.startFacialTraining)
-
-   
         
     def startFacialTraining(self):
         
@@ -231,9 +229,6 @@ class facialRegister(QtWidgets.QFrame):
         self.messageBoxShow(title=title, text=text, buttons=self.MessageBox.Ok, icon=icon)
         
         self.close()
-        
-        
-
 
     # video Streaming
     def videoStreaming(self):
