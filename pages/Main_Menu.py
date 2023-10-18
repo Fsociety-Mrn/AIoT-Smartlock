@@ -3,6 +3,8 @@ from PyQt5.QtWidgets import *
 
 from Firebase.Offline import total_fail,delete_table,offline_insert,updateToDatabase
 from Firebase.firebase import firebaseVerifyPincode
+
+from Raspberry.Raspberry import openLocker
 import socket
 
 class MainWindow(QtWidgets.QFrame):
@@ -475,6 +477,8 @@ class MainWindow(QtWidgets.QFrame):
             socket.create_connection(("8.8.8.8", 53))
             self.label.setText("<html><head/><body><p>AIoT Smartlock is <Strong>online<strong/></p></body></html>")
             updateToDatabase()
+            
+            openLocker()
         except OSError:
             
             self.facialRegister.setEnabled(False)
