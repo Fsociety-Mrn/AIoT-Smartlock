@@ -446,6 +446,8 @@ class MainWindow(QtWidgets.QFrame):
 
     # check time
     def update_time(self):
+        
+        print("Running")
         current_date = QtCore.QDate.currentDate().toString("ddd, MMM d yyyy")
         
         current_time = QtCore.QTime.currentTime().toString("h:mm AP")
@@ -498,7 +500,6 @@ class MainWindow(QtWidgets.QFrame):
         Facial_Login = FacialLogin(self)
         Facial_Login.show()
         
-
 
         self.facialLogin.setText("Facial Login")
 
@@ -572,3 +573,6 @@ class MainWindow(QtWidgets.QFrame):
             
     def showMenu(self):
         self.menu.exec_(self.settings.mapToGlobal(self.settings.rect().bottomLeft()))
+
+    def hellofriend(self):
+        print("hello friend")

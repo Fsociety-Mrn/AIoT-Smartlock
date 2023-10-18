@@ -91,7 +91,7 @@ class JoloRecognition:
                         return (self.Name_List[idx_min], min_dist)
                     else:
 
-                        return ('No match detected', None)
+                        return ('No match detected', min_dist)
                 
                 else:
                     return ('No match detected', None)
