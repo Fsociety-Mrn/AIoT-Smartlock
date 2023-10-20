@@ -2,7 +2,9 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import *
 
 from Firebase.Offline import total_fail,delete_table,offline_insert,updateToDatabase
-from Firebase.firebase import firebaseVerifyPincode
+from Firebase.firebase import firebaseVerifyPincode,lockerList
+
+from Raspberry.Raspberry import openLocker
 import socket
 
 class MainWindow(QtWidgets.QFrame):
@@ -321,7 +323,7 @@ class MainWindow(QtWidgets.QFrame):
 
         Token.show()
     
-    # to stop the timer and start it again
+    # ========== to stop the timer and start it again ========== #
     def timers(self, isAble): 
         if isAble:
             self.checkFailDetailsssss.stop()
@@ -356,13 +358,14 @@ class MainWindow(QtWidgets.QFrame):
             self.Fail = False
             self.disabled(isEnable=False)
         
-        
-            
     def disabled(self,isEnable):
         self.facialLogin.setEnabled(isEnable)
         self.facialRegister.setEnabled(isEnable)
         self.pincodeLogin.setEnabled(isEnable)
         self.settings.setEnabled(isEnable)
+        
+        
+
         
         if not isEnable:
             self.facialLogin.setText("...........")
@@ -444,8 +447,10 @@ class MainWindow(QtWidgets.QFrame):
         self.facialRegister.isEnabled = True
         self.pincodeLogin.isEnabled = True
 
-    # check time
+    # ********************** check time ********************** #
     def update_time(self):
+        
+        print("Running")
         current_date = QtCore.QDate.currentDate().toString("ddd, MMM d yyyy")
         
         current_time = QtCore.QTime.currentTime().toString("h:mm AP")
@@ -453,6 +458,9 @@ class MainWindow(QtWidgets.QFrame):
         self.check_internet_connection()
         self.label_2.setText(current_time)
         self.label_3.setText(current_date)
+    
+    
+    # ********************* Offline Mode ********************* #
     
     # download pincode
     def pinCode(self):
@@ -462,6 +470,15 @@ class MainWindow(QtWidgets.QFrame):
             delete_table("PIN")
             for key in data:
                 offline_insert(TableName="PIN", data=key)
+                
+    # List of Locker
+    def locker(self):
+        data = lockerList()
+        
+        if not data == None:
+            delete_table("LOCK")
+            for key in data:
+                offline_insert(TableName="LOCK", data=key)
             
     # check internet
     def check_internet_connection(self):
@@ -472,6 +489,8 @@ class MainWindow(QtWidgets.QFrame):
             socket.create_connection(("8.8.8.8", 53))
             self.label.setText("<html><head/><body><p>AIoT Smartlock is <Strong>online<strong/></p></body></html>")
             updateToDatabase()
+            
+            openLocker()
         except OSError:
             
             self.facialRegister.setEnabled(False)
@@ -485,6 +504,9 @@ class MainWindow(QtWidgets.QFrame):
         self.facialLogin.isEnabled = False
         self.facialRegister.isEnabled = False
         self.pincodeLogin.isEnabled = False
+        
+        # download updated Locker Number
+        self.locker()
 
         # Delay the creation of the FacialLogin object by 100 milliseconds
         QtCore.QTimer.singleShot(100, self.clickFacialLogin)
@@ -493,17 +515,15 @@ class MainWindow(QtWidgets.QFrame):
 
         from pages.Facial_Login import FacialLogin
         print("start loading facuial login")
+        
+        self.timers(True)
 
         self.resize(1024, 565)
         Facial_Login = FacialLogin(self)
         Facial_Login.show()
         
 
-
         self.facialLogin.setText("Facial Login")
-
-    def enableCurrentForm(self):
-        self.setEnabled(True)
 
     # ===================== open Facial Register ===================== #
 
@@ -523,13 +543,13 @@ class MainWindow(QtWidgets.QFrame):
 
         self.resize(1024, 565)
         Token = TokenForm(self)
+    
+        self.timers(True)
         
-
-
         Token.show()
         self.facialRegister.setText("Facial Register")
     
-    # ===================== open Facial Register ===================== #
+    # ===================== open PIN LOGIN ===================== #
     def openPincodeLogin(self):
     
         self.pincodeLogin.setText("Loading..............")
@@ -539,6 +559,8 @@ class MainWindow(QtWidgets.QFrame):
 
         self.pinCode()
         
+        self.timers(True)
+        
         # Delay the creation of the FacialLogin object by 100 milliseconds
         QtCore.QTimer.singleShot(100, self.clickPincodeLogin)
 
@@ -547,6 +569,8 @@ class MainWindow(QtWidgets.QFrame):
         from pages.Pincode_Login import PincodeLogin
         
         Token = PincodeLogin(self)
+        
+        self.timers(True)
 
         Token.show()
         self.pincodeLogin.setText("Pincode Login")
@@ -572,3 +596,6 @@ class MainWindow(QtWidgets.QFrame):
             
     def showMenu(self):
         self.menu.exec_(self.settings.mapToGlobal(self.settings.rect().bottomLeft()))
+
+    def hellofriend(self):
+        print("hello friend")

@@ -119,8 +119,19 @@ def firebaseVerifyPincode():
     except Exception as e:
         print("Error:", e)
         return None
+    
+def lockerList():
+    try:
+        user_data = db.child("LOCK").get().val()
+        data = []
+        for name,valuesss in user_data.items():
 
-
+            data.append({name:valuesss})
+        return data
+            
+    except Exception as e:
+        print("Error:", e)
+        return None
 # print(firebaseVerifyPincode(username="artlisboa", pincode="1010"))
 
 

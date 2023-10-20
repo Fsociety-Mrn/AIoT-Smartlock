@@ -11,7 +11,8 @@ import threading
 
 from PyQt5.QtCore import Qt, QPoint, QPropertyAnimation
 from Face_Recognition.JoloRecognition import JoloRecognition as Jolo
-from Firebase.Offline import offline_insert
+from Firebase.Offline import offline_insert,checkLocker
+from Raspberry.Raspberry import OpenLockers
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import *
@@ -22,14 +23,18 @@ from Firebase.firebase import firebaseHistory
 from Firebase.Offline import delete_table,offline_history
 
 class FacialLogin(QtWidgets.QFrame):
-    def __init__(self,parent=None):
-        super().__init__(parent)
+    def __init__(self,main_menu):
+        super().__init__(main_menu)
+        self.main_menu = main_menu
         # for video streaming variable
         self.videoStream = cv2.VideoCapture(1) if cv2.VideoCapture(1).isOpened() else cv2.VideoCapture(0)
         self.videoStream.set(4, 1080)
         
         # Define a flag to ensure self.aiVoice runs only once
         self.ai_voice_executed = False
+        
+        # Locker Number
+        self.LockerNumber = 0
         
         # message box
         self.MessageBox = QtWidgets.QMessageBox()
@@ -189,9 +194,8 @@ class FacialLogin(QtWidgets.QFrame):
         self.back.setText(_translate("facialLogin", "Back "))
         
     def backTomain(self):
-        from pages.Main_Menu import MainWindow
         
-        MainWindow(self).timers(isAble=False)
+        self.main_menu.timers(False)
 
         self.videoStream.release()
         cv2.destroyAllWindows()
@@ -268,6 +272,9 @@ class FacialLogin(QtWidgets.QFrame):
 
         # Save the new image using cv2.imwrite()
         cv2.imwrite(new_image_path, new_image)
+        
+        # clear the matches
+        self.matchs = ""
 
     #  for facial recognition
     def FacialRecognition(self, frame):
@@ -275,6 +282,8 @@ class FacialLogin(QtWidgets.QFrame):
         
         current_date = QtCore.QDate.currentDate().toString("MMM d yyyy")
         current_time = QtCore.QTime.currentTime().toString("h:mm AP")
+        
+        print(result[1])
 
         if result[0] == 'No match detected':
             self.validation = ""
@@ -345,6 +354,12 @@ class FacialLogin(QtWidgets.QFrame):
             delete_table("Failed attempt")
             delete_table("Fail History")
             
+            self.LockerNumber = checkLocker(rearranged_string)
+            print(self.LockerNumber)
+            
+            OpenLockers(key=self.LockerNumber,value=True)
+            
+            
     # for facial detection
     def curveBox(self,frame=None,p1=None,p2=None,curvedRadius=30):
     
@@ -406,8 +421,11 @@ class FacialLogin(QtWidgets.QFrame):
         # attempt failure
         if self.failure == 3:
             offline_insert(data={'Fail': "Facial Failure"},TableName="Fail History")
+                    
             self.videoStream.release()
             cv2.destroyAllWindows()
+            
+            self.main_menu.timers(False)
             self.close()
     
             return
@@ -451,12 +469,15 @@ class FacialLogin(QtWidgets.QFrame):
             
             cv2.putText(frame, "Face Blurreness: " + str(Face_blurreness), (30, 440), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (self.B, self.G, self.R), 1)
             
-            if not Face_blurreness < 500:
+            if not Face_blurreness < 450:
                 
                 # if authenticated
-                if self.validation == "Authenticated" :
-                    if not Face_blurreness < 550:
+                if self.validation == "Authenticated":
+                    if not Face_blurreness < 450:
                         self.LastIn_FirstOut(name=str(self.matchs),new_image=framesS)
+                        time.sleep(3)
+                        OpenLockers(key=self.LockerNumber,value=False)
+                        self.LockerNumber = 0
                         self.backTomain()
              
                 self.curveBox(frame=frame,p1=(x,y),p2=(x+w,y+h))
@@ -468,7 +489,8 @@ class FacialLogin(QtWidgets.QFrame):
                     self.FacialRecognition(frame=frame)
   
                 # check if ervery 5 second
-                if current_time - self.last_recognition_time >= 5 and not Face_blurreness < 500:
+    
+                if current_time - self.last_recognition_time >= 5 and not Face_blurreness < 450:
 
                     self.last_recognition_time = current_time
 
@@ -604,13 +626,13 @@ class FacialLogin(QtWidgets.QFrame):
     # when close the frame
 
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
 
-    import sys,background
-    # Create a new QApplication object
-    app = QApplication(sys.argv)
+#     import sys,background
+#     # Create a new QApplication object
+#     app = QApplication(sys.argv)
 
-    New_menu = FacialLogin()
-    New_menu.show() 
+#     New_menu = FacialLogin()
+#     New_menu.show() 
 
-    sys.exit(app.exec_())
+#     sys.exit(app.exec_())
