@@ -354,7 +354,7 @@ class FacialLogin(QtWidgets.QFrame):
             delete_table("Failed attempt")
             delete_table("Fail History")
             
-            self.LockerNumber = checkLocker(rearranged_string)
+            self.LockerNumber = checkLocker(str(result[0]))
             print(self.LockerNumber)
             
             OpenLockers(key=self.LockerNumber,value=True)
