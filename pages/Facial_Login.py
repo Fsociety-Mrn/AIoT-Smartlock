@@ -489,6 +489,7 @@ class FacialLogin(QtWidgets.QFrame):
                     self.FacialRecognition(frame=frame)
   
                 # check if ervery 5 second
+    
                 if current_time - self.last_recognition_time >= 5 and not Face_blurreness < 450:
 
                     self.last_recognition_time = current_time
