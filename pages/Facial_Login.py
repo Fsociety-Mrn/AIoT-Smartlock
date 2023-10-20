@@ -11,7 +11,8 @@ import threading
 
 from PyQt5.QtCore import Qt, QPoint, QPropertyAnimation
 from Face_Recognition.JoloRecognition import JoloRecognition as Jolo
-from Firebase.Offline import offline_insert
+from Firebase.Offline import offline_insert,checkLocker
+from Raspberry.Raspberry import OpenLockers
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import *
@@ -31,6 +32,9 @@ class FacialLogin(QtWidgets.QFrame):
         
         # Define a flag to ensure self.aiVoice runs only once
         self.ai_voice_executed = False
+        
+        # Locker Number
+        self.LockerNumber = 0
         
         # message box
         self.MessageBox = QtWidgets.QMessageBox()
@@ -350,6 +354,12 @@ class FacialLogin(QtWidgets.QFrame):
             delete_table("Failed attempt")
             delete_table("Fail History")
             
+            self.LockerNumber = checkLocker(rearranged_string)
+            print(self.LockerNumber)
+            
+            OpenLockers(key=self.LockerNumber,value=True)
+            
+            
     # for facial detection
     def curveBox(self,frame=None,p1=None,p2=None,curvedRadius=30):
     
@@ -465,6 +475,9 @@ class FacialLogin(QtWidgets.QFrame):
                 if self.validation == "Authenticated":
                     if not Face_blurreness < 450:
                         self.LastIn_FirstOut(name=str(self.matchs),new_image=framesS)
+                        time.sleep(3)
+                        OpenLockers(key=self.LockerNumber,value=False)
+                        self.LockerNumber = 0
                         self.backTomain()
              
                 self.curveBox(frame=frame,p1=(x,y),p2=(x+w,y+h))

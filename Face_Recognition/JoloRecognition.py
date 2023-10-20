@@ -43,7 +43,7 @@ class JoloRecognition:
         except:
             return ('No match detected', None)
             
-    def FaceCompare(self, face, threshold=0.6):
+    def FaceCompare(self, face, threshold=0.7):
     
         with torch.no_grad():
             

@@ -1,6 +1,6 @@
 from tinydb import TinyDB, Query
 from Firebase.firebase import firebaseHistory
-import json
+
 # Function to create a database and a table
 def __create_database_and_table(table_name):
     db = TinyDB("Firebase/offline.json")
@@ -100,3 +100,20 @@ def pinCodeLogin(pin):
 
     return name_found, first_pin_part
 
+# ************** LOCKERS ************** #
+def checkLocker(NAME):
+    db = TinyDB("Firebase/offline.json")
+    table = db.table("LOCK")
+
+    # Retrieve all records from the table
+    records = table.all()
+
+    LockerNumber = 0
+    
+    for each in records:
+        for name,value in each.items():
+            if name == NAME:
+                LockerNumber = value["Locker Number"]
+                
+    return LockerNumber
+    

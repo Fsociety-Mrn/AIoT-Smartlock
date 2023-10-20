@@ -12,9 +12,9 @@ GPIO.setup(3,GPIO.OUT)
 def openLocker():
     data = firebaseRead("LOCK")
     for key,value in data.items():
-        
-        if value['Locker Status']:
-            OpenLockers(key=int(value['Locker Number']), value=value['Locker Status'])
+        OpenLockers(key=int(value['Locker Number']), value=value['Locker Status'])
         
 def OpenLockers(key,value):
     GPIO.output(key,value)
+    print("Open Lockers")
+    print(key,value)

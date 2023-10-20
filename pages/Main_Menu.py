@@ -2,7 +2,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import *
 
 from Firebase.Offline import total_fail,delete_table,offline_insert,updateToDatabase
-from Firebase.firebase import firebaseVerifyPincode
+from Firebase.firebase import firebaseVerifyPincode,lockerList
 
 from Raspberry.Raspberry import openLocker
 import socket
@@ -459,6 +459,9 @@ class MainWindow(QtWidgets.QFrame):
         self.label_2.setText(current_time)
         self.label_3.setText(current_date)
     
+    
+    # ********************* Offline Mode ********************* #
+    
     # download pincode
     def pinCode(self):
         data = firebaseVerifyPincode()
@@ -467,6 +470,15 @@ class MainWindow(QtWidgets.QFrame):
             delete_table("PIN")
             for key in data:
                 offline_insert(TableName="PIN", data=key)
+                
+    # List of Locker
+    def locker(self):
+        data = lockerList()
+        
+        if not data == None:
+            delete_table("LOCK")
+            for key in data:
+                offline_insert(TableName="LOCK", data=key)
             
     # check internet
     def check_internet_connection(self):
@@ -492,6 +504,9 @@ class MainWindow(QtWidgets.QFrame):
         self.facialLogin.isEnabled = False
         self.facialRegister.isEnabled = False
         self.pincodeLogin.isEnabled = False
+        
+        # download updated Locker Number
+        self.locker()
 
         # Delay the creation of the FacialLogin object by 100 milliseconds
         QtCore.QTimer.singleShot(100, self.clickFacialLogin)
