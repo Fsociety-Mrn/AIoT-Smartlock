@@ -1,0 +1,22 @@
+.sidebar-link {
+  cursor: pointer;
+}
+.right-arrow-icon {
+  transition: 0.4s;
+}
+.sidebar-link:hover .right-arrow-icon {
+  transform: translateX(-10px);
+}
+.right-arrow-icon.active {
+  transform: translateX(-10px);
+}
+.sidebar-link-border {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 15px 23px;
+}
+.sidebar-link-border div {
+  outline: 1px solid #f1f1f1;
+  width: 100%;
+}
