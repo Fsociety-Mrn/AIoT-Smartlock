@@ -7,6 +7,8 @@ import {
   Button, 
   Divider, 
   Grid, 
+  IconButton, 
+  InputAdornment, 
   Link, 
   Paper, 
   Stack, 
@@ -28,9 +30,8 @@ import { LoginSession } from '../Authentication/Authentication';
 // icons
 // import GoogleIcon from '@mui/icons-material/Google';
 import ICON from '../Images/logo512.png'
-
-
-
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 const Login = () => {
 
@@ -62,6 +63,9 @@ const Mobile = () => {
     email: "",
     password: ""
   })
+
+  
+  const [showPassword, setShowPassword] = React.useState(false);
 
   const [error, setError] = React.useState({
     email: false,
@@ -139,6 +143,13 @@ const Mobile = () => {
   }
   
 
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
+
+
   return (
     <div style={{ 
     display: 'flex', 
@@ -213,7 +224,6 @@ const Mobile = () => {
 
           {/* password */}
                 <MobileTextbox 
-                type='password' 
                 margin='dense'  
                 variant="outlined" 
                 fullWidth  
@@ -223,6 +233,20 @@ const Mobile = () => {
                 onChange={Password}
                 error={error.password}
                 helperText={error.passwordError}
+                type={showPassword ? 'text' : 'password'}
+                InputProps={{
+                  endAdornment: 
+                    <InputAdornment position="end">
+                      <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                    
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                }}
                 />
                 
                 <Link href="/ForgotPassword" 
