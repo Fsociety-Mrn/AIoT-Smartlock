@@ -2,7 +2,7 @@
 import { 
     setPersistence, 
     signInWithEmailAndPassword, 
-    browserSessionPersistence,
+    browserLocalPersistence,
     signOut,
     createUserWithEmailAndPassword,
 } from "firebase/auth";
@@ -14,7 +14,7 @@ import { createUserData } from '../firebase/Firestore'
 export const LoginSession = (user) => {
     return new Promise((resolve, reject) => {
 
-      setPersistence(auth, browserSessionPersistence)
+      setPersistence(auth, browserLocalPersistence)
 
         .then(() => {
           signInWithEmailAndPassword(auth, user.email, user.password)

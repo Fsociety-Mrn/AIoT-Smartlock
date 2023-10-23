@@ -16,6 +16,8 @@ const Routess = () => {
 
   const isLoggedIn = sessionStorage.getItem('TOKEN');
 
+  const [login,setLogin] = React.useState()
+
   const isAdmins = sessionStorage.getItem('isAdmin');
 
 
@@ -23,6 +25,8 @@ const Routess = () => {
 
     statusLogin()
       .then(user=>{ 
+
+        setLogin(isLoggedIn)
         // verify Admin
         isAdmin(user.uid)
           .then(data=>{
@@ -35,7 +39,7 @@ const Routess = () => {
  
     <div>
 
-      {isLoggedIn ? <Mainpage isAdminS={isAdmins} />:<Login/>}
+      {login || isLoggedIn? <Mainpage isAdminS={isAdmins} />:<Login/>}
       {/* <WelcomePage/> */}
       {/* <Login/> */}
     </div>
