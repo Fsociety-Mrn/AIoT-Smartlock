@@ -2,8 +2,8 @@ import React from 'react'
 import { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Panel from "../Components/Panel/Panel";
-// import LoginForm from '../Components/Forms/LoginForm/LoginForm';
-import RegisterForm from "../Components/Forms/RegisterForm/RegisterForm"
+// import LoginForm from '../Components/Forms/LoginForm';
+import RegisterForm from '../Components/Forms/RegisterForm';
 
 
 
