@@ -1,6 +1,4 @@
 import { PureComponent } from "react";
-import { createPortal } from "react-dom";
-
 import styles from "./Panel.module.css";
 import UserDashboard from "./UserDashboard/UserDashboard";
 import UserCard from "./UserCard/UserCard";
@@ -10,11 +8,9 @@ import {
   UserEdit,
   DirectboxNotif,
   ProfileCircle,
-  Code1,
   Logout
 } from "iconsax-react";
-import { Row, Col, Button } from "react-bootstrap";
-import PropTypes from "prop-types";
+import { Row, Col, } from "react-bootstrap";
 
 // Sample user data (replace this with your actual data)
 const sampleUser = {

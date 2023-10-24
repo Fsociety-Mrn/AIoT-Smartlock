@@ -1,131 +1,122 @@
-import { useState } from 'react'
+import React from 'react'
 
 // import styles of this component
 import styles from '../Forms.module.css'
 
-// import other component
-import FormInput from '../FormInput/FormInput'
 
 // import other pkgs
-import { Container, Form, Button } from 'react-bootstrap'
-import { useFormik } from 'formik'
-import { object, string } from 'yup'
-import PropTypes from 'prop-types'
+import { Button, Col, Container, FloatingLabel, Form, Image, Row, Stack } from 'react-bootstrap'
 
-// import utils 
-import { getStorage, setUserId, updateStorage } from '../../../utils/storage'
+import LOGO from '../../../Images/Arash.jpg'
 
-const LoginForm = ({ onRegister, onLogin }) => {
-    const [submit, setSubmit] = useState(false)
-
-    const formik = useFormik({
-        initialValues: {
-            username: '',
-            email: '',
-            password: '',
-        },
-        validationSchema: object({
-            username: string().required('please enter your username')
-                .max(15, 'your username must be 15 characters or less')
-                .min(4, 'your username must be 4 characters or more'),
-            email: string().email('invalid email').required('please enter your email'),
-            password: string().required('please enter your password')
-                .min(8, 'your password must be 8 characters or more')
-                .matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/, 'invalid password'),
-        }),
-        onSubmit: ({ username, email, password }, { setFieldError }) => {
-            const users = getStorage('users')
-            const myVerifyUser = users && users.find(user => user.username === username)
-            
-            if (users && myVerifyUser) {
-                if (myVerifyUser.email === email && myVerifyUser.password === password)
-                    login(myVerifyUser)
-                else if (myVerifyUser.email !== email)
-                    setFieldError('email', `your email isn't true`)
-                else 
-                    setFieldError('password', `your password isn't correct`)
-            } else
-                setFieldError('username', 'your username not found')
-        }
-    })
-
-    const login = (myVerifyUser) => {
-        const users = getStorage('users')
-        updateStorage(users, myVerifyUser, true)
-        setUserId(myVerifyUser.id)
-        onLogin()
-    }
-
+const LoginForm = () => {
     return (
-        <Container fluid className={`${styles.container} d-flex justify-content-center align-items-center px-5`}>
-            <Form noValidate className={styles.form} onSubmit={formik.handleSubmit}>
-                <h2>Login</h2>
+        <Container fluid className={`${styles.container} d-flex justify-content-center align-items-center`}>
+            
+            {/* Login Form containers */}
+            <Container className={`${styles.LoginContainer} d-flex justify-content-center align-items-center bg-white`}>
+                <Container>
+                
+                    <Row xs={12}>
+                    
+                        <Col xs={12} md={12} >
+                            <Stack gap={1} style={{ padding:"20px" }} className={`d-flex justify-content-center align-items-center`}>
+                            
+                            {/* Logo */}
+                                <Image 
+                                src={LOGO}
+                                style={{ width: '100px', height: '100px' }}
+                                roundedCircle />
 
-                <FormInput
-                    className="mb-4 mt-5"
-                    name="username"
-                    controlId="username-input"
-                    text="Username"
-                    placeholder="Enter your Username"
-                    errMsg={formik.errors.username || ''}
-                    successMsg="done"
-                    invalid={submit && formik.errors.username ? true : false}
-                    valid={submit && !formik.errors.username ? true : false}
-                    {...formik.getFieldProps('username')}
-                />
+                            {/* Tutle */}
+                                <div className="h3" 
+                                style={{
+                                    backgroundImage: 'linear-gradient(to right, rgb(61, 152, 154) 0%, rgb(12, 14, 36) 100%)',
+                                    WebkitBackgroundClip: 'text',
+                                    color: 'transparent',
+                                    display: 'inline',
+                                    whiteSpace: "nowrap"
+                                }}>AIoT Smartlock</div>
 
-                <FormInput  
-                    className="mb-4"
-                    name="email"
-                    controlId="email-input"
-                    text="Email"
-                    placeholder="Enter your Email"
-                    errMsg={formik.errors.email || ''}
-                    successMsg="done"
-                    invalid={submit && formik.errors.email ? true : false}
-                    valid={submit && !formik.errors.email ? true : false}
-                    {...formik.getFieldProps('email')}
-                />
+                            {/* Slogan */}
+                                <div className="blockquote" 
+                                style={{
+                                    backgroundImage: 'linear-gradient(to right, rgb(61, 152, 154) 0%, rgb(12, 14, 36) 100%)',
+                                    WebkitBackgroundClip: 'text',
+                                    color: 'transparent',
+                                    display: 'inline',
+                                    textAlign: "center"
+                                }}>Unlocking Tomorrow's Security, Today</div>
 
-                <FormInput
-                    className="mb-4"
-                    name="password"
-                    controlId="password-input"
-                    text="Password"
-                    placeholder="Enter your Password"
-                    type="password"
-                    errMsg={formik.errors.password || ''}
-                    successMsg="done"
-                    invalid={submit && formik.errors.password ? true : false}
-                    valid={submit && !formik.errors.password ? true : false}
-                    {...formik.getFieldProps('password')}
-                />
+                           </Stack> 
+                        </Col>
 
-                <Button 
-                    onClick={() => onRegister('register')}
-                    className='shadow-none mt-4 p-0'
-                    type="button"
-                    variant="">
-                    you dont' have any account ?
-                </Button>
+                        <Col xs={12} md={12}>      
+                            <Stack gap={2} className="col-md-10 mx-auto">
 
-                <Button 
-                    className={`${styles["submit-btn"]} w-100`} 
-                    onClick={() => setSubmit(true)}
-                    disabled={submit && !formik.isValid ? true : false}
-                    variant="primary" 
-                    type="submit">
-                    Login
-                </Button>
-            </Form>
+                            {/* Email */}
+                                <FloatingLabel
+                                controlId="floatingInput"
+                                label="Email address"
+                                className="mb-3">
+                                    <Form.Control type="email" placeholder="name@example.com"/>
+                                </FloatingLabel>
+
+                            {/* Password */}
+                                <FloatingLabel controlId="floatingPassword" label="Password">
+                                    <Form.Control type="password" placeholder="Password" />
+                                </FloatingLabel>
+
+                            {/* Forgot Password */}
+                                <Form.Text href="youtube.com" className="text-muted">
+                                    <a href="/" color='rgb(61, 152, 154)'>
+                                        Forgot Password?
+                                    </a>
+                                </Form.Text>
+
+                            </Stack>
+                        </Col>
+
+
+                        {/* Login */}
+                        <Col xs={12} md={12} style={{ padding:"20px",justifyingContent:"center" }}>   
+                            <Stack gap={2} className="col-md-9 mx-auto">     
+                                <Button variant="primary" 
+                                style={{
+                                    background: 'linear-gradient(to right, rgb(61, 152, 154) 0%, rgb(12, 14, 36) 100%)',
+                                    color: 'white' // Set the text color
+                                }} >
+                                    Login
+                                </Button>
+                            </Stack>  
+                        </Col>
+                        
+                        {/* Signup */}
+                        <Col xs={12} md={12}>   
+                            <Stack gap={1} style={{ padding:"20px" }} className={`d-flex justify-content-center align-items-center`}> 
+               
+                                <div className="text" 
+                                style={{
+                                    backgroundImage: 'linear-gradient(to right, rgb(61, 152, 154) 0%, rgb(12, 14, 36) 100%)',
+                                    WebkitBackgroundClip: 'text',
+                                    color: 'transparent',
+                                    display: 'inline',
+                                    textAlign: "center",
+                                    whiteSpace: "nowrap"
+                                }}>Dont have a account ? </div>
+
+                                <a className="text"  href='/'> <strong> Create now! </strong></a>
+                            
+                            </Stack>  
+                        </Col>
+
+                    </Row>
+
+                </Container>
+            </Container>
         </Container>
     )
 }
 
-// validate the component
-LoginForm.propTypes = {
-    onRegister: PropTypes.func.isRequired, 
-    onLogin: PropTypes.func.isRequired,
-}
 
 export default LoginForm
