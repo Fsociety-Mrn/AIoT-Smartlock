@@ -20,7 +20,7 @@ const LoginForm = () => {
                     <Row xs={12}>
                     
                         <Col xs={12} md={12} >
-                            <Stack gap={1} style={{ padding:"20px" }} className={`d-flex justify-content-center align-items-center`}>
+                            <Stack gap={1} style={{ padding:"20px", marginTop:"80px" }} className={`d-flex justify-content-center align-items-center`}>
                             
                             {/* Logo */}
                                 <Image 
@@ -79,7 +79,7 @@ const LoginForm = () => {
 
 
                         {/* Login */}
-                        <Col xs={12} md={12} style={{ padding:"20px",justifyingContent:"center" }}>   
+                        <Col xs={12} md={12} style={{ marginTop:"20px",padding:"20px",justifyingContent:"center" }}>   
                             <Stack gap={2} className="col-md-9 mx-auto">     
                                 <Button variant="primary" 
                                 style={{
@@ -93,7 +93,7 @@ const LoginForm = () => {
                         
                         {/* Signup */}
                         <Col xs={12} md={12}>   
-                            <Stack gap={1} style={{ padding:"20px" }} className={`d-flex justify-content-center align-items-center`}> 
+                            <Stack gap={1} style={{ padding:"20px", marginBottom:"20px" }} className={`d-flex justify-content-center align-items-center`}> 
                
                                 <div className="text" 
                                 style={{

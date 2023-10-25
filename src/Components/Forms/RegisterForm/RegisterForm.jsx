@@ -12,14 +12,15 @@ const RegisterForm = () => {
         <div>
             <Container fluid className={`${styles.container} d-flex justify-content-center align-items-center px-5`}>
                 
-                {/* Login Form containers */}
+                {/* Reg Form containers */}
                 <Container className={`${styles.LoginContainer} d-flex justify-content-center align-items-center bg-white`}>
                     <Container>
                 
-                        <Row xs={12}>
-                    
-                            <Col xs={12} md={12} >
-                                <Stack gap={1} style={{ padding:"20px" }} className={`d-flex justify-content-center align-items-center`}>
+                        <Row xs={12} className="justify-content-center align-items-center">
+
+                            {/* Title */}
+                            <Col xs={12} md={12}>
+                                <Stack gap={1} style={{ padding:"20px", marginTop:"80px"}} className={`d-flex justify-content-center align-items-center`}>
                             
                                     {/* Logo */}
                                     <Image 
@@ -45,18 +46,20 @@ const RegisterForm = () => {
                                         color: 'transparent',
                                         display: 'inline',
                                         textAlign: "center"
-                                    }}>Unlocking Tomorrow's Security, Today</div>
+                                    }}>Create Account</div>
 
                                 </Stack> 
                             </Col>
-
+                            
+                            {/* Registration Form */}
                             <Col xs={12} md={12}>     
-                                <Stack gap={2}  className="col-md-10 mx-auto">
+                                <Stack gap={2} className="col-md-10 mx-auto">
 
                                     {/* Email */}
                                     <FloatingLabel
                                     controlId="floatingInput"
                                     label="Email"
+                                    className="mb-3"
                                     >
                                         <Form.Control type="email" placeholder="name@example.com"/>
                                     </FloatingLabel>
@@ -66,63 +69,47 @@ const RegisterForm = () => {
                                         <Form.Control type="password" placeholder="New Password" />
                                     </FloatingLabel>
 
-                            </Stack>
-                        </Col>
-
-                        <Row className="justify-content-center">
-{/* Create Account */}
-<Col xs={12} md={6} className="d-flex justify-content-center">
-
-    <Button variant="primary"
-      style={{
-        background: 'white',
-        color: 'rgb(61, 152, 154)',
-        border: "2px solid rgb(61, 152, 154)",
-        
-      }}>
-      Cancel
-    </Button>
-
-
-</Col>
-
-{/* Create Account */}
-<Col xs={12} md={6} className="d-flex justify-content-center">
-<Button variant="primary"
-      style={{
-        background: 'linear-gradient(to right, rgb(61, 152, 154) 0%, rgb(12, 14, 36) 100%)',
-        color: 'white',
-     
-      }}>
-      Create account
-    </Button>
-
-</Col>
-
-               </Row>         
-                        {/* Signup */}
-                        <Col xs={12} md={12}>   
-                            <Stack gap={1} style={{ padding:"20px" }} className={`d-flex justify-content-center align-items-center`}> 
-               
-                                <div className="text" 
-                                style={{
-                                    backgroundImage: 'linear-gradient(to right, rgb(61, 152, 154) 0%, rgb(12, 14, 36) 100%)',
-                                    WebkitBackgroundClip: 'text',
-                                    color: 'transparent',
-                                    display: 'inline',
-                                    textAlign: "center",
-                                    whiteSpace: "nowrap"
-                                }}>Dont have a account ? </div>
-
-                                <a className="text"  href='/'> <strong> Create now! </strong></a>
+                                </Stack>
+                            </Col>
                             
-                            </Stack>  
-                        </Col>
+                            {/* Buttons */}
+                            <Col xs={12} md={11} style={{ marginTop:"50px", marginBottom:"100px"}} className='row row-cols-2 justify-content-center align-items-center'>
+                            
+                                {/* Cancel Account */}
+                                <Col xs={12} md={5} sm={12} className='row row-cols-1 m-1'>
+                                    <Button 
+                                    variant="primary" 
+                                    style={{
+                                        background: 'white',
+                                        color: 'rgb(61, 152, 154)',
+                                        border: "2px solid rgb(61, 152, 154)",
+                                        padding:"10px",
+                                        borderRadius:"10px"
+                                    }}>
+                                        Cancel
+                                    </Button>
+                                </Col>
 
-                    </Row>
+                                {/* Create Account */}
+                                <Col xs={12} md={5} sm={12} className='row row-cols-1'>
+                                    <Button 
+                                    variant="primary"
+                                    style={{
+                                        background: 'linear-gradient(to right, rgb(61, 152, 154) 0%, rgb(12, 14, 36) 100%)',
+                                        color: 'white',
+                                        padding:"10px",
+                                        borderRadius:"10px"
+                                    }}>
+                                        Sign Up
+                                    </Button>
+                                </Col>
+                           
+                            </Col>
 
+                        </Row>
+
+                    </Container>
                 </Container>
-            </Container>
             </Container>
         </div>
     )
