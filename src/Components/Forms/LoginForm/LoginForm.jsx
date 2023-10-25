@@ -105,7 +105,7 @@ const LoginForm = () => {
                                     whiteSpace: "nowrap"
                                 }}>Dont have a account ? </div>
 
-                                <a className="text"  href='/'> <strong> Create now! </strong></a>
+                                <a className="text"  href='/Signup'> <strong> Create now! </strong></a>
                             
                             </Stack>  
                         </Col>

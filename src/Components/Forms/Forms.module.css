@@ -1,3 +1,11 @@
+body {
+    position: relative;
+    background-image: linear-gradient(
+      to bottom,
+      rgb(61, 152, 154) 0%,
+      rgb(12, 14, 36) 100%
+    );
+  }
 .container {
     min-height: 100vh !important;
     padding-top: 50px;

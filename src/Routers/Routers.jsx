@@ -1,11 +1,14 @@
 import React from 'react'
 import { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Panel from "../Components/Panel/Panel";
-import LoginForm from '../Components/Forms/LoginForm';
-import RegisterForm from '../Components/Forms/RegisterForm';
+
+// import LoginForm from '../Components/Forms/LoginForm';
+// import RegisterForm from '../Components/Forms/RegisterForm';
 
 
+
+import Login from './Pages/Login';
+import Mainmenu from './Pages/Mainmenu';
 
 const Routers = () => {
     const [toggle, setToggle] = useState("");
@@ -26,8 +29,8 @@ const Routers = () => {
 
   return (
     <div>
-        {toggle === "panel" && <Panel />}
-        {toggle === "login" && <LoginForm />}
+        {toggle === "panel" && <Mainmenu />}
+        {toggle === "login" && <Login />}
     </div>
   )
 }
