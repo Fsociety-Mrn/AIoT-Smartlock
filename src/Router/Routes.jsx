@@ -34,6 +34,7 @@ const Routess = () => {
             sessionStorage.setItem('isAdmin', data.isAdmin ? "true" : "false");  
           }).catch(error=> console.log(error))
         }).catch(error=> console.log(error))
+        
     },[])
   return (
  
