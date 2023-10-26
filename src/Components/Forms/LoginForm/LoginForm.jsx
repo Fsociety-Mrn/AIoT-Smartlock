@@ -3,6 +3,8 @@ import React from 'react'
 // import styles of this component
 import styles from '../Forms.module.css'
 
+// validation
+import { userSchema } from "../../../utils/Validation/Validation"
 
 // import other pkgs
 import { Button, Col, Container, FloatingLabel, Form, Image, Row, Stack } from 'react-bootstrap'
@@ -10,6 +12,78 @@ import { Button, Col, Container, FloatingLabel, Form, Image, Row, Stack } from '
 import LOGO from '../../../Images/Arash.jpg'
 
 const LoginForm = () => {
+    const [user, setUser] = React.useState({
+        email: "",
+        password: ""
+      })
+
+      const [error, setError] = React.useState({
+        email: false,
+        emailError: "",
+        password: false,
+        passwordError: ""
+      })
+
+// ****************** Login Details ****************** //
+    const Email = (e) => {
+        setUser({...user, email: e.target.value})
+    }
+
+    const Password = (e) => {
+        setUser({...user, password: e.target.value})
+    }
+
+// ****************** LOGIN BUTTON ****************** //
+    const Login = async () =>{
+        try {
+            await userSchema.validate({ email: user.email, password: user.password }, { abortEarly: false });
+      
+        
+    //   LoginSession(user).then(result=>{
+    //       console.log(result)
+          
+          setError({
+            email: false,
+            emailError: "",
+
+            password: false,
+            passwordError: ""
+          });
+
+    //   }).catch((error) => {
+    //     console.log("error",error); // Error message
+
+    //       setError({
+    //         email: true,
+    //         emailError: "",
+
+    //         password: true,
+    //         passwordError: error
+    //       });
+
+    //   });
+
+
+        } catch (validationError) {
+
+            // Extract specific error messages for email and password
+            const emailError = validationError.inner.find((error) => error.path === 'email');
+            const passwordError = validationError.inner.find((error) => error.path === 'password');
+
+      // If validation errors occur
+            setError({
+                email: !!emailError,
+                emailError: emailError && emailError.message,
+
+                password: !!passwordError,
+                passwordError: passwordError && passwordError.message
+            });
+      
+        }
+
+  }
+
+
     return (
         <Container fluid className={`${styles.container} d-flex justify-content-center align-items-center`}>
             
@@ -58,14 +132,24 @@ const LoginForm = () => {
                                 <FloatingLabel
                                 controlId="floatingInput"
                                 label="Email"
-                                className="mb-3">
-                                    <Form.Control type="email" placeholder="name@example.com"/>
+                                className="">
+                                    <Form.Control type="email" className={error.email && "text-danger"} placeholder="name@example.com" value={user.email} onChange={Email} />
                                 </FloatingLabel>
-
+                                {error.email && <div className="text-danger mb-3">{error.emailError}</div>}
+                                
                             {/* Password */}
                                 <FloatingLabel controlId="floatingPassword" label="Password">
-                                    <Form.Control type="password" placeholder="Password" />
+                                    <Form.Control type="password" className={error.email && "text-danger"} placeholder="Password" value={user.password} onChange={Password} />
                                 </FloatingLabel>
+                     
+                                <Form.Check // prettier-ignore
+                                type="checkbox"
+                                id="Show Password"
+                                label="Show Password"
+                                style={{ color: "rgb(61, 152, 154)", borderColor: "rgb(12, 14, 36)"}}
+                                />
+
+                                {error.password && <div className="text-danger">{error.passwordError}</div>}
 
                             {/* Forgot Password */}
                                 <Form.Text href="youtube.com" className="text-muted">
@@ -73,7 +157,7 @@ const LoginForm = () => {
                                         Forgot Password?
                                     </a>
                                 </Form.Text>
-
+                              
                             </Stack>
                         </Col>
 
@@ -85,7 +169,9 @@ const LoginForm = () => {
                                 style={{
                                     background: 'linear-gradient(to right, rgb(61, 152, 154) 0%, rgb(12, 14, 36) 100%)',
                                     color: 'white' // Set the text color
-                                }} >
+                                }} 
+                                onClick={Login}
+                                >
                                     Login
                                 </Button>
                             </Stack>  
