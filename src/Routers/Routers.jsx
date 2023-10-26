@@ -10,26 +10,51 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Login from './Pages/Login';
 import Mainmenu from './Pages/Mainmenu';
 
-const Routers = () => {
-    const [toggle, setToggle] = useState("");
+import { statusLogin } from '../utils/Firebase/Authentication/Authentication';
+import { isAdmin } from '../utils/Firebase/Firestore/Firestore';
 
-    const changeToggle = (toggle) => setToggle(toggle);
-  
-    useEffect(() => {
-      // Replace this logic with your own to determine the initial state of `toggle`
-      // For testing purposes, we'll assume the user is logged in.
-      const userIsLoggedIn = false;
-  
-      if (userIsLoggedIn) {
-        changeToggle("panel");
-      } else {
-        changeToggle("login");
-      }
-    }, []);
+
+const Routers = () => {
+
+  const [toggle, setToggle] = useState("");
+  const [email, setEmail] = useState()
+  const [UID, setUID] = useState()
+
+  const changeToggle = (toggle) => {
+    setToggle(toggle)
+  };
+
+  useEffect(() => {
+
+    // Check the status login
+    statusLogin()
+      .then(user=>
+        { 
+
+   
+          if (user !== null) 
+            {
+              setUID(user.uid)
+              setEmail(user.email)
+            // verify user
+            isAdmin(user.uid).then(data=>
+              {
+                data.isAdmin ? changeToggle("login") : changeToggle("panel")
+              })
+
+          }else{
+            setToggle("login") 
+            setEmail("")
+          }
+
+      })
+
+    }, [toggle]);
 
   return (
     <div>
-        {toggle === "panel" && <Mainmenu />}
+
+        {toggle === "panel" && <Mainmenu email={email} UID={UID} />}
         {toggle === "login" && <Login />}
     </div>
   )

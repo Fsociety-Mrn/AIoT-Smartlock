@@ -6,6 +6,9 @@ import styles from '../Forms.module.css'
 // validation
 import { userSchema } from "../../../utils/Validation/Validation"
 
+// Login
+import { LoginSession } from '../../../utils/Firebase/Authentication/Authentication'
+
 // import other pkgs
 import { Button, Col, Container, FloatingLabel, Form, Image, Row, Stack } from 'react-bootstrap'
 
@@ -24,6 +27,8 @@ const LoginForm = () => {
         passwordError: ""
       })
 
+      const [showPassword, setShowPassword] = React.useState(false);
+
 // ****************** Login Details ****************** //
     const Email = (e) => {
         setUser({...user, email: e.target.value})
@@ -38,9 +43,9 @@ const LoginForm = () => {
         try {
             await userSchema.validate({ email: user.email, password: user.password }, { abortEarly: false });
       
-        
-    //   LoginSession(user).then(result=>{
-    //       console.log(result)
+
+      LoginSession(user).then(result=>{
+          console.log(result)
           
           setError({
             email: false,
@@ -50,18 +55,18 @@ const LoginForm = () => {
             passwordError: ""
           });
 
-    //   }).catch((error) => {
-    //     console.log("error",error); // Error message
+      }).catch((error) => {
+        console.log("error",error); // Error message
 
-    //       setError({
-    //         email: true,
-    //         emailError: "",
+          setError({
+            email: true,
+            emailError: "",
 
-    //         password: true,
-    //         passwordError: error
-    //       });
+            password: true,
+            passwordError: error
+          });
 
-    //   });
+      });
 
 
         } catch (validationError) {
@@ -83,6 +88,12 @@ const LoginForm = () => {
 
   }
 
+// ****************** SHOW PASSWORD ****************** //
+
+
+const handleTogglePassword = () => {
+  setShowPassword(!showPassword);
+};
 
     return (
         <Container fluid className={`${styles.container} d-flex justify-content-center align-items-center`}>
@@ -139,7 +150,7 @@ const LoginForm = () => {
                                 
                             {/* Password */}
                                 <FloatingLabel controlId="floatingPassword" label="Password">
-                                    <Form.Control type="password" className={error.email && "text-danger"} placeholder="Password" value={user.password} onChange={Password} />
+                                    <Form.Control type={showPassword ? 'text' : 'password'} className={error.email && "text-danger"} placeholder="Password" value={user.password} onChange={Password} />
                                 </FloatingLabel>
                      
                                 <Form.Check // prettier-ignore
@@ -147,6 +158,8 @@ const LoginForm = () => {
                                 id="Show Password"
                                 label="Show Password"
                                 style={{ color: "rgb(61, 152, 154)", borderColor: "rgb(12, 14, 36)"}}
+                                checked={showPassword}
+                                onChange={handleTogglePassword}
                                 />
 
                                 {error.password && <div className="text-danger">{error.passwordError}</div>}

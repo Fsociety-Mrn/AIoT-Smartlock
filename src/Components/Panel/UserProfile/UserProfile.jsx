@@ -1,12 +1,12 @@
 // import styles of this component
 import styles from "./UserProfile.module.css";
 // import other pkgs
-import { Import } from "iconsax-react";
+import { Camera} from "iconsax-react";
 import PropTypes from "prop-types";
 
-const UserProfile = ({
-  userProfile = "img/Arash.jpg",
-  userBirthday,
+const UserProfile = (
+  {
+  userProfile,
   username,
   userEmail
 }) => {
@@ -21,11 +21,18 @@ const UserProfile = ({
       className={`${styles["user-profile"]} d-flex flex-column align-items-center border bg-white`}
     >
       <label htmlFor="user-profile" className={styles["user-profile-label"]}>
-        <img src={userProfile} alt="" />
-        <div className={`${styles["profile-icon-box"]} bg-primary`}>
-          <Import size="20" color="white" />
+        <img src={userProfile ? userProfile : "img/Arash.jpg"} alt="" style={{
+          border: "2px solid rgb(61, 152, 154)"
+        }}/>
+
+
+
+        <div className={`${styles["profile-icon-box"]} bg-white `}>
+          <Camera size="20" color="rgb(61, 152, 154)"  />
         </div>
         <input type="file" className="d-none" id="user-profile" />
+
+
       </label>
       <h1 className={`${styles.username} mt-3`}>
         {" "}
