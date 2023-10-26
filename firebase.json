@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "user-aiot-smartlocker",
     "public": "build",
     "ignore": [
       "firebase.json",
