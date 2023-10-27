@@ -1,5 +1,5 @@
 import Titles from "../../Titles/Titles";
-import { Form, Button, Modal, Alert, Col } from "react-bootstrap"; // Import Alert from React Bootstrap
+import { Form, Button, Modal, Alert, Col, Container, Stack, Row } from "react-bootstrap"; // Import Alert from React Bootstrap
 
 import React, { useState } from "react"; // Import React and useState
 import './Dashboard.css'; // Make sure this is the correct path to your CSS file
@@ -34,7 +34,7 @@ const UserDashboard = (props) => {
   // State for the Update Faces
   const [Token,setToken] = useState()
   const [isDisable,setIsdisable] = useState(false)
-  const [Timer,setTimer] = useState(30)
+  const [Timer,setTimer] = useState()
   const [tokenStatus, setTokenStatus] = useState("")
 
   React.useEffect(() => {
@@ -44,31 +44,13 @@ const UserDashboard = (props) => {
     // *************** for Faces *************** //
 
     if(Timer < 0){
-      setStatus("SLIDE TO OPEN THE LOCKERS")
-      setSliderValue(0)
-      setTimer(null)
-      setIsUnlocking(false)
 
-      openLocker({
-        FullName: FullName,
-        value: false
-      })
+      setTimer(null)
+      setIsdisable(false)
+      removeToken(FullName)
 
       return
     }
-
-    
-    const intervalFaces = setInterval(() => {
-
-        setTimer(Timer - 1);
-     
-        setTokenStatus(`Expires at ${Timer}`)
-     
-
-    }, 1000);
-
-   
-     
 
     // *************** for Locker *************** //
     if(count < 0){
@@ -87,13 +69,23 @@ const UserDashboard = (props) => {
 
 
     const intervalId = setInterval(() => {
-      setCount(count - 1);
-      setStatus(`${count} LEFT TO LOCK`)
+
+     
+        setCount(count - 1);
+        setStatus(`${count} LEFT TO LOCK`)  
+      
+
+      
+      if (Timer !== null)
+      {
+        setTimer(Timer - 1);
+        setTokenStatus(`Expires at ${Timer}`)
+      }
+
     }, 1000);
 
     return () => {
       clearInterval(intervalId)
-      clearInterval(intervalFaces)
     };
 
   }, [count,Timer, props.firstName, props.lastName]);
@@ -157,6 +149,8 @@ const UserDashboard = (props) => {
 
     setToken(tokenCode)
     setIsdisable(true)
+    setTimer(30)
+
     pushToken({ FullName: FullName,Code: tokenCode })
 
   }
@@ -166,15 +160,17 @@ const UserDashboard = (props) => {
       <Titles
       title="Welcome to the Dashboard! 🎉"
       text="Explore insights, take control, and make informed decisions with ease."
+       
+      className="text-center text-nowrap"
       />
 
-      <Form>
-        <div className="d-flex flex-column justify-content-center align-items-center mt-4">
+      <Container>
+        <Row className="d-flex flex-column justify-content-center align-items-center mt-4">
 
           {/* open locker */}
           <Col md={10} sm={12}>
             <div className="d-flex flex-column justify-content-center align-items-center my-2 px-4" >
-              <h1>{status}</h1>
+              <h1 className="text-nowrap">{status}</h1>
 
               <input 
               type="range" 
@@ -188,39 +184,50 @@ const UserDashboard = (props) => {
 
             </div>
           </Col>
-      
-          <p class="lead">Token</p>
-            <p> Expire at 30 </p>
 
-          <div className="text-danger ">
-          This is your TOKEN
-          </div>
+          {/* Token and Update Faces */}
+          <Col md={10} sm={12} className="mt-3">
 
- 
-          <Button
-          variant="primary"
-          className="my-2 px-4"
-          type="submit"
-          style={{ width: "70%" }}
-          onClick={handleToken}
-          >
-            Update Faces
-          </Button>
+            <Stack gap={2} className="col-md-12 mx-auto">
+         
 
-          {/* Add the "Change Pin" button with modal */}
-          <Button
-          variant="primary"
-          className="my-2 px-4"
-          type="button"
-          style={{ width: "70%" }}
-          onClick={handleShowModal} // Show modal on button click
-          >
-            Change Pin
-          </Button>
+              {/* Token Code */}
+              {isDisable && 
+                <div className="text-danger text-center m-3">
+                This is your <strong>{Token}</strong> and it {tokenStatus}
+                </div>
+              }
 
-   
-        </div>
-      </Form>
+              <Button
+              variant="primary"
+              className="p-2"
+              onClick={handleToken}
+              style={{
+                background: 'rgb(61, 152, 154)',
+                color: 'white' // Set the text color
+              }}
+              >
+                update face
+              </Button>
+
+              {/* Add the "Change Pin" button with modal */}
+              <Button
+              variant="primary"
+              className="p-2 mt-1"
+              type="button"
+              style={{
+                background: 'rgb(61, 152, 154)',
+                color: 'white' // Set the text color
+              }}
+              onClick={handleShowModal} // Show modal on button click
+              >
+                change pin
+              </Button>
+
+            </Stack>
+          </Col>
+        </Row>
+      </Container>
 
       {/* Modal for changing PIN */}
       <Modal show={showModal} onHide={handleCloseModal}>
@@ -231,6 +238,8 @@ const UserDashboard = (props) => {
 
         <Modal.Body>
           <Form onSubmit={handleSubmit}>
+
+            {/* Old Pin */}
             <Form.Group controlId="oldPin">
               <Form.Label>Old PIN</Form.Label>
               <Form.Control
@@ -241,7 +250,11 @@ const UserDashboard = (props) => {
               />
             </Form.Group>
 
+            <br/>
+
             <Form.Group controlId="newPin">
+
+            {/* New Pin */}
               <Form.Label>New PIN</Form.Label>
               <Form.Control
                 type="password"
@@ -257,10 +270,19 @@ const UserDashboard = (props) => {
                 Incorrect old PIN. Please try again.
               </Alert>
             )}
-
-            <Button variant="primary" type="submit">
+            
+            <div className="d-flex justify-content-center align-items-center">
+            <Button variant="primary" type="submit" className="my-3 p-2 "
+            style={{
+              background: 'linear-gradient(to right, rgb(61, 152, 154) 0%, rgb(12, 14, 36) 100%)',
+              color: 'white',
+              width: "70%" // Set the text color
+            }} 
+            >
               Save Changes
             </Button>
+
+            </div>
           </Form>
         </Modal.Body>
       </Modal>

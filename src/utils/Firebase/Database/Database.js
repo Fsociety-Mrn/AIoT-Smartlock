@@ -68,6 +68,7 @@ import {
   
         remove(keyRef)
             .then(() => {
+                console.log(FullName)
                 console.log(`Key "${FullName}" removed successfully.`);
             })
             .catch((error) => {

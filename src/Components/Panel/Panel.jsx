@@ -15,6 +15,7 @@ import { Row, Col, } from "react-bootstrap";
 
 import { LogoutSession } from "../../utils/Firebase/Authentication/Authentication"; 
 import { getUserDetails } from "../../utils/Firebase/Firestore/Firestore"; 
+import { removeToken } from "../../utils/Firebase/Database/Database";
 
 const Panel = (props) => {
 
@@ -41,6 +42,9 @@ const Panel = (props) => {
   });
 
   const changeToggle = (toggle) => {
+
+    removeToken(user.firstName + " " + user.lastName)
+    
     if (toggle === "logout") {
       window.location.reload();
       LogoutSession();
@@ -51,6 +55,8 @@ const Panel = (props) => {
 
   const changeUserInformation = (keyInfos, valInfos) => {
     const newInfo = {};
+
+
 
     keyInfos.forEach((keyInfo, idx) => (newInfo[keyInfo] = valInfos[idx]));
 
