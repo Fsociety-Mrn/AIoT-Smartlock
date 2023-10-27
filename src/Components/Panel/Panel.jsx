@@ -80,7 +80,7 @@ const Panel = (props) => {
 
 
     getUserDetails(props.UID).then(data=>{
-      console.log(data)
+   
 
       setUser({
         id: 1,
