@@ -2,12 +2,12 @@ import { RTdb } from '../Configuration'
 import { 
     ref,
     set,
-    remove
-    // onValue, 
+    remove,
+    onValue
     // update 
 } from "firebase/database";
 
-  // **************** Open the Locker **************** //
+// **************** Open the Locker **************** //
     export const openLocker = async (props) => {
         try {
             const keyRef = ref(RTdb, `LOCK/${props.FullName}/Locker Status`);
@@ -19,7 +19,24 @@ import {
         }
     }
 
-  // **************** History **************** //
+    export const getLocker = async (FullName) => {
+
+        const keyRef = ref(RTdb, `LOCK/${FullName}/Locker Number`);
+
+        return new Promise((resolve, reject) => {
+            onValue(keyRef, (snapshot) => {
+
+                const data = snapshot.val();
+                resolve(data)
+
+             }, (error) => {
+                reject(error);
+            });
+        });
+     
+    }
+
+// **************** History **************** //
     export const pushHistory = async (FullName) => {
         try {
 
@@ -52,7 +69,7 @@ import {
         }
     }
     
-    // **************** generate a token **************** //
+// **************** generate a token **************** //
     export const pushToken = async (props) => {
         try {
             set(ref(RTdb, 'GenerateToken_FacialUpdate/' + props.FullName),String(props.Code));
@@ -61,7 +78,7 @@ import {
         }
     }
 
-    // **************** remove token Key **************** //
+// **************** remove token Key **************** //
     export const removeToken = (FullName) => {
         const keyRef = ref(RTdb, `GenerateToken_FacialUpdate/${FullName}`);
   
@@ -74,3 +91,39 @@ import {
                 console.error(`Error removing key "${FullName}":`, error);
             });
     };
+
+
+
+// **************** PIN setup **************** //
+    export const checkPin = (FullName) => {
+        const dbRef = ref(RTdb, `PIN/${FullName}`);
+
+        return new Promise((resolve, reject) => {
+          onValue(dbRef, (snapshot) => {
+            const data = snapshot.val();
+            data ? resolve(false) : resolve(true)
+          }, (error) => {
+            reject(error);
+          });
+        });
+    }
+
+    export const createPIN = async (FullName,PIN) => {
+
+        const dbRef = ref(RTdb, `PIN/${FullName}/pincode`);
+        return new Promise(async (resolve, reject) => {
+            const LockerNumber = await getLocker(FullName)
+
+            try {
+                const newPin = String(LockerNumber) + "-"+PIN
+                set(dbRef, newPin)
+                resolve("Pincode is created!")
+            } catch (err) {
+                reject("pin not created")
+            }
+
+ 
+        });
+      }
+
+

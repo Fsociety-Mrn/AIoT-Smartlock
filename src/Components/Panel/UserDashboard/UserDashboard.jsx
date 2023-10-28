@@ -9,7 +9,9 @@ import {
   openLocker, 
   pushHistory, 
   pushToken,
-  removeToken 
+  removeToken,
+  checkPin,
+  createPIN
 } from "../../../utils/Firebase/Database/Database";
 
 import Code from "../../../utils/Code"
@@ -24,6 +26,7 @@ const UserDashboard = (props) => {
   // State to store the old PIN and new PIN
   const [oldPin, setOldPin] = useState("");
   const [newPin, setNewPin] = useState("");
+  const [checkPIN, setCheckPIN] = useState(false);
 
   // State for the slider 
   const [sliderValue, setSliderValue] = useState(0);
@@ -37,9 +40,14 @@ const UserDashboard = (props) => {
   const [Timer,setTimer] = useState()
   const [tokenStatus, setTokenStatus] = useState("")
 
+  
+
   React.useEffect(() => {
 
     const FullName = String(props.firstName + " " + props.lastName).toUpperCase()
+
+    // *************** for Change PIN *************** // 
+    checkPin(FullName).then(result=>setCheckPIN(result))
 
     // *************** for Faces *************** //
 
@@ -211,7 +219,7 @@ const UserDashboard = (props) => {
               </Button>
 
               {/* Add the "Change Pin" button with modal */}
-              <Button
+              {!checkPIN &&<Button
               variant="primary"
               className="p-2 mt-1"
               type="button"
@@ -222,7 +230,25 @@ const UserDashboard = (props) => {
               onClick={handleShowModal} // Show modal on button click
               >
                 change pin
-              </Button>
+              </Button>}
+
+
+              {checkPIN && <div className="text-danger text-center mt-2">
+                Please create PIN
+              </div>}
+
+              {checkPIN && <Button
+              variant="primary"
+              className="p-2"
+              type="button"
+              style={{
+                background: 'rgb(61, 152, 154)',
+                color: 'white' // Set the text color
+              }}
+              onClick={()=>createPIN("ART LISBOA",1010).then(E=>console.log(E))} // Show modal on button click
+              >
+                create pin
+              </Button>}
 
             </Stack>
           </Col>
@@ -230,7 +256,9 @@ const UserDashboard = (props) => {
       </Container>
 
       {/* Modal for changing PIN */}
-      <Modal show={showModal} onHide={handleCloseModal}>
+      <Modal 
+      // show={showModal} onHide={handleCloseModal}
+      >
 
         <Modal.Header closeButton>
           <Modal.Title>Change PIN</Modal.Title>
@@ -280,6 +308,66 @@ const UserDashboard = (props) => {
             }} 
             >
               Save Changes
+            </Button>
+
+            </div>
+          </Form>
+        </Modal.Body>
+      </Modal>
+
+      {/* Modal for create PIN */}
+      <Modal 
+      show={showModal} onHide={handleCloseModal}
+      >
+
+        <Modal.Header closeButton>
+          <Modal.Title>Setup PIN</Modal.Title>
+        </Modal.Header>
+
+        <Modal.Body>
+          <Form onSubmit={handleSubmit}>
+
+            {/* New Pin */}
+            <Form.Group controlId="newPin">
+              <Form.Label>Old PIN</Form.Label>
+              <Form.Control
+                type="password"
+                placeholder="new PIN"
+                value={oldPin}
+                onChange={(e) => setOldPin(e.target.value)}
+              />
+            </Form.Group>
+
+            <br/>
+
+            <Form.Group controlId="confirmPIN">
+
+            {/* Confirm Pin */}
+              <Form.Label>New PIN</Form.Label>
+              <Form.Control
+                type="password"
+                placeholder="Enter confirm PIN"
+                value={newPin}
+                onChange={(e) => setNewPin(e.target.value)}
+              />
+            </Form.Group>
+
+            {/* Add an alert for incorrect old PIN */}
+            {showAlert && (
+              <Alert variant="danger">
+                Incorrect old PIN. Please try again.
+              </Alert>
+            )}
+            
+            <div className="d-flex justify-content-center align-items-center">
+            <Button variant="primary" type="submit" className="my-3 p-2 "
+            style={{
+              background: 'linear-gradient(to right, rgb(61, 152, 154) 0%, rgb(12, 14, 36) 100%)',
+              color: 'white',
+              width: "70%" // Set the text color
+            }} 
+            >
+              Create PIN
             </Button>
 
             </div>
