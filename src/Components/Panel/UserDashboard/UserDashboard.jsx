@@ -194,7 +194,7 @@ const UserDashboard = (props) => {
               {/* Token Code */}
               {isDisable && 
                 <div className="text-danger text-center m-3">
-                This is your <strong>{Token}</strong> and it {tokenStatus}
+                This is your code <strong>{Token}</strong> and it {tokenStatus}
                 </div>
               }
 

@@ -43,12 +43,13 @@ const Panel = (props) => {
 
   const changeToggle = (toggle) => {
 
-    removeToken(user.firstName + " " + user.lastName)
+  
     
     if (toggle === "logout") {
       window.location.reload();
       LogoutSession();
     } else {
+      removeToken(user.firstName + " " + user.lastName)
       setToggle(toggle);
     }
   };

@@ -7,7 +7,7 @@ import {
     // update 
 } from "firebase/database";
 
-  // generate a token
+  // **************** Open the Locker **************** //
     export const openLocker = async (props) => {
         try {
             const keyRef = ref(RTdb, `LOCK/${props.FullName}/Locker Status`);
@@ -19,7 +19,7 @@ import {
         }
     }
 
-  //  History 
+  // **************** History **************** //
     export const pushHistory = async (FullName) => {
         try {
 
@@ -52,8 +52,7 @@ import {
         }
     }
     
-
-    // generate a token
+    // **************** generate a token **************** //
     export const pushToken = async (props) => {
         try {
             set(ref(RTdb, 'GenerateToken_FacialUpdate/' + props.FullName),String(props.Code));
@@ -62,7 +61,7 @@ import {
         }
     }
 
-    // remove token Key
+    // **************** remove token Key **************** //
     export const removeToken = (FullName) => {
         const keyRef = ref(RTdb, `GenerateToken_FacialUpdate/${FullName}`);
   
