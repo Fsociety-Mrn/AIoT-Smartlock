@@ -14,6 +14,9 @@ import {
   createPIN
 } from "../../../utils/Firebase/Database/Database";
 
+// validation
+import { pinSchema } from "../../../utils/Validation/Validation"
+
 import Code from "../../../utils/Code"
 
 
@@ -21,11 +24,16 @@ const UserDashboard = (props) => {
 
   // State to manage the modal and alert
   const [showModal, setShowModal] = useState(false);
+  const [showModalCreate, setShowModalCreate] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
 
   // State to store the old PIN and new PIN
   const [oldPin, setOldPin] = useState("");
   const [newPin, setNewPin] = useState("");
+  const [createPin,setCreatePIN] = useState({
+    newPin: "",
+    confirmPin: ""
+  })
   const [checkPIN, setCheckPIN] = useState(false);
 
   // State for the slider 
@@ -45,7 +53,7 @@ const UserDashboard = (props) => {
   React.useEffect(() => {
 
     const FullName = String(props.firstName + " " + props.lastName).toUpperCase()
-
+  
     // *************** for Change PIN *************** // 
     checkPin(FullName).then(result=>setCheckPIN(result))
 
@@ -104,13 +112,52 @@ const UserDashboard = (props) => {
     setShowAlert(false); // Hide any previous alerts when opening the modal
   };
 
+  const handleShowModalCreate = () => {
+    setShowModalCreate(true);
+    setShowAlert(false); // Hide any previous alerts when opening the modal
+  };
+
   // Function to handle closing the modal
   const handleCloseModal = () => {
     setShowModal(false);
     setShowAlert(false); // Hide any previous alerts when closing the modal
   };
 
-  // Function to handle form submission
+  const handleCloseModalCreate = () => {
+    setShowModalCreate(false);
+    setShowAlert(false); // Hide any previous alerts when closing the modal
+  };
+
+  // Function to handle form submission for 
+  const handleSubmitCreate = async (event) => {
+    event.preventDefault();
+    try {
+
+
+
+      await pinSchema.validate({ PIN: createPin.newPin, PIN2: createPin.confirmPin }, { abortEarly: false });
+
+
+
+
+    } catch (validationError) {
+
+      // Extract specific error messages for email and password
+      const emailError = validationError.inner.find((error) => error.path === 'email');
+      const passwordError = validationError.inner.find((error) => error.path === 'password');
+
+// If validation errors occur
+      // setError({
+      //     email: !!emailError,
+      //     emailError: emailError && emailError.message,
+
+      //     password: !!passwordError,
+      //     passwordError: passwordError && passwordError.message
+      // });
+
+    }
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     // Replace '1234' with the actual correct old PIN
@@ -245,7 +292,7 @@ const UserDashboard = (props) => {
                 background: 'rgb(61, 152, 154)',
                 color: 'white' // Set the text color
               }}
-              onClick={()=>createPIN("ART LISBOA",1010).then(E=>console.log(E))} // Show modal on button click
+              onClick={handleShowModalCreate} // Show modal on button click
               >
                 create pin
               </Button>}
@@ -257,7 +304,7 @@ const UserDashboard = (props) => {
 
       {/* Modal for changing PIN */}
       <Modal 
-      // show={showModal} onHide={handleCloseModal}
+      show={showModal} onHide={handleCloseModal}
       >
 
         <Modal.Header closeButton>
@@ -317,7 +364,7 @@ const UserDashboard = (props) => {
 
       {/* Modal for create PIN */}
       <Modal 
-      show={showModal} onHide={handleCloseModal}
+      show={showModalCreate} onHide={handleCloseModalCreate}
       >
 
         <Modal.Header closeButton>

@@ -96,15 +96,23 @@ import {
 
 // **************** PIN setup **************** //
     export const checkPin = (FullName) => {
-        const dbRef = ref(RTdb, `PIN/${FullName}`);
+        
+
 
         return new Promise((resolve, reject) => {
+        
+            try {
+
+                const dbRef = ref(RTdb, `PIN/${FullName}`);
           onValue(dbRef, (snapshot) => {
             const data = snapshot.val();
             data ? resolve(false) : resolve(true)
           }, (error) => {
             reject(error);
           });
+        }catch(error){
+            reject(error);
+        }
         });
     }
 
