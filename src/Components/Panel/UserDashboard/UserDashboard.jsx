@@ -11,13 +11,15 @@ import {
   pushToken,
   removeToken,
   checkPin,
-  createPIN
+  createPIN,
+  verifyPIN
 } from "../../../utils/Firebase/Database/Database";
 
 // validation
-import { pinSchema } from "../../../utils/Validation/Validation"
+import { pinSchema,NewpinSchema } from "../../../utils/Validation/Validation"
 
 import Code from "../../../utils/Code"
+
 
 
 const UserDashboard = (props) => {
@@ -33,6 +35,13 @@ const UserDashboard = (props) => {
   const [createPin,setCreatePIN] = useState({
     newPin: "",
     confirmPin: ""
+  })
+  const [error,setError] = useState({
+    pin1: false,
+    pin1Error: "",
+
+    pin2: false,
+    pin2Error: ""
   })
   const [checkPIN, setCheckPIN] = useState(false);
 
@@ -133,42 +142,80 @@ const UserDashboard = (props) => {
     event.preventDefault();
     try {
 
-
-
       await pinSchema.validate({ PIN: createPin.newPin, PIN2: createPin.confirmPin }, { abortEarly: false });
+      const FullName = String(props.firstName + " " + props.lastName).toUpperCase()
+      
+      createPIN(FullName,createPin.confirmPin).then(e=>{
+        setError({
+          pin1: false,
+          pin1Error: "",
+      
+          pin2: false,
+          pin2Error: ""
+        })
 
+        handleCloseModalCreate()
 
+      })
+    } catch (validationError) {
+
+      // Extract specific error messages for email and password
+      const emailError = validationError.inner.find((error) => error.path === 'PIN');
+      const passwordError = validationError.inner.find((error) => error.path === 'PIN2');
+
+    // If validation errors occur
+      setError({
+        pin1: !!emailError,
+        pin1Error: emailError && emailError.message,
+
+        pin2: !!passwordError,
+        pin2Error: passwordError && passwordError.message
+      });
+
+    }
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+
+      await NewpinSchema.validate({ PIN: oldPin, PIN2: newPin}, { abortEarly: false });
+      const FullName = String(props.firstName + " " + props.lastName).toUpperCase()
+      verifyPIN(FullName, oldPin).then(result=>{
+
+        // if pincode is verified
+        result && createPIN(FullName,newPin).then(result=> {     
+          setError({
+            pin1: false,
+            pin1Error: "",
+      
+            pin2: false,
+            pin2Error: ""
+          })
+
+          handleCloseModal()
+        })
+
+        // if pincode is verified
+        !result && setError({ pin1: false, pin1Error: "", pin2: true, pin2Error: "old pin is not verified" })
+      })
 
 
     } catch (validationError) {
 
       // Extract specific error messages for email and password
-      const emailError = validationError.inner.find((error) => error.path === 'email');
-      const passwordError = validationError.inner.find((error) => error.path === 'password');
+      const emailError = validationError.inner.find((error) => error.path === 'PIN');
+      const passwordError = validationError.inner.find((error) => error.path === 'PIN2');
 
-// If validation errors occur
-      // setError({
-      //     email: !!emailError,
-      //     emailError: emailError && emailError.message,
+    // If validation errors occur
+      setError({
+        pin1: !!emailError,
+        pin1Error: emailError && emailError.message,
 
-      //     password: !!passwordError,
-      //     passwordError: passwordError && passwordError.message
-      // });
+        pin2: !!passwordError,
+        pin2Error: passwordError && passwordError.message
+      });
 
-    }
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    // Replace '1234' with the actual correct old PIN
-    if (oldPin === "1234") {
-      // Old PIN is correct
-      // Add your logic for changing the PIN here
-      // Once the PIN is changed, you can close the modal
-      handleCloseModal();
-    } else {
-      // Old PIN is incorrect, show an alert
-      setShowAlert(true);
     }
   };
 
@@ -312,7 +359,7 @@ const UserDashboard = (props) => {
         </Modal.Header>
 
         <Modal.Body>
-          <Form onSubmit={handleSubmit}>
+          <Form >
 
             {/* Old Pin */}
             <Form.Group controlId="oldPin">
@@ -323,6 +370,11 @@ const UserDashboard = (props) => {
                 value={oldPin}
                 onChange={(e) => setOldPin(e.target.value)}
               />
+              {error.pin1 && (
+              <Alert variant="danger mt-2">
+                {error.pin1Error}
+              </Alert>
+            )}
             </Form.Group>
 
             <br/>
@@ -330,22 +382,24 @@ const UserDashboard = (props) => {
             <Form.Group controlId="newPin">
 
             {/* New Pin */}
-              <Form.Label>New PIN</Form.Label>
+              <Form.Label>Confirm PIN</Form.Label>
               <Form.Control
                 type="password"
                 placeholder="Enter new PIN"
                 value={newPin}
                 onChange={(e) => setNewPin(e.target.value)}
               />
-            </Form.Group>
 
             {/* Add an alert for incorrect old PIN */}
-            {showAlert && (
-              <Alert variant="danger">
-                Incorrect old PIN. Please try again.
+            {error.pin2 && (
+              <Alert variant="danger mt-2">
+                {error.pin2Error}
               </Alert>
             )}
-            
+
+            </Form.Group>
+
+
             <div className="d-flex justify-content-center align-items-center">
             <Button variant="primary" type="submit" className="my-3 p-2 "
             style={{
@@ -353,6 +407,7 @@ const UserDashboard = (props) => {
               color: 'white',
               width: "70%" // Set the text color
             }} 
+            onClick={handleSubmit}
             >
               Save Changes
             </Button>
@@ -376,13 +431,18 @@ const UserDashboard = (props) => {
 
             {/* New Pin */}
             <Form.Group controlId="newPin">
-              <Form.Label>Old PIN</Form.Label>
+              <Form.Label>New PIN</Form.Label>
               <Form.Control
                 type="password"
                 placeholder="new PIN"
-                value={oldPin}
-                onChange={(e) => setOldPin(e.target.value)}
+                value={createPin.newPin}
+                onChange={(e) => setCreatePIN({...createPin, newPin:e.target.value})}
               />
+              {error.pin1 && (
+              <Alert variant="danger mt-2">
+                {error.pin1Error}
+              </Alert>
+            )}
             </Form.Group>
 
             <br/>
@@ -390,13 +450,19 @@ const UserDashboard = (props) => {
             <Form.Group controlId="confirmPIN">
 
             {/* Confirm Pin */}
-              <Form.Label>New PIN</Form.Label>
+              <Form.Label>Confirm PIN</Form.Label>
               <Form.Control
                 type="password"
                 placeholder="Enter confirm PIN"
-                value={newPin}
-                onChange={(e) => setNewPin(e.target.value)}
+                value={createPin.confirmPin}
+                onChange={(e) => setCreatePIN({...createPin, confirmPin:e.target.value})}
               />
+            {/* Add an alert for incorrect old PIN */}
+            {error.pin2 && (
+              <Alert variant="danger mt-2">
+                {error.pin2Error}
+              </Alert>
+            )}
             </Form.Group>
 
             {/* Add an alert for incorrect old PIN */}
@@ -413,6 +479,7 @@ const UserDashboard = (props) => {
               color: 'white',
               width: "70%" // Set the text color
             }} 
+            onClick={handleSubmitCreate}
             >
               Create PIN
             </Button>

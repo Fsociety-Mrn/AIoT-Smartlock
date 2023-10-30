@@ -94,27 +94,42 @@ import {
 
 
 
-// **************** PIN setup **************** //
+// **************** createPIN setup **************** //
     export const checkPin = (FullName) => {
-        
-
-
         return new Promise((resolve, reject) => {
-        
             try {
-
                 const dbRef = ref(RTdb, `PIN/${FullName}`);
-          onValue(dbRef, (snapshot) => {
-            const data = snapshot.val();
-            data ? resolve(false) : resolve(true)
-          }, (error) => {
-            reject(error);
+                onValue(dbRef, (snapshot) => {
+                    const data = snapshot.val();
+                    data ? resolve(false) : resolve(true)
+                }, (error) => {
+                reject(error);
           });
         }catch(error){
             reject(error);
         }
         });
     }
+
+    export const verifyPIN = (FullName,PIN) => {
+        return new Promise((resolve, reject) => {
+            try {
+
+                const dbRef = ref(RTdb, `PIN/${FullName}`);
+                onValue(dbRef, (snapshot) => {
+                    const data = snapshot.val();
+              
+                    resolve(data.pincode.split("-")[1] === PIN)
+
+                }, (error) => {
+                reject(error);
+                });
+
+            }catch(error){
+                reject(error);
+            }
+        });
+    }  
 
     export const createPIN = async (FullName,PIN) => {
 
@@ -123,7 +138,7 @@ import {
             const LockerNumber = await getLocker(FullName)
 
             try {
-                const newPin = String(LockerNumber) + "-"+PIN
+                const newPin = String(LockerNumber) + "-" + PIN
                 set(dbRef, newPin)
                 resolve("Pincode is created!")
             } catch (err) {
@@ -132,6 +147,6 @@ import {
 
  
         });
-      }
+    }
 
 
