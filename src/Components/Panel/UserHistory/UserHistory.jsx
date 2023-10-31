@@ -27,7 +27,7 @@ const UserDashboard = (props) => {
   // ***************** datetime now ***************** //
 
   const options = { month: 'long', day: 'numeric', year: 'numeric' };
-  const [isOpen, setIsOpen] = React.useState(false)
+  // const [isOpen, setIsOpen] = React.useState(false)
   // const [date, setDate] = React.useState()
 
   // ***************** Get Data ***************** //
@@ -102,7 +102,9 @@ const UserDashboard = (props) => {
       {/* date time picker */}
      <div className="d-flex justify-content-between mt-4 mb-2">
 
-        <Button variant="light" className="p-0" onClick={()=>setIsOpen(true)}>
+        <Button variant="light" className="p-0" 
+        // onClick={()=>setIsOpen(true)}
+        >
           <CalendarEdit size="22" color="#000000"/>
         </Button>
 
