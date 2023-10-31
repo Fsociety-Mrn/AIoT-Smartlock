@@ -54,26 +54,28 @@ const UserDashboard = (props) => {
     const getHistoryData = async () => {
 
 
-      const data = await getHistory(FullName)
+      const datasss = await getHistory(FullName)
 
-      if (data) {
+      if (datasss) {
         // date&& console.log(new Date(date).toISOString().split('T')[0])
         // const today = date ? new Date(date).toISOString().split('T')[0] : new Date().toISOString().split('T')[0]; // Get today's date
         // Filter data for today's date
-        const todayData = transformData(data)
+        const todayData = transformData(datasss)
                         ?.sort((a, b) => {
                           const timeA = new Date(a.date + ' ' + a.time);
                           const timeB = new Date(b.date+ ' ' + b.time);
 
                           return timeB - timeA;
                         });
+
+        console.log(datasss)
   
-        setData(todayData);
+        setData(transformData(datasss));
       }
     }
 
     return () => getHistoryData()
-  },[ props.props.firstName, props.props.lastName])
+  },[data, props.props.firstName, props.props.lastName])
 
   // ***************** preview and next ***************** //
 
@@ -138,18 +140,13 @@ const UserDashboard = (props) => {
         </thead>
 
         <tbody>
-          {true ? currentItems?.map((item, index) => (
+          {currentItems?.map((item, index) => (
             <tr key={index}>
             <td>{new Date(item.date).toLocaleString(undefined,options)}</td>
               <td>{item.time}</td>
               <td>{item.accessType}</td>
             </tr>
-          )) : 
-          <tr>
-            <td></td>
-            <td colspan="3">No activity Today</td>
-          </tr>
-          }
+          )) }
         </tbody>
       </Table>
 
