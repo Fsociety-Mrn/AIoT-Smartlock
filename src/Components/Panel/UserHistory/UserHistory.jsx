@@ -68,14 +68,16 @@ const UserDashboard = (props) => {
                           return timeB - timeA;
                         });
 
-        console.log(datasss)
+        console.log(todayData)
+
+
   
-        setData(transformData(datasss));
+        setData(todayData);
       }
     }
 
     return () => getHistoryData()
-  },[data, props.props.firstName, props.props.lastName])
+  },[props.props.firstName, props.props.lastName])
 
   // ***************** preview and next ***************** //
 
