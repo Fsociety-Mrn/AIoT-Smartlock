@@ -81,7 +81,6 @@ const UserDashboard = (props) => {
 
   const handleNext = () => {
     setCurrentPage(currentPage + 1);
-    console.log(currentItems.length)
   };
 
   const handlePrev = () => {
@@ -139,7 +138,7 @@ const UserDashboard = (props) => {
         </thead>
 
         <tbody>
-          {currentItems.length !== 0? currentItems?.map((item, index) => (
+          { currentItems?.map((item, index) => (
             <tr key={index}>
             <td>{new Date(item.date).toLocaleString(undefined,options)}</td>
               <td>{item.time}</td>
