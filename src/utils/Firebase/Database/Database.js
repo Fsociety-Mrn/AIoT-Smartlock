@@ -4,7 +4,6 @@ import {
     set,
     remove,
     onValue
-    // update 
 } from "firebase/database";
 
 // **************** Open the Locker **************** //
@@ -68,6 +67,26 @@ import {
             console.error(err);
         }
     }
+
+    export const getHistory = async (FullName) => {
+        return new Promise((resolve, reject) => {
+            try {
+                const keyRef = ref(RTdb, `History/${FullName}`);
+                onValue(keyRef, (snapshot) => {
+
+                    const data = snapshot.val();
+                    resolve(data)
+
+                }, (error) => {
+                    reject(error);
+                });
+            } catch (err) {
+                console.error(err);
+                reject(null)
+            }
+
+        })
+    }
     
 // **************** generate a token **************** //
     export const pushToken = async (props) => {
@@ -91,8 +110,6 @@ import {
                 console.error(`Error removing key "${FullName}":`, error);
             });
     };
-
-
 
 // **************** createPIN setup **************** //
     export const checkPin = (FullName) => {
@@ -149,4 +166,5 @@ import {
         });
     }
 
+    
 

@@ -110,7 +110,13 @@ const UserDashboard = (props) => {
     }, 1000);
 
     return () => {
-      clearInterval(intervalId)
+
+      clearInterval(intervalId);
+      // removeToken(FullName);
+
+      window.removeEventListener("beforeunload", () => {
+        console.log('Cleanup function called');
+      });
     };
 
   }, [count,Timer, props.firstName, props.lastName]);

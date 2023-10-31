@@ -4,6 +4,7 @@ import UserDashboard from "./UserDashboard/UserDashboard";
 import UserCard from "./UserCard/UserCard";
 import UserInformation from "./UserInformation/UserInformation";
 import UserChangePassword from "./UserChangePassword/UserChangePassword";
+import UserHistory from "./UserHistory"
 import {
   UserEdit,
   DirectboxNotif,
@@ -15,11 +16,9 @@ import { Row, Col, } from "react-bootstrap";
 
 import { LogoutSession } from "../../utils/Firebase/Authentication/Authentication"; 
 import { getUserDetails } from "../../utils/Firebase/Firestore/Firestore"; 
-import { removeToken } from "../../utils/Firebase/Database/Database";
+
 
 const Panel = (props) => {
-
-
   
   const initState = ({
     id,
@@ -49,7 +48,7 @@ const Panel = (props) => {
       window.location.reload();
       LogoutSession();
     } else {
-      removeToken(user.firstName + " " + user.lastName)
+
       setToggle(toggle);
     }
   };
@@ -167,6 +166,16 @@ const Panel = (props) => {
             {toggle === "password" && (
               <UserChangePassword
                 password={user.password}
+                onChangeInfo={changeUserInformation}
+              />
+            )}
+            {toggle === "history" && (
+              <UserHistory
+                username={user.username}
+                firstName={user.firstName}
+                lastName={user.lastName}
+                email={user.email}
+                birthday={user.birthday}
                 onChangeInfo={changeUserInformation}
               />
             )}
