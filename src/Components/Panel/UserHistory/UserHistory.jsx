@@ -138,7 +138,7 @@ const UserDashboard = (props) => {
         </thead>
 
         <tbody>
-          { currentItems?.map((item, index) => (
+          {true ? currentItems?.map((item, index) => (
             <tr key={index}>
             <td>{new Date(item.date).toLocaleString(undefined,options)}</td>
               <td>{item.time}</td>
