@@ -11,7 +11,7 @@ import Login from './Pages/Login';
 import Mainmenu from './Pages/Mainmenu';
 
 import { statusLogin } from '../utils/Firebase/Authentication/Authentication';
-import { isAdmin } from '../utils/Firebase/Firestore/Firestore';
+// import { isAdmin } from '../utils/Firebase/Firestore/Firestore';
 
 
 const Routers = () => {
@@ -36,11 +36,13 @@ const Routers = () => {
             {
               setUID(user.uid)
               setEmail(user.email)
+
+              changeToggle("panel")
             // verify user
-            isAdmin(user.uid).then(data=>
-              {
-                data.isAdmin ? changeToggle("login") : changeToggle("panel")
-              })
+            // isAdmin(user.uid).then(data=>
+            //   {
+            //     data.isAdmin ? changeToggle("login") : changeToggle("panel")
+            //   })
 
           }else{
             setToggle("login") 

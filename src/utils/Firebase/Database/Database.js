@@ -60,7 +60,9 @@ import {
 
             const keyRef = ref(RTdb, `History/${FullName}/${dateNow}/${timeNow}`);
     
-            set(keyRef,String("IoT Access"));
+            set(keyRef,{
+                "Access_type": String("IoT Access")
+            });
     
             console.log("Okay goods")
         } catch (err) {

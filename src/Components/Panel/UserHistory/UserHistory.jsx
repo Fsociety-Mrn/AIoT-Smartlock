@@ -2,7 +2,7 @@ import Titles from "../../Titles/Titles";
 import Table from 'react-bootstrap/Table';
 import React, { useState } from "react"; // Import React and useState
 import { Button } from "react-bootstrap";
-// import { DatePicker } from 'react-responsive-datepicker'
+import { DatePicker } from 'react-responsive-datepicker'
 import 'react-responsive-datepicker/dist/index.css'
 
 import {
@@ -16,6 +16,7 @@ import { getHistory } from "../../../utils/Firebase/Database/Database"
 
 const UserDashboard = (props) => {
   const [data,setData] = useState([])
+  const [secondData,setSecondData] = useState([])
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -27,8 +28,9 @@ const UserDashboard = (props) => {
   // ***************** datetime now ***************** //
 
   const options = { month: 'long', day: 'numeric', year: 'numeric' };
-  // const [isOpen, setIsOpen] = React.useState(false)
-  // const [date, setDate] = React.useState()
+  const [isOpen, setIsOpen] = React.useState(false)
+  const [date, setDate] = React.useState() 
+  
 
   // ***************** Get Data ***************** //
 
@@ -39,7 +41,7 @@ const UserDashboard = (props) => {
         return {
           date: formattedDate.toISOString().split('T')[0],
           time: formattedDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
-          accessType,
+          accessType: accessType.Access_type,
         };
       })
     );
@@ -47,18 +49,17 @@ const UserDashboard = (props) => {
 
   React.useEffect(()=>{
 
-
+    let isMounted = true;
 
     const FullName = String(props.props.firstName + " " + props.props.lastName).toUpperCase()
 
     const getHistoryData = async () => {
 
-
       const datasss = await getHistory(FullName)
 
-      if (datasss) {
-        // date&& console.log(new Date(date).toISOString().split('T')[0])
-        // const today = date ? new Date(date).toISOString().split('T')[0] : new Date().toISOString().split('T')[0]; // Get today's date
+      if (isMounted && datasss) {
+
+
         // Filter data for today's date
         const todayData = transformData(datasss)
                         ?.sort((a, b) => {
@@ -70,13 +71,24 @@ const UserDashboard = (props) => {
 
         console.log(todayData)
 
+        setSecondData(todayData)
 
-  
-        setData(todayData);
+        setData(todayData.filter(value=> {
+          return new Date(value.date).toLocaleString(undefined, options) === new Date().toLocaleString(undefined,options)
+        }));
+
+        
       }
     }
 
-    return () => getHistoryData()
+    if (isMounted){
+      getHistoryData();
+    }
+
+    return () => {
+      isMounted = false
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   },[props.props.firstName, props.props.lastName])
 
   // ***************** preview and next ***************** //
@@ -105,31 +117,31 @@ const UserDashboard = (props) => {
       {/* date time picker */}
      <div className="d-flex justify-content-between mt-4 mb-2">
 
+        <h6>{date ? date : new Date().toLocaleString(undefined,options)}</h6>
+
         <Button variant="light" className="p-0" 
-        // onClick={()=>setIsOpen(true)}
+        onClick={()=>setIsOpen(true)}
         >
           <CalendarEdit size="22" color="#000000"/>
         </Button>
 
-        <h6>{new Date().toLocaleDateString(undefined,options)}</h6>
-
 
       </div>
 
- {/* 
+ 
       <DatePicker
         isOpen={isOpen}
-        onClose={() => setIsOpen(false)}
-        defaultValue={date}
-        onChange={(date)=>{
-          setDate(new Date(date).toLocaleString(undefined,options))
-          console.log(new Date(date).toLocaleString(undefined,options))
-          setData(data?.filter((value,key)=>console.log(value.date === "2023-10-27")))
+        
+        onClose={() => {
+          setIsOpen(false)
+          setData(secondData?.filter((value, key) => { return new Date(value.date).toLocaleString(undefined, options) === new Date(date).toLocaleString(undefined,options)}))
         }}
+        defaultValue={date}
+        onChange={(datesss)=>setDate(new Date(datesss).toLocaleString(undefined,options))}
         minDate={new Date(2022, 0, 0)}
         maxDate={new Date(2033, 0, 0)}
         headerFormat='MM dd, DD'
-      /> */}
+      />
 
       {/* Table  */}
       <Table hover size="sm">
@@ -153,7 +165,7 @@ const UserDashboard = (props) => {
       </Table>
 
       {/* Left and Right Button */}
-      {!false &&   
+      {!isOpen &&   
         <div className="d-flex justify-content-between">
 
           <Button

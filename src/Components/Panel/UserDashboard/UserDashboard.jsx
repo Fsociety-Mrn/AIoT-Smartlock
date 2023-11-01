@@ -61,11 +61,13 @@ const UserDashboard = (props) => {
 
   React.useEffect(() => {
 
-    const FullName = String(props.firstName + " " + props.lastName).toUpperCase()
-  
-    // *************** for Change PIN *************** // 
-    checkPin(FullName).then(result=>setCheckPIN(result))
 
+    const FullName = String(props.firstName + " " + props.lastName).toUpperCase()
+    console.log(props.firstName === "....")
+
+    // *************** for Change PIN *************** // 
+      checkPin(FullName).then(result=>setCheckPIN(result))
+ 
     // *************** for Faces *************** //
 
     if(Timer < 0){
@@ -99,8 +101,6 @@ const UserDashboard = (props) => {
         setCount(count - 1);
         setStatus(`${count} LEFT TO LOCK`)  
       
-
-      
       if (Timer !== null)
       {
         setTimer(Timer - 1);
@@ -114,9 +114,6 @@ const UserDashboard = (props) => {
       clearInterval(intervalId);
       // removeToken(FullName);
 
-      window.removeEventListener("beforeunload", () => {
-        console.log('Cleanup function called');
-      });
     };
 
   }, [count,Timer, props.firstName, props.lastName]);
