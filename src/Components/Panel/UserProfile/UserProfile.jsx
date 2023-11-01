@@ -40,7 +40,7 @@ const UserProfile = (
       </h1>
 
       <h4 className={`${styles["user-email"]} mt-1`}>
-        {capitalizeText(userEmail)}
+        {userEmail}
       </h4>
     </div>
   );
