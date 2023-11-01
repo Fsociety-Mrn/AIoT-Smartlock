@@ -477,10 +477,10 @@ class PincodeLogin(QtWidgets.QFrame):
             
         self.errorMessage.setText("")
         current_text = self.TokenID_3.text()
-        if len(current_text) == 2:
+        if len(current_text) == 1:
                 current_text = current_text + "-"
                 
-        if len(current_text) != 7:   
+        if len(current_text) != 6:   
                 self.TokenID_3.setText(current_text + digit)
 
     def backspace(self):
@@ -498,9 +498,11 @@ class PincodeLogin(QtWidgets.QFrame):
         self.checkFail()
         
         current_date = QtCore.QDate.currentDate().toString("MMM d yyyy")
-        current_time = QtCore.QTime.currentTime().toString("h:mm AP")
+        current_time = QtCore.QTime.currentTime().toString("h:mm:ss AP")
         
         data = pinCodeLogin(pin=self.TokenID_3.text())
+        
+        print(data)
         
         
         self.errorMessage.setText("")
@@ -513,7 +515,7 @@ class PincodeLogin(QtWidgets.QFrame):
                         name="No match detected",
                         date=current_date,
                         time=current_time,
-                        access_type="PIN Login denied")
+                        access_type="PIN Login")
             
         
            if not result:
@@ -521,7 +523,7 @@ class PincodeLogin(QtWidgets.QFrame):
                         name="No match detected",
                         date=current_date,
                         time=current_time,
-                        access_type="PIN Login denied")
+                        access_type="PIN Login")
                 
            self.failed = self.failed + 1
                 
@@ -534,7 +536,7 @@ class PincodeLogin(QtWidgets.QFrame):
                         name=data[0],
                         date=current_date,
                         time=current_time,
-                        access_type="PIN Login granted")
+                        access_type="PIN Login")
             
         
             if not result:
@@ -542,7 +544,7 @@ class PincodeLogin(QtWidgets.QFrame):
                         name=data[0],
                         date=current_date,
                         time=current_time,
-                        access_type="PIN Login granted")
+                        access_type="PIN Login")
                 
             self.messageBoxShow(
                 icon=self.MessageBox.Information,

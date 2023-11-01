@@ -37,7 +37,7 @@ class JoloRecognition:
             return linear_val + ((1.0 - linear_val) * math.pow((linear_val - 0.5) * 2, 0.2)) 
     
     # for face recognition
-    def Face_Compare(self, face, threshold=0.6):
+    def Face_Compare(self, face, threshold=0.7):
         try:
             return self.FaceCompare(face,threshold=threshold)
         except:
@@ -83,15 +83,18 @@ class JoloRecognition:
                     # in this if statment we set a threshold value of 0.6
                     # meaning all the result of comparing faces should atleast 0.6 value in order to recognize people
                     # print("threshold value: ",min_dist )
+                    percentage = self.__thresh_to_percent(face_distance=min_dist,face_match_threshold=threshold)
+                    percentage = percentage * 100
                     if min_dist < threshold:
                         
                         idx_min = match_list.index(min_dist)
                         
+
                         # print(min_dist)
-                        return (self.Name_List[idx_min], min_dist)
+                        return (self.Name_List[idx_min], percentage)
                     else:
 
-                        return ('No match detected', min_dist)
+                        return ('No match detected', percentage)
                 
                 else:
                     return ('No match detected', None)

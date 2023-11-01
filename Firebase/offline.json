@@ -1,6 +1,1 @@
-{
-    "LOCK": {
-        "1": {"ART LISBOA": {"Locker Number": 3, "Locker Status": false}}, 
-        "2": {"IVAN FAMILIARAN": {"Locker Number": 2, "Locker Status": false}}
-    }, 
-    "PIN": {"1": {"Familiarian,Ivan": {"pincode": "02-1101"}}, "2": {"Lisboa,Art": {"pincode": "03-1010"}}}}
+{"LOCK": {"1": {"ART LISBOA": {"Locker Number": 3, "Locker Status": false}}, "2": {"IVAN FAMILIARAN": {"Locker Number": 2, "Locker Status": false}}}, "PIN": {"1": {"ART LISBOA": {"pincode": "3-1111"}}}, "Failed attempt": {"1": {"attempt": 1}, "2": {"attempt": 2}}}

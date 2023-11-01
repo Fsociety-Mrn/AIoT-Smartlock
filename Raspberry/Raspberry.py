@@ -16,5 +16,6 @@ def openLocker():
         
 def OpenLockers(key,value):
     # GPIO.output(key,value)
-    print("Open Lockers")
-    print(key,value)
+    if value:
+        print("Open Lockers")
+        print(key,value)

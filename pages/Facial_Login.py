@@ -4,12 +4,7 @@ import dlib
 import numpy as np
 import torch
 import os
-import playsound
 
-import threading
-
-
-from PyQt5.QtCore import Qt, QPoint, QPropertyAnimation
 from Face_Recognition.JoloRecognition import JoloRecognition as Jolo
 from Firebase.Offline import offline_insert,checkLocker
 from Raspberry.Raspberry import OpenLockers
@@ -200,17 +195,6 @@ class FacialLogin(QtWidgets.QFrame):
         self.videoStream.release()
         cv2.destroyAllWindows()
         self.close()
-    
-    # Google Voicesss
-    def aiVoice(self):
-        filename="Sounds/please blink.mp3" 
-        playsound.playsound(filename)
-    
-    def AccessDenied(self):
-        playsound.playsound("Sounds/Access Denied.mp3")
-        
-    def AccessGranted(self):
-        playsound.playsound("Sounds/Access Granted.mp3")
         
     # message box
     def messageBoxShow(self, icon=None, title=None, text=None, buttons=None):
@@ -235,7 +219,6 @@ class FacialLogin(QtWidgets.QFrame):
      
     # Function to open the camera
     def openCameraWait(self):
-
         # Delay the creation of the FacialLogin object by 100 milliseconds
         QtCore.QTimer.singleShot(100, self.openCamera)
     
@@ -281,7 +264,7 @@ class FacialLogin(QtWidgets.QFrame):
         result = Jolo().Face_Compare(frame)
         
         current_date = QtCore.QDate.currentDate().toString("MMM d yyyy")
-        current_time = QtCore.QTime.currentTime().toString("h:mm AP")
+        current_time = QtCore.QTime.currentTime().toString("h:mm:ss AP")
         
         print(result[1])
 
@@ -292,9 +275,7 @@ class FacialLogin(QtWidgets.QFrame):
             self.R = 255
             self.G = 0
             self.B = 0
-            
-            threading.Thread(target=self.AccessDenied).start()
-            
+   
             self.messageBoxShow(
                 icon=self.MessageBox.Information,
                 title="Facial Recognition",
@@ -305,7 +286,8 @@ class FacialLogin(QtWidgets.QFrame):
         
             # update history firebase
             results = firebaseHistory(name=str(result[0]),
-                            access_type="Access Denied",
+                            access_type="Facial Login",
+                            percentage=result[1],
                             date=str(current_date),
                             time=str(current_time))
             
@@ -316,10 +298,6 @@ class FacialLogin(QtWidgets.QFrame):
             self.matchs = str(result[0])
          
             self.validation = "Authenticated"
-            
-            # self.LastIn_FirstOut(str(result[0]),save)
-        
-            threading.Thread(target=self.AccessGranted).start()
     
             self.messageBoxShow(
                 icon=self.MessageBox.Information,
@@ -340,13 +318,14 @@ class FacialLogin(QtWidgets.QFrame):
             words = str(result[0]).split(' ')
             rearranged_string = f"{words[1]},{words[0]}"
             
-            results = firebaseHistory(name=rearranged_string,
+            results = firebaseHistory(name=result[0],
+                            percentage=result[1],
                             access_type="Facial Login",
                             date=str(current_date),
                             time=str(current_time))
             
             if not results:
-                offline_history(name=rearranged_string,
+                offline_history(name=result[0],
                             access_type="Facial Login",
                             date=str(current_date),
                             time=str(current_time))
@@ -445,11 +424,7 @@ class FacialLogin(QtWidgets.QFrame):
 
         current_time = time.time()
 
-        # play ai voice if its not played
-        if not self.ai_voice_executed:
-            ai_thread = threading.Thread(target=self.aiVoice)
-            ai_thread.start()
-            self.ai_voice_executed = True
+
         
         # display the result
         if len(faces) == 1:
@@ -469,11 +444,11 @@ class FacialLogin(QtWidgets.QFrame):
             
             cv2.putText(frame, "Face Blurreness: " + str(Face_blurreness), (30, 440), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (self.B, self.G, self.R), 1)
             
-            if not Face_blurreness < 450:
+            if not Face_blurreness < 300:
                 
                 # if authenticated
                 if self.validation == "Authenticated":
-                    if not Face_blurreness < 450:
+                    if not Face_blurreness < 300:
                         self.LastIn_FirstOut(name=str(self.matchs),new_image=framesS)
                         time.sleep(3)
                         OpenLockers(key=self.LockerNumber,value=False)

@@ -44,14 +44,18 @@ def delete_table(Table_Name):
     db.close()
 
 # ******* for History
-def offline_history(name=None, date=None, time=None, access_type=None):
+def offline_history(name=None, date=None, time=None, access_type=None, Percentage=None):
     db = TinyDB("Firebase/offline.json")
     table = db.table("History")
     
     data = {
         name:{
             date:{
-                time: access_type
+                time: 
+                    {
+                        "Access_type" : access_type,
+                        "Percentage"  : Percentage
+                    },
             }
         }
     }
@@ -71,7 +75,15 @@ def updateToDatabase():
         for name,value in each.items():
             for date, value in value.items():
                 for time, access_type in value.items():
-                    firebaseHistory(name=name,date=date,time=time,access_type=access_type)
+                    
+                    # I-convert ang dictionary sa listahan ng mga tuples
+                    key_value_list = [(key, value) for key, value in access_type.items()]
+           
+                    firebaseHistory(name=name,
+                                    date=date,
+                                    time=time,
+                                    access_type=key_value_list[0][1],
+                                    percentage=key_value_list[1][1])
                 
         delete_table("History")
         

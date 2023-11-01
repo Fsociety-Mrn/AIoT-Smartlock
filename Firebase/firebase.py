@@ -82,11 +82,15 @@ def firebaseDeleteVerifiedToken(name=None):
         print("An error occurred:", e)
 
 # add Facial/ Pincode Login
-def firebaseHistory(name=None, date=None, time=None, access_type=None):
+def firebaseHistory(name=None, date=None, time=None, access_type=None, percentage=None):
     
     try:    
         # Push the new entry to the database under the specified name, date, and time
-        db.child("History").child(name).child(date).child(time).set(access_type)
+        db.child("History").child(name).child(date).child(time).set(
+            {
+                "Access_type": access_type,
+                "Percentage" : percentage
+            })
 
         return True
     except:
