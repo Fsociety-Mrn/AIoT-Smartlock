@@ -154,7 +154,6 @@ def lockerList():
 # firebaseDeleteVerifiedToken("For,Testing")
 
 def firebaseHistoryUpdate(key,data):
-    
     try:    
         # Push the new entry to the database under the specified name, date, and time
         db.child("History").child(key).update(data)
@@ -162,4 +161,54 @@ def firebaseHistoryUpdate(key,data):
         return True
     except:
         print("error")
+        return False
+    
+# ************************* CHECK LOCK ************************* #
+def firebaseCheckLock():
+    try:
+        data = db.child("AIoT Lock").get().val()
+        
+        if data:
+            print("GAGSTI MAY LAMAN") 
+            return True
+        else:
+            firebaseSetLock(isLock=True)
+            print("walang laman")
+            return True
+        
+    except Exception as e:
+        print(f"Error: {e}")
+        return False
+    
+
+def firebaseSetLock(isLock=None):
+    try:    
+        # Push the new entry to the database under the specified name, date, and time
+        db.child("AIoT Lock").child("isLock").set(isLock)
+        return True
+    except:
+        # offline_history(name=None, date=None, time=None, access_type=None)
+        return False
+    
+# ************************* delete token after it verify ************************* #
+def firebaseDeleteToken():
+    try:
+        # Delete the specific field
+        db.child("AIoT Lock").remove()
+        print("field deleted successfully.")
+    except Exception as e:
+        print("An error occurred:", e)
+    
+def firebaseTokenLOCK(token):
+    try:
+        data = db.child("AIoT Lock").child("OTP").get().val()
+    
+        if str(data) == str(token):
+            print("Goodshit")
+            return True
+        
+        return False
+    
+    except Exception as e:
+        print(f"Error: {e}")
         return False

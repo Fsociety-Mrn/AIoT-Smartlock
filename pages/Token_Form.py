@@ -875,7 +875,7 @@ class TokenForm(QtWidgets.QFrame):
     def retranslateUi(self):
         _translate = QtCore.QCoreApplication.translate
         self.setWindowTitle(_translate("Tokenfield", "Frame"))
-        self.TokenID.setPlaceholderText(_translate("Tokenfield", "eg: E-XXXXX"))
+        self.TokenID.setPlaceholderText(_translate("Tokenfield", "eg: XXXXX"))
         self.greetings.setText(_translate("Tokenfield", "Hello Friend,\n"
 "Please enter your Token code below"))       
         # self.Continue.setText(_translate("Tokenfield", "Continue"))
@@ -982,10 +982,10 @@ class TokenForm(QtWidgets.QFrame):
         #         current_text = current_text + "-"
 
         
-        # if len(current_text) != 7:   
-        #         self.TokenID.setText(current_text + digit) 
+        if len(current_text) != 6:   
+            self.TokenID.setText(current_text + digit) 
                 
-        self.TokenID.setText(current_text + digit)
+        # self.TokenID.setText(current_text + digit)
                 
     def backspace(self):
         current_text = self.TokenID.text()
@@ -1001,11 +1001,12 @@ class TokenForm(QtWidgets.QFrame):
                   
     def backTomain(self):
         self.main_menu.timers(False)
+        
         self.close()
     
     def continueTo(self):
         
-        # from Firebase.firebase import firebaseTokenVerify,firebaseDeleteVerifiedToken
+        from Firebase.firebase import firebaseTokenVerify,firebaseDeleteVerifiedToken
 
         # check if TokenID is not empty
         if not self.TokenID.text():
@@ -1015,23 +1016,23 @@ class TokenForm(QtWidgets.QFrame):
                 text="Name cannot be empty",
                 buttons=self.MessageBox.Ok)
         
-        # result = firebaseTokenVerify(self.TokenID.text())  
+        result = firebaseTokenVerify(self.TokenID.text())  
         
-        # if result == None:
-        #     formatted_text = "<b>Invalid Token Detected!</b>"
-        #     return self.messageBoxShow(
-        #         icon=self.MessageBox.Warning,
-        #         title="AIoT Smartlock",
-        #         text=formatted_text + " To perform Facial Updates/Facial Register, you must generate a valid token from the AIoT Smartlock webApp.",
-        #         buttons=self.MessageBox.Ok)
+        if result == None:
+            formatted_text = "<b>Invalid Token Detected!</b>"
+            return self.messageBoxShow(
+                icon=self.MessageBox.Warning,
+                title="AIoT Smartlock",
+                text=formatted_text + " To perform Facial Updates/Facial Register, you must generate a valid token from the AIoT Smartlock webApp.",
+                buttons=self.MessageBox.Ok)
         
 
         # words = str(result).split(',')
-        # self.rearranged_string = f"{words[1]} {words[0]}"
+        self.rearranged_string = str(result)
         # print(self.rearranged_string)
 
         # # Define the path for the known faces folder
-        path = f"Known_Faces/{self.TokenID.text()}"
+        path = f"Known_Faces/{str(result)}"
         
         if os.path.exists(path):
             
@@ -1053,21 +1054,23 @@ class TokenForm(QtWidgets.QFrame):
         #     self.messageBoxShow(
         #         icon=self.MessageBox.Information,
         #         title="AIoT Smartlock",
-        #         text="Folder Created please align your face to camera properly",
+        #         text="please align your face to camera properly",
         #         buttons=self.MessageBox.Ok
         #     )
             
 
-            # pass the {self.TokenID.text()} into facialRegister username label
+        # pass the {self.TokenID.text()} into facialRegister username label
         self.errorMessage.setText("Loading..............")   
         
         # self.Continue.isEnabled = False
         self.Cancel.isEnabled = False
         
-        # firebaseDeleteVerifiedToken(str(result))
+        firebaseDeleteVerifiedToken(str(result))
+        
+        print(str(result))
             
-            # Delay the creation of the toFacialRegister object by 100 milliseconds
-        QtCore.QTimer.singleShot(100, self.toFacialRegister)
+        # Delay the creation of the toFacialRegister object by 100 milliseconds
+        QtCore.QTimer.singleShot(50, self.toFacialRegister)
             
     def toFacialRegister(self):
         
@@ -1076,8 +1079,8 @@ class TokenForm(QtWidgets.QFrame):
         FacialRegister = facialRegister(self)
         
         self.data_passed.connect(FacialRegister.receive)
-        # self.data_passed.emit(self.rearranged_string)
-        self.data_passed.emit(self.TokenID.text())
+        self.data_passed.emit(self.rearranged_string)
+        # self.data_passed.emit(self.TokenID.text())
         
         FacialRegister.show()
         self.TokenID.setText("")

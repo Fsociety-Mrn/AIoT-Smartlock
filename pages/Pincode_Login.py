@@ -423,7 +423,7 @@ class PincodeLogin(QtWidgets.QFrame):
     def retranslateUi(self):
         _translate = QtCore.QCoreApplication.translate
         self.setWindowTitle(_translate("Pincode", "Frame"))
-        self.TokenID_3.setPlaceholderText(_translate("MainWindow", "eg: EE-XXXX"))
+        self.TokenID_3.setPlaceholderText(_translate("MainWindow", "eg: E-XXXX"))
 
         self.seven_2.setText(_translate("MainWindow", "1"))
         self.seven_3.setText(_translate("MainWindow", "2"))

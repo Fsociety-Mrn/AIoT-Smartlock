@@ -1,11 +1,14 @@
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QGridLayout, QPushButton, QLineEdit
+from Firebase.firebase import firebaseCheckLock,firebaseTokenLOCK,firebaseSetLock,firebaseDeleteToken
 from PyQt5.QtWidgets import *
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+import socket
 
 class AdminLock(QtWidgets.QFrame):
     def __init__(self, parent=None):
         super().__init__(parent)
+        
+        self.main_menu = parent
         
         # frame settings
         self.setObjectName("Facial Login")
@@ -848,7 +851,11 @@ class AdminLock(QtWidgets.QFrame):
 "    background-color: white;\n"
 "}")
         self.pushButton_78.setText("")
-        self.pushButton_78.setObjectName("pushButton_78")       
+        self.pushButton_78.setObjectName("pushButton_78")    
+        
+        self.timerSSS = QtCore.QTimer(self)
+        self.timerSSS.timeout.connect(self.check_internet_connection)
+        self.timerSSS.start(1000)   
         
         self.retranslateUi()
         QtCore.QMetaObject.connectSlotsByName(self)
@@ -857,7 +864,7 @@ class AdminLock(QtWidgets.QFrame):
         _translate = QtCore.QCoreApplication.translate
         self.greetings.setText(_translate("Admin Lock", "AIoT Smartlock is Online"))
         self.warning.setText(_translate("Admin Lock", "Please enter the token ID to unlock the AIoT Smartlock"))
-        self.TokenID.setPlaceholderText(_translate("Admin Lock", "eg: EEE-XXXXX"))
+        self.TokenID.setPlaceholderText(_translate("Admin Lock", "eg: XXXXX"))
 
         self.Q.setText(_translate("Tokenfield", "Q"))
         self.W.setText(_translate("Tokenfield", "W"))
@@ -946,9 +953,31 @@ class AdminLock(QtWidgets.QFrame):
         # BACKSPACE
         self.pushButton_77.clicked.connect(self.backspace)
         
+        # ENTER
+        self.pushButton_76.clicked.connect(self.enter)
+        
     def input_texts(self, text):
         current_text = self.TokenID.text()
         self.TokenID.setText(current_text + text)
+
+    def enter(self):
+            
+        from Firebase.Offline import delete_table
+        print(self.TokenID.text())
+        
+        result = firebaseTokenLOCK(self.TokenID.text())
+        if result:
+            self.timerSSS.stop()
+            delete_table("Failed attempt")
+            firebaseDeleteToken()
+            
+            self.main_menu.timers(False)
+
+            self.close()
+        else:
+            self.TokenID.setText("")
+            self.warning.setText("Invalid OTP Code")
+                
         
     def backspace(self):
         current_text = self.TokenID.text()
@@ -956,6 +985,18 @@ class AdminLock(QtWidgets.QFrame):
             updated_text = current_text[:-1]  # Remove the last character
             self.TokenID.setText(updated_text)
 
+    # check internet
+    def check_internet_connection(self):
+        try:
+                
+            # Attempt to create a socket connection to a known server (e.g., Google DNS)
+            socket.create_connection(("8.8.8.8", 53))
+            self.greetings.setText("<html><head/><body><p>AIoT Smartlock is <Strong>online<strong/></p></body></html>")
+            firebaseCheckLock()
+            
+        except OSError:
+            self.greetings.setText("<html><head/><body><p><Strong>No Internet<strong/> Connection</p></body></html>")
+    
 if __name__ == "__main__":
     
     import sys,background

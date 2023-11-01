@@ -1,22 +1,18 @@
-
-
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+from PyQt5.QtWidgets import *
 from Face_Recognition.JoloRecognition import JoloRecognition as JL
 
-import os
 import cv2
 import time
 import dlib
 import torch
 import numpy as np
-import threading
-from PyQt5.QtWidgets import *
-
 
 class facialRegister(QtWidgets.QFrame):
     def __init__(self,parent=None):
             super().__init__(parent)
+            
+            self.main_menu = parent
 
             # message box
             self.MessageBox = QtWidgets.QMessageBox()
@@ -228,7 +224,7 @@ class facialRegister(QtWidgets.QFrame):
         icon = self.MessageBox.Information
         self.messageBoxShow(title=title, text=text, buttons=self.MessageBox.Ok, icon=icon)
         
-        self.close()
+        self.main_menu.close()
 
     # video Streaming
     def videoStreaming(self):
