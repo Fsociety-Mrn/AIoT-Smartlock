@@ -15,6 +15,7 @@ const Login = () => {
             <Route path="/Login" element={<LoginPage/>}/>
             <Route path="/Signup" element={<Signup/>}/>
 
+
             <Route path="*" element={<Navigate to="/Login"/>}/>
 
           </Routes> 

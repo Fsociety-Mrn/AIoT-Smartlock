@@ -4,7 +4,7 @@ import RegisterForm from './RegisterForm'
 import TokenForm from './TokenForm'
 
 const index = () => {
-  return (<TokenForm/> )
+  return (<RegisterForm/> )
 }
 
 export default index

@@ -8,10 +8,10 @@ import {
     signInWithEmailAndPassword, 
     browserLocalPersistence,
     signOut,
-    // createUserWithEmailAndPassword,
+    createUserWithEmailAndPassword,
 } from "@firebase/auth";
 
-// import { createUserData } from '../firebase/Firestore'
+import { createUserData } from '../Firestore/Firestore'
 
 import { auth } from "../Configuration";
 
@@ -142,25 +142,29 @@ export const LogoutSession = async () => {
   
 }
 
-//   // create account
-//   export const createAccount = (email, password) => {
-//     return new Promise((resolve, reject) => {
-//       createUserWithEmailAndPassword(auth, email, password)
-//         .then((res) => {
-//           console.log(res.user.uid);
-//           createUserData(res.user.uid);
+  // create account
+  export const createAccount = (email, password, lastname, firstname) => {
+    return new Promise((resolve, reject) => {
+      createUserWithEmailAndPassword(auth, email, password)
+        .then((res) => {
+          console.log(res.user.uid);
 
+          createUserData(res.user.uid,lastname, firstname).then(result=>{
   
-//           resolve(res); // Resolve the promise with the response from createUserWithEmailAndPassword
-//         })
-//         .catch((error) => {
-//           console.log(error);
+            resolve(res); // Resolve the promise with the response from createUserWithEmailAndPassword
+        
+          });
 
-//           console.log(error);
-//           const errorMessage = error.message.match(/\((.*?)\)/)[1];
-//           const errorMessages = errorMessage.replace('auth/', '').replace(/-/g, ' ');
 
-//           reject(errorMessages); // Reject the promise with the error from createUserWithEmailAndPassword
-//         });
-//     });
-//   };
+        })
+        .catch((error) => {
+          console.log(error);
+
+          console.log(error);
+          const errorMessage = error.message.match(/\((.*?)\)/)[1];
+          const errorMessages = errorMessage.replace('auth/', '').replace(/-/g, ' ');
+
+          reject(errorMessages); // Reject the promise with the error from createUserWithEmailAndPassword
+        });
+    });
+  };

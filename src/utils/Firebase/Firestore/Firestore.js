@@ -1,4 +1,4 @@
-import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
 import { Fdb } from '../Configuration'
 import { LogoutSession } from "../Authentication/Authentication";
 
@@ -62,4 +62,27 @@ export const getUserDetails = async (UID) =>{
     console.error("Error fetching user data:", error);
     throw error; // Rethrow the error or handle it gracefully
   }
+}
+
+// create userData
+export const createUserData = async (UID,lastname,firstname) =>{
+
+  return new Promise(async (resolve, reject) => {
+
+    // Add a new document in collection "cities"
+    await setDoc(doc(Fdb, "users", UID), {
+      isActive: true,
+      isAdmin: false,
+      photoUrl: "",
+      user: lastname + "," + firstname 
+    })
+    .then(test=>{
+      console.log(test);
+      resolve("Good shit")
+    })
+    .catch(err=>reject(err));
+  })
+
+  
+
 }

@@ -5,9 +5,109 @@ import styles from '../Forms.module.css'
 // import other pkgs
 import { Button, Col, Container, FloatingLabel, Form, Image, Row, Stack } from 'react-bootstrap'
 
+// validation
+import { SignUp_userSchema } from "../../../utils/Validation/Validation"
+
+// Create ACCOUNT
+import { createAccount } from "../../../utils/Firebase/Authentication/Authentication"
+
 import LOGO from '../../../Images/Arash.jpg'
+import React from 'react'
 
 const RegisterForm = () => {
+    const [userDetails,setUserDetails] = React.useState({
+        FirstName: "",
+        LastName: "",
+        Email : "",
+        NewPassword:""
+    })
+
+    const [error, setError] = React.useState({
+        firstName: false,
+        firstNameError: "",
+
+        lastName: false,
+        lastNameError: "",
+
+        email: false,
+        emailError: "",
+
+        password: false,
+        passwordError: ""
+      })
+
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setUserDetails((prevUser) => ({
+          ...prevUser,
+          [name]: value,
+        }));
+      };
+
+    const createAccountss = async (event) => {
+        try {
+            await SignUp_userSchema.validate({ 
+                FirstName: userDetails.FirstName, 
+                LastName: userDetails.LastName,
+                Email: userDetails.Email, 
+                NewPassword: userDetails.NewPassword 
+            }, { abortEarly: false });
+
+
+            createAccount(
+                userDetails.Email, 
+                userDetails.NewPassword, 
+                userDetails.LastName, 
+                userDetails.FirstName).then(result=>{
+                    console.log(result)
+                    setError(
+                        {
+                            firstName: false,
+                            firstNameError: "",
+                    
+                            lastName: false,
+                            lastNameError: "",
+                    
+                            email: false,
+                            emailError: "",
+                    
+                            password: false,
+                            passwordError: ""
+                          }
+                    )
+
+                    window.location.reload()
+                })
+      
+
+
+        } catch (validationError) {
+
+            // Extract specific error messages for email and password
+            const firstnameError = validationError.inner.find((error) => error.path === 'FirstName');
+            const lastnameError = validationError.inner.find((error) => error.path === 'LastName');
+            const emailError = validationError.inner.find((error) => error.path === 'Email');
+            const passwordError = validationError.inner.find((error) => error.path === 'NewPassword');
+
+      // If validation errors occur
+            setError({
+
+                firstName: !!firstnameError,
+                firstNameError: firstnameError && firstnameError.message,
+        
+                lastName: !!lastnameError,
+                lastNameError: lastnameError && lastnameError.message,
+
+                email: !!emailError,
+                emailError: emailError && emailError.message,
+
+                password: !!passwordError,
+                passwordError: passwordError && passwordError.message
+            });
+      
+        }
+    }
     return (
         <div>
             <Container fluid className={`${styles.container} d-flex justify-content-center align-items-center px-5`}>
@@ -55,19 +155,60 @@ const RegisterForm = () => {
                             <Col xs={12} md={12}>     
                                 <Stack gap={2} className="col-md-10 mx-auto">
 
+                                    {/* First Name */}
+                                    <FloatingLabel
+                                    controlId="floatingInput"
+                                    label="First Name"
+                                    >
+                                        <Form.Control 
+                                        type="Text" 
+                                        placeholder="First Name"
+                                        name="FirstName"
+                                        value={userDetails.FirstName}
+                                        onChange={handleInputChange}
+                                        />
+                                    </FloatingLabel>
+                                    {error.firstName && <div className="text-danger mb-3">{error.firstNameError}</div>}
+
+                                    {/* Last Name */}
+                                    <FloatingLabel controlId="floatingPassword" label="Last Name" >
+                                        <Form.Control 
+                                        type="Text" 
+                                        placeholder="Last Name" 
+                                        name="LastName"
+                                        value={userDetails.LastName}
+                                        onChange={handleInputChange}    
+                                        />
+                                    </FloatingLabel>
+                                    {error.lastName && <div className="text-danger mb-3">{error.lastNameError}</div>}
+
                                     {/* Email */}
                                     <FloatingLabel
                                     controlId="floatingInput"
                                     label="Email"
-                                    className="mb-3"
+                         
                                     >
-                                        <Form.Control type="email" placeholder="name@example.com"/>
+                                        <Form.Control 
+                                        type="email" 
+                                        placeholder="name@example.com"
+                                        name="Email"
+                                        value={userDetails.Email}
+                                        onChange={handleInputChange}     
+                                        />
                                     </FloatingLabel>
+                                    {error.email && <div className="text-danger mb-3">{error.emailError}</div>}
 
                                     {/* New Password */}
                                     <FloatingLabel controlId="floatingPassword" label="New Password">
-                                        <Form.Control type="password" placeholder="New Password" />
+                                        <Form.Control 
+                                        type="password" 
+                                        placeholder="New Password" 
+                                        name="NewPassword"
+                                        value={userDetails.NewPassword}
+                                        onChange={handleInputChange}   
+                                        />
                                     </FloatingLabel>
+                                    {error.password && <div className="text-danger mb-3">{error.passwordError}</div>}
 
                                 </Stack>
                             </Col>
@@ -99,7 +240,9 @@ const RegisterForm = () => {
                                         color: 'white',
                                         padding:"10px",
                                         borderRadius:"10px"
-                                    }}>
+                                    }}
+                                    onClick={createAccountss}
+                                    >
                                         Sign Up
                                     </Button>
                                 </Col>
