@@ -5,8 +5,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 // import LoginForm from '../Components/Forms/LoginForm';
 // import RegisterForm from '../Components/Forms/RegisterForm';
 
-
-
 import Login from './Pages/Login';
 import Mainmenu from './Pages/Mainmenu';
 

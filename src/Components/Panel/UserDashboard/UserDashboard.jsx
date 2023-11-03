@@ -15,6 +15,10 @@ import {
   verifyPIN
 } from "../../../utils/Firebase/Database/Database";
 
+// Firebase.Firestore
+import { getLockerNumber } from "../../../utils/Firebase/Firestore/Firestore"; 
+
+
 // validation
 import { pinSchema,NewpinSchema } from "../../../utils/Validation/Validation"
 
@@ -63,7 +67,19 @@ const UserDashboard = (props) => {
 
 
     const FullName = String(props.firstName + " " + props.lastName).toUpperCase()
-    console.log(props.firstName === "....")
+
+    const OpenLocker = async () => {
+      const data = await getLockerNumber(props.UID)
+
+      openLocker({
+        FullName: FullName,
+        value: false,
+        number: data
+      })
+
+    }
+
+  
 
     // *************** for Change PIN *************** // 
       checkPin(FullName).then(result=>setCheckPIN(result))
@@ -86,10 +102,11 @@ const UserDashboard = (props) => {
       setCount(null)
       setIsUnlocking(false)
 
-      openLocker({
-        FullName: FullName,
-        value: false
-      })
+      OpenLocker()
+      // openLocker({
+      //   FullName: FullName,
+      //   value: false
+      // })
 
       return
     }
@@ -116,7 +133,7 @@ const UserDashboard = (props) => {
 
     };
 
-  }, [count,Timer, props.firstName, props.lastName]);
+  }, [count, Timer, props.firstName, props.lastName, props.UID]);
 
   // Function to handle opening the modal
   const handleShowModal = () => {

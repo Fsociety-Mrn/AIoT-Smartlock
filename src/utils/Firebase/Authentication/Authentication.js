@@ -86,6 +86,9 @@ export const ForgotPasswords = (email) => {
           });
         })
         .catch((error) => {
+
+          console.log(error
+            .message )
   
           // An error occurred
           reject({
@@ -168,3 +171,4 @@ export const LogoutSession = async () => {
         });
     });
   };
+

@@ -166,7 +166,7 @@ const handleTogglePassword = () => {
 
                             {/* Forgot Password */}
                                 <Form.Text href="youtube.com" className="text-muted">
-                                    <a href="/" color='rgb(61, 152, 154)'>
+                                    <a href="/Forgotpassword" color='rgb(61, 152, 154)'>
                                         Forgot Password?
                                     </a>
                                 </Form.Text>

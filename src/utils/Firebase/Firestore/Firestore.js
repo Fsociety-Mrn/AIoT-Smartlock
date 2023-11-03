@@ -1,4 +1,4 @@
-import { collection, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, setDoc, updateDoc } from "firebase/firestore";
 import { Fdb } from '../Configuration'
 import { LogoutSession } from "../Authentication/Authentication";
 
@@ -85,4 +85,73 @@ export const createUserData = async (UID,lastname,firstname) =>{
 
   
 
+}
+
+// update a details
+export const updateDetails = async (UID=null, Name=null, File=null) =>{
+  if (File) {
+    await updateDoc(doc(Fdb, "users", UID), {
+      photoUrl: File,
+      user: Name
+    })
+    .then(test=>{
+      console.log(test);
+      window.location.reload();
+    })
+    .catch(err=>console.log(err));
+  }else{
+    await updateDoc(doc(Fdb, "users", UID), {
+      user: Name
+    })
+    .then(test=>{
+      console.log(test);
+      window.location.reload();
+    })
+    .catch(err=>console.log(err));
+  }
+
+}
+
+// update Name
+export const updateName = async (UID=null, Name=null) =>{
+  return new Promise(async (resolve, reject) => {
+      await updateDoc(doc(Fdb, "users", UID), {
+        user: Name
+    })
+    .then(test=>{
+      console.log("gooodhshit")
+      resolve(test);
+    })
+    .catch(err=>reject(err));
+  })
+
+
+
+}
+
+// ********** GET LOCKER NUMBER ********** //
+
+export const getLockerNumber = async (UID) =>{
+  return new Promise(async (resolve, reject) => {
+  try {
+    const docRef = doc(Fdb, "users", UID); // Assuming Fdb is properly defined elsewhere
+
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+
+     
+
+      resolve(data.LockerNumber); // You can return the data or do whatever you want with it
+    } else {
+      console.log("User document does not exist!");
+      reject(null); // Or handle the non-existence case accordingly
+    }
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+    reject(error); // Rethrow the error or handle it gracefully
+  }
+
+})
 }

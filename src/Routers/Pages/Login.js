@@ -5,7 +5,7 @@ import { Navigate, Route, Routes } from 'react-router'
 const LoginPage = React.lazy(()=> import('../../Components/Forms/LoginForm'))
 const Signup = React.lazy(()=> import('../../Components/Forms/RegisterForm'))
 const Loading = React.lazy(()=> import('../../Components/Forms/Loading'))
-
+const ForgotPassword = React.lazy(()=> import('../../Components/Forms/ForgotPassword'))
 const Login = () => {
   return (
     <React.Suspense fallback={<Loading/>}>
@@ -14,6 +14,7 @@ const Login = () => {
 
             <Route path="/Login" element={<LoginPage/>}/>
             <Route path="/Signup" element={<Signup/>}/>
+            <Route path="/Forgotpassword" element={<ForgotPassword/>}/>
 
 
             <Route path="*" element={<Navigate to="/Login"/>}/>

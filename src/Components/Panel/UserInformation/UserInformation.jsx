@@ -1,86 +1,34 @@
 import React, { useState } from "react";
 import FormInput from "../../Forms/FormInput/FormInput";
 import Titles from "../../Titles/Titles";
-import { Form, Row, Col, Button, Modal } from "react-bootstrap";
-import { useFormik } from "formik";
-import { object, string, date } from "yup";
-import PropTypes from "prop-types";
+import { Form, Row, Col, Button, Modal, Stack } from "react-bootstrap";
+
 import UserChangePassword from "../UserChangePassword/UserChangePassword";
 
-// Sample data (replace this with your actual data)
-const sampleData = [
-  {
-    username: "sampleUser1",
-    firstName: "John",
-    lastName: "Doe",
-    email: "john@example.com",
-    birthday: "1990-01-15"
-  },
-  {
-    username: "sampleUser2",
-    firstName: "Jane",
-    lastName: "Smith",
-    email: "jane@example.com",
-    birthday: "1985-08-22"
-  }
-];
+// validation
+import { Name_Schema } from "../../../utils/Validation/Validation";
 
-const UserInformation = ({
-  username,
-  firstName,
-  lastName,
-  email,
-  birthday,
-  onChangeInfo
-}) => {
-  const [submit, setSubmit] = useState(false);
+// change name
+import { updateName } from "../../../utils/Firebase/Firestore/Firestore"; 
+import { updateData} from "../../../utils/Firebase/Database/Database";
+
+const UserInformation = ({ UID, firstName, lastName }) => {
+
+
+  const [user,setUser] = useState({
+    firstName: firstName,
+    lastName: lastName
+  })
+
+  const [error,setError] = useState({
+    firstName: false,
+    firstNameMessage: "",
+
+    lastName: false,
+    lastNameMessage: ""
+  })
+
   const [showPasswordModal, setShowPasswordModal] = useState(false);
-
-  const isNotIterateEmail = (username, email) => {
-    // Check if the email already exists in the sample data
-    const isNotDuplicateEmail = !sampleData.some(
-      (user) => user.username !== username && user.email === email
-    );
-    return isNotDuplicateEmail;
-  };
-
-  const formik = useFormik({
-    initialValues: {
-      firstName: firstName ? firstName : "",
-      lastName: lastName ? lastName : "",
-      email,
-      birthday
-    },
-    validationSchema: object({
-      firstName: string().max(
-        10,
-        "Your first name must be 10 characters or less"
-      ),
-      lastName: string().max(
-        10,
-        "Your last name must be 10 characters or less"
-      ),
-      email: string()
-        .required("Please enter your email")
-        .email("Invalid email"),
-      birthday: date()
-        .required("Please enter your birthday date")
-        .min("1922-01-01", "Your birthday date must be on or after 1922-01-01")
-        .max("2022-05-22", "Invalid birthday date")
-    }),
-    onSubmit: ({ firstName, lastName, email, birthday }, { setFieldError }) => {
-      const isNotDuplicateEmail = isNotIterateEmail(username, email);
-
-      if (isNotDuplicateEmail) {
-        onChangeInfo(
-          ["firstName", "lastName", "email", "birthday"],
-          [firstName, lastName, email, birthday]
-        );
-      } else {
-        setFieldError("email", "You can't choose this email");
-      }
-    }
-  });
 
   const handleShowPasswordModal = () => {
     setShowPasswordModal(true);
@@ -90,16 +38,103 @@ const UserInformation = ({
     setShowPasswordModal(false);
   };
 
+  const handleUpdateName = async (e) => {
+    try {
+      await Name_Schema.validate({ firstName: user.firstName, lastName: user.lastName }, { abortEarly: false });
+      
+      // // NOTE: KEY = History, NAME = FIRST AND LAST NAME UPPERCASE
+      // const LOCK = await getData("LOCK",String(user.firstName + " " + user.lastName).toUpperCase())
+      // console.log("LOCK", LOCK)
+
+      // const History = await getData("History",String(user.firstName + " " + user.lastName).toUpperCase())
+      // console.log("History", History)
+
+      // const PIN = await getData("PIN",String(user.firstName + " " + user.lastName).toUpperCase())
+      // console.log("PIN", PIN)
+
+  
+
+      updateName(UID, String(user.lastName + "," + user.firstName))
+      .then(res=>{
+
+
+        // LOCK UPDATED
+        updateData("LOCK",String(firstName + " " + lastName).toUpperCase(), String(user.firstName + " " + user.lastName).toUpperCase())
+          .then(result=>{
+
+            // History
+            updateData("History",String(firstName + " " + lastName).toUpperCase(), String(user.firstName + " " + user.lastName).toUpperCase())
+            .then(result=>{
+
+                       // PIN
+                       updateData("PIN",String(firstName + " " + lastName).toUpperCase(), String(user.firstName + " " + user.lastName).toUpperCase())
+                       .then(result=>{
+                         console.log(result)
+                         setError({
+                           firstName: false,
+                           firstNameMessage: "",
+                           lastName: false,
+                           lastNameMessage: ""
+                         })
+                         window.location.reload()
+                     })
+          })
+
+        })
+
+
+
+  
+      })
+      .catch(err=>{
+        setError({
+          firstName: true,
+          firstNameMessage: err,
+          lastName: true,
+          lastNameMessage: ""
+        })
+
+
+      })
+
+
+  } catch (validationError) {
+
+      // Extract specific error messages for email and password
+      const firstName = validationError.inner.find((error) => error.path === 'firstName');
+      const lastName = validationError.inner.find((error) => error.path === 'lastName');
+
+// If validation errors occur
+      setError({
+        firstName: !!firstName,
+        firstNameMessage: firstName && firstName.message,
+
+        lastName: !!lastName,
+        lastNameMessage: lastName && lastName.message
+      });
+
+
+
+  }
+  
+  };
+
   return (
     <>
       <Titles
         title="Welcome to the Information"
         text="Check or change your information as you want"
       />
-      <Form noValidate onSubmit={formik.handleSubmit}>
-        <Row className="mt-5 px-3">
+      <Form>
+        <Row className="mt-5 px-2">
+
+        <div class="alert alert-warning" role="alert">
+          Please generate the token in dashbaord to update your Facial Biometrics
+        </div>
+        
           <FormInput
             xs={12}
+            sm
             lg
             as={Col}
             inpClass="py-2"
@@ -107,26 +142,16 @@ const UserInformation = ({
             name="firstName"
             controlId="first-name-input"
             text="First Name"
-            placeholder="Arash"
+            placeholder="Hello"
             size="sm"
-            invalid={
-              formik.values.firstName === ""
-                ? false
-                : submit && formik.errors.firstName
-                ? true
-                : false
-            }
-            errMsg={formik.errors.firstName || ""}
-            valid={
-              formik.values.firstName === ""
-                ? false
-                : submit && !formik.errors.firstName
-                ? true
-                : false
-            }
-            successMsg="done"
-            {...formik.getFieldProps("firstName")}
+            value={user.firstName}
+            onChange={e=>setUser({...user, firstName: e.target.value})}
+
+            valid={error.firstName}
+            helperText={error.firstNameMessage}
           />
+
+
           <FormInput
             xs={12}
             lg
@@ -136,84 +161,50 @@ const UserInformation = ({
             name="lastName"
             controlId="last-name-input"
             text="Last Name"
-            placeholder="Karimi"
+            placeholder="Friend"
             size="sm"
-            invalid={
-              formik.values.lastName === ""
-                ? false
-                : submit && formik.errors.lastName
-                ? true
-                : false
-            }
-            errMsg={formik.errors.lastName || ""}
-            valid={
-              formik.values.lastName === ""
-                ? false
-                : submit && !formik.errors.lastName
-                ? true
-                : false
-            }
-            successMsg="done"
-            {...formik.getFieldProps("lastName")}
+            value={user.lastName}
+            onChange={e=>setUser({...user, lastName: e.target.value})}
+
+            valid={error.lastName}
+            helperText={error.lastNameMessage}
           />
+
+          
         </Row>
 
-        <Row className="mt-3 mt-lg-4 px-3">
-          <FormInput
-            xs={12}
-            lg
-            as={Col}
-            inpClass="py-2"
-            className="p-0"
-            name="email"
-            controlId="email-input"
-            text="Email"
-            placeholder="Enter your Email"
-            size="sm"
-            errMsg={formik.errors.email || ""}
-            successMsg="done"
-            invalid={submit && formik.errors.email ? true : false}
-            valid={submit && !formik.errors.email ? true : false}
-            {...formik.getFieldProps("email")}
-          />
-          <FormInput
-            xs={12}
-            lg
-            as={Col}
-            inpClass="py-2"
-            className="p-0 ms-lg-5 mt-3 mt-lg-0"
-            name="birthday"
-            controlId="birthday-input"
-            text="Birthday"
-            size="sm"
-            placeholder="Enter your birthday"
-            type="date"
-            invalid={submit && formik.errors.birthday ? true : false}
-            errMsg={formik.errors.birthday || ""}
-            valid={submit && !formik.errors.birthday ? true : false}
-            successMsg="done"
-            {...formik.getFieldProps("birthday")}
-          />
-        </Row>
 
-        <div className="d-flex justify-content-center align-items-center">
-          <Button
-            onClick={() => setSubmit(true)}
-            disabled={submit && !formik.isValid ? true : false}
+        <div className="d-flex justify-content-center align-items-center p-3">
+
+          <Stack gap={2} className="col-md-8 mx-auto">
+            <Button
+            onClick={handleUpdateName}
             variant="primary"
-            className="mt-5 py-2 px-4 mx-2"
-            type="submit"
+            style={{
+                background: 'rgb(61, 152, 154)',
+                color: 'white' // Set the text color
+              }}
+
           >
-            Update
+            update
           </Button>
+    
+   
 
           <Button
             variant="primary"
-            className="mt-5 py-2 px-4 mx-2"
+
             onClick={handleShowPasswordModal}
+
+            style={{
+                background: 'rgb(61, 152, 154)',
+                color: 'white' // Set the text color
+              }}
+
           >
-            Change Password
+            change Password
           </Button>
+          </Stack>
         </div>
       </Form>
 
@@ -231,8 +222,5 @@ const UserInformation = ({
   );
 };
 
-UserInformation.propTypes = {
-  onChangeInfo: PropTypes.func.isRequired
-};
 
 export default UserInformation;

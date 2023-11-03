@@ -19,10 +19,8 @@ class FormInput extends PureComponent {
             placeholder, 
             type="text", 
             as,
-            errMsg, 
-            successMsg, 
+            helperText, 
             valid, 
-            invalid, 
             size='md',
             value,
             onChange,
@@ -36,8 +34,8 @@ class FormInput extends PureComponent {
             <FormGroup controlId={controlId} className={className} as={as} xs={xs} sm={sm} md={md} lg={lg}>
                 <FormLabel className={styles['form-label']}>{text}</FormLabel>
                 <FormControl 
-                    isInvalid={invalid}
-                    isValid={valid}
+                    isInvalid={valid}
+                    // isValid={valid}
                     type={type} 
                     className={`${styles["form-input"]} ${inpClass}`} 
                     size={size}
@@ -48,8 +46,8 @@ class FormInput extends PureComponent {
                     onChange={onChange}
                     spellCheck="off"
                 />
-                {invalid && <FormText className="text-danger">{ errMsg }</FormText>}
-                {valid && <FormText className="text-success">{ successMsg }</FormText>}
+                {valid && <FormText className="text-danger">{ helperText }</FormText>}
+                {!valid && <FormText className="text-success">{ helperText }</FormText>}
             </FormGroup>
         )
     }

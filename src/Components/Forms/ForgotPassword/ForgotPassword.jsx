@@ -4,23 +4,37 @@ import React from 'react'
 import styles from '../Forms.module.css'
 
 // import other pkgs
-import { Button, Col, Container, FloatingLabel, Form, Image, Row, Stack } from 'react-bootstrap'
+import { Alert, Button, Col, Container, FloatingLabel, Form, Image, Row, Stack } from 'react-bootstrap'
 
 import LOGO from '../../../Images/Arash.jpg'
 
 // Verify Token
-import { verifyToken } from '../../../utils/Firebase/Database/Database' 
+import { ForgotPasswords } from '../../../utils/Firebase/Authentication/Authentication' 
 
-const TokenForm = (props) => {
+const ForgotPassword = () => {
   // for set Token
   const [token,setToken] = React.useState("")
-  const [error,setError] = React.useState(false)
+  const [error,setError] = React.useState({
+    error: false,
+    errorMesage: ""
+  })
+
+  const [success,setSuccess] = React.useState({
+    success: false,
+    successMessage: ""
+  })
   return (
+    <div>
+
+    {success.success && <Alert  variant="success">{success.successMessage}</Alert>}
+
     <Container fluid className={`${styles.container} d-flex justify-content-center align-items-center px-5`}>
   
   {/* Token Form containers */}
     <Container className={`${styles.LoginContainer} d-flex justify-content-center align-items-center bg-white`}>
       <Container>
+
+     
                 
         <Row xs={12} className="justify-content-center align-items-center">
 
@@ -34,16 +48,6 @@ const TokenForm = (props) => {
               style={{ width: '100px', height: '100px' }}
               roundedCircle />
 
-              {/* Tutle */}
-              <div className="h3" 
-              style={{
-                backgroundImage: 'linear-gradient(to right, rgb(61, 152, 154) 0%, rgb(12, 14, 36) 100%)',
-                WebkitBackgroundClip: 'text',
-                color: 'transparent',
-                display: 'inline',
-                whiteSpace: "nowrap"
-              }}>AIoT Smartlock</div>
-
               {/* Slogan */}
               <div className="blockquote" 
               style={{
@@ -52,7 +56,8 @@ const TokenForm = (props) => {
                 color: 'transparent',
                 display: 'inline',
                 textAlign: "center"
-              }}>Please enter your token code</div>
+              }}>please input your email</div>
+              
 
             </Stack> 
           </Col>
@@ -64,9 +69,9 @@ const TokenForm = (props) => {
               {/* Token Field */}
               <FloatingLabel
               controlId="floatingInput"
-              label="Token ID"
+              label="emaill"
               className="mb-1">
-                <Form.Control type="text" placeholder="EX: XXXXXX"
+                <Form.Control type="email" placeholder="Please Input your email"
                 value={token}
                 onChange={e=>setToken(e.target.value)}
                 />
@@ -80,7 +85,7 @@ const TokenForm = (props) => {
           {/* Login ?*/}
           <Col xs={12} md={12}>   
             <Stack gap={1} className={`d-flex justify-content-center align-items-center`}> 
-            {error && <div className="text-danger mb-3">Invalid Token</div>}
+            {error.error && <div className="text-danger mb-3">{error.errorMesage}</div>}
 
               <div className="text" 
               style={{
@@ -91,7 +96,7 @@ const TokenForm = (props) => {
                 textAlign: "center"
               }}
 
-              >Already have account ? <a className="text"  href='/'> <strong> Log in </strong></a></div>
+              >if done please Back to <a className="text"  href='/'> <strong> Log in </strong></a></div>
 
             </Stack>  
           </Col>
@@ -111,18 +116,21 @@ const TokenForm = (props) => {
                 borderRadius:"10px"
               }}
               onClick={()=>{
-                verifyToken(token)
-                  .then(rsult=>{
-                    props.setTokenShow(rsult);
-                    setError(false)
-                  })
-                  .catch(err=>{
-                    props.setTokenShow(err);
-                    setError(true)
-                  })
+                ForgotPasswords(token).then(result=>{
+                    setSuccess({
+                        success: !result.error,
+                        successMessage: result.message
+                    })
+                }).catch(err0r=>{
+                    console.log(err0r)
+                    setError({
+                        error: err0r.error,
+                        errorMesage: err0r.message
+                    })
+                })
               }}
               >
-                Verify Token
+                send
               </Button>
             </Col>
 
@@ -135,7 +143,8 @@ const TokenForm = (props) => {
         </Container>
     </Container>
     </Container>
+    </div>
   )
 }
 
-export default TokenForm
+export default ForgotPassword

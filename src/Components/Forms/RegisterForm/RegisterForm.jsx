@@ -14,7 +14,21 @@ import { createAccount } from "../../../utils/Firebase/Authentication/Authentica
 import LOGO from '../../../Images/Arash.jpg'
 import React from 'react'
 
+// Token Account
+import TokenForm from './TokenForm'
+import { useNavigate } from 'react-router-dom'
+
 const RegisterForm = () => {
+
+
+    // ********* FOR SETTING UP THE TOKEN ********* //
+
+    const [tokenShow,setTokenShow] = React.useState(false)
+
+    // ********* cREATE ACCOUNT ********* //
+
+    const navigate = useNavigate()
+
     const [userDetails,setUserDetails] = React.useState({
         FirstName: "",
         LastName: "",
@@ -34,7 +48,7 @@ const RegisterForm = () => {
 
         password: false,
         passwordError: ""
-      })
+    })
 
 
     const handleInputChange = (e) => {
@@ -43,7 +57,7 @@ const RegisterForm = () => {
           ...prevUser,
           [name]: value,
         }));
-      };
+    };
 
     const createAccountss = async (event) => {
         try {
@@ -110,150 +124,155 @@ const RegisterForm = () => {
     }
     return (
         <div>
-            <Container fluid className={`${styles.container} d-flex justify-content-center align-items-center px-5`}>
-                
-                {/* Reg Form containers */}
-                <Container className={`${styles.LoginContainer} d-flex justify-content-center align-items-center bg-white`}>
-                    <Container>
-                
-                        <Row xs={12} className="justify-content-center align-items-center">
+            {!tokenShow && <TokenForm setTokenShow={setTokenShow} />}
 
-                            {/* Title */}
-                            <Col xs={12} md={12}>
-                                <Stack gap={1} style={{ padding:"20px", marginTop:"80px"}} className={`d-flex justify-content-center align-items-center`}>
+            {tokenShow && 
+                <Container fluid className={`${styles.container} d-flex justify-content-center align-items-center px-5`}>
+                    
+                    {/* Reg Form containers */}
+                    <Container className={`${styles.LoginContainer} d-flex justify-content-center align-items-center bg-white`}>
+                        <Container>
+                    
+                            <Row xs={12} className="justify-content-center align-items-center">
+
+                                {/* Title */}
+                                <Col xs={12} md={12}>
+                                    <Stack gap={1} style={{ padding:"20px", marginTop:"80px"}} className={`d-flex justify-content-center align-items-center`}>
+                                
+                                        {/* Logo */}
+                                        <Image 
+                                        src={LOGO}
+                                        style={{ width: '100px', height: '100px' }}
+                                        roundedCircle />
+
+                                        {/* Tutle */}
+                                        <div className="h3" 
+                                        style={{
+                                            backgroundImage: 'linear-gradient(to right, rgb(61, 152, 154) 0%, rgb(12, 14, 36) 100%)',
+                                            WebkitBackgroundClip: 'text',
+                                            color: 'transparent',
+                                            display: 'inline',
+                                            whiteSpace: "nowrap"
+                                        }}>AIoT Smartlock</div>
+
+                                        {/* Slogan */}
+                                        <div className="blockquote" 
+                                        style={{
+                                            backgroundImage: 'linear-gradient(to right, rgb(61, 152, 154) 0%, rgb(12, 14, 36) 100%)',
+                                            WebkitBackgroundClip: 'text',
+                                            color: 'transparent',
+                                            display: 'inline',
+                                            textAlign: "center"
+                                        }}>Create Account</div>
+
+                                    </Stack> 
+                                </Col>
+                                
+                                {/* Registration Form */}
+                                <Col xs={12} md={12}>     
+                                    <Stack gap={2} className="col-md-10 mx-auto">
+
+                                        {/* First Name */}
+                                        <FloatingLabel
+                                        controlId="floatingInput"
+                                        label="First Name"
+                                        >
+                                            <Form.Control 
+                                            type="Text" 
+                                            placeholder="First Name"
+                                            name="FirstName"
+                                            value={userDetails.FirstName}
+                                            onChange={handleInputChange}
+                                            />
+                                        </FloatingLabel>
+                                        {error.firstName && <div className="text-danger mb-3">{error.firstNameError}</div>}
+
+                                        {/* Last Name */}
+                                        <FloatingLabel controlId="floatingPassword" label="Last Name" >
+                                            <Form.Control 
+                                            type="Text" 
+                                            placeholder="Last Name" 
+                                            name="LastName"
+                                            value={userDetails.LastName}
+                                            onChange={handleInputChange}    
+                                            />
+                                        </FloatingLabel>
+                                        {error.lastName && <div className="text-danger mb-3">{error.lastNameError}</div>}
+
+                                        {/* Email */}
+                                        <FloatingLabel
+                                        controlId="floatingInput"
+                                        label="Email"
                             
-                                    {/* Logo */}
-                                    <Image 
-                                    src={LOGO}
-                                    style={{ width: '100px', height: '100px' }}
-                                    roundedCircle />
+                                        >
+                                            <Form.Control 
+                                            type="email" 
+                                            placeholder="name@example.com"
+                                            name="Email"
+                                            value={userDetails.Email}
+                                            onChange={handleInputChange}     
+                                            />
+                                        </FloatingLabel>
+                                        {error.email && <div className="text-danger mb-3">{error.emailError}</div>}
 
-                                    {/* Tutle */}
-                                    <div className="h3" 
-                                    style={{
-                                        backgroundImage: 'linear-gradient(to right, rgb(61, 152, 154) 0%, rgb(12, 14, 36) 100%)',
-                                        WebkitBackgroundClip: 'text',
-                                        color: 'transparent',
-                                        display: 'inline',
-                                        whiteSpace: "nowrap"
-                                    }}>AIoT Smartlock</div>
+                                        {/* New Password */}
+                                        <FloatingLabel controlId="floatingPassword" label="New Password">
+                                            <Form.Control 
+                                            type="password" 
+                                            placeholder="New Password" 
+                                            name="NewPassword"
+                                            value={userDetails.NewPassword}
+                                            onChange={handleInputChange}   
+                                            />
+                                        </FloatingLabel>
+                                        {error.password && <div className="text-danger mb-3">{error.passwordError}</div>}
 
-                                    {/* Slogan */}
-                                    <div className="blockquote" 
-                                    style={{
-                                        backgroundImage: 'linear-gradient(to right, rgb(61, 152, 154) 0%, rgb(12, 14, 36) 100%)',
-                                        WebkitBackgroundClip: 'text',
-                                        color: 'transparent',
-                                        display: 'inline',
-                                        textAlign: "center"
-                                    }}>Create Account</div>
+                                    </Stack>
+                                </Col>
+                                
+                                {/* Buttons */}
+                                <Col xs={12} md={11} style={{ marginTop:"50px", marginBottom:"100px"}} className='row row-cols-2 justify-content-center align-items-center'>
+                                
+                                    {/* Cancel Account */}
+                                    <Col xs={12} md={5} sm={12} className='row row-cols-1 m-1'>
+                                        <Button 
+                                        variant="primary" 
+                                        style={{
+                                            background: 'white',
+                                            color: 'rgb(61, 152, 154)',
+                                            border: "2px solid rgb(61, 152, 154)",
+                                            padding:"10px",
+                                            borderRadius:"10px"
+                                        }}
+                                        onClick={()=>navigate("/")}>
+                                            Cancel
+                                        </Button>
+                                    </Col>
 
-                                </Stack> 
-                            </Col>
+                                    {/* Create Account */}
+                                    <Col xs={12} md={5} sm={12} className='row row-cols-1'>
+                                        <Button 
+                                        variant="primary"
+                                        style={{
+                                            background: 'linear-gradient(to right, rgb(61, 152, 154) 0%, rgb(12, 14, 36) 100%)',
+                                            color: 'white',
+                                            padding:"10px",
+                                            borderRadius:"10px"
+                                        }}
+                                        onClick={createAccountss}
+                                        >
+                                            Sign Up
+                                        </Button>
+                                    </Col>
                             
-                            {/* Registration Form */}
-                            <Col xs={12} md={12}>     
-                                <Stack gap={2} className="col-md-10 mx-auto">
-
-                                    {/* First Name */}
-                                    <FloatingLabel
-                                    controlId="floatingInput"
-                                    label="First Name"
-                                    >
-                                        <Form.Control 
-                                        type="Text" 
-                                        placeholder="First Name"
-                                        name="FirstName"
-                                        value={userDetails.FirstName}
-                                        onChange={handleInputChange}
-                                        />
-                                    </FloatingLabel>
-                                    {error.firstName && <div className="text-danger mb-3">{error.firstNameError}</div>}
-
-                                    {/* Last Name */}
-                                    <FloatingLabel controlId="floatingPassword" label="Last Name" >
-                                        <Form.Control 
-                                        type="Text" 
-                                        placeholder="Last Name" 
-                                        name="LastName"
-                                        value={userDetails.LastName}
-                                        onChange={handleInputChange}    
-                                        />
-                                    </FloatingLabel>
-                                    {error.lastName && <div className="text-danger mb-3">{error.lastNameError}</div>}
-
-                                    {/* Email */}
-                                    <FloatingLabel
-                                    controlId="floatingInput"
-                                    label="Email"
-                         
-                                    >
-                                        <Form.Control 
-                                        type="email" 
-                                        placeholder="name@example.com"
-                                        name="Email"
-                                        value={userDetails.Email}
-                                        onChange={handleInputChange}     
-                                        />
-                                    </FloatingLabel>
-                                    {error.email && <div className="text-danger mb-3">{error.emailError}</div>}
-
-                                    {/* New Password */}
-                                    <FloatingLabel controlId="floatingPassword" label="New Password">
-                                        <Form.Control 
-                                        type="password" 
-                                        placeholder="New Password" 
-                                        name="NewPassword"
-                                        value={userDetails.NewPassword}
-                                        onChange={handleInputChange}   
-                                        />
-                                    </FloatingLabel>
-                                    {error.password && <div className="text-danger mb-3">{error.passwordError}</div>}
-
-                                </Stack>
-                            </Col>
-                            
-                            {/* Buttons */}
-                            <Col xs={12} md={11} style={{ marginTop:"50px", marginBottom:"100px"}} className='row row-cols-2 justify-content-center align-items-center'>
-                            
-                                {/* Cancel Account */}
-                                <Col xs={12} md={5} sm={12} className='row row-cols-1 m-1'>
-                                    <Button 
-                                    variant="primary" 
-                                    style={{
-                                        background: 'white',
-                                        color: 'rgb(61, 152, 154)',
-                                        border: "2px solid rgb(61, 152, 154)",
-                                        padding:"10px",
-                                        borderRadius:"10px"
-                                    }}>
-                                        Cancel
-                                    </Button>
                                 </Col>
 
-                                {/* Create Account */}
-                                <Col xs={12} md={5} sm={12} className='row row-cols-1'>
-                                    <Button 
-                                    variant="primary"
-                                    style={{
-                                        background: 'linear-gradient(to right, rgb(61, 152, 154) 0%, rgb(12, 14, 36) 100%)',
-                                        color: 'white',
-                                        padding:"10px",
-                                        borderRadius:"10px"
-                                    }}
-                                    onClick={createAccountss}
-                                    >
-                                        Sign Up
-                                    </Button>
-                                </Col>
-                           
-                            </Col>
+                            </Row>
 
-                        </Row>
-
+                        </Container>
                     </Container>
                 </Container>
-            </Container>
+            }
         </div>
     )
 }

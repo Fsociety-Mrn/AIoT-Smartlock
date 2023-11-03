@@ -5,10 +5,10 @@ import SideBarLinks from '../SideBarLinks/SideBarLinks'
 // import other pkg 
 import PropTypes from 'prop-types'
 
-const UserCard = ({ userProfile, sidebarLinks, username, userBirthday, userEmail, onChangeToggle }) => {
+const UserCard = ({ userID, userProfile, sidebarLinks, username, userBirthday, userEmail, onChangeToggle }) => {
     return (
         <>
-            <UserProfile userProfile={userProfile} username={username} userBirthday={userBirthday} userEmail={userEmail} />
+            <UserProfile userID={userID} userProfile={userProfile} username={username} userBirthday={userBirthday} userEmail={userEmail} />
             <SideBarLinks sidebarLinks={sidebarLinks} onChangeToggle={onChangeToggle} />
         </>
     )

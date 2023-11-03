@@ -53,20 +53,8 @@ const Panel = (props) => {
     }
   };
 
-  const changeUserInformation = (keyInfos, valInfos) => {
-    const newInfo = {};
-
-
-
-    keyInfos.forEach((keyInfo, idx) => (newInfo[keyInfo] = valInfos[idx]));
-
-    setUser((prev) => ({
-      ...prev,
-      user: {
-        ...prev.user,
-        ...newInfo
-      }
-    }));
+  const changeUserInformation = (data) => {
+      console.log(data)
   };
 
   // ************* User Details ************* //
@@ -89,7 +77,7 @@ const Panel = (props) => {
    
 
       setUser({
-        id: 1,
+        id: props.UID,
         userProfile: data.profilePicture,
         username: data.firstName + " " + data.lastName,
         // username: data.username,
@@ -144,6 +132,7 @@ const Panel = (props) => {
         <Row className={`${styles["panel"]} flex-column flex-md-row justify-content-center align-items-center px-3`}>
           <Col xs={12} sm={8} md={4} className="d-flex flex-column justify-content-center p-0">
             <UserCard
+              userID={user.id}
               userProfile={user.userProfile}
               username={user.username}
               userBirthday={user.birthday}
@@ -155,11 +144,10 @@ const Panel = (props) => {
           <Col xs={12} sm={8} md={7} className={`${styles["panel-column"]} bg-white border mt-5 mt-md-0 ms-md-5 p-5`}>
             {toggle === "setting" && (
               <UserInformation
+                UID={user.id}
                 username={user.username}
                 firstName={user.firstName}
                 lastName={user.lastName}
-                email={user.email}
-                birthday={user.birthday}
                 onChangeInfo={changeUserInformation}
               />
             )}
@@ -181,12 +169,10 @@ const Panel = (props) => {
             )}
             {toggle === "dashboard" && (
               <UserDashboard
-                username={user.username}
+                UID={user.id}
                 firstName={user.firstName}
                 lastName={user.lastName}
-                email={user.email}
-                birthday={user.birthday}
-                onChangeInfo={changeUserInformation}
+        
               />
             )}
           </Col>

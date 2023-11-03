@@ -4,8 +4,11 @@ import styles from "./UserProfile.module.css";
 import { Camera} from "iconsax-react";
 import PropTypes from "prop-types";
 
+import { updateDetails } from "../../../utils/Firebase/Firestore/Firestore"; 
+import { imageUpload } from "../../../utils/Firebase/Storage/Storage";
 const UserProfile = (
   {
+  userID,
   userProfile,
   username,
   userEmail
@@ -15,6 +18,28 @@ const UserProfile = (
     const otherLetters = text.slice(1);
     return `${firstLetter}${otherLetters}`;
   };
+
+
+    // save changes
+    const handleFormSubmit = (e) => {
+
+      const dataImage = e.target.files[0]
+
+      const fullName = username.split(" ")
+
+      console.log(fullName)
+  
+      if (e.target.files[0]) {
+        imageUpload(dataImage,userID).then(url=>{
+          updateDetails(
+            userID, 
+            String(fullName[1] + "," + fullName[0]),
+            url);
+    
+          })
+      }
+   
+    };
 
   return (
     <div
@@ -26,11 +51,12 @@ const UserProfile = (
         }}/>
 
 
-
         <div className={`${styles["profile-icon-box"]} bg-white `}>
           <Camera size="20" color="rgb(61, 152, 154)"  />
         </div>
-        <input type="file" className="d-none" id="user-profile" />
+
+        {/* input file */}
+        <input type="file" className="d-none" id="user-profile" onChange={handleFormSubmit} />
 
 
       </label>
