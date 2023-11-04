@@ -69,7 +69,7 @@ const ForgotPassword = () => {
               {/* Token Field */}
               <FloatingLabel
               controlId="floatingInput"
-              label="emaill"
+              label="email"
               className="mb-1">
                 <Form.Control type="email" placeholder="Please Input your email"
                 value={token}
