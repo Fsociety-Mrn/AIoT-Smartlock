@@ -55,29 +55,33 @@ const UserDashboard = (props) => {
   const [status, setStatus] = useState("");
   const [count, setCount] = useState(0);
 
+  const [lockerNumber, setLockerNumber] = useState()
+
   // State for the Update Faces
   const [Token,setToken] = useState()
   const [isDisable,setIsdisable] = useState(false)
   const [Timer,setTimer] = useState()
   const [tokenStatus, setTokenStatus] = useState("")
 
-  
+  const OpenLocker = async (FullName) => {
+    const data = await getLockerNumber(props.UID)
+
+    setLockerNumber(data)
+
+    openLocker({
+      FullName: FullName,
+      value: false,
+      number: data
+    })
+
+  }
 
   React.useEffect(() => {
 
 
     const FullName = String(props.firstName + " " + props.lastName).toUpperCase()
 
-    const OpenLocker = async () => {
-      const data = await getLockerNumber(props.UID)
 
-      openLocker({
-        FullName: FullName,
-        value: false,
-        number: data
-      })
-
-    }
 
   
 
@@ -102,7 +106,7 @@ const UserDashboard = (props) => {
       setCount(null)
       setIsUnlocking(false)
 
-      OpenLocker()
+      OpenLocker(FullName)
       // openLocker({
       //   FullName: FullName,
       //   value: false
@@ -247,10 +251,14 @@ const UserDashboard = (props) => {
 
     const FullName = String(props.firstName + " " + props.lastName).toUpperCase()
 
+
+
     if (newValue >= 100){
+
       openLocker({
         FullName: FullName,
-        value: true
+        value: true,
+        number: lockerNumber
       })
 
       pushHistory(FullName)
