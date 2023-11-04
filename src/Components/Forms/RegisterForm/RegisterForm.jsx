@@ -127,7 +127,7 @@ const RegisterForm = () => {
             {!tokenShow && <TokenForm setTokenShow={setTokenShow} />}
 
             {tokenShow && 
-                <Container fluid className={`${styles.container} d-flex justify-content-center align-items-center px-5`}>
+                <Container fluid className={`${styles.container} d-flex justify-content-center align-items-center px-2.5`}>
                     
                     {/* Reg Form containers */}
                     <Container className={`${styles.LoginContainer} d-flex justify-content-center align-items-center bg-white`}>
@@ -231,7 +231,7 @@ const RegisterForm = () => {
                                 </Col>
                                 
                                 {/* Buttons */}
-                                <Col xs={12} md={11} style={{ marginTop:"50px", marginBottom:"100px"}} className='row row-cols-2 justify-content-center align-items-center'>
+                                <Col xs={12} md={11} style={{ marginTop:"15px", marginBottom:"100px"}} className='row row-cols-2 justify-content-center align-items-center'>
                                 
                                     {/* Cancel Account */}
                                     <Col xs={12} md={5} sm={12} className='row row-cols-1 m-1'>

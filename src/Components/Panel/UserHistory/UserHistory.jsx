@@ -107,11 +107,12 @@ const UserDashboard = (props) => {
 
   return (
     <>
-      <Titles
-      title="Activity History 📈"
-      text="View your AIoT Smartlock activity log"
-      className="text-center "
-      />
+<Titles
+  title="Activity History 📈"
+  text="View your Locker Access Activity Log"
+  className="text-center"
+/>
+
 
 
       {/* date time picker */}

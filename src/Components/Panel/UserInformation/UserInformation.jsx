@@ -129,7 +129,7 @@ const UserInformation = ({ UID, firstName, lastName }) => {
         <Row className="mt-5 px-2">
 
         <div class="alert alert-warning" role="alert">
-          Please generate the token in dashbaord to update your Facial Biometrics
+        Please generate face update OTP in the dashboard
         </div>
         
           <FormInput
@@ -186,7 +186,7 @@ const UserInformation = ({ UID, firstName, lastName }) => {
               }}
 
           >
-            update
+            update name
           </Button>
     
    

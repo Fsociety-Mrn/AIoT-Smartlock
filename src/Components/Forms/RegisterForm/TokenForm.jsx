@@ -16,7 +16,7 @@ const TokenForm = (props) => {
   const [token,setToken] = React.useState("")
   const [error,setError] = React.useState(false)
   return (
-    <Container fluid className={`${styles.container} d-flex justify-content-center align-items-center px-5`}>
+    <Container fluid className={`${styles.container} d-flex justify-content-center align-items-center px-3`}>
   
   {/* Token Form containers */}
     <Container className={`${styles.LoginContainer} d-flex justify-content-center align-items-center bg-white`}>

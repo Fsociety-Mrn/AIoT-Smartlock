@@ -28,7 +28,7 @@ const ForgotPassword = () => {
 
     {success.success && <Alert  variant="success">{success.successMessage}</Alert>}
 
-    <Container fluid className={`${styles.container} d-flex justify-content-center align-items-center px-5`}>
+    <Container fluid className={`${styles.container} d-flex justify-content-center align-items-center px-3`}>
   
   {/* Token Form containers */}
     <Container className={`${styles.LoginContainer} d-flex justify-content-center align-items-center bg-white`}>
@@ -40,7 +40,7 @@ const ForgotPassword = () => {
 
           {/* Title */}
           <Col xs={12} md={12}>
-            <Stack gap={1} style={{ padding:"20px", marginTop:"80px"}} className={`d-flex justify-content-center align-items-center`}>
+            <Stack gap={1} style={{ marginTop:"80px"}} className={`d-flex justify-content-center align-items-center`}>
                             
               {/* Logo */}
               <Image 

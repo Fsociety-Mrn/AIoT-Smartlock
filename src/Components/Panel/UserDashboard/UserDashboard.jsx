@@ -97,7 +97,7 @@ const UserDashboard = (props) => {
 
     // *************** for Locker *************** //
     if(count < 0){
-      setStatus("SLIDE TO OPEN THE LOCKERS")
+      setStatus("SLIDE TO OPEN your Locker")
       setSliderValue(0)
       setCount(null)
       setIsUnlocking(false)
@@ -121,7 +121,7 @@ const UserDashboard = (props) => {
       if (Timer !== null)
       {
         setTimer(Timer - 1);
-        setTokenStatus(`Expires at ${Timer}`)
+        setTokenStatus(`Expires in ${Timer}`)
       }
 
     }, 1000);
@@ -213,6 +213,8 @@ const UserDashboard = (props) => {
             pin2Error: ""
           })
 
+          setNewPin("")
+          setOldPin("")
           handleCloseModal()
         })
 
@@ -315,8 +317,10 @@ const UserDashboard = (props) => {
 
               {/* Token Code */}
               {isDisable && 
-                <div className="text-danger text-center m-3">
-                This is your code <strong>{Token}</strong> and it {tokenStatus}
+                <div className="text-danger text-center">
+
+                Generate Face Update OTP Code: <strong>{Token}</strong> 
+                <p>({tokenStatus})</p>
                 </div>
               }
 
@@ -329,7 +333,7 @@ const UserDashboard = (props) => {
                 color: 'white' // Set the text color
               }}
               >
-                update face
+                generate face update OTP
               </Button>
 
               {/* Add the "Change Pin" button with modal */}
@@ -343,12 +347,12 @@ const UserDashboard = (props) => {
               }}
               onClick={handleShowModal} // Show modal on button click
               >
-                change pin
+                 change locker pin
               </Button>}
 
 
               {checkPIN && <div className="text-danger text-center mt-2">
-                Please create PIN
+                Please create locker PIN
               </div>}
 
               {checkPIN && <Button
@@ -375,11 +379,15 @@ const UserDashboard = (props) => {
       >
 
         <Modal.Header closeButton>
-          <Modal.Title>Change PIN</Modal.Title>
+          <Modal.Title>Change 4-Digit Locker PIN</Modal.Title>
         </Modal.Header>
 
         <Modal.Body>
-          <Form >
+
+
+
+
+          <Form className="mt-1" >
 
             {/* Old Pin */}
             <Form.Group controlId="oldPin">
@@ -443,7 +451,7 @@ const UserDashboard = (props) => {
       >
 
         <Modal.Header closeButton>
-          <Modal.Title>Setup PIN</Modal.Title>
+          <Modal.Title>Create 4-Digit Locker PIN</Modal.Title>
         </Modal.Header>
 
         <Modal.Body>
