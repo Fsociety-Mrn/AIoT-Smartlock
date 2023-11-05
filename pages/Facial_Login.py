@@ -444,11 +444,11 @@ class FacialLogin(QtWidgets.QFrame):
             
             cv2.putText(frame, "Face Blurreness: " + str(Face_blurreness), (30, 440), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (self.B, self.G, self.R), 1)
             
-            if not Face_blurreness < 300:
+            if not Face_blurreness < 50:
                 
                 # if authenticated
                 if self.validation == "Authenticated":
-                    if not Face_blurreness < 300:
+                    if not Face_blurreness < 50:
                         self.LastIn_FirstOut(name=str(self.matchs),new_image=framesS)
                         time.sleep(3)
                         OpenLockers(key=self.LockerNumber,value=False)
