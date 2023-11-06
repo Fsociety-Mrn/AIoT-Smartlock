@@ -1,31 +1,33 @@
 import React, { useState } from "react";
 import FormInput from "../../Forms/FormInput/FormInput";
 import Titles from "../../Titles/Titles";
-import { Form, Row, Col, Button, Modal, Stack } from "react-bootstrap";
-
-import UserChangePassword from "../UserChangePassword/UserChangePassword";
+import { Form, Row, Col, Button, Stack } from "react-bootstrap";
 
 // validation
-import { Name_Schema } from "../../../utils/Validation/Validation";
+import { Change_password } from "../../../utils/Validation/Validation";
 
-// change name
-import { updateName } from "../../../utils/Firebase/Firestore/Firestore"; 
-import { updateData} from "../../../utils/Firebase/Database/Database";
+// reset password 
+import { updatePasswords } from "../../../utils/Firebase/Authentication/Authentication";
+
 
 const UserInformation = ({ UID, firstName, lastName }) => {
 
 
   const [user,setUser] = useState({
-    firstName: firstName,
-    lastName: lastName
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: "",
   })
 
   const [error,setError] = useState({
-    firstName: false,
-    firstNameMessage: "",
+    currentPassword: false,
+    currentPasswordMessage: "",
 
-    lastName: false,
-    lastNameMessage: ""
+    newPassword: false,
+    newPasswordMessage: "",
+
+    confirmPassword: false,
+    confirmPasswordMessage: ""
   })
 
   const [showPasswordModal, setShowPasswordModal] = useState(false);
@@ -34,83 +36,64 @@ const UserInformation = ({ UID, firstName, lastName }) => {
     setShowPasswordModal(true);
   };
 
-  const handleClosePasswordModal = () => {
-    setShowPasswordModal(false);
-  };
+ 
 
   const handleUpdateName = async (e) => {
     try {
-      await Name_Schema.validate({ firstName: user.firstName, lastName: user.lastName }, { abortEarly: false });
-      
-      // // NOTE: KEY = History, NAME = FIRST AND LAST NAME UPPERCASE
-      // const LOCK = await getData("LOCK",String(user.firstName + " " + user.lastName).toUpperCase())
-      // console.log("LOCK", LOCK)
+      e.preventDefault()
 
-      // const History = await getData("History",String(user.firstName + " " + user.lastName).toUpperCase())
-      // console.log("History", History)
-
-      // const PIN = await getData("PIN",String(user.firstName + " " + user.lastName).toUpperCase())
-      // console.log("PIN", PIN)
-
-  
-
-      updateName(UID, String(user.lastName + "," + user.firstName))
-      .then(res=>{
+      await Change_password.validate({ 
+        currentPassword: user.currentPassword, 
+        newPassword: user.newPassword,
+        confirmPassword: user.confirmPassword,
+      }, { abortEarly: false });
 
 
-        // LOCK UPDATED
-        updateData("LOCK",String(firstName + " " + lastName).toUpperCase(), String(user.firstName + " " + user.lastName).toUpperCase())
-          .then(result=>{
-
-            // History
-            updateData("History",String(firstName + " " + lastName).toUpperCase(), String(user.firstName + " " + user.lastName).toUpperCase())
-            .then(result=>{
-
-                       // PIN
-                       updateData("PIN",String(firstName + " " + lastName).toUpperCase(), String(user.firstName + " " + user.lastName).toUpperCase())
-                       .then(result=>{
-                         console.log(result)
-                         setError({
-                           firstName: false,
-                           firstNameMessage: "",
-                           lastName: false,
-                           lastNameMessage: ""
-                         })
-                         window.location.reload()
-                     })
-          })
-
-        })
-
-
-
-  
-      })
-      .catch(err=>{
+      updatePasswords(user.currentPassword,user.confirmPassword).then(()=>{
         setError({
-          firstName: true,
-          firstNameMessage: err,
-          lastName: true,
-          lastNameMessage: ""
+          currentPassword: false,
+          currentPasswordMessage: "",
+      
+          newPassword: false,
+          newPasswordMessage: "",
+      
+          confirmPassword: false,
+          confirmPasswordMessage: ""
         })
-
-
+      }
+      ).then(err=>{
+        setError({
+          currentPassword: err.oldPassword,
+          currentPasswordMessage: err.oldPasswordMessage,
+      
+          newPassword: true,
+          newPasswordMessage: "",
+      
+          confirmPassword: true,
+          confirmPasswordMessage: ""
+        })
       })
+      
+
 
 
   } catch (validationError) {
-
+    
       // Extract specific error messages for email and password
-      const firstName = validationError.inner.find((error) => error.path === 'firstName');
-      const lastName = validationError.inner.find((error) => error.path === 'lastName');
+      const currentPassword = validationError.inner.find((error) => error.path === 'currentPassword');
+      const newPassword = validationError.inner.find((error) => error.path === 'newPassword');
+      const confirmPassword = validationError.inner.find((error) => error.path === 'confirmPassword');
 
 // If validation errors occur
       setError({
-        firstName: !!firstName,
-        firstNameMessage: firstName && firstName.message,
+        currentPassword: !!currentPassword,
+        currentPasswordMessage: currentPassword && currentPassword.message,
 
-        lastName: !!lastName,
-        lastNameMessage: lastName && lastName.message
+        newPassword: !!newPassword,
+        newPasswordMessage: newPassword && newPassword.message,
+
+        confirmPassword: !!confirmPassword,
+        confirmPasswordMessage: confirmPassword && confirmPassword.message
       });
 
 
@@ -122,15 +105,39 @@ const UserInformation = ({ UID, firstName, lastName }) => {
   return (
     <>
       <Titles
-        title="Welcome to the Information"
-        text="Check or change your information as you want"
+        title="Manage Your Password 🔐"
+        text="Easily update or reset your password to keep your account secure."
       />
       <Form>
-        <Row className="mt-5 px-2">
+        <Row className="mt-3 px-2">
 
-        <div class="alert alert-warning" role="alert">
+        {/* <div class="alert alert-warning" role="alert">
         Please generate face update OTP in the dashboard
-        </div>
+        </div> */}
+
+        <Stack gap={2} className="col-md-10 mx-auto"> 
+
+        <FormInput
+            xs={12}
+            sm
+            lg
+
+            type={showPasswordModal ? 'text' : 'password'}
+
+            as={Col}
+            inpClass="py-2"
+            // className="p-0"
+            name="currentPassword"
+            controlId="first-name-input"
+            text="Current Password"
+            placeholder="Enter your current password"
+            size="sm"
+            value={user.currentPassword}
+            onChange={e=>setUser({...user, currentPassword: e.target.value})}
+
+            valid={error.currentPassword}
+            helperText={error.currentPasswordMessage}
+          />
         
           <FormInput
             xs={12}
@@ -138,17 +145,20 @@ const UserInformation = ({ UID, firstName, lastName }) => {
             lg
             as={Col}
             inpClass="py-2"
-            className="p-0"
-            name="firstName"
-            controlId="first-name-input"
-            text="First Name"
-            placeholder="Hello"
-            size="sm"
-            value={user.firstName}
-            onChange={e=>setUser({...user, firstName: e.target.value})}
 
-            valid={error.firstName}
-            helperText={error.firstNameMessage}
+            type={showPasswordModal ? 'text' : 'password'}
+
+            // className="p-0"
+            name="newPassword"
+            controlId="first-name-input"
+            text="New Password"
+            placeholder="Enter your new password"
+            size="sm"
+            value={user.newPassword}
+            onChange={e=>setUser({...user, newPassword: e.target.value})}
+
+            valid={error.newPassword}
+            helperText={error.newPasswordMessage}
           />
 
 
@@ -157,44 +167,44 @@ const UserInformation = ({ UID, firstName, lastName }) => {
             lg
             as={Col}
             inpClass="py-2"
-            className="p-0 ms-lg-5 mt-3 mt-lg-0"
-            name="lastName"
-            controlId="last-name-input"
-            text="Last Name"
-            placeholder="Friend"
-            size="sm"
-            value={user.lastName}
-            onChange={e=>setUser({...user, lastName: e.target.value})}
 
-            valid={error.lastName}
-            helperText={error.lastNameMessage}
+            type={showPasswordModal ? 'text' : 'password'}
+
+            // className="p-0 ms-lg-5 mt-3 mt-lg-0"
+            name="confirmPassword"
+            controlId="last-name-input"
+            text="Confirm Password"
+            placeholder="Confirm your new password"
+            size="sm"
+            value={user.confirmPassword}
+            onChange={e=>setUser({...user, confirmPassword: e.target.value})}
+
+            valid={error.confirmPassword}
+            helperText={error.confirmPasswordMessage}
           />
 
-          
+
+          <Form.Check // prettier-ignore
+          type="checkbox"
+          id="Show Password"
+          label="Show Password"
+          style={{ color: "rgb(61, 152, 154)", borderColor: "rgb(12, 14, 36)"}}
+          hecked={showPasswordModal}
+          onChange={handleShowPasswordModal}
+             />
+
+        </Stack>
         </Row>
 
 
-        <div className="d-flex justify-content-center align-items-center p-3">
+        <div className="d-flex justify-content-center align-items-center px-5 pt-3">
 
           <Stack gap={2} className="col-md-8 mx-auto">
-            <Button
-            onClick={handleUpdateName}
-            variant="primary"
-            style={{
-                background: 'rgb(61, 152, 154)',
-                color: 'white' // Set the text color
-              }}
-
-          >
-            update name
-          </Button>
-    
-   
 
           <Button
             variant="primary"
 
-            onClick={handleShowPasswordModal}
+            onClick={handleUpdateName}
 
             style={{
                 background: 'rgb(61, 152, 154)',
@@ -202,22 +212,11 @@ const UserInformation = ({ UID, firstName, lastName }) => {
               }}
 
           >
-            change Password
+            update password
           </Button>
           </Stack>
         </div>
       </Form>
-
-      {/* Password Change Modal */}
-      <Modal show={showPasswordModal} onHide={handleClosePasswordModal}>
-        <Modal.Header closeButton>
-          <Modal.Title>Change Password</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {/* Create a separate component for the password change form */}
-          <UserChangePassword />
-        </Modal.Body>
-      </Modal>
     </>
   );
 };

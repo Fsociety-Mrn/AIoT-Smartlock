@@ -148,7 +148,7 @@ const UserDashboard = (props) => {
       <Table hover size="sm">
         <thead>
           <tr>
-            <th>Date</th>
+            {/* <th>Date</th> */}
             <th>Time</th>
             <th>Access type</th>
           </tr>
@@ -157,7 +157,7 @@ const UserDashboard = (props) => {
         <tbody>
           {currentItems?.map((item, index) => (
             <tr key={index}>
-            <td>{new Date(item.date).toLocaleString(undefined,options)}</td>
+            {/* <td>{new Date(item.date).toLocaleString(undefined,options)}</td> */}
               <td>{item.time}</td>
               <td>{item.accessType}</td>
             </tr>

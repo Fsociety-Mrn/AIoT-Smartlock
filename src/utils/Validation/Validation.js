@@ -84,15 +84,21 @@ export const Name_Schema = yup.object().shape({
 
 // Password Validation
 export const Change_password = yup.object().shape({
-        CurrentPassword: yup.string()
+        currentPassword: yup.string()
                 // .matches(passwordRules, { message: "Please create a stronger password" })
                 .required("Please enter your current password")
                 .min(6,"Password should be 6 char long"),
 
-        NewPassword: yup.string()
+        newPassword: yup.string()
+                // .matches(passwordRules, { message: "Please create a stronger password" })
+                .required("Please enter your current password")
+                .min(6,"Password should be 6 char long"),
+
+        confirmPassword: yup.string()
                 // .matches(passwordRules, { message: "Please create a stronger password" })
                 .required("Please enter your new password")
                 .min(6,"Password should be 6 char long")
+                .oneOf([yup.ref('newPassword'), null], 'password must be match')
     });
 
 // Password Validation

@@ -172,3 +172,49 @@ export const LogoutSession = async () => {
     });
   };
 
+
+  // update Password
+  export const updatePasswords = async (oldPassword,newPassword) => {
+    return new Promise((resolve, reject) => {
+      const credential = EmailAuthProvider.credential(auth.currentUser.email, oldPassword);
+  
+      reauthenticateWithCredential(auth.currentUser, credential)
+        .then((e) => {
+  
+          updatePassword(auth.currentUser, newPassword).then(() => {
+            // Update successful.\
+  
+            alert("Password updated please login again!")
+            LogoutSession()
+
+            window.location.reload()
+  
+  
+            resolve("password updated!")
+          }).catch((error) => {
+            // An error ocurred
+            // ...
+
+            console.log(error)
+            reject({
+              oldPassword: true,
+              oldPasswordMessage: "Invalid Pasword",
+              newPassword: true,
+              newPasswordMessage: ""
+            });
+
+          });
+    
+        })
+      .catch((error) => {
+
+          console.log(error)
+          reject({
+            oldPassword: true,
+            oldPasswordMessage: "Invalid Pasword",
+            newPassword: true,
+            newPasswordMessage: ""
+          });
+        });
+    });
+  }
