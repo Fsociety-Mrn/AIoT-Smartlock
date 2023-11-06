@@ -63,6 +63,7 @@ const UserDashboard = (props) => {
   const [Timer,setTimer] = useState()
   const [tokenStatus, setTokenStatus] = useState("")
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const OpenLocker = async (FullName) => {
     const data = await getLockerNumber(props.UID)
 
@@ -80,9 +81,6 @@ const UserDashboard = (props) => {
 
 
     const FullName = String(props.firstName + " " + props.lastName).toUpperCase()
-
-
-
   
 
     // *************** for Change PIN *************** // 
@@ -130,14 +128,18 @@ const UserDashboard = (props) => {
 
     }, 1000);
 
+    // alert("remove token")
+
+
+
     return () => {
 
       clearInterval(intervalId);
-      // removeToken(FullName);
+
 
     };
 
-  }, [count, Timer, props.firstName, props.lastName, props.UID]);
+  }, [count, Timer, props.firstName, props.lastName, props.UID, OpenLocker]);
 
   // Function to handle opening the modal
   const handleShowModal = () => {
