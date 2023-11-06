@@ -33,7 +33,7 @@ const UserInformation = ({ UID, firstName, lastName }) => {
   const [showPasswordModal, setShowPasswordModal] = useState(false);
 
   const handleShowPasswordModal = () => {
-    setShowPasswordModal(true);
+    setShowPasswordModal(!showPasswordModal);
   };
 
  
