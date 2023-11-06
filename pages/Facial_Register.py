@@ -274,9 +274,9 @@ class facialRegister(QtWidgets.QFrame):
                 Face_blurreness = float("{:.2f}".format(variance))
             
 
-                cv2.putText(frame, "Face percentage: " + str(Face_percentage) + "%", (30, 420), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 255), 1)
+                cv2.putText(frame, "Face percentage: " + str(Face_percentage) + "%", (50, 450), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,255,255), 1)
                 # cv2.putText(frame, "Face percentage: " + str("{:.2f}".format(40 + Face_percentage)) + "%", (90, 400), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (self.B, self.G, self.R), 1)
-                cv2.putText(frame, "Face Blurreness:" + str(Face_blurreness), (30, 400), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 255), 1)
+                cv2.putText(frame, "Face Blurreness:" + str(Face_blurreness), (30, 400), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,255,255), 1)
             
                 
             height, width, channel = frame.shape

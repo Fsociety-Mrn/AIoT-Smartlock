@@ -20,6 +20,9 @@ from Firebase.Offline import delete_table,offline_history
 class FacialLogin(QtWidgets.QFrame):
     def __init__(self,main_menu):
         super().__init__(main_menu)
+        
+        self.cpu = "39 celcius"
+        
         self.main_menu = main_menu
         # for video streaming variable
         self.videoStream = cv2.VideoCapture(1) if cv2.VideoCapture(1).isOpened() else cv2.VideoCapture(0)
@@ -316,7 +319,7 @@ class FacialLogin(QtWidgets.QFrame):
             
             # update history firebase
             words = str(result[0]).split(' ')
-            rearranged_string = f"{words[1]},{words[0]}"
+            # rearranged_string = f"{words[1]},{words[0]}"
             
             results = firebaseHistory(name=result[0],
                             percentage=result[1],
@@ -425,7 +428,8 @@ class FacialLogin(QtWidgets.QFrame):
         current_time = time.time()
 
 
-        
+        cv2.putText(frame, "CPU Temperature: " + self.cpu, (430, 70), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,255), 1)
+            
         # display the result
         if len(faces) == 1:
             x, y, w, h = faces[0]
