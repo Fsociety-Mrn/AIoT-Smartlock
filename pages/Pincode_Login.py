@@ -423,7 +423,7 @@ class PincodeLogin(QtWidgets.QFrame):
     def retranslateUi(self):
         _translate = QtCore.QCoreApplication.translate
         self.setWindowTitle(_translate("Pincode", "Frame"))
-        self.TokenID_3.setPlaceholderText(_translate("MainWindow", "eg: E-XXXX"))
+        self.TokenID_3.setPlaceholderText(_translate("MainWindow", "eg: EE-XXXX"))
 
         self.seven_2.setText(_translate("MainWindow", "1"))
         self.seven_3.setText(_translate("MainWindow", "2"))
@@ -477,10 +477,10 @@ class PincodeLogin(QtWidgets.QFrame):
             
         self.errorMessage.setText("")
         current_text = self.TokenID_3.text()
-        if len(current_text) == 1:
+        if len(current_text) == 2:
                 current_text = current_text + "-"
                 
-        if len(current_text) != 6:   
+        if len(current_text) != 7:   
                 self.TokenID_3.setText(current_text + digit)
 
     def backspace(self):
