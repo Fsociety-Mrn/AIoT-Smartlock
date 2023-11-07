@@ -445,9 +445,9 @@ class PincodeLogin(QtWidgets.QFrame):
         self.seven_5.clicked.connect(lambda: self.input_digit('4'))
         self.seven_6.clicked.connect(lambda: self.input_digit('5'))
         self.seven_7.clicked.connect(lambda: self.input_digit('6'))
-        self.seven_8.clicked.connect(lambda: self.input_digit('7'))
-        self.seven_9.clicked.connect(lambda: self.input_digit('8'))
-        self.seven_10.clicked.connect(lambda: self.input_digit('9'))
+        self.seven_8.clicked.connect(lambda: self.input_digit('9'))
+        self.seven_9.clicked.connect(lambda: self.input_digit('7'))
+        self.seven_10.clicked.connect(lambda: self.input_digit('8'))
         self.seven_13.clicked.connect(lambda: self.input_digit('0'))
         
         self.TokenID_3.setEchoMode(QLineEdit.Password)
@@ -555,8 +555,7 @@ class PincodeLogin(QtWidgets.QFrame):
             
             # for open the Locker
             OpenLockers(key=int(data[1]),value=True)
-            time.sleep(3)
-            OpenLockers(key=int(data[1]),value=False)
+       
             
             delete_table("Failed attempt")
             delete_table("Fail History")

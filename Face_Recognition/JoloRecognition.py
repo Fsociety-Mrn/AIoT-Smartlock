@@ -37,13 +37,13 @@ class JoloRecognition:
             return linear_val + ((1.0 - linear_val) * math.pow((linear_val - 0.5) * 2, 0.2)) 
     
     # for face recognition
-    def Face_Compare(self, face, threshold=0.7):
+    def Face_Compare(self, face, threshold=0.6):
         try:
             return self.FaceCompare(face,threshold=threshold)
         except:
             return ('No match detected', None)
             
-    def FaceCompare(self, face, threshold=0.7):
+    def FaceCompare(self, face, threshold=0.6):
     
         with torch.no_grad():
             
