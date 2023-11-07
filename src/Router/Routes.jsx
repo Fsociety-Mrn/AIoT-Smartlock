@@ -10,6 +10,7 @@ import {
 
 import { statusLogin } from '../firebase/FirebaseConfig'
 import { isAdmin } from '../firebase/Firestore'
+import { LogoutSession } from '../Authentication/Authentication'
 
 // for Login
 const Routess = () => {
@@ -17,8 +18,9 @@ const Routess = () => {
   const isLoggedIn = sessionStorage.getItem('TOKEN');
 
   const [login,setLogin] = React.useState()
-
   const isAdmins = sessionStorage.getItem('isAdmin');
+
+
 
 
   React.useEffect(()=>{
@@ -26,12 +28,16 @@ const Routess = () => {
     statusLogin()
       .then(user=>{ 
 
-        setLogin(isLoggedIn)
+        
+
         // verify Admin
         isAdmin(user.uid)
           .then(data=>{
-            console.log(data.isAdmin);
-            sessionStorage.setItem('isAdmin', data.isAdmin ? "true" : "false");  
+            console.log("is admin",data.isAdmin);
+
+            data.isAdmin ? setLogin(isLoggedIn) : LogoutSession()
+            data.isAdmin && sessionStorage.setItem("true");  
+
           }).catch(error=> console.log(error))
         }).catch(error=> console.log(error))
         
@@ -80,10 +86,8 @@ const Mainpage = ({ isAdminS }) =>{
   if (isAdminS === "true"){
     console.log("admin")
     return <Admin/>
-  }else if(isAdminS === "false"){
-    console.log("user")
-    return <User/>
   }else{
+    console.log("error")
     return <WelcomePage />
   }
   

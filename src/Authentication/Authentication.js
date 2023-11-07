@@ -44,6 +44,7 @@ export const LogoutSession = async () => {
     await signOut(auth).then(()=>{
         console.log("Succesfull signout")
         sessionStorage.clear()
+        window.location.reload()
 
     }).catch((err)=>console.log(err))
   
