@@ -38,9 +38,7 @@ import { getUserDetails } from '../firebase/Firestore'
 // import { styled } from "@mui/material/styles";
 import ICON from '../Images/logo512.png'
 
-import { useNavigate } from 'react-router-dom';
-
-import { Element, Link, scroller } from 'react-scroll';
+import { Element, Link } from 'react-scroll';
 import SwipeableViews from 'react-swipeable-views';
 
 // import { useTheme } from '@emotion/react';
@@ -69,7 +67,6 @@ export const Appbar = () => {
 
   return (
     <div>
-
         {state ? <MobileAppbar />  : <DesktopAppbar />} 
     </div>
   )
@@ -78,26 +75,6 @@ export const Appbar = () => {
 // =========================== Mobile mode =========================== //
 
 const MobileAppbar = () => {
-
-    const styles = {
-        slide: {
-          padding: 15,
-          minHeight: 100,
-          color: '#fff',
-        },
-        slide1: {
-          background: '#FEA900',
-        },
-        slide2: {
-          background: '#B3DC4A',
-        },
-        slide3: {
-          background: '#6AC0FF',
-        },
-        slide4: {
-            background: '#6AC0FF',
-          },
-      };
 
     const [value, setValue] = React.useState(0);
 
@@ -145,14 +122,14 @@ const MobileAppbar = () => {
                     <BottomNavigation 
                     sx={{ backgroundImage: 'linear-gradient(to right, rgb(61, 152, 154) 50%, rgb(12, 14, 36) 100%)',
                         '& .Mui-selected': {
-                            color: 'white', // Color when an item is clicked
+                            color: '#EFECE3', // Color when an item is clicked
                             '& .MuiSvgIcon-root': {
-                                color: 'white', // Icon color when an item is clicked
+                                color: '#EFECE3', // Icon color when an item is clicked
                             },
                         }, 
                     }} 
                     value={value} 
-                onChange={handleChange}  >
+                    onChange={handleChange} >
                         <BottomNavigationAction icon={<DashboardIcon />}  />
                         <BottomNavigationAction icon={<LockPersonIcon />} />
                         <BottomNavigationAction icon={<PeopleIcon />} />
@@ -197,28 +174,21 @@ const MobileAppbar = () => {
 
 const DesktopAppbar = () => {
 
+  const drawerWidth = 260;
 
-    const [variants,setVariants] = React.useState({
-        Dashboard: "outlined",
-        MyLocker: "text",
-        ProfileSettings: "text",
-        ManageLockerAccess: ""
-
-    });
-
-
-const drawerWidth = 260;
-
-const openedMixin = (theme) => ({
+  const openedMixin = (theme) => ({
+    backgroundColor: '#EFECE3',
     width: drawerWidth,
     transition: theme.transitions.create('width', {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
+      
     }),
     overflowX: 'hidden',
   });
   
   const closedMixin = (theme) => ({
+    backgroundColor: '#EFECE3',
     transition: theme.transitions.create('width', {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
@@ -230,10 +200,8 @@ const openedMixin = (theme) => ({
     },
   });
 
-
-
 // Drawer Header
-const DrawerHeaderCustom = styled('div')(({ theme }) => ({
+  const DrawerHeaderCustom = styled('div')(({ theme }) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-end',
@@ -246,7 +214,7 @@ const DrawerHeaderCustom = styled('div')(({ theme }) => ({
   // Appbar
   const AppBarCustom = styled(MuiAppBar, {
     shouldForwardProp: (prop) => prop !== 'open',
-  })(({ theme, open }) => ({
+    })(({ theme, open }) => ({
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,
@@ -260,15 +228,17 @@ const DrawerHeaderCustom = styled('div')(({ theme }) => ({
         duration: theme.transitions.duration.enteringScreen,
       }),
     }),
-  }));
+    }));
   
   // drawer
   const DrawerCustom = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
     ({ theme, open }) => ({
+
       width: drawerWidth,
       flexShrink: 0,
       whiteSpace: 'nowrap',
       boxSizing: 'border-box',
+ 
       ...(open && {
         ...openedMixin(theme),
         '& .MuiDrawer-paper': openedMixin(theme),
@@ -280,32 +250,29 @@ const DrawerHeaderCustom = styled('div')(({ theme }) => ({
     }),
   );
 
+  const theme = useTheme();
+  const [open, setOpen] = React.useState(false);
 
-    let navigate = useNavigate()
-
-    const theme = useTheme();
-    const [open, setOpen] = React.useState(false);
-
-    const handleDrawerOpen = () => {
-        setOpen(true);
-      };
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
     
-    const handleDrawerClose = () => {
-        setOpen(false);
-      };
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
 
-    const [colorClick, setColorClick] = React.useState({
-        dashboard: "rgb(23, 44, 62)",
-        myLocker: "rgb(61, 152, 154)",
-        lockerAvail: "rgb(61, 152, 154)",
-        manageLocker: "rgb(61, 152, 154)",
-        profileSettings: "rgb(61, 152, 154)",
-        settings: "rgb(61, 152, 154)"
-    })
+  const [colorClick, setColorClick] = React.useState({
+    dashboard: "rgb(23, 44, 62)",
+    myLocker: "rgb(61, 152, 154)",
+    lockerAvail: "rgb(61, 152, 154)",
+    manageLocker: "rgb(61, 152, 154)",
+    profileSettings: "rgb(61, 152, 154)",
+    settings: "rgb(61, 152, 154)"
+  })
 
 
-    // update profile
-    const [image,setImage] = React.useState(defaultImage) //image
+  // update profile
+  const [image,setImage] = React.useState(defaultImage) //image
 
   React.useEffect(()=>{
     let isMounted = true;
@@ -314,307 +281,289 @@ const DrawerHeaderCustom = styled('div')(({ theme }) => ({
       try {
         const user = await statusLogin();
         if (isMounted) {
-
           const details = await getUserDetails(user.uid)
-
-
           details.photoUrl ? setImage(details.photoUrl) : setImage(image)
-
         }
       } catch (error) {
         console.error('Error fetching user status:', error);
       }
     };
-
     fetchUserStatus();
-
         return () => {
             isMounted = false;
         };
-    },[])
+  },[])
 
-    return (
-        <div>
+  return (
+    <div>
 
-            <AppBarCustom
-            position="fixed"
-            sx={{ 
-                backgroundImage: 'linear-gradient(to right, rgb(61, 152, 154) ,rgb(12, 14, 36))',
-                // zIndex: (theme) => theme.zIndex.drawer + 1 
-            }}
-
-            open={open}
-            >
-                <Toolbar variant="regular">
+      <AppBarCustom
+      position="fixed"
+      sx={{ 
+        backgroundImage: 'linear-gradient(to right, rgb(61, 152, 154) ,rgb(12, 14, 36))',
+        // zIndex: (theme) => theme.zIndex.drawer + 1 
+      }}
+      open={open}
+      >
+        <Toolbar variant="regular">
                          
-                    <IconButton edge="start" color="inherit"  aria-label="open drawer"
-                    onClick={handleDrawerOpen} 
-                    sx={{ 
-                        mr: 2, 
-                        ...(open && { display: 'none' }) 
-                    }}>
+          <IconButton edge="start" color="inherit"  aria-label="open drawer"
+          onClick={handleDrawerOpen} 
+          sx={{ 
+            mr: 2, 
+            ...(open && { display: 'none' }) 
+          }}>
 
-                    <Avatar alt="Remy Sharp"
-                        sx={{
-                            border: "2px solid rgb(61, 152, 154)",
-                            height: '55px', width: '55px'
-                        }}
-                        src={ICON}
-                        >S</Avatar>
-                    </IconButton>
+            <Avatar alt="Remy Sharp"
+            sx={{
+              border: "2px solid rgb(61, 152, 154)",
+              height: '55px', width: '55px'
+            }}
+            src={ICON}
+            >S</Avatar>
+          </IconButton>
                     
-                    <Typography variant="h6" color="inherit" component="div" sx={{ flexGrow: 1 }}>
-                        AIoT Smartlock
-                    </Typography>
+          <Typography variant="h6" color="inherit" component="div" sx={{ flexGrow: 1 }}>
+            AIoT Smartlock
+          </Typography>
 
 
-                    {/* account button */}
-                    <IconButton
-                    size="large"
-                    color="inherit"
-                    > 
-                        <Avatar alt="Remy Sharp"
-                        src={image}
-                        sx={{
-                            border: "2px solid rgb(61, 152, 154)"
-                        }}
-                        >A</Avatar>
-                    </IconButton> 
+          {/* account button */}
+          <IconButton
+          size="large"
+          color="inherit"> 
+            
+            <Avatar alt="Remy Sharp"
+            src={image}
+            sx={{
+              border: "2px solid rgb(61, 152, 154)"
+            }}>A</Avatar>
+              </IconButton> 
+            </Toolbar>
 
-                </Toolbar>
+      </AppBarCustom>
 
-            </AppBarCustom>
+      <DrawerCustom
+      variant="permanent"
+      open={open}
+      sx={{
+        backgroundColor: "red"
+      }}
+      >
 
+        <DrawerHeaderCustom>
+          <IconButton onClick={handleDrawerClose}>
+            {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+          </IconButton>
+        </DrawerHeaderCustom>
+            
+        <Divider />
+        
+        <List>
+                    
+          {/* Dashboard */}
+          <ListItem disablePadding sx={{ display: 'block'}}>
 
-
-            <DrawerCustom
-            variant="permanent"
-            open={open}
+            <Link
+            to="Dashboard"
+            spy={true}
+            smooth={true}
+            offset={0}
+            duration={500}
+            style={{ textDecoration: 'none', color: 'inherit' }}
             >
 
-            <DrawerHeaderCustom>
-                <IconButton onClick={handleDrawerClose}>
-                {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-                </IconButton>
-            </DrawerHeaderCustom>
+              <ListItemButton
+              sx={{
+                color: "rgb(23, 44, 62)",
+                minHeight: 48,
+                justifyContent: open ? 'initial' : 'center',
+                px: 2.5,
+              }}
+              onClick={() => {
+                  // navigate("/Admin/");
+                  setColorClick({
+                    dashboard: "rgb(23, 44, 62)", // DARK color
+                    myLocker: "rgb(61, 152, 154)",
+                    lockerAvail: "rgb(61, 152, 154)",
+                    manageLocker: "rgb(61, 152, 154)",
+                    profileSettings: "rgb(61, 152, 154)",
+                    settings: "rgb(61, 152, 154)",
+                  });
+                }}
+              >
+                <ListItemIcon
+                sx={{
+                  color: colorClick.dashboard,
+                  minWidth: 0,
+                  mr: open ? 3 : 'auto',
+                  justifyContent: 'center',
+                }}
+                >
+                  <DashboardIcon />
+                </ListItemIcon>
+
+                <ListItemText color='white' primary="Dashboard" sx={{ 
+                  opacity: open ? 1 : 0,
+                }} />
+              </ListItemButton>
+            </Link>
+          </ListItem>
+
+          {/* My locker */}
+          <ListItem disablePadding sx={{ display: 'block'}}>
             
-            <Divider />
+            <Link
+            to="MyLocker"
+            spy={true}
+            smooth={true}
+            offset={0}
+            duration={500}
+            style={{ textDecoration: 'none', color: 'inherit' }}
+            >
 
+              <ListItemButton
+              sx={{
+                color: "rgb(61, 152, 154)",
+                minHeight: 48,
+                justifyContent: open ? 'initial' : 'center',
+                px: 2.5,
+              }}
+              onClick={() => {
 
+                setColorClick({
+                  dashboard: "rgb(61, 152, 154)",
+                  myLocker: "rgb(23, 44, 62)", // DARK color
+                  lockerAvail: "rgb(61, 152, 154)",
+                  manageLocker: "rgb(61, 152, 154)",
+                  profileSettings: "rgb(61, 152, 154)",
+                  settings: "rgb(61, 152, 154)",
+                });
+              }}
+              >
 
-                    <List>
-                    
-                    {/* Dashboard */}
-                    <ListItem disablePadding sx={{ display: 'block' }}>
-  <Link
-    to="Dashboard"
-    spy={true}
-    smooth={true}
-    offset={70}
-    duration={500}
-    style={{ textDecoration: 'none', color: 'inherit' }}
-  >
-    <ListItemButton
-      sx={{
-        color: "rgb(23, 44, 62)",
-        minHeight: 48,
-        justifyContent: open ? 'initial' : 'center',
-        px: 2.5,
-      }}
-      onClick={() => {
-        // navigate("/Admin/");
-        setColorClick({
-          dashboard: "rgb(23, 44, 62)", // DARK color
-          myLocker: "rgb(61, 152, 154)",
-          lockerAvail: "rgb(61, 152, 154)",
-          manageLocker: "rgb(61, 152, 154)",
-          profileSettings: "rgb(61, 152, 154)",
-          settings: "rgb(61, 152, 154)",
-        });
-      }}
-    >
-      <ListItemIcon
-        sx={{
-          color: colorClick.dashboard,
-          minWidth: 0,
-          mr: open ? 3 : 'auto',
-          justifyContent: 'center',
-        }}
-      >
-        <DashboardIcon />
-      </ListItemIcon>
-      <ListItemText color='white' primary="Dashboard" sx={{ 
-        opacity: open ? 1 : 0,
-      }} />
-    </ListItemButton>
-  </Link>
-</ListItem>
+                <ListItemIcon
+                sx={{
+                  color: colorClick.myLocker,
+                  minWidth: 0,
+                  mr: open ? 3 : 'auto',
+                  justifyContent: 'center',
+                }}
+                >
 
+                  <LockPersonIcon />
 
-                     {/* My locker */}
-                     <ListItem disablePadding sx={{ display: 'block' }}>
-  <Link
-    to="MyLocker"
-    spy={true}
-    smooth={true}
-    offset={-70}
-    duration={500}
-    style={{ textDecoration: 'none', color: 'inherit' }}
-  >
-    <ListItemButton
-      sx={{
-        color: "rgb(61, 152, 154)",
-        minHeight: 48,
-        justifyContent: open ? 'initial' : 'center',
-        px: 2.5,
-      }}
-      onClick={() => {
-        // navigate("/Admin/MyLocker");
-        setColorClick({
-          dashboard: "rgb(61, 152, 154)",
-          myLocker: "rgb(23, 44, 62)", // DARK color
-          lockerAvail: "rgb(61, 152, 154)",
-          manageLocker: "rgb(61, 152, 154)",
-          profileSettings: "rgb(61, 152, 154)",
-          settings: "rgb(61, 152, 154)",
-        });
-      }}
-    >
-      <ListItemIcon
-        sx={{
-          color: colorClick.myLocker,
-          minWidth: 0,
-          mr: open ? 3 : 'auto',
-          justifyContent: 'center',
-        }}
-      >
-        <LockPersonIcon />
-      </ListItemIcon>
-      <ListItemText primary="My locker" sx={{ opacity: open ? 1 : 0 }} />
-    </ListItemButton>
-  </Link>
-</ListItem>
-
-                        
-                  
-                        {/* Manage Locker Access */}
-                        <ListItem disablePadding sx={{ display: 'block' }}>
-                            <ListItemButton 
-                            sx={{
-                                color: "rgb(61, 152, 154)",
-                                minHeight: 48,
-                                justifyContent: open ? 'initial' : 'center',
-                                px: 2.5,
-                            }}
-                            onClick={()=>{
-                                navigate("/Admin/ManageLockerAccess");
-                                setColorClick({
-                                    dashboard: "rgb(61, 152, 154)",
-                                    myLocker: "rgb(61, 152, 154)",
-                                    lockerAvail: "rgb(61, 152, 154)", 
-                                    manageLocker: "rgb(23, 44, 62)", //DARK color
-                                    profileSettings: "rgb(61, 152, 154)", 
-                                    settings: "rgb(61, 152, 154)"
-                                });
-                            }}
-                            >
-
-                                <ListItemIcon 
-                                sx={{
-                                    color: colorClick.manageLocker,
-                                    minWidth: 0,
-                                    mr: open ? 3 : 'auto',
-                                    justifyContent: 'center',
-                                }}>
-                                    <PeopleIcon /> 
-                                </ListItemIcon>
-
-                                <ListItemText primary="Manage Locker Access" sx={{ opacity: open ? 1 : 0 }}/>
-                            </ListItemButton>
-                        </ListItem>
-
-                        {/* Profile Settings */}
-                        <ListItem disablePadding sx={{ display: 'block' }}>
-                            <ListItemButton 
-                            sx={{
-                                color: "rgb(61, 152, 154)",
-                                minHeight: 48,
-                                justifyContent: open ? 'initial' : 'center',
-                                px: 2.5,
-                            }}
-                            onClick={()=>{
-                                navigate("/Admin/ProfileSettings");
-                                setColorClick({
-                                    dashboard: "rgb(61, 152, 154)",
-                                    myLocker: "rgb(61, 152, 154)",
-                                    lockerAvail: "rgb(61, 152, 154)", 
-                                    manageLocker: "rgb(61, 152, 154)",
-                                    profileSettings: "rgb(23, 44, 62)", //DARK color
-                                    settings: "rgb(61, 152, 154)",
-                                });
-                            }}
-                            >
-
-                                <ListItemIcon 
-                                sx={{
-                                    color: colorClick.profileSettings,
-                                    minWidth: 0,
-                                    mr: open ? 3 : 'auto',
-                                    justifyContent: 'center',
-                                }}>
-                                    <ManageAccountsIcon /> 
-                                </ListItemIcon>
-
-                                <ListItemText primary="Profile Settings" sx={{ opacity: open ? 1 : 0 }}/>
-                            </ListItemButton>
-                        </ListItem>
-
-                        {/* Smartlocker Settings */}
-                        {/* <ListItem disablePadding sx={{ display: 'block' }}>
-                            <ListItemButton 
-                            sx={{
-                                color: "rgb(61, 152, 154)",
-                                minHeight: 48,
-                                justifyContent: open ? 'initial' : 'center',
-                                px: 2.5,
-                            }}
-                            onClick={()=>{
-                                navigate("/Admin/Settings");
-                                setColorClick({
-                                    dashboard: "rgb(61, 152, 154)",
-                                    myLocker: "rgb(61, 152, 154)",
-                                    lockerAvail: "rgb(61, 152, 154)", 
-                                    manageLocker: "rgb(61, 152, 154)",
-                                    profileSettings: "rgb(61, 152, 154)",
-                                    settings: "rgb(23, 44, 62)", //DARK color
-                                });
-                            }}
-                            >
-
-                                <ListItemIcon 
-                                sx={{
-                                    color: colorClick.settings,
-                                    minWidth: 0,
-                                    mr: open ? 3 : 'auto',
-                                    justifyContent: 'center',
-                                }}>
-                                    <SettingsIcon /> 
-                                </ListItemIcon>
-
-                                <ListItemText primary="Settings & Configuration" sx={{ opacity: open ? 1 : 0 }}/>
-                            </ListItemButton>
-
-
-
-                        </ListItem> */}
-
-
-                    </List>
+                </ListItemIcon>
             
-            </DrawerCustom>
+                <ListItemText primary="My locker" sx={{ opacity: open ? 1 : 0 }} />
+
+              </ListItemButton>
+            </Link>
+          </ListItem>
+
+          {/* Manage Locker Access */}
+          <ListItem disablePadding sx={{ display: 'block' }}>
+
+            <Link
+            to="ManageLockerAccess"
+            spy={true}
+            smooth={true}
+            offset={0}
+            duration={500}
+            style={{ textDecoration: 'none', color: 'inherit' }}
+            >
+
+              <ListItemButton 
+              sx={{
+                color: "rgb(61, 152, 154)",
+                minHeight: 48,
+                justifyContent: open ? 'initial' : 'center',
+                px: 2.5,
+              }}
+              
+              onClick={()=>{
+                setColorClick({
+                  dashboard: "rgb(61, 152, 154)",
+                  myLocker: "rgb(61, 152, 154)",
+                  lockerAvail: "rgb(61, 152, 154)", 
+                  manageLocker: "rgb(23, 44, 62)", //DARK color
+                  profileSettings: "rgb(61, 152, 154)", 
+                  settings: "rgb(61, 152, 154)"
+                });
+              }}
+              >
+
+                <ListItemIcon 
+                sx={{
+                  color: colorClick.manageLocker,
+                  minWidth: 0,
+                  mr: open ? 3 : 'auto',
+                  justifyContent: 'center',
+                }}>
+                  <PeopleIcon /> 
+                </ListItemIcon>
+
+                <ListItemText primary="Manage Locker Access" sx={{ opacity: open ? 1 : 0 }}/>
+
+              </ListItemButton>
+
+            </Link>
+          </ListItem>
+
+          {/* Profile Settings */}
+          <ListItem disablePadding sx={{ display: 'block' }}>
+            <Link
+            to="ProfileSettings"
+            spy={true}
+            smooth={true}
+            offset={0}
+            duration={500}
+            style={{ textDecoration: 'none', color: 'inherit' }}
+            >
+
+              <ListItemButton 
+              sx={{
+                color: "rgb(61, 152, 154)",
+                minHeight: 48,
+                justifyContent: open ? 'initial' : 'center',
+                px: 2.5,
+              }}
+              onClick={()=>{            
+                setColorClick({
+                  dashboard: "rgb(61, 152, 154)",
+                  myLocker: "rgb(61, 152, 154)",
+                  lockerAvail: "rgb(61, 152, 154)", 
+                  manageLocker: "rgb(61, 152, 154)",
+                  profileSettings: "rgb(23, 44, 62)", //DARK color
+                  settings: "rgb(61, 152, 154)",
+                });
+              }}
+              >
+
+                <ListItemIcon 
+                sx={{
+                  color: colorClick.profileSettings,
+                  minWidth: 0,
+                  mr: open ? 3 : 'auto',
+                  justifyContent: 'center',
+                }}>
+                   <ManageAccountsIcon /> 
+                </ListItemIcon>
+
+                <ListItemText primary="Profile Settings" sx={{ opacity: open ? 1 : 0 }}/>
+              </ListItemButton>
+            </Link>
+          </ListItem>
 
 
-    <Element name="Dashboard">
+
+
+        </List>
+            
+      </DrawerCustom>
+
+
+      <Element name="Dashboard">
         <Dashboard />
       </Element>
 
@@ -622,13 +571,15 @@ const DrawerHeaderCustom = styled('div')(({ theme }) => ({
         <MyLocker />
       </Element>
 
+      <Element name="ManageLockerAccess">
+        <ManageLockerAccess />
+      </Element>
+
       <Element name="ProfileSettings">
         <ProfileSettings />
       </Element>
 
-      <Element name="ManageLockerAccess">
-        <ManageLockerAccess />
-      </Element>
+
 
         </div>
     )

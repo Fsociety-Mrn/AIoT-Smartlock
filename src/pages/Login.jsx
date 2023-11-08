@@ -5,17 +5,14 @@ import {
   Avatar, 
   Box, 
   Button, 
-  Divider, 
   Grid, 
   IconButton, 
   InputAdornment, 
   Link, 
   Paper, 
   Stack, 
-  Typography,
-  
 } from '@mui/material'
-import { MobileTextbox,DesktopTextbox } from '../Components/Textfield';
+import { MobileTextbox, DesktopTextbox } from '../Components/Textfield';
 
 // import { isAdmin } from '../firebase/Firestore'
 
@@ -282,7 +279,7 @@ const Mobile = () => {
                 onClick={Login}
                 >Login</Button>
 
-                <Grid item xs={12}>
+                {/* <Grid item xs={12}>
                   <Divider>
                     <Typography
                       fontFamily={'sans-serif'}
@@ -301,7 +298,7 @@ const Mobile = () => {
                 >
             
 
-                  {/* Signup Account */}
+                  Signup Account
                   <Typography noWrap>
                     <Link 
                   href="/otp"
@@ -309,7 +306,7 @@ const Mobile = () => {
                       <strong> Sign up here!</strong>
                     </Link> 
                   </Typography>
-                </Stack>
+                </Stack> */}
 
                 
   
@@ -564,7 +561,7 @@ const Desktop = () => {
 
                 </Stack>
 
-                <Divider orientation='horizontal' color='rgb(12, 14, 36)'>
+                {/* <Divider orientation='horizontal' color='rgb(12, 14, 36)'>
                   <Typography
                   fontFamily={'sans-serif'} 
                   style={{
@@ -579,7 +576,7 @@ const Desktop = () => {
                 paddingY={1}
                 spacing={1}
                 >
-                    {/* Signup Account */}
+                    Signup Account
                     <Typography noWrap>
                       <Link 
                       href="/otp"
@@ -588,7 +585,7 @@ const Desktop = () => {
                       </Link> 
                     </Typography>
 
-                </Stack>
+                </Stack> */}
 
                
 

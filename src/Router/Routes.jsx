@@ -59,7 +59,7 @@ const Routess = () => {
 
 // import LoginPage from '../pages/Login'
 const LoginPage = React.lazy(()=> import('../pages/Login'))
-const Signup = React.lazy(()=> import('../pages/signup/Otp_SignIn'))
+// const Signup = React.lazy(()=> import('../pages/signup/Otp_SignIn'))
 const ForgotPassword = React.lazy(()=> import('../pages/ForgotPassword'))
 const Login = () => {
     return (
@@ -68,7 +68,7 @@ const Login = () => {
           <Routes>
 
             <Route path="/Login" element={<LoginPage/>}/>
-            <Route path="/otp" element={<Signup/>}/>
+            {/* <Route path="/otp" element={<Signup/>}/> */}
             <Route path="/ForgotPassword" element={<ForgotPassword/>}/>
             <Route path="*" element={<Navigate to="/Login"/>}/>
 
