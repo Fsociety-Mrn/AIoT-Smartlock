@@ -1,10 +1,10 @@
-torch==2.0.1
-torchvision==0.15.2
+torch==2.1.0
+torchvision==0.16.0
 facenet_pytorch==2.5.3
-gtts==2.3.2
-numpy==1.25.2
-playsound==1.2.2
-PyQt5==5.15.9
+numpy==1.26.1
+PyQt5==5.15.10
+PyQt5_sip==12.13.0
 pyrebase==3.0.27
 Requests==2.31.0
-validate_email_address==1
+tinydb==4.8.0
+

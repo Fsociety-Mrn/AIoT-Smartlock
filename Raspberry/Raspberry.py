@@ -21,6 +21,7 @@ import threading
 def openLocker():
     data = firebaseRead("LOCK")
     for key,value in data.items():
+        print("KEY",key)
         # OpenLockers(key=int(value['Locker Number']), value=value['Locker Status'])
         threading.Thread(target=OpenLockers, args=(int(value['Locker Number']),value['Locker Status'],)).start()
         
