@@ -35,6 +35,7 @@ import defaultImage from "../Images/logo512.png"
 import { statusLogin } from '../firebase/FirebaseConfig'
 import { getUserDetails } from '../firebase/Firestore'
 
+
 // import { styled } from "@mui/material/styles";
 import ICON from '../Images/logo512.png'
 
@@ -77,96 +78,105 @@ export const Appbar = () => {
 const MobileAppbar = () => {
 
     const [value, setValue] = React.useState(0);
+    const theme = useTheme();
 
-    const handleChange = (event, newValue) => {
+    const handleChange = (newValue) => {
+      setValue(newValue);
+    };
+
+    const handleChanges = (event, newValue) => {
       setValue(newValue);
     };
 
     // for swipe
     return (
-        <div>
-            <AppBar position="fixed">
+      <div>
+        <AppBar position="fixed">
 
-                {/* Title */}
-                <Toolbar variant="regular"                
-                sx={{ 
-                    // display: 'flex',
-                    // justifyContent: 'center',
-                    backgroundImage: 'linear-gradient(to right, rgb(61, 152, 154) 50%, rgb(12, 14, 36) 100%)',
-                    borderBottom: 'none', // Remove the bottom border
-                }}>
+          {/* Title */}
+          <Toolbar 
+          variant="regular"                
+          sx={{ 
+            // display: 'flex',
+            // justifyContent: 'center',
+            backgroundImage: 'linear-gradient(to right, rgb(61, 152, 154) 50%, rgb(12, 14, 36) 100%)',
+            borderBottom: 'none', // Remove the bottom border
+          }}>
 
-                    <IconButton edge="start" color="inherit" aria-label="menu" 
-                    sx={{ mr: 1, marginTop: 1.5}}
-                    >
-                        <Avatar alt="Remy Sharp"
-                        sx={{
-                            border: "2px solid rgb(61, 152, 154)",
-                            width: 50, height: 50 
-                        }}
-                        src={ICON}
-                        >S</Avatar>
-                    </IconButton>
+            <IconButton 
+            edge="start" 
+            color="inherit" 
+            aria-label="menu" 
+            sx={{ mr: 1, marginTop: 1.5}}
+            >
+              <Avatar 
+              alt="Remy Sharp"
+              sx={{
+                border: "2px solid rgb(61, 152, 154)",
+                 width: 50, height: 50 
+              }}
+              src={ICON}
+              >S</Avatar>
+            </IconButton>
 
-                    <Typography variant="h5" 
-                    fontFamily={'sans-serif'}
-                    color="inherit" 
-                    sx={{ marginTop: 1.5}}
-                    >
-                        AIoT Smartlock
-                    </Typography>
+            <Typography 
+            variant="h5" 
+            fontFamily={'sans-serif'}
+            color="inherit" 
+            sx={{ marginTop: 1.5}}
+            >
+              AIoT Smartlock
+            </Typography>
 
-                </Toolbar>
-                <Box sx={{ marginTop: -1 }}                 
-                >
-                    <BottomNavigation 
-                    sx={{ backgroundImage: 'linear-gradient(to right, rgb(61, 152, 154) 50%, rgb(12, 14, 36) 100%)',
-                        '& .Mui-selected': {
-                            color: '#EFECE3', // Color when an item is clicked
-                            '& .MuiSvgIcon-root': {
-                                color: '#EFECE3', // Icon color when an item is clicked
-                            },
-                        }, 
-                    }} 
-                    value={value} 
-                    onChange={handleChange} >
-                        <BottomNavigationAction icon={<DashboardIcon />}  />
-                        <BottomNavigationAction icon={<LockPersonIcon />} />
-                        <BottomNavigationAction icon={<PeopleIcon />} />
-                        <BottomNavigationAction icon={<ManageAccountsIcon />} />
-                    </BottomNavigation>
+          </Toolbar>
 
-                      
-
-                </Box>
+          <Box sx={{ marginTop: -1 }}>
+            <BottomNavigation 
+            sx={{ 
+              backgroundImage: 'linear-gradient(to right, rgb(61, 152, 154) 50%, rgb(12, 14, 36) 100%)',
+              '& .Mui-selected': {
+                color: '#EFECE3', // Color when an item is clicked
+                '& .MuiSvgIcon-root': {
+                  color: '#EFECE3', // Icon color when an item is clicked
+                },
+              }, 
+            }} 
+            value={value} 
+            onChange={handleChanges} 
+            >
+              <BottomNavigationAction icon={<DashboardIcon />}  />
+              <BottomNavigationAction icon={<LockPersonIcon />} />
+              <BottomNavigationAction icon={<PeopleIcon />} />
+              <BottomNavigationAction icon={<ManageAccountsIcon />} />
+            </BottomNavigation>
+          </Box>
          
-            </AppBar>
+        </AppBar>
 
-            {/* Swipeable Views */}
-      <SwipeableViews index={value} onChangeIndex={handleChange}>
+        {/* Swipeable Views */}
+        <SwipeableViews 
+        axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+        index={value} 
+        onChangeIndex={handleChange}>
         
-        <div>
+          <div>
             <Dashboard/>
-        </div>
+          </div>
 
-        <div>
+          <div>
             <MyLocker/>
-        </div>
+          </div>
 
-        <div>
+          <div>
             <ManageLockerAccess/>
-        </div>
+          </div>
 
-        <div>
+          <div>
             <ProfileSettings/>
-        </div>
+          </div>
 
-
-  </SwipeableViews>
-
-
-
-        </div>
+        </SwipeableViews>
+      </div>
     )
 }
 
