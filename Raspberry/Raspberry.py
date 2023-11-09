@@ -1,4 +1,4 @@
-from Firebase.firebase import firebaseRead
+from Firebase.firebase import firebaseRead, lockerUpdate
 # import RPi.GPIO as GPIO
 import time
 import threading
@@ -21,19 +21,21 @@ import threading
 def openLocker():
     data = firebaseRead("LOCK")
     for key,value in data.items():
-        print("KEY",key)
+        # print("KEY",key)
         # OpenLockers(key=int(value['Locker Number']), value=value['Locker Status'])
-        threading.Thread(target=OpenLockers, args=(int(value['Locker Number']),value['Locker Status'],)).start()
+        threading.Thread(target=OpenLockers, args=(key, int(value['Locker Number']),value['Locker Status'],)).start()
         
-def OpenLockers(key,value):
+def OpenLockers(name,key,value):
 
     if value:
         print("Open Lockers")
         print(key,value)
         
         # GPIO.output(key,value)
-        time.sleep(1)
+        time.sleep(2)
         # GPIO.output(key,GPIO.LOW)
+        
+        lockerUpdate(name=name, value=False)
         
         print(key,False)
         

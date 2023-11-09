@@ -214,4 +214,11 @@ def firebaseTokenLOCK(token):
         return False
     
     
-# ************************* List of Register Faces ************************* #
+def lockerUpdate(name,value):
+    try:
+       db.child("LOCK").child(name).child("Locker Status").set(value)
+       return True
+            
+    except Exception as e:
+        print("Error:", e)
+        return None
