@@ -301,9 +301,12 @@ const UserDashboard = (props) => {
       <Container>
         <Row className="d-flex flex-column justify-content-center align-items-center mt-4">
 
+
           {/* open locker */}
           <Col md={10} sm={12}>
             <div className="d-flex flex-column justify-content-center align-items-center my-2 px-4" >
+              
+              <p class="lead blockquote text-nowrap">your Locker Number <strong>{lockerNumber}</strong> </p>
               <h1 className="text-nowrap">{status}</h1>
 
               <input 
