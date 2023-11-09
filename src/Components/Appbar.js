@@ -30,10 +30,12 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import PeopleIcon from '@mui/icons-material/People';
 // import SettingsIcon from '@mui/icons-material/Settings';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 import defaultImage from "../Images/logo512.png"
 import { statusLogin } from '../firebase/FirebaseConfig'
 import { getUserDetails } from '../firebase/Firestore'
+import { LogoutSession } from '../Authentication/Authentication'
 
 
 // import { styled } from "@mui/material/styles";
@@ -48,6 +50,7 @@ const Dashboard = React.lazy(()=> import('../pages/admin/Dashboard'))
 const MyLocker = React.lazy(()=> import('../pages/admin/MyLocker'))
 const ProfileSettings = React.lazy(()=> import('../pages/admin/ProfileSettings'))
 const ManageLockerAccess = React.lazy(()=> import('../pages/admin/ManageLockerAccess'))
+const Settings = React.lazy(()=> import('../pages/admin/Settings'))
 
 // admin Appbar
 export const Appbar = () => {
@@ -172,10 +175,11 @@ const MobileAppbar = () => {
           </div>
 
           <div>
-            <ProfileSettings/>
+            <Settings/>
           </div>
-
+      
         </SwipeableViews>
+
       </div>
     )
 }
@@ -560,9 +564,50 @@ const DesktopAppbar = () => {
                    <ManageAccountsIcon /> 
                 </ListItemIcon>
 
-                <ListItemText primary="Profile Settings" sx={{ opacity: open ? 1 : 0 }}/>
+                <ListItemText primary="Change Password" sx={{ opacity: open ? 1 : 0 }}/>
               </ListItemButton>
             </Link>
+          </ListItem>
+
+          <Divider/>
+
+          {/* Logout */}
+          <ListItem disablePadding sx={{ display: 'block' }}>
+      
+              <ListItemButton 
+              sx={{
+                color: "rgb(61, 152, 154)",
+                minHeight: 48,
+                justifyContent: open ? 'initial' : 'center',
+                px: 2.5,
+              }}
+              onClick={()=>{            
+                setColorClick({
+                  dashboard: "rgb(61, 152, 154)",
+                  myLocker: "rgb(61, 152, 154)",
+                  lockerAvail: "rgb(61, 152, 154)", 
+                  manageLocker: "rgb(61, 152, 154)",
+                  profileSettings: "rgb(23, 44, 62)", //DARK color
+                  settings: "rgb(61, 152, 154)",
+                });
+
+                LogoutSession()
+              }}
+              >
+
+                <ListItemIcon 
+                sx={{
+                  color: "rgb(61, 152, 154)",
+                  minWidth: 0,
+                  mr: open ? 3 : 'auto',
+                  justifyContent: 'center',
+                }}>
+                   <LogoutIcon /> 
+                </ListItemIcon>
+
+                <ListItemText primary="Log out" sx={{ opacity: open ? 1 : 0 }}/>
+              </ListItemButton>
+
           </ListItem>
 
 

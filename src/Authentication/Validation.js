@@ -62,7 +62,13 @@ export const Change_password = yup.object().shape({
         NewPassword: yup.string()
                 // .matches(passwordRules, { message: "Please create a stronger password" })
                 .required("Please enter your new password")
+                .min(6,"Password should be 6 char long"),
+
+        ConfirmPassword: yup.string()
+                // .matches(passwordRules, { message: "Please create a stronger password" })
+                .required("Please enter your new password")
                 .min(6,"Password should be 6 char long")
+                .oneOf([yup.ref('NewPassword'), null], 'Passwords must match')
     });
 
 // Password Validation
