@@ -339,7 +339,7 @@ const DesktopAppbar = () => {
 
 
           {/* account button */}
-          <IconButton
+          {/* <IconButton
           size="large"
           color="inherit"> 
             
@@ -348,8 +348,8 @@ const DesktopAppbar = () => {
             sx={{
               border: "2px solid rgb(61, 152, 154)"
             }}>A</Avatar>
-              </IconButton> 
-            </Toolbar>
+              </IconButton>  */}
+        </Toolbar>
 
       </AppBarCustom>
 
