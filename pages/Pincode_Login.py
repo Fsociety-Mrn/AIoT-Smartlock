@@ -49,11 +49,11 @@ class PincodeLogin(QtWidgets.QFrame):
         
         # Greetings
         self.greetings = QtWidgets.QLabel(self)
-        self.greetings.setGeometry(QtCore.QRect(-10, 0, 1031, 181))
+        self.greetings.setGeometry(QtCore.QRect(-15, 0, 1031, 181))
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(21)
-        font.setBold(False)
+        font.setBold(True)
         font.setWeight(50)
         self.greetings.setFont(font)
         self.greetings.setStyleSheet("color: #3D989A")
@@ -423,7 +423,7 @@ class PincodeLogin(QtWidgets.QFrame):
     def retranslateUi(self):
         _translate = QtCore.QCoreApplication.translate
         self.setWindowTitle(_translate("Pincode", "Frame"))
-        self.TokenID_3.setPlaceholderText(_translate("MainWindow", "eg: EE-XXXX"))
+        self.TokenID_3.setPlaceholderText(_translate("MainWindow", "eg: LN-XXXX"))
 
         self.seven_2.setText(_translate("MainWindow", "1"))
         self.seven_3.setText(_translate("MainWindow", "2"))
@@ -461,7 +461,7 @@ class PincodeLogin(QtWidgets.QFrame):
         self.Cancel_2.setText(_translate("MainWindow", "Cancel"))
 
         self.greetings.setText(_translate("MainWindow", "Hello Friend,\n"
-        "Please choose your name and enter your pincode"))
+        "Kindly provide your locker number and PIN for access."))
         self.checkBox.setText(_translate("MainWindow", "Show Password"))
              
     def toggle_password_visibility(self,state):
@@ -554,7 +554,7 @@ class PincodeLogin(QtWidgets.QFrame):
             )
             
             # for open the Locker
-            OpenLockers(key=int(data[1]),value=True)
+            OpenLockers(str(data[0]),key=int(data[1]),value=True)
        
             
             delete_table("Failed attempt")
