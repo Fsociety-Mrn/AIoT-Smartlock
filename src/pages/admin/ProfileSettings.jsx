@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import './ProfileSettings.css'; // Link to your CSS file
 import { Change_password } from '../../Authentication/Validation'
 import { 
-  getUserDetails, imageUpload, updateDetails,
+  getUserDetails, 
+  imageUpload, 
+  updateDetails,
 } from '../../firebase/Firestore'
 import { statusLogin,changing_password } from '../../firebase/FirebaseConfig'
 import { Button,Stack,Avatar, Grid, Typography } from '@mui/material';
