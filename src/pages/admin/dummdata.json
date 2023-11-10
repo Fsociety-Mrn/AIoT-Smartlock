@@ -1,0 +1,117 @@
+{
+    "Familaran,Ivan": {
+      "Nov 1, 2023": {
+        "1:31:44 PM": {
+          "Access_type": "Facial Login",
+          "Percentage": 64.63496886969651
+        },
+        "1:32:22 PM": {
+          "Access_type": "Facial Login",
+          "Percentage": 79.47212969880968
+        },
+        "1:33:24 PM": {
+          "Access_type": "Facial Login",
+          "Percentage": 78.38061617409736
+        },
+        "1:35:16 PM": {
+          "Access_type": "PIN Login"
+        },
+        "1:35:35 PM": {
+          "Access_type": "PIN Login"
+        },
+        "1:35:52 PM": {
+          "Access_type": "PIN Login"
+        }
+      },
+      "Oct 23, 2023": {
+        "1:31:44 PM": {
+          "Access_type": "Facial Login",
+          "Percentage": 64.63496886969651
+        },
+        "1:32:22 PM": {
+          "Access_type": "Facial Login",
+          "Percentage": 79.47212969880968
+        },
+        "1:33:24 PM": {
+          "Access_type": "Facial Login",
+          "Percentage": 78.38061617409736
+        },
+        "1:35:16 PM": {
+          "Access_type": "PIN Login"
+        },
+        "1:35:35 PM": {
+          "Access_type": "PIN Login"
+        },
+        "1:35:52 PM": {
+          "Access_type": "PIN Login"
+        }
+      }
+    },
+    "Gajunera,Roger": {
+      "Nov 26, 2023": {
+        "1:34:21 PM": {
+          "Access_type": "Facial Login",
+          "Percentage": 27.555763721466057
+        },
+        "1:34:30 PM": {
+          "Access_type": "Facial Login",
+          "Percentage": 22.333085536956784
+        },
+        "1:34:38 PM": {
+          "Access_type": "Facial Login",
+          "Percentage": 24.79411164919535
+        },
+        "1:35:04 PM": {
+          "Access_type": "PIN Login"
+        },
+        "1:35:44 PM": {
+          "Access_type": "PIN Login"
+        },
+        "1:35:48 PM": {
+          "Access_type": "PIN Login"
+        },
+        "1:36:01 PM": {
+          "Access_type": "PIN Login"
+        },
+        "1:36:02 PM": {
+          "Access_type": "PIN Login"
+        },
+        "1:36:04 PM": {
+          "Access_type": "PIN Login"
+        },
+        "1:36:08 PM": {
+          "Access_type": "PIN Login"
+        },
+        "1:36:09 PM": {
+          "Access_type": "PIN Login"
+        },
+        "1:36:10 PM": {
+          "Access_type": "PIN Login"
+        },
+        "1:36:15 PM": {
+          "Access_type": "PIN Login"
+        },
+        "1:36:16 PM": {
+          "Access_type": "PIN Login"
+        },
+        "1:36:18 PM": {
+          "Access_type": "PIN Login"
+        },
+        "1:36:19 PM": {
+          "Access_type": "PIN Login"
+        },
+        "1:36:20 PM": {
+          "Access_type": "PIN Login"
+        },
+        "1:36:22 PM": {
+          "Access_type": "PIN Login"
+        },
+        "1:36:24 PM": {
+          "Access_type": "PIN Login"
+        },
+        "1:36:27 PM": {
+          "Access_type": "PIN Login"
+        }
+      }
+    }
+  }
