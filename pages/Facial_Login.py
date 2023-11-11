@@ -23,6 +23,8 @@ class FacialLogin(QtWidgets.QFrame):
         
         self.cpu = "39 celcius"
         
+        self.start_start = time.time()
+        
         self.main_menu = main_menu
         # for video streaming variable
         self.videoStream = cv2.VideoCapture(1) if cv2.VideoCapture(1).isOpened() else cv2.VideoCapture(0)
@@ -69,7 +71,7 @@ class FacialLogin(QtWidgets.QFrame):
         self.B = 0
 
         # EAR of eye
-        self.blink_threshold = 0.3
+        self.blink_threshold = 0.35
         self.blink_counter = 0
         self.blink = True
         self.last_dilation_time  = 0
@@ -427,9 +429,8 @@ class FacialLogin(QtWidgets.QFrame):
 
         current_time = time.time()
 
-
         cv2.putText(frame, "CPU Temperature: " + self.cpu, (430, 70), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,255), 1)
-            
+
         # display the result
         if len(faces) == 1:
             x, y, w, h = faces[0]
@@ -469,7 +470,7 @@ class FacialLogin(QtWidgets.QFrame):
   
                 # check if ervery 5 second
     
-                if current_time - self.last_recognition_time >= 5 and not Face_blurreness < 450:
+                if current_time - self.last_recognition_time >= 5 and not Face_blurreness < 300:
 
                     self.last_recognition_time = current_time
 
@@ -485,7 +486,6 @@ class FacialLogin(QtWidgets.QFrame):
 
             else:
                 self.status.setText("Camera is blurr")     
-            
 
         elif len(faces) >= 1:
             
@@ -496,7 +496,6 @@ class FacialLogin(QtWidgets.QFrame):
             for (x, y, w, h) in faces:
                 self.curveBox(frame=frame,p1=(x,y),p2=(x+w,y+h))
             self.status.setText("more than 1 faces is detected")
-            
         else:
             self.status.setText("No face is detected")
 

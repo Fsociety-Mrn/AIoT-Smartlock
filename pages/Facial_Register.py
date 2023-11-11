@@ -31,7 +31,7 @@ class facialRegister(QtWidgets.QFrame):
               """)
 
             # EAR of eye
-            self.blink_threshold = 0.3
+            self.blink_threshold = 0.35
             self.blink_counter = 0
             self.blink = True
 
@@ -183,7 +183,7 @@ class facialRegister(QtWidgets.QFrame):
             # check if the frame is blured
             laplacian_var = cv2.Laplacian(cropFrame, cv2.CV_64F).var()
             print("Blurered level",laplacian_var)
-            if laplacian_var < 500:
+            if laplacian_var < 300:
                 self.status.setText("cant capture it is blured")
                 
             else:
