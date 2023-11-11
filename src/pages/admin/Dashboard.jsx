@@ -1,12 +1,19 @@
-import { Grid } from '@mui/material'
+import { Box, Divider, Grid, Paper, Stack, Typography } from '@mui/material'
+import Card from "../../Components/Card"
 import React from 'react'
+import styled from 'styled-components'
+import TodayIcon from '@mui/icons-material/Today';
+import { Carousel } from "react-responsive-carousel";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
+
 
 const Dashboard = () => {
-  const [paddinSize, setPaddingSize] = React.useState(10)
+  const [paddinSize, setPaddingSize] = React.useState()
+  const carouselRef = React.useRef(null);
 
   React.useEffect(()=>{
     const setResponsiveness = () => {
-        return window.innerWidth < 700 ? setPaddingSize(17) : setPaddingSize(10);
+        return window.innerWidth < 700 ? setPaddingSize(15) : setPaddingSize(0);
     };
 
     setResponsiveness();
@@ -17,63 +24,72 @@ const Dashboard = () => {
   },[])
     
   return (
-    <div 
-    // style={{
-    //   display: 'flex',  
-    //   justifyContent:'center', 
-    //   alignItems:'flex-start', 
-    //   height: '100vh'
-    // }}
-    >
+    <div style={{
+      minHeight: "100vh"
+    }}>
+
       <Grid
       container
       direction="row"
       justifyContent="center"
       alignItems="flex-start"
-      sx={{
-        height: "100vh"
-      }}
       marginTop={paddinSize}
       spacing={2}
-
+      padding={2}
+      sx={{ overflowX: 'auto' }} // Add this style
       >
-        <Grid item xs={2} md={2} sm={2}  sx={{
-          backgroundColor: "red"
-        }}>
-          Total Access
-        </Grid>
- 
-        <Grid item xs={2} md={2} sm={2} sx={{
-          backgroundColor: "white"
-        }}>
-          Facial Login
-        </Grid>
-
-        <Grid item xs={2} md={2} sm={2}  sx={{
-          backgroundColor: "GrayText"
-        }}>
-          PIN Login
-        </Grid>
-
-        <Grid item xs={2} md={2} sm={2} sx={{
-          backgroundColor: "violet"
-        }}>
-          IoT Access
-        </Grid>
-
-        <Grid item xs={2} md={2} sm={2} sx={{
-          backgroundColor: "gray"
-        }}>
-          Failure
-        </Grid>
 
 
+        <Card 
+        Title="Today Access"
+        Number={0}
+        />
 
+        <Card 
+        Title="Facial Login"
+        Number={0}
+        />
+
+        <Card 
+        Title="PIN Login"
+        Number={0}
+        />
+
+        <Card 
+        Title="IoT Login"
+        Number={0}
+        />
+
+        <Card 
+        Title="Access Denied"
+        Number={0}
+        />
+
+        
+<Card 
+        Title="IoT Login"
+        Number={0}
+        />
+
+        <Card 
+        Title="Access Denied"
+        Number={0}
+        />
 
 
       </Grid>
     </div>
   )
 }
+
+
+// Components
+const Item = styled(Paper)(() => ({
+  backgroundColor: "#fff",
+  padding: "20px",
+  textAlign: 'center',
+  color: "black",
+  borderRadius: "30px"
+}));
 
 export default Dashboard
