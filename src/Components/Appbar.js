@@ -4,7 +4,6 @@ import {
     BottomNavigation, 
     BottomNavigationAction, 
     Box, 
-    Collapse, 
     Divider, 
     IconButton, 
     List,
@@ -269,9 +268,9 @@ const DesktopAppbar = () => {
   const [open, setOpen] = React.useState(false);
   const [title, setTitle] = React.useState("");
 
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
+  // const handleDrawerOpen = () => {
+  //   setOpen(true);
+  // };
     
   const handleDrawerClose = () => {
     setOpen(!open);

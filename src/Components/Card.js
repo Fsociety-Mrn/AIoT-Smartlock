@@ -1,9 +1,11 @@
-import { Box, Grid, Stack, Typography } from '@mui/material'
+import { Stack, Typography, Card  } from '@mui/material'
 import TodayIcon from '@mui/icons-material/Today';
 import PinIcon from '@mui/icons-material/Pin';
 import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt';
 import SmartphoneIcon from '@mui/icons-material/Smartphone';
 import SmsFailedIcon from '@mui/icons-material/SmsFailed';
+
+
 
 import React from 'react'
 
@@ -20,21 +22,22 @@ const Icon = ({ icon }) => {
 };
 
 
-const Card = (props) => {
+const CardItem = (props) => {
     return (
-        <Grid item xs={8} md={2} sm={3}>
-          <Box
-          padding={2}
+
+          <Card
           sx={{
             backgroundColor: "white",
             borderRadius: "20px",
             textAlign: "center", // Center the content
-            alignItems: "flex-start"
+            alignItems: "center",
+            padding: "20px",
+            margin: "10px"
           }}>
             
             <Stack
             direction="row"
-            justifyContent="flex-start"
+            justifyContent="center"
             alignItems="center"
             spacing={2}
             > 
@@ -54,10 +57,10 @@ const Card = (props) => {
             </Stack>
 
          
-          </Box>
-        </Grid>
+          </Card >
+
    
     )
 }
 
-export default Card
+export default CardItem
