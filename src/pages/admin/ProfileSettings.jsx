@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import './ProfileSettings.css'; // Link to your CSS file
 import { Change_password } from '../../Authentication/Validation'
 import { 
-  getUserDetails, imageUpload, updateDetails,
+  getUserDetails, 
+  imageUpload, 
+  updateDetails,
 } from '../../firebase/Firestore'
 import { statusLogin,changing_password } from '../../firebase/FirebaseConfig'
 import { Button,Stack,Avatar, Grid, Typography } from '@mui/material';
@@ -250,11 +252,11 @@ const Account = () => {
             justifyContent="center"
             alignItems="center">
 
-              <Typography variant='h5' color="black" fontWeight="bold" fontSize="1.3rem">
+              <Typography variant='h5' color="#0F2C3D" fontWeight="bold" fontSize="1.3rem">
                 {String(name.firstName + " " + name.lastName).toUpperCase()} 
               </Typography>
 
-              <Typography variant='h5' color="black" fontWeight="lighter" fontSize="0.9rem">{name.email}</Typography>
+              <Typography variant='h5' color="#0F2C3D" fontWeight="lighter" fontSize="0.9rem">{name.email}</Typography>
             </Stack>
 
 {/* ==================================== Update Password ==================================== */} 

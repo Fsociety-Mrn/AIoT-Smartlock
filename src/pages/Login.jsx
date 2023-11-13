@@ -338,8 +338,6 @@ const Desktop = () => {
     passwordError: ""
   })
 
-
-
   // Login Details
   const Email = (e) => {
     setUser({...user, email: e.target.value})

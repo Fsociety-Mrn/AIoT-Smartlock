@@ -158,7 +158,8 @@ const MobileAppbar = () => {
 
         {/* Swipeable Views */}
         <SwipeableViews 
-        axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+        // axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+        // axis='x'
         index={value} 
         onChangeIndex={handleChange}>
         
@@ -218,7 +219,7 @@ const DesktopAppbar = () => {
   const DrawerHeaderCustom = styled('div')(({ theme }) => ({
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
     padding: theme.spacing(0, 1),
     // necessary for content to be below app bar
     ...theme.mixins.toolbar,
@@ -266,13 +267,15 @@ const DesktopAppbar = () => {
 
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  const [title, setTitle] = React.useState("");
 
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
+  // const handleDrawerOpen = () => {
+  //   setOpen(true);
+  // };
     
   const handleDrawerClose = () => {
-    setOpen(false);
+    setOpen(!open);
+    !open ? setTitle("AIoT Smartlock") : setTitle("")
   };
 
   const [colorClick, setColorClick] = React.useState({
@@ -312,7 +315,7 @@ const DesktopAppbar = () => {
     <div>
 
       <AppBarCustom
-      position="fixed"
+      position="static"
       sx={{ 
         backgroundImage: 'linear-gradient(to right, rgb(61, 152, 154) ,rgb(12, 14, 36))',
         // zIndex: (theme) => theme.zIndex.drawer + 1 
@@ -320,7 +323,7 @@ const DesktopAppbar = () => {
       open={open}
       >
         <Toolbar variant="regular">
-                         
+{/*                          
           <IconButton edge="start" color="inherit"  aria-label="open drawer"
           onClick={handleDrawerOpen} 
           sx={{ 
@@ -335,15 +338,15 @@ const DesktopAppbar = () => {
             }}
             src={ICON}
             >S</Avatar>
-          </IconButton>
+          </IconButton> */}
                     
           <Typography variant="h6" color="inherit" component="div" sx={{ flexGrow: 1 }}>
-            AIoT Smartlock
+            {/* AIoT Smartlock */}
           </Typography>
 
 
           {/* account button */}
-          {/* <IconButton
+          <IconButton
           size="large"
           color="inherit"> 
             
@@ -352,11 +355,15 @@ const DesktopAppbar = () => {
             sx={{
               border: "2px solid rgb(61, 152, 154)"
             }}>A</Avatar>
-              </IconButton>  */}
+              </IconButton> 
         </Toolbar>
 
       </AppBarCustom>
 
+
+  
+     
+        
       <DrawerCustom
       variant="permanent"
       open={open}
@@ -367,11 +374,30 @@ const DesktopAppbar = () => {
 
         <DrawerHeaderCustom>
           <IconButton onClick={handleDrawerClose}>
+
+          <Avatar alt="Remy Sharp"
+            sx={{
+              border: "2px solid rgb(61, 152, 154)",
+              height: '40px', width: '40px'
+            }}
+            src={ICON}
+            >S</Avatar>
+          
+          </IconButton>
+
+          <Typography variant='h6' color="#0F2C3D">{title}</Typography>
+
+          
+          
+          {open && 
+          <IconButton onClick={handleDrawerClose}>
             {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
           </IconButton>
+          }
+
         </DrawerHeaderCustom>
             
-        <Divider />
+
         
         <List>
                     
@@ -382,7 +408,7 @@ const DesktopAppbar = () => {
             to="Dashboard"
             spy={true}
             smooth={true}
-            offset={0}
+            offset={-200}
             duration={500}
             style={{ textDecoration: 'none', color: 'inherit' }}
             >
@@ -615,6 +641,7 @@ const DesktopAppbar = () => {
 
         </List>
             
+
       </DrawerCustom>
 
 
