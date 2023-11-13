@@ -13,12 +13,12 @@ import "react-multi-carousel/lib/styles.css";
 
 import Table from '../../Components/Table';
 
-import { useTheme } from '@emotion/react';
 
 
 
 const Dashboard = () => {
   const [paddinSize, setPaddingSize] = React.useState()
+  const [value, setValue] = React.useState(0);
 
   React.useEffect(()=>{
     const setResponsiveness = () => {
@@ -53,17 +53,17 @@ const Dashboard = () => {
     },
   };
 
-  const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
  
 
-  const theme = useTheme();
 
   return (
-    <div style={{ minHeight: "100vh" }}>
+    <div 
+    style={{ minHeight: "100vh" }}
+    >
 
       <Grid
       container
@@ -74,9 +74,9 @@ const Dashboard = () => {
       spacing={2}
       padding={2}>
 
-        <Grid item xs={10}>
+        {/* <Grid item xs={10}>
           <Typography variant='h4'>Dashboard</Typography>
-        </Grid>
+        </Grid> */}
 
         {/* Status */}
         <Grid item xs={10}>
@@ -192,7 +192,7 @@ const Dashboard = () => {
 
 const columns = [
   // { field: 'id', headerName: 'ID', width: 70 },
-  { field: 'Name', headerName: 'Name', width: 160 },
+  { field: 'Name', headerName: 'Name', width: 230 },
   { field: 'Time', headerName: 'Time', width: 130 },
   { field: 'AccessType', headerName: 'Access Type', width: 160, sortable: false },
   { field: 'Percentage', headerName: 'Percentage', width: 130, sortable: false }

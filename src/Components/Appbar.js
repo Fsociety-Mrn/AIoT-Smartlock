@@ -158,7 +158,8 @@ const MobileAppbar = () => {
 
         {/* Swipeable Views */}
         <SwipeableViews 
-        axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+        // axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+        // axis='x'
         index={value} 
         onChangeIndex={handleChange}>
         
