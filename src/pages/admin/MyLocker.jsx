@@ -5,11 +5,13 @@ import {
   Button,
   Avatar,
   Stack,
-  Slider
+  Slider,
+  IconButton
 } from '@mui/material';
 import React from 'react';
 
-
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import LockOpenOutlinedIcon from '@mui/icons-material/LockOpenOutlined';
 
 const MyLocker = () => {
   const [paddinSize, setPaddingSize] = React.useState()
@@ -20,11 +22,17 @@ const MyLocker = () => {
     };
 
     setResponsiveness();
-        window.addEventListener("resize", () => setResponsiveness());
+    window.addEventListener("resize", () => setResponsiveness());
     return () => {
         window.removeEventListener("resize", () => setResponsiveness());
     };
   },[])
+
+    const [sliderValue, setSliderValue] = React.useState(false);
+
+  const handleClick = () => {
+    setSliderValue(!sliderValue)
+  };
 
   return (
     <div 
@@ -44,7 +52,7 @@ const MyLocker = () => {
           <Typography variant='h4' >My locker</Typography>
         </Grid> */}
 
-        <Grid item xs={12} md={3}>
+        <Grid item xs={12} md={4}>
           <Card
           sx={{
             backgroundColor: "white",
@@ -60,7 +68,7 @@ const MyLocker = () => {
             spacing={1}>
             
               <Avatar 
-              sx={{ width: '100px', height: '100px' }}
+              sx={{ width: '100px', height: '100px', border: '2px solid rgb(61, 152, 154)' }}
               >
                 A
               </Avatar>
@@ -75,12 +83,14 @@ const MyLocker = () => {
               </Stack>
 
               <Button> Change your Locker Number </Button>
+              <Button variant='contained' fullWidth>Generate face update OTP</Button>
+              <Button variant='contained' fullWidth >change locker pin</Button>
             </Stack>
 
           </Card>
         </Grid>
 
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={5}>
           <Card
           sx={{
             backgroundColor: "white",
@@ -90,17 +100,24 @@ const MyLocker = () => {
             padding: "40px",
             margin: "10px"
           }}>
-              <Stack
-              direction="column"
-              justifyContent="center"
-              alignItems="center"
-              spacing={2}>
+            <Stack
+            direction="column"
+            justifyContent="center"
+            alignItems="center"
+            spacing={1}>
 
-                <Slider defaultValue={0} aria-label="Default" valueLabelDisplay="auto" />
-                <Button variant='contained' fullWidth>Generate face update OTP</Button>
-                <Button variant='contained' fullWidth>change locker pin</Button>
-              </Stack>
+              <Typography variant='h5' color="#0F2C3D" fontWeight="bold" fontSize="1.3rem">
+                Your locker is { !sliderValue ? "close" : "open"}
+              </Typography>  
 
+              <IconButton size="large" onClick={handleClick} color='primary' >
+                {!sliderValue ? <LockOutlinedIcon fontSize='large'   style={{ fontSize: 100 }} /> 
+                : <LockOpenOutlinedIcon fontSize='large'   style={{ fontSize: 100 }} />}
+              </IconButton>
+
+              <Typography variant='h5' color="#0F2C3D" fontWeight="lighter" fontSize="0.9rem">click to open your locker</Typography>
+              
+            </Stack>
           </Card>
         </Grid>
 
