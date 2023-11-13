@@ -1,6 +1,8 @@
 import { 
-  Box,
-  Grid, Typography 
+  Grid, 
+  Typography,
+  Tab, 
+  Tabs
 } from '@mui/material'
 import CardItem from "../../Components/Card"
 import React from 'react'
@@ -9,92 +11,14 @@ import React from 'react'
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 
+import Table from '../../Components/Table';
 
-import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
-import DeleteIcon from '@mui/icons-material/Delete';
-import SecurityIcon from '@mui/icons-material/Security';
-import FileCopyIcon from '@mui/icons-material/FileCopy';
+import { useTheme } from '@emotion/react';
 
 
-
-const initialRows = [
-  {
-    id: 1,
-    name: 'Damien',
-    age: 25,
-
-    isAdmin: true,
-    country: 'Spain',
-    discount: '',
-  },
-  {
-    id: 2,
-    name: 'Nicolas',
-    age: 36,
-
-    isAdmin: false,
-    country: 'France',
-    discount: '',
-  },
-  {
-    id: 3,
-    name: 'Kate',
-    age: 19,
-
-    isAdmin: false,
-    country: 'Brazil',
-    discount: 'junior',
-  },
-  {
-    id: 3,
-    name: 'Kate',
-    age: 19,
-
-    isAdmin: false,
-    country: 'Brazil',
-    discount: 'junior',
-  },
-  {
-    id: 3,
-    name: 'Kate',
-    age: 19,
-
-    isAdmin: false,
-    country: 'Brazil',
-    discount: 'junior',
-  },
-  {
-    id: 3,
-    name: 'Kate',
-    age: 19,
-
-    isAdmin: false,
-    country: 'Brazil',
-    discount: 'junior',
-  },
-  {
-    id: 3,
-    name: 'Kate',
-    age: 19,
-
-    isAdmin: false,
-    country: 'Brazil',
-    discount: 'junior',
-  },
-  {
-    id: 3,
-    name: 'Kate',
-    age: 19,
-
-    isAdmin: false,
-    country: 'Brazil',
-    discount: 'junior',
-  },
-];
 
 const Dashboard = () => {
   const [paddinSize, setPaddingSize] = React.useState()
-
 
   React.useEffect(()=>{
     const setResponsiveness = () => {
@@ -129,111 +53,17 @@ const Dashboard = () => {
     },
   };
 
+  const [value, setValue] = React.useState(0);
 
-  const [rows, setRows] = React.useState(initialRows);
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+ 
 
-  const deleteUser = React.useCallback(
-    (id) => () => {
-      setTimeout(() => {
-        setRows((prevRows) => prevRows.filter((row) => row.id !== id));
-      });
-    },
-    [],
-  );
-
-  const toggleAdmin = React.useCallback(
-    (id) => () => {
-      setRows((prevRows) =>
-        prevRows.map((row) =>
-          row.id === id ? { ...row, isAdmin: !row.isAdmin } : row,
-        ),
-      );
-    },
-    [],
-  );
-
-  const duplicateUser = React.useCallback(
-    (id) => () => {
-      setRows((prevRows) => {
-        const rowToDuplicate = prevRows.find((row) => row.id === id);
-        return [...prevRows, { ...rowToDuplicate, id: Date.now() }];
-      });
-    },
-    [],
-  );
-
-  const columns = React.useMemo(
-    () => [
-      { field: 'name', type: 'string' },
-      { field: 'age', type: 'number' },
-      { field: 'dateCreated', type: 'date', width: 130 },
-      { field: 'lastLogin', type: 'dateTime', width: 180 },
-      { field: 'isAdmin', type: 'boolean', width: 120 },
-      {
-        field: 'country',
-        type: 'singleSelect',
-        width: 120,
-        valueOptions: [
-          'Bulgaria',
-          'Netherlands',
-          'France',
-          'United Kingdom',
-          'Spain',
-          'Brazil',
-        ],
-      },
-      {
-        field: 'discount',
-        type: 'singleSelect',
-        width: 120,
-        editable: true,
-        valueOptions: ({ row }) => {
-          if (row === undefined) {
-            return ['EU-resident', 'junior'];
-          }
-          const options = [];
-          if (!['United Kingdom', 'Brazil'].includes(row.country)) {
-            options.push('EU-resident');
-          }
-          if (row.age < 27) {
-            options.push('junior');
-          }
-          return options;
-        },
-      },
-      {
-        field: 'actions',
-        type: 'actions',
-        width: 80,
-        getActions: (params) => [
-          <GridActionsCellItem
-            icon={<DeleteIcon />}
-            label="Delete"
-            onClick={deleteUser(params.id)}
-          />,
-          <GridActionsCellItem
-            icon={<SecurityIcon />}
-            label="Toggle Admin"
-            onClick={toggleAdmin(params.id)}
-            showInMenu
-          />,
-          <GridActionsCellItem
-            icon={<FileCopyIcon />}
-            label="Duplicate User"
-            onClick={duplicateUser(params.id)}
-            showInMenu
-          />,
-        ],
-      },
-    ],
-    [deleteUser, toggleAdmin, duplicateUser],
-  );
-
+  const theme = useTheme();
 
   return (
-    <div style={{
-      minHeight: "100vh"
-    }}>
+    <div style={{ minHeight: "100vh" }}>
 
       <Grid
       container
@@ -245,7 +75,7 @@ const Dashboard = () => {
       padding={2}>
 
         <Grid item xs={10}>
-          <Typography variant='h5'> Welcome to Dashboard</Typography>
+          <Typography variant='h4'>Dashboard</Typography>
         </Grid>
 
         {/* Status */}
@@ -255,9 +85,9 @@ const Dashboard = () => {
           draggable={false}
           showDots={window.innerWidth < 800 ? true : false}
           removeArrowOnDeviceType={["desktop", "superLargeDesktop"]}
-          transitionDuration={500}
+          transitionDuration={1000}
           autoPlay={window.innerWidth < 800 ? true : false}
-          autoPlaySpeed={1000}
+          autoPlaySpeed={500}
           keyBoardControl={true}
           ssr={true} // means to render carousel on server-side.
           infinite={window.innerWidth < 800 ? true : false}
@@ -291,15 +121,68 @@ const Dashboard = () => {
           </Carousel>
         </Grid>
 
+        {/* Tabs Header */}
         <Grid item xs={10}>
-          <Typography variant='h4'>History</Typography>
+          <Tabs value={value} onChange={handleChange}    
+          variant="scrollable"
+          scrollButtons
+          allowScrollButtonsMobile
+          >
+            <Tab label="Today Access" />
+            <Tab label="Facial Login" />
+            <Tab label="PIN Login" />
+            <Tab label="IoT Login" />
+            <Tab label="Access Denied" />
+          </Tabs>
         </Grid>
 
-        <Grid item xs={10} >
-          <Box style={{ height: 400, width: '100%', backgroundColor: "white", padding: "15px", borderRadius: "20px"}}>
-            <DataGrid columns={columns} rows={rows} sx={{ borderRadius: "20px", padding: "15px", }} />
-         </Box>
+        {/* Tabs List */}
+        <Grid item xs={12} md={10} sm={12}>
+
+          {/* Today Access */}
+          <Table 
+          value={value}
+          set={0}
+          rows={rows}
+          columns={columns}
+          />
+
+          {/* Facial Login */}
+          <Table 
+          value={value}
+          set={1}
+          rows={rows}
+          columns={FacialLogin}
+          />
+
+          
+          {/* PIN Login */}
+          <Table 
+          value={value}
+          set={2}
+          rows={rows}
+          columns={PinLogin}
+          />
+
+          {/* IoT Login */}
+          <Table 
+          value={value}
+          set={3}
+          rows={rows}
+          columns={IoTLogin}
+          />
+
+          {/* Access Denied */}
+          <Table 
+          value={value}
+          set={4}
+          rows={rows}
+          columns={AccessDenied}
+          />
+
         </Grid>
+
+
 
 
       </Grid>
@@ -307,5 +190,79 @@ const Dashboard = () => {
   )
 }
 
+const columns = [
+  // { field: 'id', headerName: 'ID', width: 70 },
+  { field: 'Name', headerName: 'Name', width: 160 },
+  { field: 'Time', headerName: 'Time', width: 130 },
+  { field: 'AccessType', headerName: 'Access Type', width: 160, sortable: false },
+  { field: 'Percentage', headerName: 'Percentage', width: 130, sortable: false }
+];
+
+const rows = [
+  { 
+    id: 1,
+    Name: 'ART LISBOA', 
+    Time: '9:30 am', 
+    AccessType: "IoT Login",
+    Percentage: "90%"
+  },
+  { 
+    id: 6,
+    Name: 'FRANZ MANECLANG', 
+    Time: '9:30 am', 
+    AccessType: "IoT Login",
+    Percentage: "90%"
+  },
+  { 
+    id: 2,
+    Name: 'REY CUMPA', 
+    Time: '9:30 am', 
+    AccessType: "IoT Login",
+    Percentage: "90%"
+  },
+  { 
+    id: 3,
+    Name: 'ROGER GAJUNERA', 
+    Time: '9:30 am', 
+    AccessType: "IoT Login",
+    Percentage: "90%"
+  },
+  { 
+    id: 4,
+    Name: 'IVAN FAMILARAN', 
+    Time: '9:30 am', 
+    AccessType: "IoT Login",
+    Percentage: "90%"
+  },
+  { 
+    id: 5,
+    Name: 'KEYT LISBOA', 
+    Time: '9:30 am', 
+    AccessType: "Face Login",
+    Percentage: "90%"
+  },
+
+];
+
+const FacialLogin = [
+  { field: 'Name', headerName: 'Name', width: 160 },
+  { field: 'Time', headerName: 'Time', width: 130 },
+  { field: 'Percentage', headerName: 'Percentage', width: 130, sortable: false }
+]
+
+const PinLogin = [
+  { field: 'Name', headerName: 'Name', width: 160 },
+  { field: 'Time', headerName: 'Time', width: 130 },
+]
+const IoTLogin = [
+  { field: 'Name', headerName: 'Name', width: 160 },
+  { field: 'Time', headerName: 'Time', width: 130 },
+]
+
+const AccessDenied = [
+  { field: 'Time', headerName: 'Time', width: 130 },
+  { field: 'AccessType', headerName: 'Access Type', width: 160, sortable: false },
+  { field: 'Percentage', headerName: 'Percentage', width: 130, sortable: false }
+]
 
 export default Dashboard
