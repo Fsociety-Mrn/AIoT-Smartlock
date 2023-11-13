@@ -1,6 +1,5 @@
 import { 
   Grid, 
-  Typography,
   Tab, 
   Tabs
 } from '@mui/material'

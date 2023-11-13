@@ -5,7 +5,6 @@ import {
   Button,
   Avatar,
   Stack,
-  Slider,
   IconButton
 } from '@mui/material';
 import React from 'react';
@@ -36,7 +35,7 @@ const MyLocker = () => {
 
   return (
     <div 
-    style={{  minHeight: "100vh" }} 
+    style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: "100vh" }} 
     >
 
       <Grid

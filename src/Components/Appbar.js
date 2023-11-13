@@ -81,7 +81,7 @@ export const Appbar = () => {
 const MobileAppbar = () => {
 
     const [value, setValue] = React.useState(0);
-    const theme = useTheme();
+
 
     const handleChange = (newValue) => {
       setValue(newValue);
