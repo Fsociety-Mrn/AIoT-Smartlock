@@ -23,6 +23,7 @@ def openLocker():
     for key,value in data.items():
         # print("KEY",key)
         # OpenLockers(key=int(value['Locker Number']), value=value['Locker Status'])
+
         threading.Thread(target=OpenLockers, args=(key, int(value['Locker Number']),value['Locker Status'],)).start()
         
 def OpenLockers(name,key,value):

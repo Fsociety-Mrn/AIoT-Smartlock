@@ -71,7 +71,7 @@ class FacialLogin(QtWidgets.QFrame):
         self.B = 0
 
         # EAR of eye
-        self.blink_threshold = 0.35
+        self.blink_threshold = 0.3
         self.blink_counter = 0
         self.blink = True
         self.last_dilation_time  = 0
@@ -261,8 +261,6 @@ class FacialLogin(QtWidgets.QFrame):
         # Save the new image using cv2.imwrite()
         cv2.imwrite(new_image_path, new_image)
         
-        # clear the matches
-        self.matchs = ""
 
     #  for facial recognition
     def FacialRecognition(self, frame):
@@ -319,10 +317,6 @@ class FacialLogin(QtWidgets.QFrame):
             
             self.status.setText("Good day! " + str(result[0]))
             
-            # update history firebase
-            words = str(result[0]).split(' ')
-            # rearranged_string = f"{words[1]},{words[0]}"
-            
             results = firebaseHistory(name=result[0],
                             percentage=result[1],
                             access_type="Facial Login",
@@ -339,7 +333,8 @@ class FacialLogin(QtWidgets.QFrame):
             delete_table("Fail History")
             
             self.LockerNumber = checkLocker(str(result[0]))
-            print(self.LockerNumber)
+
+            self.status.setText("Please align your face to the camera")
             
             # OpenLockers(name=result[0],key=self.LockerNumber,value=True)
             
@@ -393,8 +388,6 @@ class FacialLogin(QtWidgets.QFrame):
     # for video streaming
     def videoStreaming(self):
         ret, frame = self.videoStream.read()
-        
-        frames = frame
         
         # if no detected frames
         if not ret:
@@ -453,10 +446,9 @@ class FacialLogin(QtWidgets.QFrame):
                 
                 # if authenticated
                 if self.validation == "Authenticated":
-                    if not Face_blurreness < 300:
+                    if not Face_blurreness < 400:
                         self.LastIn_FirstOut(name=str(self.matchs),new_image=framesS)
-                        time.sleep(3)
-                        OpenLockers(name=str(self.matchs),key=self.LockerNumber,value=False)
+                        OpenLockers(name=str(self.matchs),key=self.LockerNumber,value=True)
                         self.LockerNumber = 0
                         self.backTomain()
              
@@ -497,7 +489,8 @@ class FacialLogin(QtWidgets.QFrame):
                 self.curveBox(frame=frame,p1=(x,y),p2=(x+w,y+h))
             self.status.setText("more than 1 faces is detected")
         else:
-            self.status.setText("No face is detected")
+            self.status.setText("Align your face to unlock the Locker" if self.validation == "Authenticated" else "No face is detected")
+
 
         # display the frame on the label
         height, width, channel = frame.shape
