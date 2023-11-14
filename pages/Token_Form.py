@@ -877,7 +877,7 @@ class TokenForm(QtWidgets.QFrame):
         self.setWindowTitle(_translate("Tokenfield", "Frame"))
         self.TokenID.setPlaceholderText(_translate("Tokenfield", "eg: XXXXX"))
         self.greetings.setText(_translate("Tokenfield", "Hello Friend,\n"
-"Please enter your Token code below"))       
+                "Please enter your Token code below"))       
         # self.Continue.setText(_translate("Tokenfield", "Continue"))
         # self.Continue.clicked.connect(self.continueTo)
         

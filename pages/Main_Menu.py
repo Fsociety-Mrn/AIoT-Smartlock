@@ -447,7 +447,7 @@ class MainWindow(QtWidgets.QFrame):
     # ********************** check time ********************** #
     def update_time(self):
         
-        print("Running")
+        print("Update Time")
         current_date = QtCore.QDate.currentDate().toString("ddd, MMM d yyyy")
         
         current_time = QtCore.QTime.currentTime().toString("h:mm AP")
@@ -480,12 +480,14 @@ class MainWindow(QtWidgets.QFrame):
     # check internet
     def check_internet_connection(self):
         try:
+            
+            self.facialRegister.setEnabled(True)
+            self.facialRegister.setText("Facial Register")
 
             # Attempt to create a socket connection to a known server (e.g., Google DNS)
             socket.create_connection(("8.8.8.8", 53))
             self.label.setText("<html><head/><body><p>AIoT Smartlock is <Strong>online<strong/></p></body></html>")
             updateToDatabase()
-            
             openLocker()
         except OSError:
             

@@ -19,12 +19,16 @@ import threading
 # GPIO.setup(18,GPIO.OUT)
 
 def openLocker():
-    data = firebaseRead("LOCK")
-    for key,value in data.items():
+    try:
+        data = firebaseRead("LOCK")
+        for key,value in data.items():
         # print("KEY",key)
         # OpenLockers(key=int(value['Locker Number']), value=value['Locker Status'])
-
-        threading.Thread(target=OpenLockers, args=(key, int(value['Locker Number']),value['Locker Status'],)).start()
+            if key: 
+                threading.Thread(target=OpenLockers, args=(key, int(value['Locker Number']),value['Locker Status'],)).start()
+    except:
+        print("Error Open Locker")
+        
         
 def OpenLockers(name,key,value):
 

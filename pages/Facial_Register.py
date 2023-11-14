@@ -248,13 +248,8 @@ class facialRegister(QtWidgets.QFrame):
                                                     minSize=(100, 100),
                                                     flags=cv2.CASCADE_SCALE_IMAGE)
         
-        
-        # laplacian_var = cv2.Laplacian(gray, cv2.CV_64F).var()
-        # print("bluredness level ", laplacian_var)
-
         current_time = time.time()
-        # check if the frame is dark
-        mean_value = cv2.mean(gray)[0]
+
         
         if current_time - self.start_start <= 11:
             
@@ -264,20 +259,6 @@ class facialRegister(QtWidgets.QFrame):
                 x, y, w, h = faces[0]
                 cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
                 
-                # Calculate the Laplacian
-                laplacian = cv2.Laplacian(gray, cv2.CV_64F)
-    
-                # Calculate the variance of the Laplacian
-                variance = laplacian.var()
-            
-                Face_percentage = float("{:.2f}".format(100 * (w * h) / (frame.shape[0] * frame.shape[1])))
-                Face_blurreness = float("{:.2f}".format(variance))
-            
-
-                cv2.putText(frame, "Face percentage: " + str(Face_percentage) + "%", (50, 450), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,255,255), 1)
-                # cv2.putText(frame, "Face percentage: " + str("{:.2f}".format(40 + Face_percentage)) + "%", (90, 400), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (self.B, self.G, self.R), 1)
-                cv2.putText(frame, "Face Blurreness:" + str(Face_blurreness), (30, 400), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,255,255), 1)
-            
                 
             height, width, channel = frame.shape
             bytesPerLine = channel * width
@@ -285,34 +266,6 @@ class facialRegister(QtWidgets.QFrame):
             pixmap = QtGui.QPixmap.fromImage(qImg)
             self.video.setPixmap(pixmap)
             return
-        
-        # self.start_start = current_time
-            
-        
-        # print("brightness value ", mean_value)
-        
-        # if mean_value < 35:
-                
-        #     self.status.setText("It is too dark.")
-                    
-        #     height, width, channel = frame.shape
-        #     bytesPerLine = channel * width
-        #     qImg = QtGui.QImage(frame.data, width, height, bytesPerLine, QtGui.QImage.Format_BGR888)
-        #     pixmap = QtGui.QPixmap.fromImage(qImg)
-        #     self.video.setPixmap(pixmap)
-        #     return
-        
-        # # check if the frame is Bright
-        # if mean_value > 100:
-        #     self.status.setText("It is too bright.")
-                
-        #     height, width, channel = frame.shape
-        #     bytesPerLine = channel * width
-        #     qImg = QtGui.QImage(frame.data, width, height, bytesPerLine, QtGui.QImage.Format_BGR888)
-        #     pixmap = QtGui.QPixmap.fromImage(qImg)
-        #     self.video.setPixmap(pixmap)
-        #     return
-        
 
         if len(faces) == 1:
             
@@ -324,7 +277,7 @@ class facialRegister(QtWidgets.QFrame):
             faceCrop = notFlip[y:y+h, x:x+w]
             face_gray = cv2.cvtColor(faceCrop, cv2.COLOR_BGR2GRAY)
             
-                    # Calculate the Laplacian
+            # Calculate the Laplacian
             laplacian = cv2.Laplacian(face_gray, cv2.CV_64F)
     
             # Calculate the variance of the Laplacian
@@ -334,11 +287,9 @@ class facialRegister(QtWidgets.QFrame):
             Face_blurreness = float("{:.2f}".format(variance))
             
 
-            cv2.putText(frame, "Face percentage: " + str(Face_percentage) + "%", (30, 420), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 255), 1)
+            cv2.putText(frame, "Face percentage: " + str(Face_percentage) + "%", (30, 420), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,255,255), 1)
             # cv2.putText(frame, "Face percentage: " + str("{:.2f}".format(40 + Face_percentage)) + "%", (90, 400), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (self.B, self.G, self.R), 1)
-            cv2.putText(frame, "Face Blurreness:" + str(Face_blurreness), (30, 400), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 255), 1)
-            
-
+            cv2.putText(frame, "Face Blurreness:" + str(Face_blurreness), (30, 400), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,255,255), 1)
             
             statusCap = self.captureSave(current_time=current_time, frame=notFlip,cropFrame=face_gray)
             
