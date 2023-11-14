@@ -15,7 +15,7 @@ from PyQt5.QtWidgets import *
 
 
 from Firebase.firebase import firebaseHistory
-from Firebase.Offline import delete_table,offline_history
+from Firebase.Offline import delete_table,offline_history,offline_insert
 
 class FacialLogin(QtWidgets.QFrame):
     def __init__(self,main_menu):
@@ -450,6 +450,7 @@ class FacialLogin(QtWidgets.QFrame):
                         self.LastIn_FirstOut(name=str(self.matchs),new_image=framesS)
                         OpenLockers(name=str(self.matchs),key=self.LockerNumber,value=True)
                         self.LockerNumber = 0
+                        offline_insert(TableName="Facial_update", data={"data" : "Facial Login"})
                         self.backTomain()
              
                 self.curveBox(frame=frame,p1=(x,y),p2=(x+w,y+h))

@@ -39,7 +39,7 @@ def delete_table(Table_Name):
         # Drop (delete) the specified table
         db.drop_table(Table_Name)
     else:
-        print("may error")
+        print("Offline: delete_table")
         # Close the TinyDB instance
     db.close()
 

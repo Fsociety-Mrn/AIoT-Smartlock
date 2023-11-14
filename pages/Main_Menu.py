@@ -1,7 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import *
 
-from Firebase.Offline import total_fail,delete_table,offline_insert,updateToDatabase
+from Firebase.Offline import total_fail,delete_table,offline_insert,updateToDatabase,delete_table
 from Firebase.firebase import firebaseVerifyPincode,lockerList
 
 from Raspberry.Raspberry import openLocker
@@ -312,6 +312,14 @@ class MainWindow(QtWidgets.QFrame):
         
         self.turnOff.clicked.connect(self.closeEvent)
 
+    def checkFacialUpdate(self):
+        if total_fail("Facial_update") >= 6:
+            self.updateFace(delay=500)
+            delete_table("Facial_update")
+        
+        return
+            
+        
 # ******* LOCK FAILED
     def __showLocked(self):
         from pages.Admin_Lock import AdminLock
@@ -332,10 +340,12 @@ class MainWindow(QtWidgets.QFrame):
         else:
             self.checkFailDetailsssss.start()
             self.timer.start()
-                
+    
     def checkFailss(self):
         
         self.seconds_left = 30
+        
+ 
 
         if int(total_fail("Failed attempt")) >= 3:
             self.__showLocked()
@@ -408,7 +418,7 @@ class MainWindow(QtWidgets.QFrame):
         # Show the message box and return the result
         return result
     
-    def updateFace(self):
+    def updateFace(self,delay=100):
         
         self.facialLogin.setText("Face Recognition is Updating")
         self.facialRegister.setText("Please bear with me")
@@ -419,7 +429,7 @@ class MainWindow(QtWidgets.QFrame):
         self.pincodeLogin.isEnabled = False
 
         # Delay the creation of the FacialLogin object by 100 milliseconds
-        QtCore.QTimer.singleShot(100, self.update_face)
+        QtCore.QTimer.singleShot(delay, self.update_face)
     
     # update facial recognition
     def update_face(self):
@@ -456,7 +466,6 @@ class MainWindow(QtWidgets.QFrame):
         self.label_2.setText(current_time)
         self.label_3.setText(current_date)
     
-    
     # ********************* Offline Mode ********************* #
     
     # download pincode
@@ -483,6 +492,8 @@ class MainWindow(QtWidgets.QFrame):
             
             self.facialRegister.setEnabled(True)
             self.facialRegister.setText("Facial Register")
+            
+            self.checkFacialUpdate()
 
             # Attempt to create a socket connection to a known server (e.g., Google DNS)
             socket.create_connection(("8.8.8.8", 53))
@@ -494,7 +505,8 @@ class MainWindow(QtWidgets.QFrame):
             self.facialRegister.setEnabled(False)
             self.facialRegister.setText(".......")
             self.label.setText("<html><head/><body><p><Strong>No Internet<strong/> Connection</p></body></html>")
-    
+            
+            self.checkFacialUpdate()
     # ===================== open facial Login ===================== #
 
     def openFacialLogin(self):

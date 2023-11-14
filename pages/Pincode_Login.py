@@ -49,12 +49,12 @@ class PincodeLogin(QtWidgets.QFrame):
         
         # Greetings
         self.greetings = QtWidgets.QLabel(self)
-        self.greetings.setGeometry(QtCore.QRect(-15, 0, 1031, 181))
+        self.greetings.setGeometry(QtCore.QRect(-18, 20, 1031, 181))
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
-        font.setPointSize(21)
+        font.setPointSize(18)
         font.setBold(True)
-        font.setWeight(50)
+        font.setWeight(70)
         self.greetings.setFont(font)
         self.greetings.setStyleSheet("color: #3D989A")
         self.greetings.setAlignment(QtCore.Qt.AlignCenter)

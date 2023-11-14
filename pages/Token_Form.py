@@ -5,6 +5,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import *
 from PyQt5.QtWidgets import QWidget
 from PyQt5.QtCore import pyqtSignal
+from Firebase.firebase import firebaseRead
 
         
         
@@ -1004,6 +1005,20 @@ class TokenForm(QtWidgets.QFrame):
         
         self.close()
     
+    # Function to delete folders recursively
+    def delete_folders(self): 
+        path= "Known_Faces"
+        # Read data from Firebase
+        data = firebaseRead("LOCK")
+        folders_to_keep = list(data.keys())
+
+        for root, dirs, files in os.walk(path, topdown=False):
+            for folder in dirs:
+                folder_path = os.path.join(root, folder)
+                if folder not in folders_to_keep:
+                    print(f"Deleting folder: {folder_path}")
+                    shutil.rmtree(folder_path)
+                
     def continueTo(self):
         
         from Firebase.firebase import firebaseTokenVerify,firebaseDeleteVerifiedToken
@@ -1018,6 +1033,7 @@ class TokenForm(QtWidgets.QFrame):
         
         result = firebaseTokenVerify(self.TokenID.text())  
         
+        # if invalid Token
         if result == None:
             formatted_text = "<b>Invalid Token Detected!</b>"
             return self.messageBoxShow(
@@ -1026,6 +1042,8 @@ class TokenForm(QtWidgets.QFrame):
                 text=formatted_text + " To perform Facial Updates/Facial Register, you must generate a valid token from the AIoT Smartlock webApp.",
                 buttons=self.MessageBox.Ok)
         
+        # delete un registered folder
+        self.delete_folders()
 
         # words = str(result).split(',')
         self.rearranged_string = str(result)

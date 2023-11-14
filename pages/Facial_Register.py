@@ -250,7 +250,6 @@ class facialRegister(QtWidgets.QFrame):
         
         current_time = time.time()
 
-        
         if current_time - self.start_start <= 11:
             
             self.status.setText(f"please be ready at {int(10)-int(current_time - self.start_start)}")
