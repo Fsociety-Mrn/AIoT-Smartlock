@@ -463,6 +463,8 @@ class MainWindow(QtWidgets.QFrame):
         current_time = QtCore.QTime.currentTime().toString("h:mm AP")
         
         self.check_internet_connection()
+        
+
         self.label_2.setText(current_time)
         self.label_3.setText(current_date)
     
@@ -490,8 +492,9 @@ class MainWindow(QtWidgets.QFrame):
     def check_internet_connection(self):
         try:
             
-            self.facialRegister.setEnabled(True)
-            self.facialRegister.setText("Facial Register")
+            if self.Fail:
+                self.facialRegister.setEnabled(True)
+                self.facialRegister.setText("Facial Register")
             
             self.checkFacialUpdate()
 

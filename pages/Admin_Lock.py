@@ -1,4 +1,4 @@
-from Firebase.firebase import firebaseCheckLock,firebaseTokenLOCK,firebaseSetLock,firebaseDeleteToken
+from Firebase.firebase import firebaseCheckLock,firebaseTokenLOCK,firebaseDeleteToken
 from PyQt5.QtWidgets import *
 from PyQt5 import QtCore, QtGui, QtWidgets
 
@@ -41,6 +41,7 @@ class AdminLock(QtWidgets.QFrame):
         # warning
         self.warning = QtWidgets.QLabel(self)
         self.warning.setGeometry(QtCore.QRect(0, 50, 1021, 41))
+
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(22)
@@ -50,6 +51,7 @@ class AdminLock(QtWidgets.QFrame):
         self.warning.setStyleSheet("color: #3D989A")
         self.warning.setAlignment(QtCore.Qt.AlignCenter)
         self.warning.setObjectName("greetings")
+        
         
         # Token ID
         self.TokenID = QtWidgets.QLineEdit(self)
@@ -977,6 +979,7 @@ class AdminLock(QtWidgets.QFrame):
         else:
             self.TokenID.setText("")
             self.warning.setText("Invalid OTP Code")
+            self.warning.setStyleSheet("color: red")
                 
         
     def backspace(self):

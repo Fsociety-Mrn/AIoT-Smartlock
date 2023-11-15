@@ -234,6 +234,9 @@ class FacialLogin(QtWidgets.QFrame):
     # LIFO
     def LastIn_FirstOut(self,name, new_image):
         
+        if name == "":
+            return
+        
         directory = f"Known_Faces/{name}"
         # Get the list of files in the directory
         files = os.listdir(directory)
@@ -447,6 +450,7 @@ class FacialLogin(QtWidgets.QFrame):
                 # if authenticated
                 if self.validation == "Authenticated":
                     if not Face_blurreness < 400:
+                        
                         self.LastIn_FirstOut(name=str(self.matchs),new_image=framesS)
                         OpenLockers(name=str(self.matchs),key=self.LockerNumber,value=True)
                         self.LockerNumber = 0
