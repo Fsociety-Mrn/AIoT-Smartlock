@@ -310,7 +310,7 @@ const UserDashboard = (props) => {
           <Col md={10} sm={12}>
             <div className="d-flex flex-column justify-content-center align-items-center my-2 px-4" >
               
-              <p class="lead blockquote text-nowrap">your Locker Number <strong>{lockerNumber}</strong> </p>
+              <p class="lead blockquote text-nowrap">your Locker Number: <strong>{lockerNumber}</strong> </p>
               {!isLock && <h1 className="text-nowrap">{status}</h1>}
 
               <input 
