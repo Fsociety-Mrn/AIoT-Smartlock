@@ -1,7 +1,10 @@
 import { 
+  Alert,
   Grid, 
+  Button, 
   Tab, 
-  Tabs
+  Tabs,
+  Typography
 } from '@mui/material'
 import CardItem from "../../Components/Card"
 import React from 'react'
@@ -11,6 +14,7 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 
 import Table from '../../Components/Table';
+
 
 
 
@@ -64,6 +68,8 @@ const Dashboard = () => {
     style={{ minHeight: "100vh" }}
     >
 
+
+
       <Grid
       container
       direction="row"
@@ -73,9 +79,16 @@ const Dashboard = () => {
       spacing={2}
       padding={2}>
 
-        {/* <Grid item xs={10}>
-          <Typography variant='h4'>Dashboard</Typography>
-        </Grid> */}
+
+        <Grid item xs={12} md={10} sm={12}>
+          <Alert variant="filled" severity="error" sx={{ width: '100%' }} action={(    
+            <Button color="inherit"  variant="filled" size="small" fullWidth>
+            Unlock
+            </Button>)}>
+              <Typography noWrap color="white">AIoT Smartlock is Lock!</Typography>
+            
+          </Alert>
+        </Grid>
 
         {/* Status */}
         <Grid item xs={10}>
@@ -121,7 +134,7 @@ const Dashboard = () => {
         </Grid>
 
         {/* Tabs Header */}
-        <Grid item xs={10}>
+        <Grid item xs={12} md={10} sm={12}>
           <Tabs value={value} onChange={handleChange}    
           variant="scrollable"
           scrollButtons
