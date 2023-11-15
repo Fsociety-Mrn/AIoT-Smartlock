@@ -218,7 +218,7 @@ export const verifyToken = (TOKENs) => {
         onlyOnce: true // Optional: Ma-trigger lamang ng isang beses
       });
     });
-  };
+};
 
   // remove token Key
 export const removeKey = (key) => {
@@ -236,11 +236,10 @@ export const removeKey = (key) => {
           });
     })
 
-  };
+    };
     
 
 // **************** UPDATE NAME **************** //
-
 export const getData = async (Key, FullName) => {
     return new Promise((resolve, reject) => {
         try {
@@ -259,7 +258,7 @@ export const getData = async (Key, FullName) => {
         }
 
     })
-}
+    }
 
 export const updateData = async (Key, OldName, FullName) => {
    
@@ -283,4 +282,5 @@ export const updateData = async (Key, OldName, FullName) => {
 
 
     });
-}
+    }
+

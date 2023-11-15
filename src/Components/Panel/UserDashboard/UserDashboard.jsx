@@ -12,7 +12,8 @@ import {
   removeToken,
   checkPin,
   createPIN,
-  verifyPIN
+  verifyPIN,
+  getData
 } from "../../../utils/Firebase/Database/Database";
 
 // Firebase.Firestore
@@ -62,6 +63,7 @@ const UserDashboard = (props) => {
   const [isDisable,setIsdisable] = useState(false)
   const [Timer,setTimer] = useState()
   const [tokenStatus, setTokenStatus] = useState("")
+  const [isLock, setIslock] = useState(false)
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const OpenLocker = async (FullName) => {
@@ -81,6 +83,8 @@ const UserDashboard = (props) => {
 
 
     const FullName = String(props.firstName + " " + props.lastName).toUpperCase()
+
+    getData("AIoT Lock", "isLock").then(data=>setIslock(data))
   
 
     // *************** for Change PIN *************** // 
@@ -139,7 +143,7 @@ const UserDashboard = (props) => {
 
     };
 
-  }, [count, Timer, props.firstName, props.lastName, props.UID, OpenLocker]);
+  }, [count, Timer, props.firstName, props.lastName, props.UID, OpenLocker,isLock]);
 
   // Function to handle opening the modal
   const handleShowModal = () => {
@@ -179,7 +183,7 @@ const UserDashboard = (props) => {
           pin2: false,
           pin2Error: ""
         })
-
+        alert("PIN Successfully Created! ✔️")
         handleCloseModalCreate()
 
       })
@@ -292,8 +296,8 @@ const UserDashboard = (props) => {
   return (
     <>
       <Titles
-      title="Welcome to the Dashboard! 🎉"
-      text="Explore insights, take control, and make informed decisions with ease."
+      title={isLock ? "AIoT Smartlock is Lock!  🔒 ":"Welcome to the Dashboard! 🎉"}
+      text={isLock ? "Contact the administrator to unlock.":"Explore insights, take control, and make informed decisions with ease."}
        
       className="text-center text-nowrap"
       />
@@ -307,7 +311,7 @@ const UserDashboard = (props) => {
             <div className="d-flex flex-column justify-content-center align-items-center my-2 px-4" >
               
               <p class="lead blockquote text-nowrap">your Locker Number <strong>{lockerNumber}</strong> </p>
-              <h1 className="text-nowrap">{status}</h1>
+              {!isLock && <h1 className="text-nowrap">{status}</h1>}
 
               <input 
               type="range" 
@@ -316,7 +320,7 @@ const UserDashboard = (props) => {
               max="100"
               value={sliderValue}
               onChange={handleSliderChange}
-              disabled={isUnlocking}
+              disabled={isLock ? isLock : isUnlocking}
               />
 
             </div>
@@ -345,6 +349,7 @@ const UserDashboard = (props) => {
                 background: 'rgb(61, 152, 154)',
                 color: 'white' // Set the text color
               }}
+              disabled={isLock}
               >
                 generate face update OTP
               </Button>
@@ -359,6 +364,7 @@ const UserDashboard = (props) => {
                 color: 'white' // Set the text color
               }}
               onClick={handleShowModal} // Show modal on button click
+              disabled={isLock}
               >
                  change locker pin
               </Button>}
@@ -377,6 +383,7 @@ const UserDashboard = (props) => {
                 color: 'white' // Set the text color
               }}
               onClick={handleShowModalCreate} // Show modal on button click
+              disabled={isLock}
               >
                 create pin
               </Button>}
