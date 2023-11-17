@@ -6,22 +6,20 @@ import {
   Tabs,
   Typography
 } from '@mui/material'
+import ModalAlert from '../../Components/ModalAlert';
+
 import CardItem from "../../Components/Card"
 import React from 'react'
-
 
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 
 import Table from '../../Components/Table';
 
-
-
-
-
 const Dashboard = () => {
   const [paddinSize, setPaddingSize] = React.useState()
   const [value, setValue] = React.useState(0);
+  const [open, setOpen] = React.useState(false);
 
   React.useEffect(()=>{
     const setResponsiveness = () => {
@@ -56,19 +54,15 @@ const Dashboard = () => {
     },
   };
 
-
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
- 
-
 
   return (
     <div 
-    style={{ minHeight: "100vh" }}
-    >
+    style={{ minHeight: "100vh" }} >
 
-
+      <ModalAlert setOpen={setOpen} open={open}/>
 
       <Grid
       container
@@ -79,13 +73,15 @@ const Dashboard = () => {
       spacing={2}
       padding={2}>
 
-
+        {/* Alert for unlock */}
         <Grid item xs={12} md={10} sm={12}>
-          <Alert variant="filled" severity="error" sx={{ width: '100%' }} action={(    
-            <Button color="inherit"  variant="filled" size="small" fullWidth>
+          <Alert variant="filled" severity="error" sx={{ width: '100%' }} 
+          action={(    
+            <Button color="inherit"  variant="filled" size="small" fullWidth onClick={()=>setOpen(true)}>
             Unlock
             </Button>)}>
-              <Typography noWrap color="white">AIoT Smartlock is Lock!</Typography>
+
+            <Typography noWrap color="white">AIoT Smartlock is Lock!</Typography>
             
           </Alert>
         </Grid>
@@ -193,9 +189,6 @@ const Dashboard = () => {
           />
 
         </Grid>
-
-
-
 
       </Grid>
     </div>
