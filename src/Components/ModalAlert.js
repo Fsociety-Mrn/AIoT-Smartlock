@@ -5,6 +5,7 @@ import Modal from '@mui/material/Modal';
 import { Button } from 'react-scroll';
 import { Stack } from '@mui/material';
 import TokenGenerator from './TokenGenerator';
+import { AIoT_unlock, get_AIoT_unlock } from '../firebase/Realtime_Db'; 
 
 const style = {
     position: 'absolute',
@@ -17,7 +18,7 @@ const style = {
     boxShadow: 24,
     borderRadius: "10px",
     p: 4
-  };
+};
 
 const ModalAlert = (props) => {
 
@@ -26,38 +27,61 @@ const ModalAlert = (props) => {
         expiration: ""
     })
 
-    const [isAble,setIsable] = React.useState(false)
 
     const handleClose = () => props.setOpen(false);
 
     const createToken = () => {
         
+        const Token = TokenGenerator()
         // Get the current date and time
         const currentDate = new Date();
 
         // Add 30 minutes to the current time
         const newDate = new Date(currentDate.getTime() + 30 * 60000); // 30 minutes in milliseconds
 
-        // Format date as mm-dd-yyyy
-        const formattedDate = `${newDate.getMonth() + 1}-${newDate.getDate()}-${newDate.getFullYear()}`;
+        const dateOptions = {
+          month: 'short',
+          day: 'numeric',
+          year: 'numeric',
+        };
+  
+        const timeOptions = {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: true,
+          };
 
-        // Format time as HH:MM AM/PM
-        const hours = newDate.getHours() % 12 || 12; // Handle 0 hours as 12 AM
-        const minutes = newDate.getMinutes();
-        const amPm = newDate.getHours() < 12 ? 'AM' : 'PM';
-        const formattedTime = `${hours}:${minutes < 10 ? '0' : ''}${minutes} ${amPm}`;
+        const formattedDate = String(currentDate.toLocaleString('en-US', dateOptions)).replace(",", "");
+        const formattedTime = newDate.toLocaleString('en-US', timeOptions);
 
-        // Update state with formatted date and time
-        setToken({
-            token: TokenGenerator(),
+        AIoT_unlock({
+            token: Token,
             expiration: {
                 date: formattedDate,
                 time: formattedTime
             }
+        }).then(e=>{
+
+            // Update state with formatted date and time
+            setToken({
+                token: Token,
+                expiration: {
+                    date: formattedDate,
+                    time: formattedTime
+                }
+            })
         })
 
-        setIsable(true)
     }
+
+    React.useEffect(()=>{
+            // check if AIoT Smartlock is Lock
+    get_AIoT_unlock().then(data=>{
+        data.data && setToken(data.data)
+  
+      })
+    },[])
 return (
     <div>      
     
@@ -96,7 +120,7 @@ return (
                         borderRadius: '10px', // Add rounded corners for a modern look
                     }}
                     onClick={createToken}
-                    disabled={isAble}
+               
                     >
                         generate Token
                     </Button>

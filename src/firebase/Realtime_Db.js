@@ -87,3 +87,46 @@ const getListOFTokens = () => {
   });
   
 }
+
+// Push to AIoT Token For unlock
+export const AIoT_unlock = async (data) => {
+  return new Promise(async (resolve, reject) => {
+
+    const dbRef = ref(RTdb, `AIoT Lock/data`);
+
+    try {
+      set(dbRef, data)
+      resolve("OTP is created")
+    } catch (err) {
+      reject("OTP not created")
+    }
+
+  });
+}
+
+export const get_AIoT_unlock = async () =>{
+  const dbRef = ref(RTdb, 'AIoT Lock');
+
+  return new Promise((resolve, reject) => {
+    onValue(dbRef, (snapshot) => {
+      const data = snapshot.val();
+      resolve(data)
+    }, (error) => {
+      reject(error);
+    });
+  });
+}
+
+
+  // remove token Key
+export const remove_token_data = () => {
+    const keyRef = ref(RTdb, `AIoT Lock/data`);
+  
+    remove(keyRef)
+      .then(() => {
+        console.log(`removed successfully.`);
+      })
+      .catch((error) => {
+        console.error(`Error removing:`, error);
+      });
+  };

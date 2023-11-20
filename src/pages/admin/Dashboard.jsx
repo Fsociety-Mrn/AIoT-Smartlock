@@ -4,7 +4,8 @@ import {
   Button, 
   Tab, 
   Tabs,
-  Typography
+  Typography,
+  Collapse
 } from '@mui/material'
 import ModalAlert from '../../Components/ModalAlert';
 
@@ -16,18 +17,54 @@ import "react-multi-carousel/lib/styles.css";
 
 import Table from '../../Components/Table';
 
+import { get_AIoT_unlock, remove_token_data } from '../../firebase/Realtime_Db';
+
+
 const Dashboard = () => {
   const [paddinSize, setPaddingSize] = React.useState()
   const [value, setValue] = React.useState(0);
   const [open, setOpen] = React.useState(false);
+  const [alert, setAlert] = React.useState();
+  const [dataToken, setTokenData] = React.useState()
+
+  const isExpired = (expirationDateTime) => {
+    // Convert the expiration date string to a Date object
+    const expirationDate = new Date(expirationDateTime.date + ' ' + expirationDateTime.time);
+  
+    // Get the current date and time
+    const currentDate = new Date();
+  
+    // Compare the current date and time with the expiration date and time
+    return currentDate.getTime() > expirationDate.getTime();
+  }
 
   React.useEffect(()=>{
+
+    // check if AIoT Smartlock is Lock
+    get_AIoT_unlock().then(data=>{
+      // set alert
+      setAlert(data.isLock)
+
+
+
+
+      if (data.data){
+        setTokenData(data.data)
+   
+        isExpired(data.data.expiration) === true && remove_token_data()
+      }
+
+
+
+    })
+
+
     const setResponsiveness = () => {
         return window.innerWidth < 700 ? setPaddingSize(15) : setPaddingSize(0);
     };
 
     setResponsiveness();
-        window.addEventListener("resize", () => setResponsiveness());
+    window.addEventListener("resize", () => setResponsiveness());
     return () => {
         window.removeEventListener("resize", () => setResponsiveness());
     };
@@ -62,7 +99,7 @@ const Dashboard = () => {
     <div 
     style={{ minHeight: "100vh" }} >
 
-      <ModalAlert setOpen={setOpen} open={open}/>
+      <ModalAlert setOpen={setOpen} open={open} data={dataToken}  />
 
       <Grid
       container
@@ -74,17 +111,22 @@ const Dashboard = () => {
       padding={2}>
 
         {/* Alert for unlock */}
-        <Grid item xs={12} md={10} sm={12}>
-          <Alert variant="filled" severity="error" sx={{ width: '100%' }} 
-          action={(    
-            <Button color="inherit"  variant="filled" size="small" fullWidth onClick={()=>setOpen(true)}>
-            Unlock
-            </Button>)}>
 
-            <Typography noWrap color="white">AIoT Smartlock is Lock!</Typography>
+          <Grid item xs={12} md={10} sm={12}>
+
+            <Collapse in={alert}>
+            <Alert variant="filled" severity="error" sx={{ width: '100%' }} 
+            action={(    
+              <Button color="inherit"  variant="filled" size="small" fullWidth onClick={()=>setOpen(true)}>
+              Unlock
+              </Button>)}>
+
+              <Typography noWrap color="white">AIoT Smartlock is Lock!</Typography>
             
-          </Alert>
-        </Grid>
+            </Alert>
+            </Collapse>
+          </Grid>
+      
 
         {/* Status */}
         <Grid item xs={10}>
