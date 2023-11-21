@@ -9,8 +9,6 @@ const Table = (props) => {
        {props.value === props.set &&
         <Paper sx={{ padding: "20px", borderRadius: "20px" }}> 
               
-            <Typography>November 3 2023</Typography> 
-
             <Box sx={{ height: 400, width: '100%',padding: "10px" }}>
 
                 <DataGrid

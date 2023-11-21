@@ -19,6 +19,9 @@ import Table from '../../Components/Table';
 
 import { get_AIoT_unlock, remove_token_data } from '../../firebase/Realtime_Db';
 
+import dummyData from "./dummyData.json"
+
+const data = dummyData
 
 const Dashboard = () => {
   const [paddinSize, setPaddingSize] = React.useState()
@@ -26,6 +29,29 @@ const Dashboard = () => {
   const [open, setOpen] = React.useState(false);
   const [alert, setAlert] = React.useState();
   const [dataToken, setTokenData] = React.useState()
+
+  const [filteredLogs, setFilteredLogs] = React.useState([]);
+  const [facialLoginLogs, setFacialLoginLogs] = React.useState([]);
+  const [pinLoginLogs, setPinLoginLogs] = React.useState([]);
+  const [iotLoginLogs, setIoTLoginLogs] = React.useState([]);
+  const [accessDeniedLogs, setAccessDeniedLogs] = React.useState([]);
+
+
+  // React.useEffect(() => {
+  //   // Assuming accessLogs is the array containing your dummy data
+  //   // const currentDate = new Date().toLocaleDateString();
+
+  //   // // Filter logs for the current date
+  //   // const currentDateLogs = data.filter(log => log.date === currentDate);
+  //   // setFilteredLogs(currentDateLogs);
+
+  //   // Filter logs for each access type
+  //   // setFacialLoginLogs(data.filter(log => log.type === 'Facial Login'));
+  //   // setPinLoginLogs(data.filter(log => log.type === 'PIN Login'));
+  //   // setIoTLoginLogs(data.filter(log => log.type === 'IoT Login'));
+  //   // setAccessDeniedLogs(data.filter(log => log.type === 'No match detected'));
+  // }, [data]);
+
 
   const isExpired = (expirationDateTime) => {
     // Convert the expiration date string to a Date object
@@ -40,32 +66,47 @@ const Dashboard = () => {
 
   React.useEffect(()=>{
 
+    let cleanup = true;
+
+    if(cleanup){
+  
+      Object.values(data).map((value,key)=> console.log(value))
+    // console.log(data)
+
+    // const smartlock_check = async () => {
+    //   const data = await get_AIoT_unlock()
+
+    //   setAlert(data.isLock)
+    //   setTokenData(data.data)
+    //   isExpired(data.data.expiration) === true && remove_token_data()
+    // }
+
     // check if AIoT Smartlock is Lock
     get_AIoT_unlock().then(data=>{
+
       // set alert
       setAlert(data.isLock)
-
-
-
-
       if (data.data){
         setTokenData(data.data)
-   
         isExpired(data.data.expiration) === true && remove_token_data()
       }
-
-
-
     })
-
+       
+  }
+    // smartlock_check();
 
     const setResponsiveness = () => {
         return window.innerWidth < 700 ? setPaddingSize(15) : setPaddingSize(0);
     };
 
     setResponsiveness();
+
     window.addEventListener("resize", () => setResponsiveness());
+
+ 
+
     return () => {
+      cleanup = false
         window.removeEventListener("resize", () => setResponsiveness());
     };
   },[])
@@ -111,8 +152,7 @@ const Dashboard = () => {
       padding={2}>
 
         {/* Alert for unlock */}
-
-          <Grid item xs={12} md={10} sm={12}>
+        <Grid item xs={12} md={10} sm={12}>
 
             <Collapse in={alert}>
             <Alert variant="filled" severity="error" sx={{ width: '100%' }} 
@@ -125,7 +165,7 @@ const Dashboard = () => {
             
             </Alert>
             </Collapse>
-          </Grid>
+        </Grid>
       
 
         {/* Status */}
