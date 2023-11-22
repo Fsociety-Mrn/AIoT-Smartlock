@@ -233,9 +233,9 @@ def firebase_check_expiration():
         print(f"Error: {e}")
         return True
     
-def lockerUpdate(name,value):
+def lockerUpdate(value):
     try:
-       db.child("AIoT Lock").child(name).child("isLock").set(value)
+       db.child("AIoT Lock").child("isLock").set(value)
        return True
             
     except Exception as e:
