@@ -1,8 +1,7 @@
 import pyrebase
 import os
 import requests
-
-
+from datetime import datetime
 
 timeout = 1
 
@@ -194,14 +193,14 @@ def firebaseSetLock(isLock=None):
 def firebaseDeleteToken():
     try:
         # Delete the specific field
-        db.child("AIoT Lock").remove()
+        db.child("AIoT Lock").child("data").remove()
         print("field deleted successfully.")
     except Exception as e:
         print("An error occurred:", e)
     
 def firebaseTokenLOCK(token):
     try:
-        data = db.child("AIoT Lock").child("OTP").get().val()
+        data = db.child("AIoT Lock").child("data").child("token").get().val()
     
         if str(data) == str(token):
             print("Goodshit")
@@ -212,11 +211,31 @@ def firebaseTokenLOCK(token):
     except Exception as e:
         print(f"Error: {e}")
         return False
+
+def firebase_check_expiration():
+    try:
+        expiration_data = db.child("AIoT Lock").child("data").child("expiration").get().val()
+
+        # Assuming the format of expiration_data is as mentioned in your example
+        expiration_date_str = expiration_data['date'] + ' ' + expiration_data['time']
+        expiration_datetime = datetime.strptime(expiration_date_str, '%b %d %Y %I:%M:%S %p')
+
+        current_datetime = datetime.now()
+
+        if current_datetime > expiration_datetime:
+            print("Expiration date and time have passed.")
+            return True
+        else:
+            print("Expiration date and time are still valid.")
+            return False
     
+    except Exception as e:
+        print(f"Error: {e}")
+        return True
     
 def lockerUpdate(name,value):
     try:
-       db.child("LOCK").child(name).child("Locker Status").set(value)
+       db.child("AIoT Lock").child(name).child("isLock").set(value)
        return True
             
     except Exception as e:

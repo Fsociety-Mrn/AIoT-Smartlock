@@ -1,4 +1,4 @@
-from Firebase.firebase import firebaseCheckLock,firebaseTokenLOCK,firebaseDeleteToken
+from Firebase.firebase import firebaseCheckLock,firebaseTokenLOCK,firebaseDeleteToken, firebase_check_expiration, lockerUpdate
 from PyQt5.QtWidgets import *
 from PyQt5 import QtCore, QtGui, QtWidgets
 
@@ -963,7 +963,15 @@ class AdminLock(QtWidgets.QFrame):
         self.TokenID.setText(current_text + text)
 
     def enter(self):
-            
+        
+        # check if the OTP is expired
+        if firebase_check_expiration():
+            self.warning.setText("the OTP code you enter is expired")
+            # Set the color of the text to red
+            self.warning.setStyleSheet("color: red;")
+            self.TokenID.setText("")
+            return
+
         from Firebase.Offline import delete_table
         print(self.TokenID.text())
         
@@ -972,11 +980,13 @@ class AdminLock(QtWidgets.QFrame):
             self.timerSSS.stop()
             delete_table("Failed attempt")
             firebaseDeleteToken()
+            lockerUpdate(False)
             
             self.main_menu.timers(False)
 
             self.close()
         else:
+            
             self.TokenID.setText("")
             self.warning.setText("Invalid OTP Code")
             self.warning.setStyleSheet("color: red")
