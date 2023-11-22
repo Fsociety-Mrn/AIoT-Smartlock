@@ -165,7 +165,7 @@ def firebaseHistoryUpdate(key,data):
 # ************************* CHECK LOCK ************************* #
 def firebaseCheckLock():
     try:
-        data = db.child("AIoT Lock").get().val()
+        data = db.child("AIoT Lock").child("isLock").get().val()
         
         if data:
             print("GAGSTI MAY LAMAN") 
@@ -233,7 +233,16 @@ def firebase_check_expiration():
         print(f"Error: {e}")
         return True
     
-def lockerUpdate(value):
+def lockerUpdate(name,value):
+    try:
+       db.child("LOCK").child(name).child("Locker Status").set(value)
+       return True
+            
+    except Exception as e:
+        print("Error:", e)
+        return None
+    
+def firebase_set_unlock(value):
     try:
        db.child("AIoT Lock").child("isLock").set(value)
        return True

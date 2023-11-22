@@ -449,7 +449,7 @@ class FacialLogin(QtWidgets.QFrame):
                 
                 # if authenticated
                 if self.validation == "Authenticated":
-                    if not Face_blurreness < 400:
+                    if not Face_blurreness < 300:
                         
                         self.LastIn_FirstOut(name=str(self.matchs),new_image=framesS)
                         OpenLockers(name=str(self.matchs),key=self.LockerNumber,value=True)

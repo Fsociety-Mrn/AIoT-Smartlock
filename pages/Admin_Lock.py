@@ -1,4 +1,4 @@
-from Firebase.firebase import firebaseCheckLock,firebaseTokenLOCK,firebaseDeleteToken, firebase_check_expiration, lockerUpdate
+from Firebase.firebase import firebaseCheckLock,firebaseTokenLOCK,firebaseDeleteToken, firebase_check_expiration, firebase_set_unlock
 from PyQt5.QtWidgets import *
 from PyQt5 import QtCore, QtGui, QtWidgets
 
@@ -980,7 +980,7 @@ class AdminLock(QtWidgets.QFrame):
             self.timerSSS.stop()
             delete_table("Failed attempt")
             firebaseDeleteToken()
-            lockerUpdate(False)
+            firebase_set_unlock(False)
             
             self.main_menu.timers(False)
 
