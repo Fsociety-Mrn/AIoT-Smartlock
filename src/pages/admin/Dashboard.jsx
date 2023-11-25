@@ -19,10 +19,6 @@ import Table from '../../Components/Table';
 
 import { get_AIoT_unlock, remove_token_data } from '../../firebase/Realtime_Db';
 
-import dummyData from "./dummyData.json"
-
-const data = dummyData
-
 const Dashboard = () => {
   const [paddinSize, setPaddingSize] = React.useState()
   const [value, setValue] = React.useState(0);
@@ -30,27 +26,7 @@ const Dashboard = () => {
   const [alert, setAlert] = React.useState();
   const [dataToken, setTokenData] = React.useState()
 
-  const [filteredLogs, setFilteredLogs] = React.useState([]);
-  const [facialLoginLogs, setFacialLoginLogs] = React.useState([]);
-  const [pinLoginLogs, setPinLoginLogs] = React.useState([]);
-  const [iotLoginLogs, setIoTLoginLogs] = React.useState([]);
-  const [accessDeniedLogs, setAccessDeniedLogs] = React.useState([]);
 
-
-  // React.useEffect(() => {
-  //   // Assuming accessLogs is the array containing your dummy data
-  //   // const currentDate = new Date().toLocaleDateString();
-
-  //   // // Filter logs for the current date
-  //   // const currentDateLogs = data.filter(log => log.date === currentDate);
-  //   // setFilteredLogs(currentDateLogs);
-
-  //   // Filter logs for each access type
-  //   // setFacialLoginLogs(data.filter(log => log.type === 'Facial Login'));
-  //   // setPinLoginLogs(data.filter(log => log.type === 'PIN Login'));
-  //   // setIoTLoginLogs(data.filter(log => log.type === 'IoT Login'));
-  //   // setAccessDeniedLogs(data.filter(log => log.type === 'No match detected'));
-  // }, [data]);
 
 
   const isExpired = (expirationDateTime) => {
@@ -70,7 +46,7 @@ const Dashboard = () => {
 
     if(cleanup){
   
-      Object.values(data).map((value,key)=> console.log(value))
+      // Object.values(data).map((value,key)=> console.log(value))
     // console.log(data)
 
     // const smartlock_check = async () => {

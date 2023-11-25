@@ -38,7 +38,6 @@ export const LoginSession = (user) => {
     });
   };
 
-
   // Logout
 export const LogoutSession = async () => {
     await signOut(auth).then(()=>{
@@ -51,9 +50,9 @@ export const LogoutSession = async () => {
 }
 
   // create account
-  export const createAccount = (email, password) => {
-    return new Promise((resolve, reject) => {
-      createUserWithEmailAndPassword(auth, email, password)
+export const createAccount = (email, password) => {
+  return new Promise((resolve, reject) => {
+    createUserWithEmailAndPassword(auth, email, password)
         .then((res) => {
           console.log(res.user.uid);
           createUserData(res.user.uid);

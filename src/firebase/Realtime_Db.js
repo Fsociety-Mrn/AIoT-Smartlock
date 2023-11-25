@@ -6,7 +6,6 @@ import {
     set
 } from "firebase/database";
 
-
 // verify token users
 export const verifyToken = (TOKENs) => {
     return new Promise((resolve, reject) => {
@@ -43,9 +42,9 @@ export const verifyToken = (TOKENs) => {
         onlyOnce: true // Optional: Ma-trigger lamang ng isang beses
       });
     });
-  };
+};
 
-  // remove token Key
+// remove token Key
 export const removeKey = (key) => {
     const keyRef = ref(RTdb, `GenerateToken_User/${key}`);
   
@@ -56,9 +55,9 @@ export const removeKey = (key) => {
       .catch((error) => {
         console.error(`Error removing key "${key}":`, error);
       });
-  };
+};
 
-  // generate a token
+// generate a token
 export const generateToken = async (uniqueID) => {
   try {
     const tokensList = await getListOFTokens(); // Assuming getListOFTokens() returns a list of tokens
@@ -117,8 +116,7 @@ export const get_AIoT_unlock = async () =>{
   });
 }
 
-
-  // remove token Key
+// remove token Key
 export const remove_token_data = () => {
     const keyRef = ref(RTdb, `AIoT Lock/data`);
   
@@ -129,4 +127,20 @@ export const remove_token_data = () => {
       .catch((error) => {
         console.error(`Error removing:`, error);
       });
-  };
+};
+
+// **************** Open the Locker **************** //
+export const openLocker = async (props) => {
+  try {
+      const keyRef = ref(RTdb, `LOCK/${props.FullName}/`);
+      
+      const data ={
+          "Locker Status": props.value,
+          "Locker Number": props.number
+      }
+      set(keyRef,data);
+
+  } catch (err) {
+      console.error(err);
+  }
+}
