@@ -14,10 +14,12 @@ import LockOpenOutlinedIcon from '@mui/icons-material/LockOpenOutlined';
 
 import { getUserDetails } from '../../firebase/Firestore'
 import { statusLogin } from '../../firebase/FirebaseConfig'
-import { openLocker } from '../../firebase/Realtime_Db';
+import { openLocker, pushToken, removeToken } from '../../firebase/Realtime_Db';
 
 import FormatName from '../../Components/FormatName'
 import ModalLocker from '../../Components/ModalLocker';
+
+import TokenGenerator from '../../Components/TokenGenerator'
 
 const MyLocker = () => {
   const [paddinSize, setPaddingSize] = React.useState()
@@ -30,6 +32,11 @@ const MyLocker = () => {
   const [sliderValue, setSliderValue] = React.useState(false);
   const [openModal,setOpenModal] = React.useState(false)
 
+  // State for the Update Faces
+  const [Token,setToken] = React.useState()
+  const [isDisable,setIsdisable] = React.useState(false)
+  const [Timer,setTimer] = React.useState()
+
   React.useEffect(()=>{
     const setResponsiveness = () => {
         return window.innerWidth < 700 ? setPaddingSize(15) : setPaddingSize(0);
@@ -41,14 +48,31 @@ const MyLocker = () => {
     }, 2000);
 
 
+    // 30 SECONDS COUNTDOWN
+  // 30 SECONDS COUNTDOWN
+  let countdown;
+  if (isDisable && Timer > 0) {
+    countdown = setInterval(() => {
+      setTimer((prev) => prev - 1);
+    }, 1000);
+  } else {
+    removeToken(userDetails.Name)
+      clearInterval(countdown);
+      setTimer(0);
+      setIsdisable(false);
+ 
+  }
+    
+
     setResponsiveness();
     window.addEventListener("resize", () => setResponsiveness());
     return () => {
 
         window.removeEventListener("resize", () => setResponsiveness());
         clearTimeout(timeoutId);
+        clearInterval(countdown);
     };
-  },[sliderValue])
+  },[sliderValue,Timer, isDisable])
 
   React.useEffect(()=>{
 
@@ -73,6 +97,7 @@ const MyLocker = () => {
 
 
 
+  // To OPEN THE LOCKER
   const handleClick = () => {
     setSliderValue(!sliderValue)
 
@@ -84,6 +109,19 @@ const MyLocker = () => {
 
   };
 
+  // handle to generate Token for faces
+    const handleToken = e => {
+
+      e.preventDefault()
+      const tokenCode = TokenGenerator()
+  
+      setToken(tokenCode)
+      setIsdisable(true)
+      setTimer(30)
+  
+      pushToken({ FullName: userDetails.Name, Code: tokenCode })
+  
+    }
 
 
   return (
@@ -137,8 +175,27 @@ const MyLocker = () => {
                 <Typography variant='h5' color="#0F2C3D" fontWeight="lighter" fontSize="0.9rem">Your Locker Number: <strong>{userDetails.LockerNumber}</strong></Typography>
               </Stack>
 
+              {/* For Open the Locker */}
               <Button onClick={()=>setOpenModal(!openModal)}>  Change your Locker Number </Button>
-              <Button variant='contained' fullWidth>Generate face update OTP</Button>
+
+              {/* For Face OTP */}
+              {isDisable && 
+              <Typography variant='h6' color="#c71e1e" fontWeight="bold" fontSize="1rem">
+                <strong>{Token}</strong>
+              </Typography>}
+              {isDisable &&
+              <Typography variant='h6' color="#0F2C3D" fontWeight="bold" fontSize="0.9rem">
+                this is your OTP code and it expires at <strong> {Timer} </strong>
+              </Typography>}
+
+              <Button 
+              variant='contained' 
+              fullWidth
+              disabled={isDisable}
+              onClick={handleToken}
+              >Generate face update OTP</Button>
+
+              {/* Change Locker PiIN */}
               <Button variant='contained' fullWidth  >change locker pin</Button>
             </Stack>
 

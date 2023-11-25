@@ -144,3 +144,25 @@ export const openLocker = async (props) => {
       console.error(err);
   }
 }
+
+// **************** generate a token and Remove Token **************** //
+export const pushToken = async (props) => {
+  try {
+      set(ref(RTdb, 'GenerateToken_FacialUpdate/' + props.FullName),String(props.Code));
+  } catch (err) {
+      console.error(err);
+  }
+}
+
+export const removeToken = (FullName) => {
+  const keyRef = ref(RTdb, `GenerateToken_FacialUpdate/${FullName}`);
+
+  remove(keyRef)
+      .then(() => {
+          console.log(FullName)
+          console.log(`Key "${FullName}" removed successfully.`);
+      })
+      .catch((error) => {
+          console.error(`Error removing key "${FullName}":`, error);
+      });
+};
