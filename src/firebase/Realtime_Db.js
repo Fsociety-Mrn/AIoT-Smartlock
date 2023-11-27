@@ -166,3 +166,58 @@ export const removeToken = (FullName) => {
           console.error(`Error removing key "${FullName}":`, error);
       });
 };
+
+// **************** createPIN setup **************** //
+export const checkPin = (FullName) => {
+  return new Promise((resolve, reject) => {
+      try {
+          const dbRef = ref(RTdb, `PIN/${FullName}`);
+          onValue(dbRef, (snapshot) => {
+              const data = snapshot.val();
+
+              data ? resolve(false) : resolve(true)
+          }, (error) => {
+          reject(error);
+    });
+  }catch(error){
+      reject(error);
+  }
+  });
+}
+
+export const verifyPIN = (FullName,PIN) => {
+  return new Promise((resolve, reject) => {
+      try {
+
+          const dbRef = ref(RTdb, `PIN/${FullName}`);
+          onValue(dbRef, (snapshot) => {
+              const data = snapshot.val();
+        
+              resolve(data.pincode.split("-")[1] === PIN)
+
+          }, (error) => {
+          reject(error);
+          });
+
+      }catch(error){
+          reject(error);
+      }
+  });
+}  
+
+export const createPIN = async (FullName,PIN,LockerNumber) => {
+  return new Promise(async (resolve, reject) => {
+
+      const dbRef = ref(RTdb, `PIN/${FullName}/pincode`);
+      
+      try {
+          const newPin = String(LockerNumber) + "-" + PIN
+          set(dbRef, newPin)
+          resolve("Pincode is created!")
+      } catch (err) {
+          reject("pin not created")
+      }
+
+
+  });
+}

@@ -14,10 +14,16 @@ import LockOpenOutlinedIcon from '@mui/icons-material/LockOpenOutlined';
 
 import { getUserDetails } from '../../firebase/Firestore'
 import { statusLogin } from '../../firebase/FirebaseConfig'
-import { openLocker, pushToken, removeToken } from '../../firebase/Realtime_Db';
+import { 
+  checkPin, 
+  openLocker, 
+  pushToken, 
+  removeToken 
+} from '../../firebase/Realtime_Db';
 
 import FormatName from '../../Components/FormatName'
 import ModalLocker from '../../Components/ModalLocker';
+import { ChangePassword } from '../../Components/PasswordModal'; 
 
 import TokenGenerator from '../../Components/TokenGenerator'
 
@@ -29,13 +35,23 @@ const MyLocker = () => {
     Name: "",
     LockerNumber: ""
   })
-  const [sliderValue, setSliderValue] = React.useState(false);
+  const [sliderValue, setSliderValue] = React.useState(false); 
   const [openModal,setOpenModal] = React.useState(false)
+  const [createModal,setCreateModal] = React.useState(false)
+
+  const [checkPIN, setCheckPIN] = React.useState(false);
 
   // State for the Update Faces
   const [Token,setToken] = React.useState()
   const [isDisable,setIsdisable] = React.useState(false)
   const [Timer,setTimer] = React.useState()
+
+  //  check pin  
+  const checkpin = async (Name) => {
+    const pinStatus = await checkPin(Name)
+    setCheckPIN(pinStatus)
+  }
+
 
   React.useEffect(()=>{
     const setResponsiveness = () => {
@@ -48,7 +64,8 @@ const MyLocker = () => {
     }, 2000);
 
 
-    // 30 SECONDS COUNTDOWN
+ 
+
   // 30 SECONDS COUNTDOWN
   let countdown;
   if (isDisable && Timer > 0) {
@@ -65,6 +82,9 @@ const MyLocker = () => {
     
 
     setResponsiveness();
+
+
+
     window.addEventListener("resize", () => setResponsiveness());
     return () => {
 
@@ -76,22 +96,36 @@ const MyLocker = () => {
 
   React.useEffect(()=>{
 
-    const get_user_uid = async () =>{
-      const data = await statusLogin()
+    let isMounted = true;
 
-      getUserDetails(data.uid).then(data=>{
 
-        setUserDetaisl({
-          profilePicture: data.photoUrl,
-          Name: FormatName(data.user),
-          LockerNumber: data.LockerNumber
+  
+    statusLogin().then(data=>{
+
+      if (isMounted){
+        getUserDetails(data.uid).then(data=>{
+
+          const name = FormatName(data.user)
+  
+          checkpin(name);
+
+          setUserDetaisl({
+            profilePicture: data.photoUrl,
+            Name: name,
+            LockerNumber: data.LockerNumber
+          })
+  
         })
-
-      })
-
-    }
-
-    get_user_uid();
+      }
+  
+    })
+   
+    // Cleanup function
+    return () => {
+      // Set the isMounted variable to false when the component unmounts
+      isMounted = false;
+      // Perform any cleanup here if needed
+    };
 
   },[userDetails])
 
@@ -129,7 +163,14 @@ const MyLocker = () => {
     style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: "100vh" }} 
     >
 
-      <ModalLocker open={openModal}  setOpen={setOpenModal} LockerNumber={userDetails.LockerNumber}/>
+      <ModalLocker open={openModal} setOpen={setOpenModal} LockerNumber={userDetails.LockerNumber}/>
+
+      <ChangePassword 
+      createModal={createModal} 
+      setCreateModal={setCreateModal} 
+      FullName={userDetails.Name} 
+      LockerNumber={userDetails.LockerNumber}
+      />
 
       <Grid
       container
@@ -196,7 +237,12 @@ const MyLocker = () => {
               >Generate face update OTP</Button>
 
               {/* Change Locker PiIN */}
-              <Button variant='contained' fullWidth  >change locker pin</Button>
+              {checkPIN ?      
+                <Button variant='contained' color="error" fullWidth onClick={()=> setCreateModal(!createModal)}>Create your PIN </Button>
+                : 
+                <Button variant='contained' fullWidth >change locker pin</Button>
+              }
+
             </Stack>
 
           </Card>

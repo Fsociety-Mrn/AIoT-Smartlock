@@ -64,7 +64,6 @@ const Account = () => {
     };
   },[])
 
-
   // upload images
   const [image,setImage] = useState(defaultImage) //image
 
@@ -101,7 +100,6 @@ const Account = () => {
     confirmPasswordError:''
   })
   
-
   // submit password
   const handlePasswordChange = e => {
     e.preventDefault();
@@ -162,7 +160,6 @@ const Account = () => {
     }
 
   };
-
 
   return (
 
