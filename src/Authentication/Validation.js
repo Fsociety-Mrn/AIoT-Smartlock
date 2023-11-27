@@ -92,3 +92,17 @@ export const pinSchema = yup.object().shape({
                 .max(4,"Password should be 4 char long")
                 .oneOf([yup.ref('PIN'), null], 'PIN code must be match')
     });
+
+export const NewpinSchema = yup.object().shape({
+        PIN : yup.string()
+                .required("Please enter your pin code")
+                .min(4,"Password should be 4 char long")
+                .max(4,"Password should be 4 char long"),
+    
+        PIN2: yup.string()
+                // .matches(passwordRules, { message: "Please create a stronger password" })
+                .required("Please enter your pin code")
+                .min(4,"Password should be 4 char long")
+                .max(4,"Password should be 4 char long")
+
+    });

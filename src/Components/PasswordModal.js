@@ -11,8 +11,8 @@ import {
 } from "@mui/material"
 import { DesktopTextbox } from './Textfield';
 import React from "react"
-import { createPIN } from "../firebase/Realtime_Db";
-import { pinSchema } from "../Authentication/Validation";
+import { createPIN, verifyPIN } from "../firebase/Realtime_Db";
+import { pinSchema,NewpinSchema } from "../Authentication/Validation";
 
 const style = {
     position: 'absolute',
@@ -27,7 +27,7 @@ const style = {
     p: 4
 };
 
-export const ChangePassword = (props) => {
+export const CreatePassword = (props) => {
 
     const handleClose = () => props.setCreateModal(false);
 
@@ -168,6 +168,170 @@ export const ChangePassword = (props) => {
                                 onClick={handleSubmitCreate}
               
                                 variant="contained">Create PIN</Button>
+                            </Grid>
+
+               
+                        </Grid>
+                    </Box>
+                </Fade>
+            </Modal>
+        </div>
+    )
+}
+
+export const ChangePassword = (props) => {
+
+    const handleClose = () => props.setCreateModal(false);
+
+    const [createPin,setCreatePIN] = React.useState({
+        oldPin: "",
+        newPin: ""
+    })
+
+    const [error,setError] = React.useState({
+        pin1: false,
+        pin1Error: "",
+    
+        pin2: false,
+        pin2Error: ""
+    })
+
+    const [isChangePasswordOpen, setIsChangePasswordOpen] = React.useState(false);
+
+    
+    // Function to handle form submission for 
+    const handleSubmitCreate = async (event) => {
+        event.preventDefault();
+        try {
+
+            await NewpinSchema.validate({ PIN: createPin.newPin, PIN2: createPin.confirmPin }, { abortEarly: false });
+            
+  
+            verifyPIN(props.FullName, createPin.confirmPin).then(result=>{
+      
+              // if pincode is verified
+              result && createPIN(props.FullName,createPin.newPin).then(result=> {     
+                setError({
+                  pin1: false,
+                  pin1Error: "",
+            
+                  pin2: false,
+                  pin2Error: ""
+                })
+
+                alert(
+                    "PIN successfully change"
+                )
+      
+  
+                handleClose()
+              })
+      
+              // if pincode is verified
+              !result && setError({ pin1: false, pin1Error: "", pin2: true, pin2Error: "old pin is not verified" })
+            })
+
+        } catch (validationError) {
+
+            // Extract specific error messages for email and password
+            const emailError = validationError.inner.find((error) => error.path === 'PIN');
+            const passwordError = validationError.inner.find((error) => error.path === 'PIN2');
+
+            // If validation errors occur
+            setError({
+                pin1: !!emailError,
+                pin1Error: emailError && emailError.message,
+
+                pin2: !!passwordError,
+                pin2Error: passwordError && passwordError.message
+            });
+
+        }
+    };
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setCreatePIN((prevUser) => ({
+          ...prevUser,
+          [name]: value,
+        }));
+    };
+
+      // submit password
+    const handlePasswordChange = e => {
+        e.preventDefault();
+        setIsChangePasswordOpen(!isChangePasswordOpen);
+    };
+
+    return (
+        <div>  
+            <Modal
+            open={props.createModal}
+            onClose={handleClose}
+            closeAfterTransition
+            slots={{ backdrop: Backdrop }}
+            slotProps={{
+                backdrop: {
+                timeout: 500,
+            },
+            }}>
+                <Fade in={props.createModal}>
+                    <Box sx={style}>
+
+                        <Typography variant='h5' color="#0F2C3D" fontWeight="BOLD" fontSize="1rem">
+                        Input 4 digit pin code
+                        </Typography>
+
+                        <Grid container spacing={1} padding={2}
+                        direction="row"
+                        justifyContent="center"
+                        alignItems="center">
+
+                            <Grid item xs={12}>
+                                <DesktopTextbox fullWidth             
+                                id="oldPin"
+                                name="oldPin"
+                                placeholder='Old PIN'
+                                value={createPin.oldPin}
+                                onChange={handleInputChange}
+
+                                error={error.pin1}
+                                helperText={error.pin1Error}
+
+                                type={isChangePasswordOpen ? "text" : "password"}
+                                />
+                            </Grid>
+
+                            <Grid item xs={12}>
+                                <DesktopTextbox fullWidth             
+                                id="newPin"
+                                name="newPin"
+
+                                placeholder='New PIN' 
+                                onChange={handleInputChange}
+                                value={createPin.newPin}
+
+                                error={error.pin2}
+                                helperText={error.pin2Error}
+
+                                type={isChangePasswordOpen ? "text" : "password"}
+                                />
+                            
+                            {/* Show Password */}
+            <FormControlLabel
+            control={
+              <Checkbox checked={isChangePasswordOpen} onChange={handlePasswordChange} />
+            }
+            label="Show Password"
+          />
+                            </Grid>
+
+            
+                            <Grid item xs={10}>
+                                <Button fullWidth 
+                                onClick={handleSubmitCreate}
+              
+                                variant="contained">Save Changes</Button>
                             </Grid>
 
                

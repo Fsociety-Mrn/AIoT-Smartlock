@@ -23,7 +23,7 @@ import {
 
 import FormatName from '../../Components/FormatName'
 import ModalLocker from '../../Components/ModalLocker';
-import { ChangePassword } from '../../Components/PasswordModal'; 
+import { CreatePassword,ChangePassword } from '../../Components/PasswordModal'; 
 
 import TokenGenerator from '../../Components/TokenGenerator'
 
@@ -38,6 +38,7 @@ const MyLocker = () => {
   const [sliderValue, setSliderValue] = React.useState(false); 
   const [openModal,setOpenModal] = React.useState(false)
   const [createModal,setCreateModal] = React.useState(false)
+  const [changeModal,setChangeModal] = React.useState(false)
 
   const [checkPIN, setCheckPIN] = React.useState(false);
 
@@ -144,7 +145,7 @@ const MyLocker = () => {
   };
 
   // handle to generate Token for faces
-    const handleToken = e => {
+  const handleToken = e => {
 
       e.preventDefault()
       const tokenCode = TokenGenerator()
@@ -165,9 +166,16 @@ const MyLocker = () => {
 
       <ModalLocker open={openModal} setOpen={setOpenModal} LockerNumber={userDetails.LockerNumber}/>
 
-      <ChangePassword 
+      <CreatePassword 
       createModal={createModal} 
       setCreateModal={setCreateModal} 
+      FullName={userDetails.Name} 
+      LockerNumber={userDetails.LockerNumber}
+      />
+
+      <ChangePassword 
+      createModal={changeModal} 
+      setCreateModal={setChangeModal} 
       FullName={userDetails.Name} 
       LockerNumber={userDetails.LockerNumber}
       />
@@ -240,7 +248,7 @@ const MyLocker = () => {
               {checkPIN ?      
                 <Button variant='contained' color="error" fullWidth onClick={()=> setCreateModal(!createModal)}>Create your PIN </Button>
                 : 
-                <Button variant='contained' fullWidth >change locker pin</Button>
+                <Button variant='contained' fullWidth onClick={()=> setChangeModal(!changeModal)}>change locker pin</Button>
               }
 
             </Stack>
