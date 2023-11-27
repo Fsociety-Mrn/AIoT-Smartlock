@@ -1,4 +1,4 @@
-import { Paper, Typography } from '@mui/material'
+import { Paper } from '@mui/material'
 import { Box } from '@mui/system'
 import { DataGrid } from '@mui/x-data-grid'
 import React from 'react'

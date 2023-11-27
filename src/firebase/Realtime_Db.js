@@ -6,7 +6,6 @@ import {
     set
 } from "firebase/database";
 
-
 // verify token users
 export const verifyToken = (TOKENs) => {
     return new Promise((resolve, reject) => {
@@ -43,9 +42,9 @@ export const verifyToken = (TOKENs) => {
         onlyOnce: true // Optional: Ma-trigger lamang ng isang beses
       });
     });
-  };
+};
 
-  // remove token Key
+// remove token Key
 export const removeKey = (key) => {
     const keyRef = ref(RTdb, `GenerateToken_User/${key}`);
   
@@ -56,9 +55,9 @@ export const removeKey = (key) => {
       .catch((error) => {
         console.error(`Error removing key "${key}":`, error);
       });
-  };
+};
 
-  // generate a token
+// generate a token
 export const generateToken = async (uniqueID) => {
   try {
     const tokensList = await getListOFTokens(); // Assuming getListOFTokens() returns a list of tokens
@@ -117,8 +116,7 @@ export const get_AIoT_unlock = async () =>{
   });
 }
 
-
-  // remove token Key
+// remove token Key
 export const remove_token_data = () => {
     const keyRef = ref(RTdb, `AIoT Lock/data`);
   
@@ -129,4 +127,97 @@ export const remove_token_data = () => {
       .catch((error) => {
         console.error(`Error removing:`, error);
       });
-  };
+};
+
+// **************** Open the Locker **************** //
+export const openLocker = async (props) => {
+  try {
+      const keyRef = ref(RTdb, `LOCK/${props.FullName}/`);
+      
+      const data ={
+          "Locker Status": props.value,
+          "Locker Number": props.number
+      }
+      set(keyRef,data);
+
+  } catch (err) {
+      console.error(err);
+  }
+}
+
+// **************** generate a token and Remove Token **************** //
+export const pushToken = async (props) => {
+  try {
+      set(ref(RTdb, 'GenerateToken_FacialUpdate/' + props.FullName),String(props.Code));
+  } catch (err) {
+      console.error(err);
+  }
+}
+
+export const removeToken = (FullName) => {
+  const keyRef = ref(RTdb, `GenerateToken_FacialUpdate/${FullName}`);
+
+  remove(keyRef)
+      .then(() => {
+          console.log(FullName)
+          console.log(`Key "${FullName}" removed successfully.`);
+      })
+      .catch((error) => {
+          console.error(`Error removing key "${FullName}":`, error);
+      });
+};
+
+// **************** createPIN setup **************** //
+export const checkPin = (FullName) => {
+  return new Promise((resolve, reject) => {
+      try {
+          const dbRef = ref(RTdb, `PIN/${FullName}`);
+          onValue(dbRef, (snapshot) => {
+              const data = snapshot.val();
+
+              data ? resolve(false) : resolve(true)
+          }, (error) => {
+          reject(error);
+    });
+  }catch(error){
+      reject(error);
+  }
+  });
+}
+
+export const verifyPIN = (FullName,PIN) => {
+  return new Promise((resolve, reject) => {
+      try {
+
+          const dbRef = ref(RTdb, `PIN/${FullName}`);
+          onValue(dbRef, (snapshot) => {
+              const data = snapshot.val();
+        
+              resolve(data.pincode.split("-")[1] === PIN)
+
+          }, (error) => {
+          reject(error);
+          });
+
+      }catch(error){
+          reject(error);
+      }
+  });
+}  
+
+export const createPIN = async (FullName,PIN,LockerNumber) => {
+  return new Promise(async (resolve, reject) => {
+
+      const dbRef = ref(RTdb, `PIN/${FullName}/pincode`);
+      
+      try {
+          const newPin = String(LockerNumber) + "-" + PIN
+          set(dbRef, newPin)
+          resolve("Pincode is created!")
+      } catch (err) {
+          reject("pin not created")
+      }
+
+
+  });
+}
