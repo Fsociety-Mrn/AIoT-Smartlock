@@ -100,13 +100,15 @@ const MyLocker = () => {
     let isMounted = true;
 
 
-  
+  // make this one time call
     statusLogin().then(data=>{
 
       if (isMounted){
         getUserDetails(data.uid).then(data=>{
 
           const name = FormatName(data.user)
+
+          console.log(name)
   
           checkpin(name);
 
@@ -128,7 +130,7 @@ const MyLocker = () => {
       // Perform any cleanup here if needed
     };
 
-  },[userDetails])
+  },[])
 
 
 

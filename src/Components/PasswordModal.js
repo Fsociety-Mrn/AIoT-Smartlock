@@ -65,7 +65,7 @@ export const CreatePassword = (props) => {
                 })
                 alert("PIN Successfully Created! ✔️")
                 handleClose()
-
+                window.location.reload()
             })
         } catch (validationError) {
 
@@ -204,13 +204,13 @@ export const ChangePassword = (props) => {
         event.preventDefault();
         try {
 
-            await NewpinSchema.validate({ PIN: createPin.newPin, PIN2: createPin.confirmPin }, { abortEarly: false });
+            await NewpinSchema.validate({ PIN: createPin.oldPin, PIN2: createPin.newPin }, { abortEarly: false });
             
   
-            verifyPIN(props.FullName, createPin.confirmPin).then(result=>{
+            verifyPIN(props.FullName, createPin.oldPin).then(result=>{
       
               // if pincode is verified
-              result && createPIN(props.FullName,createPin.newPin).then(result=> {     
+              result && createPIN(props.FullName,createPin.newPin, props.LockerNumber).then(result=> {     
                 setError({
                   pin1: false,
                   pin1Error: "",
@@ -220,11 +220,12 @@ export const ChangePassword = (props) => {
                 })
 
                 alert(
-                    "PIN successfully change"
+                    "PIN successfully change ✔️"
                 )
       
-  
+                    
                 handleClose()
+                window.location.reload()
               })
       
               // if pincode is verified
