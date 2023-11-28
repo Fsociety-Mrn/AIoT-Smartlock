@@ -59,7 +59,7 @@ export const Appbar = () => {
   const [state, setState] = React.useState(true);
   React.useEffect(()=>{
       const setResponsiveness = () => {
-          return window.innerWidth < 700 ? setState(true) : setState(false);
+          return window.innerWidth < 800 ? setState(true) : setState(false);
       };
   
       setResponsiveness();
