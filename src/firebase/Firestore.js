@@ -35,7 +35,7 @@ export const userData = async () => {
   return await getDocs(collectionRef)
     .then((querySnapshot) => {
       const userDataArray = querySnapshot.docs
-      .filter((document) => !document.data().isAdmin) // Filter out isAdmin = true
+      // .filter((document) => !document.data().isAdmin) // Filter out isAdmin = true
       .map((document) => ({
         id: document.id,
         ...document.data(),

@@ -9,7 +9,7 @@ const Table = (props) => {
        {props.value === props.set &&
         <Paper sx={{ padding: "20px", borderRadius: "20px" }}> 
               
-            <Box sx={{ height: 400, width: '100%',padding: "10px" }}>
+            <Box sx={{ height: 400, width: '100%', padding: "10px" }}>
 
                 <DataGrid
                 rows={props.rows}

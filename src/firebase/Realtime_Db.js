@@ -1,3 +1,5 @@
+
+import TokenGenerator from "../Components/TokenGenerator";
 import { RTdb } from "./FirebaseConfig"
 import { 
     ref,  
@@ -5,6 +7,8 @@ import {
     remove,
     set
 } from "firebase/database";
+
+// **************** for Token Users **************** //
 
 // verify token users
 export const verifyToken = (TOKENs) => {
@@ -58,10 +62,44 @@ export const removeKey = (key) => {
 };
 
 // generate a token
-export const generateToken = async (uniqueID) => {
+export const generateToken = async () => {
   try {
+      const Token = TokenGenerator()
+
+      // Get the current date and time
+      const currentDate = new Date();
+
+      // Add 3 hours to the current time
+      const newDate = new Date(currentDate.getTime() + 3 * 60 * 60000); // 3 hours in milliseconds
+
+      const dateOptions = {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+      };
+  
+      const timeOptions = {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true,
+      };
+
+      const formattedDate = String(currentDate.toLocaleString('en-US', dateOptions)).replace(",", "");
+      const formattedTime = newDate.toLocaleString('en-US', timeOptions);
+
+      const data = {
+        OTP: Token,
+        EXPIRATION: {
+          date: formattedDate,
+          time: formattedTime
+        }
+      }
+
     const tokensList = await getListOFTokens(); // Assuming getListOFTokens() returns a list of tokens
-    set(ref(RTdb, 'GenerateToken_User/' + tokensList),String(uniqueID));
+    set(ref(RTdb, 'GenerateToken_User/' + tokensList),data);
+    alert("🎉 One-Time Password (OTP) for signing up has been generated! 🚀");
+
   } catch (err) {
     console.error(err);
   }
@@ -86,6 +124,8 @@ const getListOFTokens = () => {
   });
   
 }
+
+// **************** AIoT Lock**************** //
 
 // Push to AIoT Token For unlock
 export const AIoT_unlock = async (data) => {
@@ -219,5 +259,25 @@ export const createPIN = async (FullName,PIN,LockerNumber) => {
       }
 
 
+  });
+}
+
+// **************** get history of all data **************** //
+export const getHistory = async () => {
+  return new Promise((resolve, reject) => {
+    try {
+      const dbRef = ref(RTdb, `History`);
+      onValue(dbRef, (snapshot) => 
+        {
+          const data = snapshot.val();
+          resolve(data) 
+        }, (error) => 
+        {
+          reject(error);
+        });
+
+    }catch(error){
+      reject(error);
+    }
   });
 }

@@ -128,7 +128,7 @@ return (
                 </Stack>
   
             </Box>
-      </Modal>
+        </Modal>
     </div>
   )
 }

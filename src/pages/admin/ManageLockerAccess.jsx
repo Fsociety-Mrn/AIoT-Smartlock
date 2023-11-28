@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -10,29 +10,28 @@ import {
   Accordion, 
   AccordionDetails, 
   AccordionSummary, 
-  FormControl, 
-  MenuItem, 
-  Select, 
   Typography,
-  InputLabel,
   Stack,
   IconButton 
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import FormatName from '../../Components/FormatName'; 
 
-
 import { Avatar, Grid } from '@mui/material';
+
+import GenerateTokenModal from '../../Components/GenerateTokenModal'
 
 // data
 import { userData } from '../../firebase/Firestore'
-import dummdata from './dummyData.json'; 
+import { getHistory } from '../../firebase/Realtime_Db';
 
+// Icons
 import SettingsIcon from '@mui/icons-material/Settings';
+import KeyOutlinedIcon from '@mui/icons-material/KeyOutlined';
 
 
 //  user cards
-const Card = ({ imgSrc, title, user, isActive, LockerNumber  }) => {
+const Card = ({ imgSrc, title, user, isActive, LockerNumber, Data, isAdmin  }) => {
 
   const [open, setOpen] = useState(false);
   const [expanded, setExpanded] = useState('');
@@ -68,7 +67,7 @@ const Card = ({ imgSrc, title, user, isActive, LockerNumber  }) => {
           </div>
         )}
 
-        <IconButton color='primary' onClick={()=>console.log(dummdata[user])}>
+        <IconButton color='primary' onClick={()=>console.log("How I met your mother")}>
           <SettingsIcon />
         </IconButton>
       </Stack>
@@ -100,6 +99,15 @@ const Card = ({ imgSrc, title, user, isActive, LockerNumber  }) => {
             {user}
           </Typography>
 
+          {isAdmin && 
+            <Typography 
+            variant='h5' 
+            color="#0F2C3D" 
+            fontWeight="bold" 
+            fontSize="0.7rem">
+              admin
+            </Typography>
+          }
           <Typography 
           variant='h5' 
           color="#0F2C3D" 
@@ -131,8 +139,8 @@ const Card = ({ imgSrc, title, user, isActive, LockerNumber  }) => {
       
           <div>
             <h2>History Access:</h2>
-              {dummdata[user] &&
-                Object.keys(dummdata[user]).map((date, index) => (
+              {Data && Data[user] ?
+                Object.keys(Data[user]).map((date, index) => (
 
                   <Accordion key={index} expanded={expanded === date} onChange={() => setExpanded(expanded === date ? '' : date)}>
                     <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls={`panel${index}bh-content`} id={`panel${index}bh-header`}>
@@ -142,13 +150,13 @@ const Card = ({ imgSrc, title, user, isActive, LockerNumber  }) => {
                     <AccordionDetails>
 
                       <div>
-                        {Object.keys(dummdata[user][date]).map((time, idx) => (
+                        {Object.keys(Data[user][date]).map((time, idx) => (
                           <div key={idx}>
                             <p>Time: {time}</p>
-                            <p>Access Type: {dummdata[user][date][time].Access_type}</p>
+                            <p>Access Type: {Data[user][date][time].Access_type}</p>
 
-                            {dummdata[user][date][time].Percentage && (
-                              <p>Percentage: {dummdata[user][date][time].Percentage}</p>
+                            {Data[user][date][time].Percentage && (
+                              <p>Percentage: {Data[user][date][time].Percentage}</p>
                             )}
                             <hr />
                           </div>
@@ -157,7 +165,12 @@ const Card = ({ imgSrc, title, user, isActive, LockerNumber  }) => {
                     </AccordionDetails>
 
                   </Accordion>
-              ))}
+              ))
+              :
+              (
+                <p>No access history available for the user {user}.</p>
+              )}
+              
           </div>
         </DialogContent>
 
@@ -180,7 +193,6 @@ const StyledCard = styled.div`
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 `;
 
-
 const StatusDot = styled.div`
   width: 10px;
   height: 10px;
@@ -201,6 +213,7 @@ const ManageLockerAccess = () => {
       };
       
       setResponsiveness();
+
       window.addEventListener("resize", () => setResponsiveness());
       return () => {
         window.removeEventListener("resize", () => setResponsiveness());
@@ -209,7 +222,7 @@ const ManageLockerAccess = () => {
 
   return (
     <div>
-      {state ? <MobileView size={20} /> : <DesktopView />}
+      {state ? <MobileView size={20} jc="center" /> : <DesktopView />}
     </div>
   )
 }
@@ -225,7 +238,7 @@ const DesktopView = ()=>{
       alignItems="center"
       paddingLeft={12}
       >
-        <MobileView />
+        <MobileView size={2} jc="flex-start"/>
       </Grid>
     </div>
   );
@@ -236,9 +249,33 @@ const MobileView = (props) => {
 
   // for data user
   const [dataUser, setDataUser] = React.useState([])
-  const [token, setToken] = useState();
-  const [expiration, setExpiration] = useState(0);
-  const [selectedLocker, setSelectedLocker] = useState(''); // State for selected locker
+  const [Data,setData] = React.useState()
+  const [openModal,setOpenModal] = React.useState(false)
+
+  // Function to sort the data by date
+  const sortDataByDate = (data) => {
+    const sortedData = {};
+  
+    // Iterate over each user
+    Object.keys(data).forEach((user) => {
+
+      // console.log("NAME: ", user)
+
+      // Sort the dates for each user
+      const sortedDates = Object.keys(data[user]).sort((a, b) => new Date(b) - new Date(a))
+
+      // console.log("SORTED: ",sortedDates)
+  
+      // Create a new object with sorted dates
+      sortedData[user] = sortedDates.reduce((acc, date) => {
+        acc[date] = data[user][date];
+        return acc;
+      }, {});
+    });
+
+    return sortedData;
+}
+
 
   React.useEffect(() => {
    let isMounted = true;
@@ -264,7 +301,18 @@ const MobileView = (props) => {
         console.error(error);
       }
     };
-      fetchData();
+    fetchData();
+
+    getHistory()
+      .then(data=>
+        {
+          if (data){
+            const sortedData = sortDataByDate(data)
+            console.log(sortedData)
+            setData(sortedData)
+       
+          }
+        })
 
 
    return () => {
@@ -273,105 +321,59 @@ const MobileView = (props) => {
 
   }, [dataUser]);
 
- // Function to handle the selection of the locker
- const handleLockerSelection = (event) => {
-  setSelectedLocker(event.target.value);
-};
-
- // Function to generate OTP for the user
- const generateToken = () => {
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'; // Define the set of characters to choose from
-  let generatedToken = '';
-  const tokenLength = 4; // Set the desired token length
-
-  for (let i = 0; i < tokenLength; i++) {
-      const randomIndex = Math.floor(Math.random() * characters.length);
-      generatedToken += characters[randomIndex];
-  }
-
-  const expirationTime = 60; // Set the expiration time
-  setToken(generatedToken);
-  setExpiration(expirationTime);
-
-  // Store token and expiration in local storage
-  const expirationMilliseconds = Date.now() + expirationTime * 1000;
-  localStorage.setItem('token', generatedToken);
-  localStorage.setItem('expiration', expirationMilliseconds); // Store expiration time in milliseconds
-};
-
-
-
-useEffect(() => {
-  let storedToken = localStorage.getItem('token');
-  let storedExpiration = localStorage.getItem('expiration');
-
-  if (storedToken && storedExpiration) {
-    storedExpiration = parseInt(storedExpiration);
-    const remainingTime = storedExpiration - Date.now(); // Calculate the remaining time
-
-    if (remainingTime > 0) {
-      setToken(storedToken);
-      setExpiration(Math.floor(remainingTime / 1000)); // Convert milliseconds to seconds
-    } else {
-      // Clear token and expiration from local storage if the token has expired
-      localStorage.removeItem('token');
-      localStorage.removeItem('expiration');
-      setToken(''); // Reset token when expiration reaches 0
-      setExpiration(0); // Reset expiration when expiration reaches 0
-    }
-  }
-}, [token]);
-
-// State for token expiration time
-
-useEffect(() => {
-  let interval;
-  if (expiration > 0) {
-    interval = setInterval(() => {
-      setExpiration((prev) => prev - 1); // Decrease expiration time by 1 second
-    }, 1000);
-  } else {
-    setToken(''); // Reset token when expiration reaches 0
-  }
-
-  return () => clearInterval(interval); // Clear interval on component unmount
-}, [expiration]);
-
-
   return(
+    <>
+      <GenerateTokenModal 
+      open={openModal} 
+      setOpen={setOpenModal} 
+      />
 
     <Grid
     container
     direction="row"
-    justifyContent="center"
+    justifyContent={props.jc}
     alignItems="center"
     paddingTop={props.size}
     spacing={1}
     style={{ 
-        minHeight: "100vh",
-      }}
+      minHeight: "100vh",
+    }}
     >
-    
+
+  
+
+      <Grid item xs={7} md={3} sm={7}>
+        <Button variant='contained' fullWidth startIcon={<KeyOutlinedIcon fontSize='large'/>}
+        style={{ borderRadius: "10px", padding: "8px" }}
+        onClick={()=>setOpenModal(!openModal)}>Generate OTP </Button>
+      </Grid>
+
+      <Grid item xs={12} sm={12} />
+
+
+
       {/* Person List */}
       {dataUser.map((person, index) => (
         <Grid item key={index} xl={3} md={3} sm={4}>
+
           <Card
           key={index}
           imgSrc={person.photoUrl}
           user={FormatName(person.user)}
           LockerNumber={person.LockerNumber}
           isActive={person.isActive}
+          Data={Data}
+          isAdmin={person.isAdmin}
+
           />
+
         </Grid>
       ))}
 
 
 
     </Grid>
-
+   </>
   )
 }
-
-
-
 export default ManageLockerAccess
