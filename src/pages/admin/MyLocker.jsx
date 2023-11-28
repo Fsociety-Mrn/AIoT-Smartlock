@@ -31,6 +31,7 @@ const MyLocker = () => {
   const [paddinSize, setPaddingSize] = React.useState()
 
   const [userDetails, setUserDetaisl] = React.useState({
+    uid: "",
     profilePicture: "",
     Name: "",
     LockerNumber: ""
@@ -101,18 +102,19 @@ const MyLocker = () => {
 
 
   // make this one time call
-    statusLogin().then(data=>{
+    statusLogin().then(uid=>{
 
       if (isMounted){
-        getUserDetails(data.uid).then(data=>{
+        getUserDetails(uid.uid).then(data=>{
 
           const name = FormatName(data.user)
 
-          console.log(name)
+
   
           checkpin(name);
 
           setUserDetaisl({
+            uid: uid.uid,
             profilePicture: data.photoUrl,
             Name: name,
             LockerNumber: data.LockerNumber
@@ -166,7 +168,12 @@ const MyLocker = () => {
     style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: "100vh" }} 
     >
 
-      <ModalLocker open={openModal} setOpen={setOpenModal} LockerNumber={userDetails.LockerNumber}/>
+      <ModalLocker 
+      open={openModal} 
+      setOpen={setOpenModal} 
+      LockerNumber={userDetails.LockerNumber}
+      UID={userDetails.uid}
+      />
 
       <CreatePassword 
       createModal={createModal} 

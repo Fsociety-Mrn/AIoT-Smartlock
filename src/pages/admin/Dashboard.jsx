@@ -26,9 +26,6 @@ const Dashboard = () => {
   const [alert, setAlert] = React.useState();
   const [dataToken, setTokenData] = React.useState()
 
-
-
-
   const isExpired = (expirationDateTime) => {
     // Convert the expiration date string to a Date object
     const expirationDate = new Date(expirationDateTime.date + ' ' + expirationDateTime.time);
@@ -45,17 +42,6 @@ const Dashboard = () => {
     let cleanup = true;
 
     if(cleanup){
-  
-      // Object.values(data).map((value,key)=> console.log(value))
-    // console.log(data)
-
-    // const smartlock_check = async () => {
-    //   const data = await get_AIoT_unlock()
-
-    //   setAlert(data.isLock)
-    //   setTokenData(data.data)
-    //   isExpired(data.data.expiration) === true && remove_token_data()
-    // }
 
     // check if AIoT Smartlock is Lock
     get_AIoT_unlock().then(data=>{
@@ -69,7 +55,7 @@ const Dashboard = () => {
     })
        
   }
-    // smartlock_check();
+
 
     const setResponsiveness = () => {
         return window.innerWidth < 700 ? setPaddingSize(15) : setPaddingSize(0);

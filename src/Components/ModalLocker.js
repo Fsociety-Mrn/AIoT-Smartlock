@@ -5,8 +5,10 @@ import {
     Modal, 
     Typography,
     Button,
-    Grid
+    Grid,
+    Stack
  } from '@mui/material';
+import { updateLocker } from '../firebase/Firestore';
 import React from 'react'
 
 
@@ -27,8 +29,22 @@ const style = {
 const ModalLocker = (props) => {
 
     const LockerNumber = ['20', '21'] 
+    const [selectedLocker, setSelectedLocker] = React.useState(null);
+
+    const handleButtonClick = (number) => {
+      setSelectedLocker(number === selectedLocker ? null : number);
+    };
+
 
     const handleClose = () => props.setOpen(false);
+
+    React.useEffect(() => {
+        setSelectedLocker(props.LockerNumber);
+    }, [props.LockerNumber]);
+    
+    const handleonsavechanges = () => {
+        updateLocker(props.UID, selectedLocker)
+    }
 
     return (
         <div>  
@@ -45,25 +61,47 @@ const ModalLocker = (props) => {
                 <Fade in={props.open}>
                     <Box sx={style}>
 
-                        <Typography variant='h5' color="#0F2C3D" fontWeight="lighter" fontSize="0.9rem">
-                        choose the locker number or leave it behind
-                        </Typography>
 
-                        <Grid container spacing={1} padding={2}>
+                        <Grid container spacing={1}>
+                        
+                            <Grid item xs={12}>
+                                <Typography variant='h5' color="#0F2C3D" fontWeight="lighter" fontSize="1rem">
+                                This is your Locker Number: <strong> {selectedLocker} </strong>
+                                </Typography>
+
+                                <Typography variant='h5' color="#0F2C3D" fontWeight="lighter" fontSize="0.9rem">
+                                choose the locker number or leave it behind
+                                </Typography>
+                            </Grid>
+
                             {LockerNumber.map((number) => (
                                 <Grid item xs={3} key={number}> 
                                     <Button
-                                    variant={props.LockerNumber === number ? 'contained' : 'outlined'}
+                                    variant={selectedLocker === number ? 'contained' : 'outlined'}
                                     style={{
-                                        width: '50px', // Adjust the width as needed
-                                        height: '50px', // Adjust the height as needed
-                                        fontSize: '16px', // Adjust the font size as needed
+                                        width: '50px',
+                                        height: '50px',
+                                        fontSize: '16px',
                                     }}
+                                    onClick={() => handleButtonClick(number)}
                                     >
                                         {number}
                                     </Button>
                                 </Grid>
                             ))}
+
+                            <Grid item xs={12}>
+                                <Stack
+                                direction="row"
+                                justifyContent="center"
+                                alignItems="center"
+                                spacing={2}
+                                paddingTop={2}
+                                >
+                                    <Button variant='contained' onClick={handleonsavechanges}>Save Changes</Button>
+                                </Stack>
+                                
+                            </Grid>
                         </Grid>
                     </Box>
                 </Fade>
