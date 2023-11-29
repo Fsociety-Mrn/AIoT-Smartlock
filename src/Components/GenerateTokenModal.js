@@ -13,60 +13,48 @@ import KeyOutlinedIcon from '@mui/icons-material/KeyOutlined';
 import CloseIcon from '@mui/icons-material/Close';
 import { generateToken } from '../firebase/Realtime_Db';
 
-const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: "100%",
-    bgcolor: 'background.paper',
-    // border: '2px solid #000',
-    boxShadow: 24,
-    borderRadius: "10px",
-    p: 4
-};
-
 const columns = [
     { field: 'OTP', headerName: 'OTP', width: 150 },
-    { field: 'DATE', headerName: 'DATE', width: 120 },
-    { field: 'TIME', headerName: 'TIME', width: 100 },
+    { field: 'DATE', headerName: 'EXPIRED DATE', width: 120 },
+    { field: 'TIME', headerName: 'EXPIRED TIME', width: 120 },
   ];
 
-const rows = [
-    { 
-      id: 1,
-      OTP: 'ABC123', 
-      DATE: 'Nov 23 2023', 
-      TIME: "9:40 AM"
-    },
-    { 
-        id: 2,
-        OTP: 'ABC123', 
-        DATE: 'Nov 23 2023', 
-        TIME: "9:40 AM"
-    },
-    { 
-        id: 3,
-        OTP: 'ABC123', 
-        DATE: 'Nov 23 2023', 
-        TIME: "9:40 AM"
-    },
-    { 
-        id: 4,
-        OTP: 'ABC123', 
-        DATE: 'Nov 23 2023', 
-        TIME: "9:40 AM"
-    },
-    { 
-        id: 5,
-        OTP: 'ABC123', 
-        DATE: 'Nov 23 2023', 
-        TIME: "9:40 AM"
-    },
-];
+// const rows = [
+//     { 
+//       id: 1,
+//       OTP: 'ABC123', 
+//       DATE: 'Nov 23 2023', 
+//       TIME: "9:40 AM"
+//     },
+//     { 
+//         id: 2,
+//         OTP: 'ABC123', 
+//         DATE: 'Nov 23 2023', 
+//         TIME: "9:40 AM"
+//     },
+//     { 
+//         id: 3,
+//         OTP: 'ABC123', 
+//         DATE: 'Nov 23 2023', 
+//         TIME: "9:40 AM"
+//     },
+//     { 
+//         id: 4,
+//         OTP: 'ABC123', 
+//         DATE: 'Nov 23 2023', 
+//         TIME: "9:40 AM"
+//     },
+//     { 
+//         id: 5,
+//         OTP: 'ABC123', 
+//         DATE: 'Nov 23 2023', 
+//         TIME: "9:40 AM"
+//     },
+// ];
 
 const GenerateTokenModal = (props) => {
     const handleClose = () => props.setOpen(false);
+
     return (
         <div>
             <Modal
@@ -74,7 +62,20 @@ const GenerateTokenModal = (props) => {
             onClose={handleClose}
             >
 
-                <Box sx={style}>
+                <Box sx={
+                    {
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        width: "400px",
+                        bgcolor: 'background.paper',
+                        // border: '2px solid #000',
+                        boxShadow: 24,
+                        borderRadius: "10px",
+                        p: 4
+                    }
+                }>
 
                     <Stack
                     direction="column"
@@ -109,19 +110,22 @@ const GenerateTokenModal = (props) => {
                                 <Table 
                                 value={0}
                                 set={0}
-                                rows={rows}
+                                rows={props.tokenList}
                                 columns={columns}
                                 />
 
                             </Grid>
 
-                            <Grid item xs={12} md={3} sm={6}>
+                            <Grid item xs={12} md={10} sm={10}>
                                 <Button 
                                 fullWidth
                                 variant='contained'
                                 startIcon={<KeyOutlinedIcon fontSize='large'/>}
                                 style={{ borderRadius: "10px", padding: "8px" }}
-                                onClick={()=>generateToken()}
+                                onClick={()=>{
+                                    generateToken();
+                                    handleClose()
+                                }}
                                 >Generate Token</Button>
                             </Grid>
                         </Grid>

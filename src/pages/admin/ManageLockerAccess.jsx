@@ -23,7 +23,7 @@ import GenerateTokenModal from '../../Components/GenerateTokenModal'
 
 // data
 import { userData } from '../../firebase/Firestore'
-import { getHistory } from '../../firebase/Realtime_Db';
+import { TokenList, getHistory } from '../../firebase/Realtime_Db';
 
 // Icons
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -251,6 +251,7 @@ const MobileView = (props) => {
   const [dataUser, setDataUser] = React.useState([])
   const [Data,setData] = React.useState()
   const [openModal,setOpenModal] = React.useState(false)
+  const [listTokens, setListTokesn] = React.useState("ASD")
 
   // Function to sort the data by date
   const sortDataByDate = (data) => {
@@ -274,7 +275,7 @@ const MobileView = (props) => {
     });
 
     return sortedData;
-}
+  }
 
 
   React.useEffect(() => {
@@ -303,16 +304,20 @@ const MobileView = (props) => {
     };
     fetchData();
 
+    // Get History List
     getHistory()
       .then(data=>
         {
           if (data){
             const sortedData = sortDataByDate(data)
-            console.log(sortedData)
             setData(sortedData)
        
           }
         })
+
+
+
+
 
 
    return () => {
@@ -326,6 +331,7 @@ const MobileView = (props) => {
       <GenerateTokenModal 
       open={openModal} 
       setOpen={setOpenModal} 
+      tokenList={listTokens}
       />
 
     <Grid
@@ -345,7 +351,29 @@ const MobileView = (props) => {
       <Grid item xs={7} md={3} sm={7}>
         <Button variant='contained' fullWidth startIcon={<KeyOutlinedIcon fontSize='large'/>}
         style={{ borderRadius: "10px", padding: "8px" }}
-        onClick={()=>setOpenModal(!openModal)}>Generate OTP </Button>
+        onClick={()=>{
+
+
+          TokenList()
+        .then(tokenList => {
+
+          const formattedTokenList = tokenList.map((token, index) => {
+            const expirationDate = new Date(`${token.EXPIRATION.date} ${token.EXPIRATION.time}`);
+            return {
+              id: index + 1, // Assuming you want 1-based index
+              OTP: token.OTP,
+              DATE: expirationDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+              TIME: expirationDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }),
+            };
+          });
+
+          setListTokesn(formattedTokenList); 
+          setOpenModal(!openModal);
+        })
+        .catch(error => {
+          console.error(error);
+        });
+        }}>Generate OTP </Button>
       </Grid>
 
       <Grid item xs={12} sm={12} />
@@ -364,6 +392,7 @@ const MobileView = (props) => {
           isActive={person.isActive}
           Data={Data}
           isAdmin={person.isAdmin}
+
 
           />
 
