@@ -111,10 +111,13 @@ const TokenForm = (props) => {
                 borderRadius:"10px"
               }}
               onClick={()=>{
+                
+                // setError(true)
+
                 verifyToken(token)
                   .then(rsult=>{
                     props.setTokenShow(rsult);
-                    setError(false)
+                    setError(!rsult)
                   })
                   .catch(err=>{
                     props.setTokenShow(err);

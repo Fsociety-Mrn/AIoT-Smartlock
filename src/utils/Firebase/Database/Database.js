@@ -1,3 +1,4 @@
+
 import { RTdb } from '../Configuration'
 import { 
     ref,
@@ -176,10 +177,27 @@ import {
 
 // **************** TOKEN VERIFY **************** //
 
-    // verify token users
+// verify token users
 export const verifyToken = (TOKENs) => {
+
+    const isDateNotExpired = ({ date, time }) => {
+
+        // Parse the input date and time string
+        const inputDate = new Date(`${date} ${time}`);
+      
+        // Get the current date and time
+        const currentDate = new Date();
+      
+        // Compare the input date with the current date
+        if (inputDate > currentDate) {
+          return true; // Date is not expired
+        } else {
+          return false; // Date is expired
+        }
+    }
+      
     return new Promise((resolve, reject) => {
-      const dbRef = ref(RTdb, 'Token_User');
+      const dbRef = ref(RTdb, 'GenerateToken_User');
   
       onValue(dbRef, (snapshot) => {
         const data = snapshot.val();
@@ -189,7 +207,8 @@ export const verifyToken = (TOKENs) => {
   
           Object.entries(data).forEach(([key, value]) => {
             try {
-              if (value === TOKENs) {
+
+              if (value.OTP === TOKENs && isDateNotExpired(value.EXPIRATION)) {
                 console.log(`Data with key ${key} is valid.`);
                 removeKey(key)
                     .then(result=> console.log(result))
@@ -197,12 +216,24 @@ export const verifyToken = (TOKENs) => {
                         console.log(error);
                    
                     });
+              
                 isValid = true
                
               } else {
                 console.log(`Invalid key`);
                 isValid = false;
               }
+
+              
+              if (isDateNotExpired(value.EXPIRATION) === false){
+                removeKey(key)
+                .then(result=> console.log(result))
+                .catch(error=>{
+                    console.log(error);
+               
+                });
+              }
+
             } catch (error) {
               console.error(`Error removing key "${key}":`, error);
               reject(false);
@@ -223,7 +254,7 @@ export const verifyToken = (TOKENs) => {
   // remove token Key
 export const removeKey = (key) => {
     return new Promise((resolve, reject) => {
-        const keyRef = ref(RTdb, `Token_User/${key}`);
+        const keyRef = ref(RTdb, `GenerateToken_User/${key}`);
   
         remove(keyRef)
           .then(() => {
