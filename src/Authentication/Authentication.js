@@ -5,6 +5,7 @@ import {
     browserLocalPersistence,
     signOut,
     createUserWithEmailAndPassword,
+    deleteUser,
 } from "firebase/auth";
 
 import { auth } from '../firebase/FirebaseConfig'
@@ -21,7 +22,7 @@ export const LoginSession = (user) => {
 
             .then(() => {
                 window.location.reload();
-              resolve("Login Successful");
+                resolve("Login Successful");
             })
             .catch((error) => {
               console.log(error);
@@ -72,3 +73,17 @@ export const createAccount = (email, password) => {
     });
   };
 
+  // Delete Own User Account
+export const deleteAccount = () =>{
+
+  // Delete the user
+  deleteUser(auth.currentUser)
+    .then(() => {
+      console.log('Successfully deleted user');
+    })
+    .catch((error) => {
+      console.log('Error deleting user:', error);
+    });
+
+
+}

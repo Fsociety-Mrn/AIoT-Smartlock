@@ -9,7 +9,7 @@ import {
 
 import { statusLogin } from '../firebase/FirebaseConfig'
 import { isAdmin } from '../firebase/Firestore'
-import { LogoutSession } from '../Authentication/Authentication'
+import { LogoutSession, deleteAccount } from '../Authentication/Authentication'
 
 // for Login
 const Routess = () => {
@@ -27,20 +27,23 @@ const Routess = () => {
       .then(user=>{ 
 
         setLogin(isLoggedIn)
+
         // verify Admin
         isAdmin(user.uid)
           .then(data=>{
 
             if (data.isAdmin)
             {
-
-          
               sessionStorage.setItem('isAdmin', "true");  
             }else{
               LogoutSession()
             }
 
-          }).catch(error=> console.log(error))
+          }).catch(error=> {
+            alert(error)
+            deleteAccount()
+            window.location.reload()
+          })
         }).catch(error=> console.log(error))
         
     },[])
@@ -48,7 +51,10 @@ const Routess = () => {
  
     <div>
 
-      {login || isLoggedIn? <Mainpage isAdminS={isAdmins} />:<Login/>}
+      {login === "Login" && isLoggedIn === "Login" && <Mainpage isAdminS={isAdmins} />}
+      {login !== "Login" && isLoggedIn !== "Login" && <Login/>}
+
+
       {/* <WelcomePage/> */}
       {/* <Login/> */}
     </div>

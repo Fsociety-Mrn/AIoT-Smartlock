@@ -12,7 +12,8 @@ import {
   AccordionSummary, 
   Typography,
   Stack,
-  IconButton 
+  IconButton, 
+  Menu
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import FormatName from '../../Components/FormatName'; 
@@ -28,7 +29,7 @@ import { TokenList, getHistory } from '../../firebase/Realtime_Db';
 // Icons
 import SettingsIcon from '@mui/icons-material/Settings';
 import KeyOutlinedIcon from '@mui/icons-material/KeyOutlined';
-
+import { MenuItem } from '@mui/base';
 
 //  user cards
 const Card = ({ imgSrc, title, user, isActive, LockerNumber, Data, isAdmin  }) => {
@@ -44,6 +45,15 @@ const Card = ({ imgSrc, title, user, isActive, LockerNumber, Data, isAdmin  }) =
     setOpen(false);
   };
   
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const openS = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleCloseD = () => {
+    setAnchorEl(null);
+  };
 
   return (
     
@@ -67,9 +77,29 @@ const Card = ({ imgSrc, title, user, isActive, LockerNumber, Data, isAdmin  }) =
           </div>
         )}
 
-        <IconButton color='primary' onClick={()=>console.log("How I met your mother")}>
+        <IconButton color='primary' 
+             id="basic-button"
+        aria-controls={open ? 'basic-menu' : undefined}
+        aria-haspopup="true"
+        aria-expanded={open ? 'true' : undefined}
+        onClick={handleClick}>
           <SettingsIcon />
         </IconButton>
+
+        <Menu
+        id="basic-menu"
+        anchorEl={anchorEl}
+        open={openS}
+        onClose={handleCloseD}
+        MenuListProps={{
+          'aria-labelledby': 'basic-button',
+        }}
+      >
+        <MenuItem onClick={handleCloseD}>Promote to Admin</MenuItem>
+        <MenuItem onClick={handleCloseD}>Delete Account</MenuItem>
+
+      </Menu>
+
       </Stack>
    
       <Stack
@@ -380,7 +410,7 @@ const MobileView = (props) => {
       {dataUser.map((person, index) => (
         
         <Grid item key={index} xl={3} md={3} sm={4}>
-          {/* <button onClick={()=>console.log(person.id)}>click me</button> */}
+          {/* <button onClick={()=>deleteAccouint("4LcaafDRpAcyIMwwrzqm0P4zPub2")}>click me</button> */}
           <Card
           key={index}
           imgSrc={person.photoUrl}
