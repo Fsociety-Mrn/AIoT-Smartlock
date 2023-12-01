@@ -277,7 +277,6 @@ const MobileView = (props) => {
     return sortedData;
   }
 
-
   React.useEffect(() => {
    let isMounted = true;
     // fetch the user List
@@ -314,11 +313,6 @@ const MobileView = (props) => {
        
           }
         })
-
-
-
-
-
 
    return () => {
      isMounted = false;
@@ -384,8 +378,9 @@ const MobileView = (props) => {
 
       {/* Person List */}
       {dataUser.map((person, index) => (
+        
         <Grid item key={index} xl={3} md={3} sm={4}>
-
+          {/* <button onClick={()=>console.log(person.id)}>click me</button> */}
           <Card
           key={index}
           imgSrc={person.photoUrl}

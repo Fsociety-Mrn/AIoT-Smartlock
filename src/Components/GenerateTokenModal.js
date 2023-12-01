@@ -82,12 +82,12 @@ const ChildModal = (props) => {
 
 
 
-                        <Typography variant='h5' color="red" fontWeight="BOLD" fontSize="1.2rem"> 
+                        <Typography id="modal-modal-title" variant='h5' color="red" fontWeight="BOLD" fontSize="1.2rem"> 
                             "{props.OTP}"
                         </Typography>
 
-                        <Typography variant='h5' color="#0F2C3D" fontWeight="lighter" fontSize="0.9rem"> 
-                        🎉 One-Time Password (OTP) for signing up has been generated! 🚀 
+                        <Typography  variant='h5' color="#0F2C3D" fontWeight="lighter" fontSize="0.9rem"> 
+                        <span role="img" />🎉 One-Time Password (OTP) for signing up has been generated! 🚀 
                         </Typography>
                         
                         <Typography variant='h5' color="#0F2C3D" fontWeight="lighter" fontSize="0.9rem"> 
