@@ -1,10 +1,15 @@
+
+import TokenGenerator from "../Components/TokenGenerator";
 import { RTdb } from "./FirebaseConfig"
 import { 
     ref,  
     onValue, 
     remove,
-    set
+    set,
+    push
 } from "firebase/database";
+
+// **************** for Token Users **************** //
 
 // verify token users
 export const verifyToken = (TOKENs) => {
@@ -58,34 +63,101 @@ export const removeKey = (key) => {
 };
 
 // generate a token
-export const generateToken = async (uniqueID) => {
+export const generateToken = async () => {
+return new Promise((resolve, reject) => {
   try {
-    const tokensList = await getListOFTokens(); // Assuming getListOFTokens() returns a list of tokens
-    set(ref(RTdb, 'GenerateToken_User/' + tokensList),String(uniqueID));
+    const Token = TokenGenerator();
+
+    // Get the current date and time
+    const currentDate = new Date();
+
+    // Add 3 hours to the current time
+    const newDate = new Date(currentDate.getTime() + 3 * 60 * 60000); // 3 hours in milliseconds
+
+    const dateOptions = {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+    };
+
+    const timeOptions = {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: true,
+    };
+
+    const formattedDate = String(currentDate.toLocaleString('en-US', dateOptions)).replace(",", "");
+    const formattedTime = newDate.toLocaleString('en-US', timeOptions);
+
+    const data = {
+      OTP: Token,
+      EXPIRATION: {
+        date: formattedDate,
+        time: formattedTime
+      }
+    }
+
+    const tokensRef = ref(RTdb, 'GenerateToken_User');
+    const newTokenRef = push(tokensRef); // This generates a unique key
+
+    set(newTokenRef, data);
+
+    console.log("🎉 One-Time Password (OTP) for signing up has been generated! 🚀");
+
+    resolve(Token)
+
   } catch (err) {
     console.error(err);
+    reject(err)
   }
+})
 }
 
-const getListOFTokens = () => {
+export const TokenList = () => {
   const dbRef = ref(RTdb, 'GenerateToken_User');
 
   return new Promise((resolve, reject) => {
     onValue(dbRef, (snapshot) => {
+
       const data = snapshot.val();
-      if (data && typeof data === 'object') {
-        const numberOfTokens = Object.keys(data).length;
-        resolve(numberOfTokens);
-      } else {
-        // Handle the case when data is null or not an object
-        resolve(0); // Return 0 tokens or any default value as per your requirement
-      }
+      const currentTime = new Date();
+
+      // Filter out expired tokens
+      const validTokens = data && Object.values(data).filter(token => {
+        const expirationDate = new Date(`${token.EXPIRATION.date} ${token.EXPIRATION.time}`);
+        return expirationDate > currentTime;
+      });
+
+      // Remove expired tokens
+      const expiredTokens = data && Object.entries(data).filter(([key, token]) => {
+        const expirationDate = new Date(`${token.EXPIRATION.date} ${token.EXPIRATION.time}`);
+        return expirationDate <= currentTime;
+      });
+
+      // Remove expired tokens from the database
+      const removalPromises = expiredTokens && expiredTokens.map(([key]) => removeKey(key));
+
+      // Wait for all removal operations to complete
+      Promise.all(removalPromises)
+        .then(() => {
+          console.log('Expired tokens removed successfully.');
+          resolve(validTokens);
+        })
+        .catch((error) => {
+          console.error('Error removing expired tokens:', error);
+          reject(error);
+        });
     }, (error) => {
       reject(error);
     });
   });
-  
 }
+
+
+
+
+// **************** AIoT Lock**************** //
 
 // Push to AIoT Token For unlock
 export const AIoT_unlock = async (data) => {
@@ -219,5 +291,25 @@ export const createPIN = async (FullName,PIN,LockerNumber) => {
       }
 
 
+  });
+}
+
+// **************** get history of all data **************** //
+export const getHistory = async () => {
+  return new Promise((resolve, reject) => {
+    try {
+      const dbRef = ref(RTdb, `History`);
+      onValue(dbRef, (snapshot) => 
+        {
+          const data = snapshot.val();
+          resolve(data) 
+        }, (error) => 
+        {
+          reject(error);
+        });
+
+    }catch(error){
+      reject(error);
+    }
   });
 }

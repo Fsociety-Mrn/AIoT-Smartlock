@@ -35,7 +35,7 @@ export const userData = async () => {
   return await getDocs(collectionRef)
     .then((querySnapshot) => {
       const userDataArray = querySnapshot.docs
-      .filter((document) => !document.data().isAdmin) // Filter out isAdmin = true
+      // .filter((document) => !document.data().isAdmin) // Filter out isAdmin = true
       .map((document) => ({
         id: document.id,
         ...document.data(),
@@ -138,8 +138,8 @@ export const updateDetails = async (UID=null, Name=null, File=null) =>{
     })
     .catch(err=>console.log(err));
   }else{
-    await updateDoc(doc(Fdb, "users", UID), {
 
+    await updateDoc(doc(Fdb, "users", UID), {
       user: Name
     })
     .then(test=>{
@@ -170,4 +170,19 @@ export const getUserDetails = async (UID) =>{
     console.error("Error fetching user data:", error);
     throw error; // Rethrow the error or handle it gracefully
   }
+}
+
+// update Locker Number
+export const updateLocker = async (UID=null, LockerNumber=null) =>{
+
+  await updateDoc(doc(Fdb, "users", UID), {
+    LockerNumber: LockerNumber
+  })
+    .then(test=>{
+      alert("your Locker is updated! ");
+      window.location.reload();
+    })
+    .catch(err=>console.log(err));
+
+
 }
