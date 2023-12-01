@@ -251,7 +251,7 @@ const MobileView = (props) => {
   const [dataUser, setDataUser] = React.useState([])
   const [Data,setData] = React.useState()
   const [openModal,setOpenModal] = React.useState(false)
-  const [listTokens, setListTokesn] = React.useState("ASD")
+  const [listTokens, setListTokesn] = React.useState("")
 
   // Function to sort the data by date
   const sortDataByDate = (data) => {
@@ -368,11 +368,13 @@ const MobileView = (props) => {
           });
 
           setListTokesn(formattedTokenList); 
-          setOpenModal(!openModal);
+   
         })
         .catch(error => {
           console.error(error);
         });
+
+        setOpenModal(!openModal);
         }}>Generate OTP </Button>
       </Grid>
 

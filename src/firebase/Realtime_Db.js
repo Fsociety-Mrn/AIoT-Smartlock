@@ -64,6 +64,7 @@ export const removeKey = (key) => {
 
 // generate a token
 export const generateToken = async () => {
+return new Promise((resolve, reject) => {
   try {
     const Token = TokenGenerator();
 
@@ -102,11 +103,15 @@ export const generateToken = async () => {
 
     set(newTokenRef, data);
 
-    alert("🎉 One-Time Password (OTP) for signing up has been generated! 🚀");
+    console.log("🎉 One-Time Password (OTP) for signing up has been generated! 🚀");
+
+    resolve(Token)
 
   } catch (err) {
     console.error(err);
+    reject(err)
   }
+})
 }
 
 export const TokenList = () => {
@@ -119,19 +124,19 @@ export const TokenList = () => {
       const currentTime = new Date();
 
       // Filter out expired tokens
-      const validTokens = Object.values(data).filter(token => {
+      const validTokens = data && Object.values(data).filter(token => {
         const expirationDate = new Date(`${token.EXPIRATION.date} ${token.EXPIRATION.time}`);
         return expirationDate > currentTime;
       });
 
       // Remove expired tokens
-      const expiredTokens = Object.entries(data).filter(([key, token]) => {
+      const expiredTokens = data && Object.entries(data).filter(([key, token]) => {
         const expirationDate = new Date(`${token.EXPIRATION.date} ${token.EXPIRATION.time}`);
         return expirationDate <= currentTime;
       });
 
       // Remove expired tokens from the database
-      const removalPromises = expiredTokens.map(([key]) => removeKey(key));
+      const removalPromises = expiredTokens && expiredTokens.map(([key]) => removeKey(key));
 
       // Wait for all removal operations to complete
       Promise.all(removalPromises)

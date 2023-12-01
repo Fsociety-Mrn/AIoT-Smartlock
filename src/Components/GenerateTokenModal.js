@@ -15,8 +15,8 @@ import { generateToken } from '../firebase/Realtime_Db';
 
 const columns = [
     { field: 'OTP', headerName: 'OTP', width: 150 },
-    { field: 'DATE', headerName: 'EXPIRED DATE', width: 120 },
     { field: 'TIME', headerName: 'EXPIRED TIME', width: 120 },
+    { field: 'DATE', headerName: 'EXPIRED DATE', width: 120 },
   ];
 
 // const rows = [
@@ -52,17 +52,78 @@ const columns = [
 //     },
 // ];
 
-const GenerateTokenModal = (props) => {
-    const handleClose = () => props.setOpen(false);
-
-    return (
+const ChildModal = (props) => {
+    return(
         <div>
+            <Modal
+            open={props.open}
+            onClose={props.handleClose}
+            >
+                <Box 
+                sx={
+                    {
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    width: "300px",
+                    bgcolor: 'background.paper',
+                    boxShadow: 24,
+                    borderRadius: "10px",
+                    p: 4
+                    }
+                }>
+
+                    <Stack
+                    direction="column"
+                    justifyContent="center"
+                    alignItems="center"
+                    spacing={1}>
+
+
+
+                        <Typography variant='h5' color="red" fontWeight="BOLD" fontSize="1.2rem"> 
+                            "{props.OTP}"
+                        </Typography>
+
+                        <Typography variant='h5' color="#0F2C3D" fontWeight="lighter" fontSize="0.9rem"> 
+                        🎉 One-Time Password (OTP) for signing up has been generated! 🚀 
+                        </Typography>
+                        
+                        <Typography variant='h5' color="#0F2C3D" fontWeight="lighter" fontSize="0.9rem"> 
+                        and will expire in 3 hours.
+                        </Typography>
+
+                    </Stack>
+                </Box>
+            </Modal>
+    </div>
+    )
+}
+const GenerateTokenModal = (props) => {
+
+    const handleClose = () => {
+        props.setOpen(false)
+        setOpen(false)
+    };
+
+    const [open,setOpen] = React.useState()
+    const [otp,setOtp] = React.useState()
+
+    return ( 
+        <div>
+
+            <ChildModal 
+            open={open}
+            handleClose={handleClose}
+            OTP={otp}
+            />
             <Modal
             open={props.open}
             onClose={handleClose}
             >
-
-                <Box sx={
+                <Box 
+                sx={
                     {
                         position: 'absolute',
                         top: '50%',
@@ -107,12 +168,23 @@ const GenerateTokenModal = (props) => {
                         >
 
                             <Grid item xs={12}>
+
+                                {props.tokenList ?
                                 <Table 
                                 value={0}
                                 set={0}
                                 rows={props.tokenList}
                                 columns={columns}
                                 />
+                                :
+                                <Stack
+                                direction="column"
+                                justifyContent="center"
+                                alignItems="center"
+                                >
+                                    <Typography>no token available</Typography>
+                                </Stack>
+                                }
 
                             </Grid>
 
@@ -123,8 +195,13 @@ const GenerateTokenModal = (props) => {
                                 startIcon={<KeyOutlinedIcon fontSize='large'/>}
                                 style={{ borderRadius: "10px", padding: "8px" }}
                                 onClick={()=>{
-                                    generateToken();
-                                    handleClose()
+                                    generateToken()
+                                    .then(otp=>{
+                                        setOtp(otp)
+                                        setOpen(!open)
+                                    })
+                                    // handleClose()
+                                    
                                 }}
                                 >Generate Token</Button>
                             </Grid>
