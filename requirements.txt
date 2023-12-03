@@ -4,7 +4,6 @@ opencv_python==4.5.5.64
 PyQt5==5.15.10
 PyQt5_sip==12.13.0
 Pyrebase4==4.7.1
-Requests==2.31.0
 tinydb==4.8.0
 torch==2.0.1
 torchvision==0.15.2
