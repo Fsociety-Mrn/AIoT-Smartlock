@@ -156,7 +156,6 @@ export const TokenList = () => {
 
 
 
-
 // **************** AIoT Lock**************** //
 
 // Push to AIoT Token For unlock
@@ -190,15 +189,15 @@ export const get_AIoT_unlock = async () =>{
 
 // remove token Key
 export const remove_token_data = () => {
-    const keyRef = ref(RTdb, `AIoT Lock/data`);
+  const keyRef = ref(RTdb, `AIoT Lock/data`);
   
-    remove(keyRef)
-      .then(() => {
-        console.log(`removed successfully.`);
-      })
-      .catch((error) => {
-        console.error(`Error removing:`, error);
-      });
+  remove(keyRef)
+    .then(() => {
+      console.log(`removed successfully.`);
+    })
+    .catch((error) => {
+      console.error(`Error removing:`, error);
+    });
 };
 
 // **************** Open the Locker **************** //
@@ -312,4 +311,17 @@ export const getHistory = async () => {
       reject(error);
     }
   });
+}
+
+// remove History of user
+export const removeUser = async (KeyName,Name) =>{
+  const keyRef = ref(RTdb, `${KeyName}/${Name}`);
+  
+  remove(keyRef)
+    .then(() => {
+      console.log(`removed successfully.`);
+    })
+    .catch((error) => {
+      console.error(`Error removing:`, error);
+    });
 }

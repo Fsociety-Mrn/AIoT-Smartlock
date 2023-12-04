@@ -1,4 +1,4 @@
-import { collection,getDocs, doc, setDoc, getDoc,updateDoc  } from "firebase/firestore";
+import { collection,getDocs, doc, setDoc, getDoc,updateDoc, deleteDoc  } from "firebase/firestore";
 import { Fdb } from './FirebaseConfig'
 import { 
   getDownloadURL, 
@@ -184,5 +184,37 @@ export const updateLocker = async (UID=null, LockerNumber=null) =>{
     })
     .catch(err=>console.log(err));
 
+
+}
+
+// update a username
+export const promoteAdmin = async (UID,Name) =>{
+
+  await updateDoc(doc(Fdb, "users", UID), {
+    isAdmin: true
+  })
+  .then(test=>{
+    alert(`${Name} is promoted as a Admin`);
+    window.location.reload();
+  })
+  .catch(err=>console.log(err));
+}
+
+// delete User
+export const deleteUser =  (UID) =>{
+
+  return new Promise(async (resolve, reject) => {
+    try{
+
+      const userDoc = doc(Fdb, "users", UID);
+      await deleteDoc(userDoc);  
+      alert("Successful remove")
+      resolve("Successful remove")
+  
+    }catch(e){
+      alert("Error removing")
+      reject("Error removing")
+    }
+  })
 
 }

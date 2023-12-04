@@ -7,7 +7,7 @@ import {
   Typography,
   Collapse
 } from '@mui/material'
-import ModalAlert from '../../Components/ModalAlert';
+import ModalAlert from '../../Components/Modal/ModalAlert';
 
 import CardItem from "../../Components/Card"
 import React from 'react'

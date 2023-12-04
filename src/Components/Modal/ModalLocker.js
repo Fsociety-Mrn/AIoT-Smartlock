@@ -8,7 +8,7 @@ import {
     Grid,
     Stack
  } from '@mui/material';
-import { updateLocker } from '../firebase/Firestore';
+import { updateLocker } from '../../firebase/Firestore';
 import React from 'react'
 
 
@@ -105,7 +105,7 @@ const ModalLocker = (props) => {
                         </Grid>
                     </Box>
                 </Fade>
-      </Modal>
+            </Modal>
     </div>
     )
 }

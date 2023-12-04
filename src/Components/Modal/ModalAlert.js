@@ -4,8 +4,8 @@ import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import { Button } from 'react-scroll';
 import { Stack } from '@mui/material';
-import TokenGenerator from './TokenGenerator';
-import { AIoT_unlock, get_AIoT_unlock } from '../firebase/Realtime_Db'; 
+import TokenGenerator from '../TokenGenerator';
+import { AIoT_unlock, get_AIoT_unlock } from '../../firebase/Realtime_Db'; 
 
 const style = {
     position: 'absolute',

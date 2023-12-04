@@ -22,8 +22,8 @@ import {
 } from '../../firebase/Realtime_Db';
 
 import FormatName from '../../Components/FormatName'
-import ModalLocker from '../../Components/ModalLocker';
-import { CreatePassword,ChangePassword } from '../../Components/PasswordModal'; 
+import ModalLocker from '../../Components/Modal/ModalLocker';
+import { CreatePassword,ChangePassword } from '../../Components/Modal/PasswordModal'; 
 
 import TokenGenerator from '../../Components/TokenGenerator'
 

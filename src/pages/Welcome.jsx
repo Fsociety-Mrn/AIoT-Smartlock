@@ -3,6 +3,7 @@ import React from 'react'
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../firebase/FirebaseConfig';
 import { getUserName } from '../firebase/Firestore';
+import FormatName from '../Components/FormatName';
 
 import Loading from './Loading';
 
@@ -29,7 +30,7 @@ const Welcome = () => {
               setUID(user.uid);
 
             }else{
-              setCurrentUser(result);
+              setCurrentUser(FormatName(result));
               setName(null);
             }
             

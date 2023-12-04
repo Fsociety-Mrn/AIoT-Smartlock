@@ -51,7 +51,7 @@ const Routess = () => {
  
     <div>
 
-      {login === "Login" && isLoggedIn === "Login" && <Mainpage isAdminS={isAdmins} />}
+      {isLoggedIn === "Login" && <Mainpage isAdminS={isAdmins} />}
       {login !== "Login" && isLoggedIn !== "Login" && <Login/>}
 
 

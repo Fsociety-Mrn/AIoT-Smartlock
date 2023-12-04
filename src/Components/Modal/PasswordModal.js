@@ -9,10 +9,10 @@ import {
     FormControlLabel,
     Checkbox
 } from "@mui/material"
-import { DesktopTextbox } from './Textfield';
+import { DesktopTextbox } from '../Textfield';
 import React from "react"
-import { createPIN, verifyPIN } from "../firebase/Realtime_Db";
-import { pinSchema,NewpinSchema } from "../Authentication/Validation";
+import { createPIN, verifyPIN } from "../../firebase/Realtime_Db";
+import { pinSchema,NewpinSchema } from "../../Authentication/Validation";
 
 const style = {
     position: 'absolute',

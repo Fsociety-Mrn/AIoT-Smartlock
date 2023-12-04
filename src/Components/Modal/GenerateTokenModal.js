@@ -6,12 +6,12 @@ import {
     Modal, 
     Stack, 
     Typography } from '@mui/material';
-import Table from './Table';
+import Table from '../Table';
 import React from 'react'
 
 import KeyOutlinedIcon from '@mui/icons-material/KeyOutlined';
 import CloseIcon from '@mui/icons-material/Close';
-import { generateToken } from '../firebase/Realtime_Db';
+import { generateToken } from '../../firebase/Realtime_Db';
 
 const columns = [
     { field: 'OTP', headerName: 'OTP', width: 150 },

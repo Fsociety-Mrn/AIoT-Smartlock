@@ -13,30 +13,39 @@ import {
   Typography,
   Stack,
   IconButton, 
-  Menu
+  Menu,
+  MenuItem,
+  ListItemIcon
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import FormatName from '../../Components/FormatName'; 
 
 import { Avatar, Grid } from '@mui/material';
 
-import GenerateTokenModal from '../../Components/GenerateTokenModal'
+import GenerateTokenModal from '../../Components/Modal/GenerateTokenModal'
+import ModalConfirm from '../../Components/Modal/ModalConfirm';
 
 // data
-import { userData } from '../../firebase/Firestore'
-import { TokenList, getHistory } from '../../firebase/Realtime_Db';
+import { userData,promoteAdmin, deleteUser } from '../../firebase/Firestore'
+import { TokenList, getHistory, removeUser } from '../../firebase/Realtime_Db';
 
 // Icons
 import SettingsIcon from '@mui/icons-material/Settings';
 import KeyOutlinedIcon from '@mui/icons-material/KeyOutlined';
-import { MenuItem } from '@mui/base';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 
-//  user cards
-const Card = ({ imgSrc, title, user, isActive, LockerNumber, Data, isAdmin  }) => {
+
+//  user s
+const Card = ({ imgSrc, title, user, isActive, LockerNumber, Data, isAdmin, id  }) => {
 
   const [open, setOpen] = useState(false);
   const [expanded, setExpanded] = useState('');
- 
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [openModal,setOpenModal] = React.useState(false)
+
+  const openS = Boolean(anchorEl);
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -44,10 +53,7 @@ const Card = ({ imgSrc, title, user, isActive, LockerNumber, Data, isAdmin  }) =
   const handleClose = () => {
     setOpen(false);
   };
-  
 
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const openS = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -55,9 +61,26 @@ const Card = ({ imgSrc, title, user, isActive, LockerNumber, Data, isAdmin  }) =
     setAnchorEl(null);
   };
 
+  const removeAccount = async () =>{
+    await removeUser("HISTORY", user)
+    await removeUser("LOCK", user)
+    await removeUser("PIN", user)
+    await deleteUser(id)
+
+    window.location.reload()
+  }
+
   return (
+
     
     <StyledCard>
+
+      <ModalConfirm
+      open={openModal}
+      setOpen={setOpenModal}
+      name={user}
+      delete={removeAccount}
+      />
 
       <Stack
       direction="row"
@@ -78,7 +101,7 @@ const Card = ({ imgSrc, title, user, isActive, LockerNumber, Data, isAdmin  }) =
         )}
 
         <IconButton color='primary' 
-             id="basic-button"
+        id="basic-button"
         aria-controls={open ? 'basic-menu' : undefined}
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
@@ -94,9 +117,25 @@ const Card = ({ imgSrc, title, user, isActive, LockerNumber, Data, isAdmin  }) =
         MenuListProps={{
           'aria-labelledby': 'basic-button',
         }}
-      >
-        <MenuItem onClick={handleCloseD}>Promote to Admin</MenuItem>
-        <MenuItem onClick={handleCloseD}>Delete Account</MenuItem>
+        >
+          {!isAdmin && 
+          <MenuItem onClick={()=>promoteAdmin(id,user)}>
+          
+            <ListItemIcon>
+              <AdminPanelSettingsIcon fontSize="medium" color="primary" />
+            </ListItemIcon>
+
+            Promote Admin
+          </MenuItem>
+          }
+
+          <MenuItem onClick={()=>setOpenModal(true)}>
+            <ListItemIcon>
+              <PersonRemoveIcon fontSize="medium" color='error'/>
+            </ListItemIcon>
+
+            Delete Account
+          </MenuItem>
 
       </Menu>
 
@@ -378,7 +417,7 @@ const MobileView = (props) => {
         onClick={()=>{
 
 
-          TokenList()
+        TokenList()
         .then(tokenList => {
 
           const formattedTokenList = tokenList.map((token, index) => {
@@ -410,7 +449,7 @@ const MobileView = (props) => {
       {dataUser.map((person, index) => (
         
         <Grid item key={index} xl={3} md={3} sm={4}>
-          {/* <button onClick={()=>deleteAccouint("4LcaafDRpAcyIMwwrzqm0P4zPub2")}>click me</button> */}
+
           <Card
           key={index}
           imgSrc={person.photoUrl}
@@ -419,8 +458,7 @@ const MobileView = (props) => {
           isActive={person.isActive}
           Data={Data}
           isAdmin={person.isAdmin}
-
-
+          id={person.id}
           />
 
         </Grid>
