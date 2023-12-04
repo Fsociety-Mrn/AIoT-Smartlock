@@ -1,6 +1,5 @@
 import { collection, doc, getDoc, getDocs, setDoc, updateDoc } from "firebase/firestore";
 import { Fdb } from '../Configuration'
-import { LogoutSession } from "../Authentication/Authentication";
 
 
 const collectionRef = collection(Fdb, "users");
@@ -16,10 +15,10 @@ export const isAdmin = (UID) => {
 
     
 
-                if(doc.data().isAdmin){
-                    LogoutSession()
-                    window.location.reload()
-                }
+                // if(doc.data().isAdmin){
+                //     LogoutSession()
+                //     window.location.reload()
+                // }
 
               resolve(doc.data());
             }

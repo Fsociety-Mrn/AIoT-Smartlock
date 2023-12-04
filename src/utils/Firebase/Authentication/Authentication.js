@@ -9,6 +9,7 @@ import {
     browserLocalPersistence,
     signOut,
     createUserWithEmailAndPassword,
+    deleteUser,
 } from "@firebase/auth";
 
 import { createUserData } from '../Firestore/Firestore'
@@ -218,3 +219,17 @@ export const LogoutSession = async () => {
         });
     });
   }
+
+  // Delete Own User Account
+  export const deleteAccount = () =>{
+
+  // Delete the user
+  deleteUser(auth.currentUser)
+    .then(() => {
+      console.log('Successfully deleted user');
+    })
+    .catch((error) => {
+      console.log('Error deleting user:', error);
+    });
+
+}
