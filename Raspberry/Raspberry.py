@@ -37,9 +37,9 @@ def OpenLockers(name,key,value):
         print("Open Lockers")
         print(key,value)
         
-        GPIO.output(key,value)
+        GPIO.output(int(key),value)
         time.sleep(2)
-        GPIO.output(key,GPIO.LOW)
+        GPIO.output(int(key),GPIO.LOW)
         
         lockerUpdate(name=name, value=False)
         
