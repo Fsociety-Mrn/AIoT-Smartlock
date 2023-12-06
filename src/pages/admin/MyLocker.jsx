@@ -173,6 +173,7 @@ const MyLocker = () => {
       setOpen={setOpenModal} 
       LockerNumber={userDetails.LockerNumber}
       UID={userDetails.uid}
+      FullName={userDetails.Name} 
       />
 
       <CreatePassword 

@@ -155,7 +155,6 @@ export const TokenList = () => {
 }
 
 
-
 // **************** AIoT Lock**************** //
 
 // Push to AIoT Token For unlock
@@ -324,4 +323,17 @@ export const removeUser = async (KeyName,Name) =>{
     .catch((error) => {
       console.error(`Error removing:`, error);
     });
+}
+
+export const changeLockerNumber = async (KeyName,Name,LockerNumber) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const keyRef = ref(RTdb, `${KeyName}/${Name}/Locker Number`);
+      
+      set(keyRef,LockerNumber);
+      resolve("locker Number Updated")
+    } catch (err) {
+      reject(err);
+    }
+  })
 }
