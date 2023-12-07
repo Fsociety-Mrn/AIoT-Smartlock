@@ -23,6 +23,7 @@ def openLocker():
             if key: 
                 threading.Thread(target=OpenLockers, args=(key, int(value['Locker Number']),value['Locker Status'],)).start()
     except Exception as e:
+        pass
         print("Error Open Locker: ", e)
         
 def gpio_manual(key,value):
