@@ -23,16 +23,18 @@ def openLocker():
     except:
         print("Error Open Locker")
         
-        
+def gpio_manual(key,value):
+    GPIO.output(int(key),value)
+    
 def OpenLockers(name,key,value):
 
     if value:
         print("Open Lockers")
         print(key,value)
         
-        GPIO.output(int(key),GPIO.LOW)
+        gpio_manual(int(key),GPIO.LOW)
         time.sleep(2)
-        GPIO.output(int(key),GPIO.HIGH)
+        gpio_manual(int(key),GPIO.HIGH)
         
         lockerUpdate(name=name, value=False)
         
