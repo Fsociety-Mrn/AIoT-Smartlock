@@ -271,6 +271,10 @@ class MainWindow(QtWidgets.QFrame):
         self.checkFailDetailsssss.timeout.connect(self.checkFailss)
         self.checkFailDetailsssss.start(1000)
 
+        self.updateData = QtCore.QTimer(self)
+        self.updateData.timeout.connect(self.update_data)
+        self.updateData.start(1000)
+        
         
         self.closeEvent = self.closeEvent
         self.horizontalLayout.addWidget(self.widget_2) 
@@ -500,6 +504,7 @@ class MainWindow(QtWidgets.QFrame):
             # Attempt to create a socket connection to a known server (e.g., Google DNS)
             socket.create_connection(("8.8.8.8", 53))
             self.label.setText("<html><head/><body><p>AIoT Smartlock is <Strong>online<strong/></p></body></html>")
+            
             updateToDatabase()
             openLocker()
             
@@ -512,6 +517,17 @@ class MainWindow(QtWidgets.QFrame):
             self.label.setText("<html><head/><body><p><Strong>No Internet<strong/> Connection</p></body></html>")
             
             self.checkFacialUpdate()
+            
+    def update_data(self):
+        try:
+            
+            updateToDatabase()
+            openLocker()
+            
+        except OSError:
+            
+            pass
+            print("No Internet")
     # ===================== open facial Login ===================== #
 
     def openFacialLogin(self):
