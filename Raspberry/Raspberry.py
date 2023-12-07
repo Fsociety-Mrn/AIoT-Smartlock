@@ -6,18 +6,11 @@ import threading
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 
-# SETUP PIN
-GPIO.setup(21,GPIO.OUT)
-GPIO.setup(20,GPIO.OUT)
-GPIO.setup(16,GPIO.OUT)
-GPIO.setup(12,GPIO.OUT)
-GPIO.setup(7,GPIO.OUT)
-GPIO.setup(8,GPIO.OUT)
+PIN = [21,20,16,12,7,8]
 
-# GPIO.setup(25,GPIO.OUT)
-# GPIO.setup(24,GPIO.OUT)
-# GPIO.setup(23,GPIO.OUT)
-# GPIO.setup(18,GPIO.OUT)
+for number in PIN:
+    GPIO.setup(number,GPIO.OUT)
+    GPIO.output(number,GPIO.LOW)
 
 def openLocker():
     try:
