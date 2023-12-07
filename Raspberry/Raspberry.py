@@ -6,11 +6,11 @@ import threading
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 
-PIN = [21,20,16,12,7,8]
+batch_one_locker = [21,20,16,12,7,8]
 
-for number in PIN:
+for number in batch_one_locker:
     GPIO.setup(number,GPIO.OUT)
-    GPIO.output(number,GPIO.LOW)
+    GPIO.output(number,True)
 
 def openLocker():
     try:
@@ -30,9 +30,9 @@ def OpenLockers(name,key,value):
         print("Open Lockers")
         print(key,value)
         
-        GPIO.output(int(key),value)
-        time.sleep(2)
         GPIO.output(int(key),GPIO.LOW)
+        time.sleep(2)
+        GPIO.output(int(key),GPIO.HIGH)
         
         lockerUpdate(name=name, value=False)
         
