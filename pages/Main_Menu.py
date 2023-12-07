@@ -456,8 +456,7 @@ class MainWindow(QtWidgets.QFrame):
 
     # ********************** check time ********************** #
     def update_time(self):
-        
-        print("Update Time")
+
         current_date = QtCore.QDate.currentDate().toString("ddd, MMM d yyyy")
         
         current_time = QtCore.QTime.currentTime().toString("h:mm AP")
@@ -503,7 +502,10 @@ class MainWindow(QtWidgets.QFrame):
             self.label.setText("<html><head/><body><p>AIoT Smartlock is <Strong>online<strong/></p></body></html>")
             updateToDatabase()
             openLocker()
+            
         except OSError:
+            
+            pass
             
             self.facialRegister.setEnabled(False)
             self.facialRegister.setText(".......")

@@ -1,29 +1,32 @@
 from Firebase.firebase import firebaseRead, lockerUpdate
-import RPi.GPIO as GPIO
+# import RPi.GPIO as GPIO
 import time
 import threading
 
-GPIO.setmode(GPIO.BCM)
-GPIO.setwarnings(False)
+# GPIO.setmode(GPIO.BCM)
+# GPIO.setwarnings(False)
 
 batch_one_locker = [21,20,16,12,7,8]
 
-for number in batch_one_locker:
-    GPIO.setup(number,GPIO.OUT)
-    GPIO.output(number,True)
+# for number in batch_one_locker:
+#     GPIO.setup(number,GPIO.OUT)
+#     GPIO.output(number,True)
 
 def openLocker():
     try:
         data = firebaseRead("LOCK")
         for key,value in data.items():
-        # print("KEY",key)
-        # OpenLockers(key=int(value['Locker Number']), value=value['Locker Status'])
+            
+            # print("KEY",key)
+            # OpenLockers(key=int(value['Locker Number']), value=value['Locker Status'])
+            
             if key: 
                 threading.Thread(target=OpenLockers, args=(key, int(value['Locker Number']),value['Locker Status'],)).start()
-    except:
-        print("Error Open Locker")
+    except Exception as e:
+        print("Error Open Locker: ", e)
         
 def gpio_manual(key,value):
+    print(key,value)
     GPIO.output(int(key),value)
     
 def OpenLockers(name,key,value):

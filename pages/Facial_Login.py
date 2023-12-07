@@ -7,7 +7,7 @@ import os
 
 from Face_Recognition.JoloRecognition import JoloRecognition as Jolo
 from Firebase.Offline import offline_insert,checkLocker
-from Raspberry.Raspberry import OpenLockers
+from Raspberry.Raspberry import OpenLockers,gpio_manual
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import *
@@ -22,6 +22,10 @@ class FacialLogin(QtWidgets.QFrame):
         super().__init__(main_menu)
         
         self.cpu = "39 celcius"
+        
+        self.Light_PIN = 12
+        
+        self.lights_on = True
         
         self.start_start = time.time()
         
@@ -171,6 +175,28 @@ class FacialLogin(QtWidgets.QFrame):
         self.back.setFlat(False)
         self.back.setObjectName("back")
         self.back.clicked.connect(self.backTomain)
+        
+        # turn on the switch 
+        self.Lights = QtWidgets.QPushButton(self)
+        self.Lights.setGeometry(QtCore.QRect(910 - 30, 250, 101, 41))
+        font = QtGui.QFont()
+        font.setFamily("Segoe UI")
+        font.setBold(False)
+        font.setPointSize(12)
+        self.Lights.setFont(font)
+        self.Lights.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.Lights.setAutoFillBackground(False)
+        self.Lights.setStyleSheet("border:none;\n"
+                "color:  rgba(11, 131, 120, 219);\n"
+                "padding:10px")
+        self.Lights.setText("")
+        icon1 = QtGui.QIcon()
+        icon1.addPixmap(QtGui.QPixmap("Images/lights_on.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.Lights.setIcon(icon1)
+        self.Lights.setIconSize(QtCore.QSize(42, 42))
+        self.Lights.setFlat(False)
+        self.Lights.setObjectName("back")
+        self.Lights.clicked.connect(self.toggle_light)
 
         # Timer
         self.timer = QtCore.QTimer(self)
@@ -200,7 +226,38 @@ class FacialLogin(QtWidgets.QFrame):
         self.videoStream.release()
         cv2.destroyAllWindows()
         self.close()
+
+    # =================== for Lights Button =================== #
+
+    def toggle_light(self):
+        # Toggle the state of the lights
+        self.lights_on = not self.lights_on
+
+        # Update the button text and icon
+        self.update_button_icon()
+
+    def update_button_icon(self):
         
+        icon1 = QtGui.QIcon()
+                
+        # Update the button text and icon based on the state of the lights
+        if self.lights_on:
+            
+            icon1 = QtGui.QIcon()
+            icon1.addPixmap(QtGui.QPixmap("Images/lights_on.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+
+            self.Lights.setIcon(icon1)
+            
+            gpio_manual(self.Light_PIN,True)
+        else:
+            
+            icon1 = QtGui.QIcon()
+            icon1.addPixmap(QtGui.QPixmap("Images/lights_off.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+  
+            self.Lights.setIcon(icon1)
+            gpio_manual(self.Light_PIN,False)
+
+    
     # message box
     def messageBoxShow(self, icon=None, title=None, text=None, buttons=None):
 
