@@ -158,7 +158,7 @@ export const CreatePassword = (props) => {
             control={
               <Checkbox checked={isChangePasswordOpen} onChange={handlePasswordChange} />
             }
-            label="Show Password"
+            label="Show PIN code"
           />
                             </Grid>
 

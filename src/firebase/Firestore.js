@@ -179,7 +179,7 @@ export const updateLocker = async (UID=null, LockerNumber=null) =>{
     LockerNumber: LockerNumber
   })
     .then(test=>{
-      alert("your Locker is updated! ");
+      alert("Your locker has been updated! Please set a new PIN code.");
       window.location.reload();
     })
     .catch(err=>console.log(err));

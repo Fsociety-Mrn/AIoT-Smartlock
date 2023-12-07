@@ -215,6 +215,19 @@ export const openLocker = async (props) => {
   }
 }
 
+export const changeLockerNumber = async (KeyName,Name,LockerNumber) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const keyRef = ref(RTdb, `${KeyName}/${Name}/Locker Number`);
+      
+      set(keyRef,LockerNumber);
+      resolve("locker Number Updated")
+    } catch (err) {
+      reject(err);
+    }
+  })
+}
+
 // **************** generate a token and Remove Token **************** //
 export const pushToken = async (props) => {
   try {
@@ -238,6 +251,7 @@ export const removeToken = (FullName) => {
 };
 
 // **************** createPIN setup **************** //
+
 export const checkPin = (FullName) => {
   return new Promise((resolve, reject) => {
       try {
@@ -292,6 +306,25 @@ export const createPIN = async (FullName,PIN,LockerNumber) => {
   });
 }
 
+export const removePIN = async (FullName) => {
+
+  return new Promise((resolve, reject) => { 
+    
+    const keyRef = ref(RTdb, `PIN/${FullName}`);
+
+    remove(keyRef)
+      .then(() => {
+        console.log(`removed successfully.`);
+        resolve('removed successfully.')
+      })
+      .catch((error) => {
+        console.error(`Error removing:`, error);
+        reject(`Error removing:`, error)
+      });
+  })
+
+}
+
 // **************** get history of all data **************** //
 export const getHistory = async () => {
   return new Promise((resolve, reject) => {
@@ -325,15 +358,3 @@ export const removeUser = async (KeyName,Name) =>{
     });
 }
 
-export const changeLockerNumber = async (KeyName,Name,LockerNumber) => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      const keyRef = ref(RTdb, `${KeyName}/${Name}/Locker Number`);
-      
-      set(keyRef,LockerNumber);
-      resolve("locker Number Updated")
-    } catch (err) {
-      reject(err);
-    }
-  })
-}

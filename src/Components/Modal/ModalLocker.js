@@ -9,7 +9,7 @@ import {
     Stack
  } from '@mui/material';
 import { updateLocker } from '../../firebase/Firestore';
-import { changeLockerNumber } from '../../firebase/Realtime_Db';
+import { changeLockerNumber,removePIN } from '../../firebase/Realtime_Db';
 import React from 'react'
 
 
@@ -46,6 +46,7 @@ const ModalLocker = (props) => {
     const handleonsavechanges = async () => {
         updateLocker(props.UID, selectedLocker)
         await changeLockerNumber("LOCK",props.FullName,selectedLocker)
+        await removePIN(props.FullName)
         // await changeLockerNumber("PIN",props.FullName,selectedLocker)
     }
 
