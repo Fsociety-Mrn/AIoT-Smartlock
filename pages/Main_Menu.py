@@ -505,8 +505,8 @@ class MainWindow(QtWidgets.QFrame):
             socket.create_connection(("8.8.8.8", 53))
             self.label.setText("<html><head/><body><p>AIoT Smartlock is <Strong>online<strong/></p></body></html>")
             
-            updateToDatabase()
-            openLocker()
+            # updateToDatabase()
+            # openLocker()
             
         except OSError:
             

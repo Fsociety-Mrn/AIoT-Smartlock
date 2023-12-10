@@ -65,27 +65,34 @@ def offline_history(name=None, date=None, time=None, access_type=None, Percentag
     db.close()
     
 def updateToDatabase():
-    db = TinyDB("Firebase/offline.json")
-    table = db.table("History")
-
-    # Retrieve all records from the table
-    records = table.all()
     
-    for each in records:
-        for name,value in each.items():
-            for date, value in value.items():
-                for time, access_type in value.items():
+    try:
+
+        
+        db = TinyDB("Firebase/offline.json")
+        table = db.table("History")
+
+        # Retrieve all records from the table
+        records = table.all()
+    
+        for each in records:
+            for name,value in each.items():
+                for date, value in value.items():
+                    for time, access_type in value.items():
                     
                     # I-convert ang dictionary sa listahan ng mga tuples
-                    key_value_list = [(key, value) for key, value in access_type.items()]
+                        key_value_list = [(key, value) for key, value in access_type.items()]
            
-                    firebaseHistory(name=name,
+                        firebaseHistory(name=name,
                                     date=date,
                                     time=time,
                                     access_type=key_value_list[0][1],
                                     percentage=key_value_list[1][1])
                 
-        delete_table("History")
+            delete_table("History")
+    except Exception as e:
+        pass
+        print("error")
         
 # ************** PIN LOGIN ************** #
 def pinCodeLogin(pin):
