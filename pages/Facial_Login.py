@@ -21,9 +21,9 @@ class FacialLogin(QtWidgets.QFrame):
     def __init__(self,main_menu):
         super().__init__(main_menu)
         
-        self.cpu = "39 celcius"
+        self.cpu = ""
         
-        self.Light_PIN = 12
+        self.Light_PIN = 25
         
         self.lights_on = True
         

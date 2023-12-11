@@ -6,7 +6,7 @@ import threading
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 
-batch_one_locker = [21,20,16,12,7,8]
+batch_one_locker = [21,20,16,12,7,8,25]
 
 for number in batch_one_locker:
     GPIO.setup(number,GPIO.OUT)
