@@ -1,6 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import *
 from Face_Recognition.JoloRecognition import JoloRecognition as JL
+from Raspberry.Raspberry import gpio_manual
 
 import cv2
 import time
@@ -13,6 +14,9 @@ class facialRegister(QtWidgets.QFrame):
             super().__init__(parent)
             
             self.main_menu = parent
+            
+            self.Light_PIN = 25
+            self.lights_on = True
 
             # message box
             self.MessageBox = QtWidgets.QMessageBox()
@@ -133,6 +137,28 @@ class facialRegister(QtWidgets.QFrame):
             self.landmark_detector = dlib.shape_predictor('Model/shape_predictor_68_face_landmarks.dat')
 
 
+            # turn on the switch 
+            self.Lights = QtWidgets.QPushButton(self)
+            self.Lights.setGeometry(QtCore.QRect(910 - 30, 250, 101, 41))
+            font = QtGui.QFont()
+            font.setFamily("Segoe UI")
+            font.setBold(False)
+            font.setPointSize(12)
+            self.Lights.setFont(font)
+            self.Lights.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+            self.Lights.setAutoFillBackground(False)
+            self.Lights.setStyleSheet("border:none;\n"
+                "color:  rgba(11, 131, 120, 219);\n"
+                "padding:10px")
+            self.Lights.setText("")
+            icon1 = QtGui.QIcon()
+            icon1.addPixmap(QtGui.QPixmap("Images/lights_on.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+            self.Lights.setIcon(icon1)
+            self.Lights.setIconSize(QtCore.QSize(42, 42))
+            self.Lights.setFlat(False)
+            self.Lights.setObjectName("back")
+            self.Lights.clicked.connect(self.toggle_light)
+
             # Timer
             self.timer = QtCore.QTimer(self)
             self.timer.timeout.connect(self.videoStreaming)
@@ -149,6 +175,36 @@ class facialRegister(QtWidgets.QFrame):
         self.capture.setText(_translate("facialRegistration", "0"))
         self.status.setText(_translate("facialRegistration", "Please be ready at 16"))
         self.Name.setText(_translate("facialRegistration", "Art Lisboa"))
+
+    # =================== for Lights Button =================== #
+
+    def toggle_light(self):
+        # Toggle the state of the lights
+        self.lights_on = not self.lights_on
+
+        # Update the button text and icon
+        self.update_button_icon()
+
+    def update_button_icon(self):
+        
+        icon1 = QtGui.QIcon()
+                
+        # Update the button text and icon based on the state of the lights
+        if self.lights_on:
+            
+            icon1 = QtGui.QIcon()
+            icon1.addPixmap(QtGui.QPixmap("Images/lights_on.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+
+            self.Lights.setIcon(icon1)
+            
+            gpio_manual(self.Light_PIN,True)
+        else:
+            
+            icon1 = QtGui.QIcon()
+            icon1.addPixmap(QtGui.QPixmap("Images/lights_off.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+  
+            self.Lights.setIcon(icon1)
+            gpio_manual(self.Light_PIN,False)
 
     # receivce data from Token Form
     def receive(self,data):
