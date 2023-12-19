@@ -164,12 +164,20 @@ const Dashboard = () => {
     return sortedData;
   };
 
+  const sortByDate = (dataToSort) => {
+    const sortedData = [...dataToSort].sort((a, b) => {
+      return new Date(a.Date).getTime() - new Date(b.Date).getTime();
+    });
+    return sortedData;
+  };
+  
+  
   // State to hold the sorted data for "Today Access" table
   const [sortedTodayAccessData, setSortedTodayAccessData] = React.useState(rows);
 
-  // Function to handle sorting for "Today Access" table
   const handleSortTodayAccess = (sortType) => {
     let sortedTableData;
+  
     switch (sortType) {
       case 'name':
         sortedTableData = sortByName(rows);
@@ -179,11 +187,16 @@ const Dashboard = () => {
         sortedTableData = sortByTime(rows);
         setSortedTodayAccessData(sortedTableData);
         break;
-      default:
-        break;
+        case 'date':
+          sortedTableData = sortByDate(rows); // or sortedTodayAccessData if necessary
+          setSortedTodayAccessData(sortedTableData);
+          break;
+        default:
+          break;
     }
-
   };
+  
+  
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -282,13 +295,15 @@ const Dashboard = () => {
           Sort By: {selectedSort ? selectedSort : ''}
         </Button>
         <Menu
-          anchorEl={anchorEl}
-          open={Boolean(anchorEl)}
-          onClose={() => setAnchorEl(null)}
-        >
-          <MenuItem onClick={() => handleSort('name')}>Sort by Name</MenuItem>
-          <MenuItem onClick={() => handleSort('time')}>Sort by Time</MenuItem>
-        </Menu>
+  anchorEl={anchorEl}
+  open={Boolean(anchorEl)}
+  onClose={() => setAnchorEl(null)}
+>
+  <MenuItem onClick={() => handleSort('name')}>Sort by Name</MenuItem>
+  <MenuItem onClick={() => handleSort('time')}>Sort by Time</MenuItem>
+  <MenuItem onClick={() => handleSort('date')}>Sort by Date</MenuItem>
+</Menu>
+
       </Grid>
 
 
@@ -363,6 +378,7 @@ const columns = [
   // { field: 'id', headerName: 'ID', width: 70 },
   { field: 'Name', headerName: 'Name', width: 230 },
   { field: 'Time', headerName: 'Time', width: 130 },
+  { field: 'Date', headerName: 'Date', width: 230 },
   { field: 'AccessType', headerName: 'Access Type', width: 160, sortable: false },
   { field: 'Percentage', headerName: 'Percentage', width: 130, sortable: false }
 ];
@@ -372,6 +388,7 @@ const rows = [
     id: 1,
     Name: 'ART LISBOA', 
     Time: '9:30 am', 
+    Date: '2020-07-06',
     AccessType: "IoT Login",
     Percentage: "90%"
   },
@@ -379,6 +396,7 @@ const rows = [
     id: 6,
     Name: 'FRANZ MANECLANG', 
     Time: '10:30 am', 
+    Date: '2019-06-05',
     AccessType: "IoT Login",
     Percentage: "90%"
   },
@@ -386,6 +404,7 @@ const rows = [
     id: 2,
     Name: 'REY CUMPA', 
     Time: '11:30 am', 
+    Date: '2019-01-04',
     AccessType: "IoT Login",
     Percentage: "90%"
   },
@@ -393,6 +412,7 @@ const rows = [
     id: 3,
     Name: 'ROGER GAJUNERA', 
     Time: '12:30 am', 
+    Date: '2019-02-03',
     AccessType: "IoT Login",
     Percentage: "90%"
   },
@@ -400,6 +420,7 @@ const rows = [
     id: 4,
     Name: 'IVAN FAMILARAN', 
     Time: '1:30 pm', 
+    Date: '2019-09-02',
     AccessType: "IoT Login",
     Percentage: "90%"
   },
@@ -407,6 +428,7 @@ const rows = [
     id: 5,
     Name: 'KEYT LISBOA', 
     Time: '9:30 am', 
+    Date: '2010-06-01',
     AccessType: "Face Login",
     Percentage: "90%"
   },
@@ -416,19 +438,23 @@ const rows = [
 const FacialLogin = [
   { field: 'Name', headerName: 'Name', width: 160 },
   { field: 'Time', headerName: 'Time', width: 130 },
+  { field: 'Date', headerName: 'Date', width: 230 },
   { field: 'Percentage', headerName: 'Percentage', width: 130, sortable: false }
 ]
 
 const PinLogin = [
   { field: 'Name', headerName: 'Name', width: 160 },
   { field: 'Time', headerName: 'Time', width: 130 },
+  { field: 'Date', headerName: 'Date', width: 230 },
 ]
 const IoTLogin = [
   { field: 'Name', headerName: 'Name', width: 160 },
   { field: 'Time', headerName: 'Time', width: 130 },
+  { field: 'Date', headerName: 'Date', width: 230 },
 ]
 
 const AccessDenied = [
+  { field: 'Date', headerName: 'Date', width: 230 },
   { field: 'Time', headerName: 'Time', width: 130 },
   { field: 'AccessType', headerName: 'Access Type', width: 160, sortable: false },
   { field: 'Percentage', headerName: 'Percentage', width: 130, sortable: false }
