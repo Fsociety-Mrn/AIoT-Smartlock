@@ -5,9 +5,14 @@ import {
   Tab, 
   Tabs,
   Typography,
-  Collapse
+  Collapse,
+  MenuItem, 
+  Menu
+
 } from '@mui/material'
-import ModalAlert from '../../Components/Modal/ModalAlert';
+import {ExpandMore } from '@mui/icons-material';
+
+import ModalAlert from '../../Components/ModalAlert';
 
 import CardItem from "../../Components/Card"
 import React from 'react'
@@ -19,12 +24,42 @@ import Table from '../../Components/Table';
 
 import { get_AIoT_unlock, remove_token_data } from '../../firebase/Realtime_Db';
 
+import dummyData from "./dummyData.json"
+
+const data = dummyData
+
 const Dashboard = () => {
   const [paddinSize, setPaddingSize] = React.useState()
   const [value, setValue] = React.useState(0);
   const [open, setOpen] = React.useState(false);
   const [alert, setAlert] = React.useState();
   const [dataToken, setTokenData] = React.useState()
+  const [selectedSort, setSelectedSort] = React.useState(''); 
+  const [anchorEl, setAnchorEl] = React.useState(null); // To manage Menu anchor
+
+
+  const [filteredLogs, setFilteredLogs] = React.useState([]);
+  const [facialLoginLogs, setFacialLoginLogs] = React.useState([]);
+  const [pinLoginLogs, setPinLoginLogs] = React.useState([]);
+  const [iotLoginLogs, setIoTLoginLogs] = React.useState([]);
+  const [accessDeniedLogs, setAccessDeniedLogs] = React.useState([]);
+
+
+  // React.useEffect(() => {
+  //   // Assuming accessLogs is the array containing your dummy data
+  //   // const currentDate = new Date().toLocaleDateString();
+
+  //   // // Filter logs for the current date
+  //   // const currentDateLogs = data.filter(log => log.date === currentDate);
+  //   // setFilteredLogs(currentDateLogs);
+
+  //   // Filter logs for each access type
+  //   // setFacialLoginLogs(data.filter(log => log.type === 'Facial Login'));
+  //   // setPinLoginLogs(data.filter(log => log.type === 'PIN Login'));
+  //   // setIoTLoginLogs(data.filter(log => log.type === 'IoT Login'));
+  //   // setAccessDeniedLogs(data.filter(log => log.type === 'No match detected'));
+  // }, [data]);
+
 
   const isExpired = (expirationDateTime) => {
     // Convert the expiration date string to a Date object
@@ -42,6 +77,17 @@ const Dashboard = () => {
     let cleanup = true;
 
     if(cleanup){
+  
+      Object.values(data).map((value,key)=> console.log(value))
+    // console.log(data)
+
+    // const smartlock_check = async () => {
+    //   const data = await get_AIoT_unlock()
+
+    //   setAlert(data.isLock)
+    //   setTokenData(data.data)
+    //   isExpired(data.data.expiration) === true && remove_token_data()
+    // }
 
     // check if AIoT Smartlock is Lock
     get_AIoT_unlock().then(data=>{
@@ -55,7 +101,7 @@ const Dashboard = () => {
     })
        
   }
-
+    // smartlock_check();
 
     const setResponsiveness = () => {
         return window.innerWidth < 700 ? setPaddingSize(15) : setPaddingSize(0);
@@ -96,6 +142,57 @@ const Dashboard = () => {
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+  };
+
+  const sortByName = (dataToSort) => {
+    const sortedData = [...dataToSort].sort((a, b) => {
+      if (a.Name < b.Name) return -1;
+      if (a.Name > b.Name) return 1;
+      return 0;
+    });
+    return sortedData;
+  };
+
+  // Function to sort table data by time/date
+  const sortByTime = (dataToSort) => {
+    const sortedData = [...dataToSort].sort((a, b) => {
+      // Convert time/date strings to Date objects for comparison
+      const dateA = new Date(a.Time);
+      const dateB = new Date(b.Time);
+      return dateA - dateB;
+    });
+    return sortedData;
+  };
+
+  // State to hold the sorted data for "Today Access" table
+  const [sortedTodayAccessData, setSortedTodayAccessData] = React.useState(rows);
+
+  // Function to handle sorting for "Today Access" table
+  const handleSortTodayAccess = (sortType) => {
+    let sortedTableData;
+    switch (sortType) {
+      case 'name':
+        sortedTableData = sortByName(rows);
+        setSortedTodayAccessData(sortedTableData);
+        break;
+      case 'time':
+        sortedTableData = sortByTime(rows);
+        setSortedTodayAccessData(sortedTableData);
+        break;
+      default:
+        break;
+    }
+
+  };
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+
+  const handleSort = (sortType) => {
+    setSelectedSort(sortType); // Set selected sort option
+    handleSortTodayAccess(sortType); // Perform sorting
+    setAnchorEl(null); // Close the dropdown menu
   };
 
   return (
@@ -171,8 +268,31 @@ const Dashboard = () => {
             />
 
           </Carousel>
+
+
         </Grid>
 
+      {/* Modern Button acting as dropdown */}
+      <Grid item xs={12} md={10} sm={12}>
+      <Button
+          variant="contained"
+          endIcon={<ExpandMore />} // Add the dropdown icon to the end of the button
+          onClick={handleClick}
+        >
+          Sort By: {selectedSort ? selectedSort : ''}
+        </Button>
+        <Menu
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={() => setAnchorEl(null)}
+        >
+          <MenuItem onClick={() => handleSort('name')}>Sort by Name</MenuItem>
+          <MenuItem onClick={() => handleSort('time')}>Sort by Time</MenuItem>
+        </Menu>
+      </Grid>
+
+
+      
         {/* Tabs Header */}
         <Grid item xs={12} md={10} sm={12}>
           <Tabs value={value} onChange={handleChange}    
@@ -193,17 +313,17 @@ const Dashboard = () => {
 
           {/* Today Access */}
           <Table 
-          value={value}
-          set={0}
-          rows={rows}
+          value={value} 
+          set={0} 
+          rows={sortedTodayAccessData} 
           columns={columns}
-          />
+           />
 
           {/* Facial Login */}
           <Table 
           value={value}
           set={1}
-          rows={rows}
+          rows={sortedTodayAccessData} 
           columns={FacialLogin}
           />
 
@@ -212,7 +332,7 @@ const Dashboard = () => {
           <Table 
           value={value}
           set={2}
-          rows={rows}
+          rows={sortedTodayAccessData} 
           columns={PinLogin}
           />
 
@@ -220,7 +340,7 @@ const Dashboard = () => {
           <Table 
           value={value}
           set={3}
-          rows={rows}
+          rows={sortedTodayAccessData} 
           columns={IoTLogin}
           />
 
@@ -228,7 +348,7 @@ const Dashboard = () => {
           <Table 
           value={value}
           set={4}
-          rows={rows}
+          rows={sortedTodayAccessData} 
           columns={AccessDenied}
           />
 
@@ -258,28 +378,28 @@ const rows = [
   { 
     id: 6,
     Name: 'FRANZ MANECLANG', 
-    Time: '9:30 am', 
+    Time: '10:30 am', 
     AccessType: "IoT Login",
     Percentage: "90%"
   },
   { 
     id: 2,
     Name: 'REY CUMPA', 
-    Time: '9:30 am', 
+    Time: '11:30 am', 
     AccessType: "IoT Login",
     Percentage: "90%"
   },
   { 
     id: 3,
     Name: 'ROGER GAJUNERA', 
-    Time: '9:30 am', 
+    Time: '12:30 am', 
     AccessType: "IoT Login",
     Percentage: "90%"
   },
   { 
     id: 4,
     Name: 'IVAN FAMILARAN', 
-    Time: '9:30 am', 
+    Time: '1:30 pm', 
     AccessType: "IoT Login",
     Percentage: "90%"
   },
