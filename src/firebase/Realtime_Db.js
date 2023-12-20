@@ -63,7 +63,7 @@ export const removeKey = (key) => {
 };
 
 // generate a token
-export const generateToken = async () => {
+export const generateToken = async (LockerNumber) => {
 return new Promise((resolve, reject) => {
   try {
     const Token = TokenGenerator();
@@ -91,6 +91,7 @@ return new Promise((resolve, reject) => {
     const formattedTime = newDate.toLocaleString('en-US', timeOptions);
 
     const data = {
+      LockerNumber: LockerNumber,
       OTP: Token,
       EXPIRATION: {
         date: formattedDate,

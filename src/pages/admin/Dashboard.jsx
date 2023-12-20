@@ -10,9 +10,9 @@ import {
   Menu
 
 } from '@mui/material'
-import {ExpandMore } from '@mui/icons-material';
+import { ExpandMore } from '@mui/icons-material';
 
-import ModalAlert from '../../Components/ModalAlert';
+import ModalAlert from '../../Components/Modal/ModalAlert';
 
 import CardItem from "../../Components/Card"
 import React from 'react'
@@ -38,11 +38,11 @@ const Dashboard = () => {
   const [anchorEl, setAnchorEl] = React.useState(null); // To manage Menu anchor
 
 
-  const [filteredLogs, setFilteredLogs] = React.useState([]);
-  const [facialLoginLogs, setFacialLoginLogs] = React.useState([]);
-  const [pinLoginLogs, setPinLoginLogs] = React.useState([]);
-  const [iotLoginLogs, setIoTLoginLogs] = React.useState([]);
-  const [accessDeniedLogs, setAccessDeniedLogs] = React.useState([]);
+  // const [filteredLogs, setFilteredLogs] = React.useState([]);
+  // const [facialLoginLogs, setFacialLoginLogs] = React.useState([]);
+  // const [pinLoginLogs, setPinLoginLogs] = React.useState([]);
+  // const [iotLoginLogs, setIoTLoginLogs] = React.useState([]);
+  // const [accessDeniedLogs, setAccessDeniedLogs] = React.useState([]);
 
 
   // React.useEffect(() => {

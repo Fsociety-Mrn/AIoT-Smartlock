@@ -3,8 +3,10 @@ import {
     Button, 
     Grid, 
     IconButton, 
+    MenuItem, 
     Modal, 
     Stack, 
+    TextField, 
     Typography } from '@mui/material';
 import Table from '../Table';
 import React from 'react'
@@ -15,9 +17,11 @@ import { generateToken } from '../../firebase/Realtime_Db';
 
 const columns = [
     { field: 'OTP', headerName: 'OTP', width: 150 },
+    { field: 'LOCKERNUMBER', headerName: 'LOCKER', width: 80 },
     { field: 'TIME', headerName: 'EXPIRED TIME', width: 120 },
     { field: 'DATE', headerName: 'EXPIRED DATE', width: 120 },
   ];
+
 
 // const rows = [
 //     { 
@@ -110,6 +114,35 @@ const GenerateTokenModal = (props) => {
     const [open,setOpen] = React.useState()
     const [otp,setOtp] = React.useState()
 
+
+    const currencies = [
+        { value: 21, label: 21 },
+        { value: 20, label: 20 },
+        { value: 16, label: 16 },
+        { value: 12, label: 12 },
+        { value: 7, label: 7 },
+        { value: 8, label: 8 }
+        // Add more currencies as needed
+      ];
+    
+    // const [selectedCurrency, setSelectedCurrency] = React.useState('');
+    // const [setToks,toks] = React.useState(true);
+    
+    // const handleCurrencyChange = (event) => {
+    //     setSelectedCurrency(event.target.value);
+    //     setToks(false);
+    // };
+
+    const [selectedCurrency, setSelectedCurrency] = React.useState('');
+    const [toks, setToks] = React.useState(true);
+
+    const handleCurrencyChange = (event) => {
+        setSelectedCurrency(event.target.value);
+        setToks(false);
+    };
+
+
+    
     return ( 
         <div>
 
@@ -118,6 +151,7 @@ const GenerateTokenModal = (props) => {
             handleClose={handleClose}
             OTP={otp}
             />
+
             <Modal
             open={props.open}
             onClose={handleClose}
@@ -189,22 +223,50 @@ const GenerateTokenModal = (props) => {
                             </Grid>
 
                             <Grid item xs={12} md={10} sm={10}>
-                                <Button 
+
+                                <Stack
+                                direction="column"
+                                justifyContent="center"
+                                alignItems="center"
+                                >
+
+                                    <TextField
+                                select
+                                label="Locker Number"        
+                                helperText="Pick locker number, generate token"
+                                variant="outlined"
+                                value={selectedCurrency}
+                                onChange={handleCurrencyChange}
+                                >
+                                    {currencies.map((option) => (
+                                        <MenuItem key={option.value} value={option.value}>
+                                            {option.label}
+                                        </MenuItem>
+                                    ))}
+                                    </TextField>
+                                
+                                    <Button 
                                 fullWidth
+                                disabled={toks}
                                 variant='contained'
                                 startIcon={<KeyOutlinedIcon fontSize='large'/>}
                                 style={{ borderRadius: "10px", padding: "8px" }}
                                 onClick={()=>{
-                                    generateToken()
+                                    generateToken(selectedCurrency)
                                     .then(otp=>{
                                         setOtp(otp)
                                         setOpen(!open)
+                                        setToks(true)
+                                        setSelectedCurrency('')
                                     })
                                     // handleClose()
                                     
                                 }}
-                                >Generate Token</Button>
+                                    >Generate Token</Button>
+                                    
+                                </Stack>
                             </Grid>
+                          
                         </Grid>
 
                     </Stack>

@@ -425,6 +425,7 @@ const MobileView = (props) => {
             return {
               id: index + 1, // Assuming you want 1-based index
               OTP: token.OTP,
+              LOCKERNUMBER: token.LockerNumber,
               DATE: expirationDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
               TIME: expirationDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }),
             };
