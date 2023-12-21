@@ -15,6 +15,9 @@ const TokenForm = (props) => {
   // for set Token
   const [token,setToken] = React.useState("")
   const [error,setError] = React.useState(false)
+  // const [locker,setLocker] = React.useState()
+
+
   return (
     <Container fluid className={`${styles.container} d-flex justify-content-center align-items-center px-3`}>
   
@@ -116,8 +119,10 @@ const TokenForm = (props) => {
 
                 verifyToken(token)
                   .then(rsult=>{
-                    props.setTokenShow(rsult);
-                    setError(!rsult)
+                    props.setTokenShow(rsult.status);
+                    props.setLocker(rsult.locker)
+                    // console.log(rsult.locker)
+                    setError(!rsult.status)
                   })
                   .catch(err=>{
                     props.setTokenShow(err);

@@ -147,13 +147,13 @@ export const LogoutSession = async () => {
 }
 
   // create account
-  export const createAccount = (email, password, lastname, firstname) => {
+  export const createAccount = (email, password, lastname, firstname,LockerNumber) => {
     return new Promise((resolve, reject) => {
       createUserWithEmailAndPassword(auth, email, password)
         .then((res) => {
           console.log(res.user.uid);
 
-          createUserData(res.user.uid,lastname, firstname).then(result=>{
+          createUserData(res.user.uid,lastname, firstname,LockerNumber).then(result=>{
   
             resolve(res); // Resolve the promise with the response from createUserWithEmailAndPassword
         

@@ -204,6 +204,7 @@ export const verifyToken = (TOKENs) => {
   
         if (data) {
           let isValid = false;
+          let LockerNumber = 0;
   
           Object.entries(data).forEach(([key, value]) => {
             try {
@@ -218,7 +219,7 @@ export const verifyToken = (TOKENs) => {
                     });
               
                 isValid = true
-               
+                LockerNumber = value.LockerNumber
               } else {
                 console.log(`Invalid key`);
                 isValid = false;
@@ -240,7 +241,11 @@ export const verifyToken = (TOKENs) => {
             }
           });
   
-          resolve(isValid); // Resolve the Promise with the validity status
+          resolve({
+                status: isValid,
+                locker: LockerNumber
+            }); // Resolve the Promise with the validity status
+
         } else {
           console.log('No data found');
           reject(false); // Resolve the Promise with false if no data is found

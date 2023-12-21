@@ -64,7 +64,7 @@ export const getUserDetails = async (UID) =>{
 }
 
 // create userData
-export const createUserData = async (UID,lastname,firstname) =>{
+export const createUserData = async (UID,lastname,firstname,LockerNumber) =>{
 
   return new Promise(async (resolve, reject) => {
 
@@ -72,6 +72,7 @@ export const createUserData = async (UID,lastname,firstname) =>{
     await setDoc(doc(Fdb, "users", UID), {
       isActive: true,
       isAdmin: false,
+      LockerNumber: LockerNumber,
       photoUrl: "",
       user: lastname + "," + firstname 
     })

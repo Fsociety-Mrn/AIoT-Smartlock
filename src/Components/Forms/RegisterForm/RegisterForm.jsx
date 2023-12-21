@@ -25,6 +25,8 @@ const RegisterForm = () => {
 
     const [tokenShow,setTokenShow] = React.useState(false)
 
+    const [locker,setLocker] = React.useState()
+
     // ********* cREATE ACCOUNT ********* //
 
     const navigate = useNavigate()
@@ -73,8 +75,10 @@ const RegisterForm = () => {
                 userDetails.Email, 
                 userDetails.NewPassword, 
                 userDetails.LastName, 
-                userDetails.FirstName).then(result=>{
-                    console.log(result)
+                userDetails.FirstName,
+                locker)
+            .then(result=>{
+        
                     setError(
                         {
                             firstName: false,
@@ -124,7 +128,7 @@ const RegisterForm = () => {
     }
     return (
         <div>
-            {!tokenShow && <TokenForm setTokenShow={setTokenShow} />}
+            {!tokenShow && <TokenForm setTokenShow={setTokenShow} setLocker={setLocker} />}
 
             {tokenShow && 
                 <Container fluid className={`${styles.container} d-flex justify-content-center align-items-center px-2.5`}>
