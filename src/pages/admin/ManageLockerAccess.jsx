@@ -142,7 +142,7 @@ const Card = ({ imgSrc, title, user, isActive, LockerNumber, Data, isAdmin, id  
 
           <MenuItem onClick={()=>setChangeLocker(true)}>
             <ListItemIcon>
-              <LockResetIcon fontSize="medium"/>
+              <LockResetIcon fontSize="medium" color="primary"/>
             </ListItemIcon>
 
             Change Locker
@@ -341,6 +341,8 @@ const MobileView = (props) => {
   const [openModal,setOpenModal] = React.useState(false)
   const [listTokens, setListTokesn] = React.useState("")
 
+
+
   // Function to sort the data by date
   const sortDataByDate = (data) => {
     const sortedData = {};
@@ -390,6 +392,7 @@ const MobileView = (props) => {
       }
     };
     fetchData();
+
 
     // Get History List
     getHistory()

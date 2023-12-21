@@ -1,4 +1,7 @@
 import { 
+    Accordion,
+    AccordionSummary,
+    AccordionDetails,
     Box,
     Button, 
     Grid, 
@@ -8,19 +11,20 @@ import {
     Stack, 
     TextField, 
     Typography } from '@mui/material';
-import Table from '../Table';
+// import Table from '../Table';
 import React from 'react'
 
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import KeyOutlinedIcon from '@mui/icons-material/KeyOutlined';
 import CloseIcon from '@mui/icons-material/Close';
 import { generateToken } from '../../firebase/Realtime_Db';
 
-const columns = [
-    { field: 'OTP', headerName: 'OTP', width: 150 },
-    { field: 'LOCKERNUMBER', headerName: 'LOCKER', width: 80 },
-    { field: 'TIME', headerName: 'EXPIRED TIME', width: 120 },
-    { field: 'DATE', headerName: 'EXPIRED DATE', width: 120 },
-  ];
+// const columns = [
+//     { field: 'OTP', headerName: 'OTP', width: 150 },
+//     { field: 'LOCKERNUMBER', headerName: 'LOCKER', width: 80 },
+//     { field: 'TIME', headerName: 'EXPIRED TIME', width: 120 },
+//     { field: 'DATE', headerName: 'EXPIRED DATE', width: 120 },
+//   ];
 
 
 // const rows = [
@@ -115,6 +119,9 @@ const GenerateTokenModal = (props) => {
     const [otp,setOtp] = React.useState()
 
 
+    const [expanded, setExpanded] = React.useState('');
+
+
     const currencies = [
         { value: 21, label: 21 },
         { value: 20, label: 20 },
@@ -204,12 +211,26 @@ const GenerateTokenModal = (props) => {
                             <Grid item xs={12}>
 
                                 {props.tokenList ?
-                                <Table 
-                                value={0}
-                                set={0}
-                                rows={props.tokenList}
-                                columns={columns}
-                                />
+                                    <div>
+                                {
+                                    Object.values(props.tokenList)
+                                    .map((data,key) => (
+                                        <Accordion key={key} expanded={expanded === data.DATE} onChange={() => setExpanded(expanded === data.DATE ? '' : data.DATE)}>
+                                            <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls={`panel${key}bh-content`} id={`panel${key}bh-header`}>
+                                                <Typography> <strong>{data.OTP} </strong> </Typography>
+                                            </AccordionSummary>
+
+                                            <AccordionDetails>
+                                                <div>
+                                                    <p>LOCKER NUMBER: <strong>{data.LOCKERNUMBER}</strong></p>
+                                                    <p>EXPIRED DATE: <strong>{data.DATE}</strong></p>
+                                                    <p>EXPIRED TIME: <strong>{data.TIME}</strong></p>
+                                                </div>
+                                            </AccordionDetails>
+                                        </Accordion>
+                                    ))
+                                }
+                                </div>
                                 :
                                 <Stack
                                 direction="column"
