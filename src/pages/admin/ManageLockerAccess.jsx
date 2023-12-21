@@ -34,6 +34,8 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import KeyOutlinedIcon from '@mui/icons-material/KeyOutlined';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
+import LockResetIcon from '@mui/icons-material/LockReset';
+import ModalLocker from '../../Components/Modal/ModalLocker';
 
 
 //  user s
@@ -43,6 +45,7 @@ const Card = ({ imgSrc, title, user, isActive, LockerNumber, Data, isAdmin, id  
   const [expanded, setExpanded] = useState('');
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [openModal,setOpenModal] = React.useState(false)
+  const [changeLocker,setChangeLocker] = React.useState(false)
 
   const openS = Boolean(anchorEl);
 
@@ -74,6 +77,14 @@ const Card = ({ imgSrc, title, user, isActive, LockerNumber, Data, isAdmin, id  
 
     
     <StyledCard>
+
+      <ModalLocker 
+      open={changeLocker} 
+      setOpen={setChangeLocker} 
+      LockerNumber={LockerNumber}
+      UID={id}
+      FullName={user} 
+      />
 
       <ModalConfirm
       open={openModal}
@@ -128,6 +139,14 @@ const Card = ({ imgSrc, title, user, isActive, LockerNumber, Data, isAdmin, id  
             Promote Admin
           </MenuItem>
           }
+
+          <MenuItem onClick={()=>setChangeLocker(true)}>
+            <ListItemIcon>
+              <LockResetIcon fontSize="medium"/>
+            </ListItemIcon>
+
+            Change Locker
+          </MenuItem>
 
           <MenuItem onClick={()=>setOpenModal(true)}>
             <ListItemIcon>
