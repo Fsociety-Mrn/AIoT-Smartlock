@@ -24,9 +24,39 @@ import Table from '../../Components/Table';
 
 import { get_AIoT_unlock, remove_token_data } from '../../firebase/Realtime_Db';
 
-import dummyData from "./dummyData.json"
+import dummyData from "./dummdata.json"
 
 const data = dummyData
+
+const transformDataToArray = (data) => {
+  const result = [];
+
+  Object.entries(data).forEach(([name, dates]) => {
+
+    Object.entries(dates).forEach(([date, times],ID) => {
+      Object.entries(times).forEach(([time, details]) => {
+
+        const entry = {
+          id: result.length + 1,
+          Name: name,
+          Time: time,
+          Date: date,
+          AccessType: details.Access_type,
+          Percentage: details.Percentage ? `${details.Percentage}%` : null,
+        };
+
+        result.push(entry);
+      });
+    });
+  });
+
+  // Sort the result array based on Date and Time
+  result.sort((a, b) => {
+    return new Date(b.Date) - new Date(a.Date)
+  });
+
+  return result; // Add this line to return the sorted array
+};
 
 const Dashboard = () => {
   const [paddinSize, setPaddingSize] = React.useState()
@@ -37,6 +67,7 @@ const Dashboard = () => {
   const [selectedSort, setSelectedSort] = React.useState(''); 
   const [anchorEl, setAnchorEl] = React.useState(null); // To manage Menu anchor
 
+  const [dataFrom,setDataFrom] = React.useState(transformDataToArray(data));
 
   // const [filteredLogs, setFilteredLogs] = React.useState([]);
   // const [facialLoginLogs, setFacialLoginLogs] = React.useState([]);
@@ -45,20 +76,34 @@ const Dashboard = () => {
   // const [accessDeniedLogs, setAccessDeniedLogs] = React.useState([]);
 
 
-  // React.useEffect(() => {
-  //   // Assuming accessLogs is the array containing your dummy data
-  //   // const currentDate = new Date().toLocaleDateString();
+  React.useEffect(() => {
+    // Assuming accessLogs is the array containing your dummy data
+    // const currentDate = new Date().toLocaleDateString();
 
-  //   // // Filter logs for the current date
-  //   // const currentDateLogs = data.filter(log => log.date === currentDate);
-  //   // setFilteredLogs(currentDateLogs);
+    // // Filter logs for the current date
+    // const currentDateLogs = data.filter(log => log.date === currentDate);
+    // setFilteredLogs(currentDateLogs);
 
-  //   // Filter logs for each access type
-  //   // setFacialLoginLogs(data.filter(log => log.type === 'Facial Login'));
-  //   // setPinLoginLogs(data.filter(log => log.type === 'PIN Login'));
-  //   // setIoTLoginLogs(data.filter(log => log.type === 'IoT Login'));
-  //   // setAccessDeniedLogs(data.filter(log => log.type === 'No match detected'));
-  // }, [data]);
+    // Filter logs for each access type
+    // setFacialLoginLogs(data.filter(log => log.type === 'Facial Login'));
+    // setPinLoginLogs(data.filter(log => log.type === 'PIN Login'));
+    // setIoTLoginLogs(data.filter(log => log.type === 'IoT Login'));
+    // setAccessDeniedLogs(data.filter(log => log.type === 'No match detected'));
+
+    Object.values(data).forEach((item) => {
+ 
+      setDataFrom((prevData) => {
+        // Check if the item already exists in the dataUser state
+        if (!prevData.some((dataItem) => dataItem.id === item.id)) {
+          console.log(prevData)
+          return [...prevData, item]; // Add the item if it doesn't exist
+        }
+        console.log(prevData)
+        return prevData; // Return the existing state if the item already exists
+      });
+    })
+
+  }, []);
 
 
   const isExpired = (expirationDateTime) => {
@@ -77,8 +122,6 @@ const Dashboard = () => {
     let cleanup = true;
 
     if(cleanup){
-  
-      Object.values(data).map((value,key)=> console.log(value))
     // console.log(data)
 
     // const smartlock_check = async () => {
@@ -203,9 +246,10 @@ const Dashboard = () => {
 
 
   const handleSort = (sortType) => {
-    setSelectedSort(sortType); // Set selected sort option
-    handleSortTodayAccess(sortType); // Perform sorting
-    setAnchorEl(null); // Close the dropdown menu
+    console.log(dataFrom)
+    // setSelectedSort(sortType); // Set selected sort option
+    // handleSortTodayAccess(sortType); // Perform sorting
+    // setAnchorEl(null); // Close the dropdown menu
   };
 
   return (
@@ -242,6 +286,7 @@ const Dashboard = () => {
 
         {/* Status */}
         <Grid item xs={10}>
+
           <Carousel 
           responsive={responsive}
           draggable={false}
@@ -287,22 +332,24 @@ const Dashboard = () => {
 
       {/* Modern Button acting as dropdown */}
       <Grid item xs={12} md={10} sm={12}>
-      <Button
-          variant="contained"
-          endIcon={<ExpandMore />} // Add the dropdown icon to the end of the button
-          onClick={handleClick}
+
+        <Button
+        variant="contained"
+        endIcon={<ExpandMore />} // Add the dropdown icon to the end of the button
+        onClick={handleClick}
         >
           Sort By: {selectedSort ? selectedSort : ''}
         </Button>
+
         <Menu
-  anchorEl={anchorEl}
-  open={Boolean(anchorEl)}
-  onClose={() => setAnchorEl(null)}
->
-  <MenuItem onClick={() => handleSort('name')}>Sort by Name</MenuItem>
-  <MenuItem onClick={() => handleSort('time')}>Sort by Time</MenuItem>
-  <MenuItem onClick={() => handleSort('date')}>Sort by Date</MenuItem>
-</Menu>
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={() => setAnchorEl(null)}
+        >
+          <MenuItem onClick={() => handleSort('name')}>Sort by Name</MenuItem>
+          <MenuItem onClick={() => handleSort('time')}>Sort by Time</MenuItem>
+          <MenuItem onClick={() => handleSort('date')}>Sort by Date</MenuItem>
+        </Menu>
 
       </Grid>
 
@@ -330,7 +377,7 @@ const Dashboard = () => {
           <Table 
           value={value} 
           set={0} 
-          rows={sortedTodayAccessData} 
+          rows={dataFrom} 
           columns={columns}
            />
 
