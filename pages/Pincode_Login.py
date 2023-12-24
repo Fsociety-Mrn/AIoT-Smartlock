@@ -500,10 +500,9 @@ class PincodeLogin(QtWidgets.QFrame):
         current_date = QtCore.QDate.currentDate().toString("MMM d yyyy")
         current_time = QtCore.QTime.currentTime().toString("h:mm:ss AP")
         
-        data = pinCodeLogin(pin=self.TokenID_3.text())
-        
-        print(data)
-        
+        pins = self.TokenID_3.text().split("-")        
+            
+        data = pinCodeLogin(pin=str(int(pins[0])) + "-" + pins[1])
         
         self.errorMessage.setText("")
         
