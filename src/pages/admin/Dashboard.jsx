@@ -22,11 +22,11 @@ import "react-multi-carousel/lib/styles.css";
 
 import Table from '../../Components/Table';
 
-import { get_AIoT_unlock, remove_token_data } from '../../firebase/Realtime_Db';
+import { get_AIoT_unlock, remove_token_data,getHistory } from '../../firebase/Realtime_Db';
 
 import dummyData from "./dummdata.json"
 
-const data = dummyData
+// const data = dummyData
 
 // transform data
 const transformDataToArray = (data) => {
@@ -60,14 +60,14 @@ const transformDataToArray = (data) => {
 };
 
 // extract the dates
-const extractUniqueDates = () => {
+const extractUniqueDates = (data) => {
   // Extract unique dates
   const uniqueDates = [...new Set(transformDataToArray(data).sort((a,b)=>new Date(b.Date) - new Date(a.Date)).map(entry => entry.Date))];
   
   return uniqueDates;
 };
 
-const filterDataByDateAndAccessType = (targetDate, targetAccessType) => {
+const filterDataByDateAndAccessType = (data,targetDate, targetAccessType) => {
 
   if (targetAccessType === "Access Denied"){
 
@@ -88,11 +88,11 @@ const getFormattedTodayDate = () => {
   const today = new Date();
   const options = { month: 'short', day: 'numeric', year: 'numeric' };
   const formattedDate = today.toLocaleDateString('en-US', options);
-  console.log("Date: ", String(formattedDate).replace(',',''))
   return formattedDate;
 };
 
 const Dashboard = () => {
+  const [data,setData] = React.useState({})
   const [paddinSize, setPaddingSize] = React.useState()
   const [value, setValue] = React.useState(0);
   const [open, setOpen] = React.useState(false);
@@ -105,10 +105,10 @@ const Dashboard = () => {
     TodayAccess: transformDataToArray(data)
                 .filter(entry => entry.Date === getFormattedTodayDate()).length,
 
-    FacialLogin: filterDataByDateAndAccessType(getFormattedTodayDate(),'Facial Login').length,
-    PINLogin: filterDataByDateAndAccessType(getFormattedTodayDate(),'PIN Login').length,
-    IoTLogin: filterDataByDateAndAccessType(getFormattedTodayDate(),'IoT Access').length,
-    AccessDenied: filterDataByDateAndAccessType(getFormattedTodayDate(),'Access Denied').length
+    FacialLogin: filterDataByDateAndAccessType(data,getFormattedTodayDate(),'Facial Login').length,
+    PINLogin: filterDataByDateAndAccessType(data,getFormattedTodayDate(),'PIN Login').length,
+    IoTLogin: filterDataByDateAndAccessType(data,getFormattedTodayDate(),'IoT Access').length,
+    AccessDenied: filterDataByDateAndAccessType(data,getFormattedTodayDate(),'Access Denied').length
   })
   const [dataFrom,setDataFrom] = React.useState(filterDataByDateAndAccessType(getFormattedTodayDate(),'Facial Login'));
 
@@ -130,6 +130,7 @@ const Dashboard = () => {
     if(cleanup)
     {
 
+      getHistory().then(data=>setData(data)).catch(error=>setData({}))
     // check if AIoT Smartlock is Lock
     get_AIoT_unlock().then(data=>{
 
@@ -185,26 +186,26 @@ const Dashboard = () => {
     setValue(newValue);
     switch (newValue){
       case 0:
-        setDataFrom(filterDataByDateAndAccessType(selectedSort,'Facial Login'))
+        setDataFrom(filterDataByDateAndAccessType(data,selectedSort,'Facial Login'))
       break;
       case 1:
-        setDataFrom(filterDataByDateAndAccessType(selectedSort,'PIN Login'))
+        setDataFrom(filterDataByDateAndAccessType(data,selectedSort,'PIN Login'))
       break;
       case 2:
-        setDataFrom(filterDataByDateAndAccessType(selectedSort,'IoT Access'))
+        setDataFrom(filterDataByDateAndAccessType(data,selectedSort,'IoT Access'))
       break;
       case 3:
-        setDataFrom(filterDataByDateAndAccessType(selectedSort,'Access Denied'))
+        setDataFrom(filterDataByDateAndAccessType(data,selectedSort,'Access Denied'))
       break;
       default:
-        setDataFrom(filterDataByDateAndAccessType(selectedSort,'Facial Login'))
+        setDataFrom(filterDataByDateAndAccessType(data,selectedSort,'Facial Login'))
       break;
     }
   };
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
-    console.log(extractUniqueDates())
+    console.log(extractUniqueDates(data))
   };
 
 
@@ -212,16 +213,16 @@ const Dashboard = () => {
     // console.log(dataFrom)
     setSelectedSort(sortType); // Set selected sort option
     console.log(sortType)
-    setDataFrom(filterDataByDateAndAccessType(sortType,'Facial Login'))
+    setDataFrom(filterDataByDateAndAccessType(data, sortType,'Facial Login'))
     setTotalAccess(
       {
         TodayAccess: transformDataToArray(data)
                     .filter(entry => entry.Date === sortType).length,
     
-        FacialLogin: filterDataByDateAndAccessType(sortType,'Facial Login').length,
-        PINLogin: filterDataByDateAndAccessType(sortType,'PIN Login').length,
-        IoTLogin: filterDataByDateAndAccessType(sortType,'IoT Access').length,
-        AccessDenied: filterDataByDateAndAccessType(sortType,'Access Denied').length
+        FacialLogin: filterDataByDateAndAccessType(data,sortType,'Facial Login').length,
+        PINLogin: filterDataByDateAndAccessType(data,sortType,'PIN Login').length,
+        IoTLogin: filterDataByDateAndAccessType(data,sortType,'IoT Access').length,
+        AccessDenied: filterDataByDateAndAccessType(data,sortType,'Access Denied').length
       }
     )
 
@@ -323,11 +324,14 @@ const Dashboard = () => {
         open={Boolean(anchorEl)}
         onClose={() => setAnchorEl(null)}
         >
-          <MenuItem onClick={() => handleSort('Today Access')}>Today Access</MenuItem>
+          <MenuItem onClick={() => handleSort(getFormattedTodayDate())}>Today Access</MenuItem>
 
-          {extractUniqueDates().map((date,index)=>(          
-            <MenuItem key={index} onClick={() => handleSort(String(date))}>{date}</MenuItem>
-          ))}
+          {extractUniqueDates(data)
+            .filter(date=> date !== getFormattedTodayDate())
+            .map((date,index)=>(          
+              <MenuItem key={index} onClick={() => handleSort(String(date))}>{date}</MenuItem>
+            ))
+          }
 
         </Menu>
 
