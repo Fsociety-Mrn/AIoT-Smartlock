@@ -67,9 +67,21 @@ const extractUniqueDates = () => {
   return uniqueDates;
 };
 
-// filter dates
 const filterDataByDateAndAccessType = (targetDate, targetAccessType) => {
-  return transformDataToArray(data).filter(entry => entry.Date === targetDate && entry.AccessType === targetAccessType);
+
+  if (targetAccessType === "Access Denied"){
+
+    return transformDataToArray(data).filter(entry => 
+      entry.Date === targetDate && 
+      entry.Name === 'No match detected'
+    );
+  }
+
+  return transformDataToArray(data).filter(entry => 
+    entry.Date === targetDate && 
+    entry.AccessType === targetAccessType &&
+    entry.Name !== 'No match detected'
+  );
 };
 
 const getFormattedTodayDate = () => {
@@ -80,6 +92,27 @@ const getFormattedTodayDate = () => {
   return formattedDate;
 };
 
+const getAccessCountByTypeAndDate  = (targetDate) =>{
+  console.log(transformDataToArray(data)
+  .filter(entry => entry.Date === targetDate).length)
+  return {
+    TodayAccess: transformDataToArray(data)
+                .filter(entry => entry.Date === targetDate).length,
+    FacialLogin: transformDataToArray(data)
+                .filter(entry => entry.Date === targetDate && 
+                  entry.AccessType === 'Facial Login').length,
+    PINLogin: transformDataToArray(data)
+                .filter(entry => entry.Date === targetDate && 
+                  entry.AccessType === 'PIN Login').length,
+    IoTLogin: transformDataToArray(data)
+                .filter(entry => entry.Date === targetDate && 
+                  entry.AccessType === 'IoT Login').length,
+    AccessDenied: transformDataToArray(data)
+                .filter(entry => entry.Date === targetDate && 
+                  entry.Name === 'No match detected').length
+  }
+}
+
 const Dashboard = () => {
   const [paddinSize, setPaddingSize] = React.useState()
   const [value, setValue] = React.useState(0);
@@ -88,9 +121,9 @@ const Dashboard = () => {
   const [dataToken, setTokenData] = React.useState()
   const [selectedSort, setSelectedSort] = React.useState(''); 
   const [anchorEl, setAnchorEl] = React.useState(null); // To manage Menu anchor
-
-  const [tabStatus,setTabStatus] = React.useState('Facial Login')
-  const [dataFrom,setDataFrom] = React.useState(filterDataByDateAndAccessType(getFormattedTodayDate(),tabStatus));
+  
+  const [ totalAccess,setTotalAccess] = React.useState(getAccessCountByTypeAndDate(getFormattedTodayDate()))
+  const [dataFrom,setDataFrom] = React.useState(filterDataByDateAndAccessType(getFormattedTodayDate(),'Facial Login'));
 
   const isExpired = (expirationDateTime) => {
     // Convert the expiration date string to a Date object
@@ -176,62 +209,12 @@ const Dashboard = () => {
       case 3:
         setDataFrom(filterDataByDateAndAccessType(selectedSort,'Access Denied'))
       break;
+      default:
+        setDataFrom(filterDataByDateAndAccessType(selectedSort,'Facial Login'))
+      break;
     }
   };
 
-  const sortByName = (dataToSort) => {
-    const sortedData = [...dataToSort].sort((a, b) => {
-      if (a.Name < b.Name) return -1;
-      if (a.Name > b.Name) return 1;
-      return 0;
-    });
-    return sortedData;
-  };
-
-  // Function to sort table data by time/date
-  const sortByTime = (dataToSort) => {
-    const sortedData = [...dataToSort].sort((a, b) => {
-      // Convert time/date strings to Date objects for comparison
-      const dateA = new Date(a.Time);
-      const dateB = new Date(b.Time);
-      return dateA - dateB;
-    });
-    return sortedData;
-  };
-
-  const sortByDate = (dataToSort) => {
-    const sortedData = [...dataToSort].sort((a, b) => {
-      return new Date(a.Date).getTime() - new Date(b.Date).getTime();
-    });
-    return sortedData;
-  };
-  
-  
-  // State to hold the sorted data for "Today Access" table
-  const [sortedTodayAccessData, setSortedTodayAccessData] = React.useState(rows);
-
-  const handleSortTodayAccess = (sortType) => {
-    let sortedTableData;
-  
-    switch (sortType) {
-      case 'name':
-        sortedTableData = sortByName(rows);
-        setSortedTodayAccessData(sortedTableData);
-        break;
-      case 'time':
-        sortedTableData = sortByTime(rows);
-        setSortedTodayAccessData(sortedTableData);
-        break;
-        case 'date':
-          sortedTableData = sortByDate(rows); // or sortedTodayAccessData if necessary
-          setSortedTodayAccessData(sortedTableData);
-          break;
-        default:
-          break;
-    }
-  };
-  
-  
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
     console.log(extractUniqueDates())
@@ -243,7 +226,7 @@ const Dashboard = () => {
     setSelectedSort(sortType); // Set selected sort option
     console.log(sortType)
     setDataFrom(filterDataByDateAndAccessType(sortType,'Facial Login'))
-    
+  
     // handleSortTodayAccess(sortType); // Perform sorting
     setAnchorEl(null); // Close the dropdown menu
   };
@@ -298,27 +281,27 @@ const Dashboard = () => {
 
             <CardItem 
             Title="Today Access"
-            Number={0}
+            Number={totalAccess.TodayAccess}
             />
 
             <CardItem 
             Title="Facial Login"
-            Number={0}
+            Number={totalAccess.FacialLogin}
             />
 
             <CardItem 
             Title="PIN Login"
-            Number={0}
+            Number={totalAccess.PINLogin}
             />
 
             <CardItem 
             Title="IoT Login"
-            Number={0}
+            Number={totalAccess.IoTLogin}
             />
 
             <CardItem 
             Title="Access Denied"
-            Number={0}
+            Number={totalAccess.AccessDenied}
             />
 
           </Carousel>
@@ -411,58 +394,6 @@ const Dashboard = () => {
   )
 }
 
-
-const rows = [
-  { 
-    id: 1,
-    Name: 'ART LISBOA', 
-    Time: '9:30 am', 
-    Date: '2020-07-06',
-    AccessType: "IoT Login",
-    Percentage: "90%"
-  },
-  { 
-    id: 6,
-    Name: 'FRANZ MANECLANG', 
-    Time: '10:30 am', 
-    Date: '2019-06-05',
-    AccessType: "IoT Login",
-    Percentage: "90%"
-  },
-  { 
-    id: 2,
-    Name: 'REY CUMPA', 
-    Time: '11:30 am', 
-    Date: '2019-01-04',
-    AccessType: "IoT Login",
-    Percentage: "90%"
-  },
-  { 
-    id: 3,
-    Name: 'ROGER GAJUNERA', 
-    Time: '12:30 am', 
-    Date: '2019-02-03',
-    AccessType: "IoT Login",
-    Percentage: "90%"
-  },
-  { 
-    id: 4,
-    Name: 'IVAN FAMILARAN', 
-    Time: '1:30 pm', 
-    Date: '2019-09-02',
-    AccessType: "IoT Login",
-    Percentage: "90%"
-  },
-  { 
-    id: 5,
-    Name: 'KEYT LISBOA', 
-    Time: '9:30 am', 
-    Date: '2010-06-01',
-    AccessType: "Face Login",
-    Percentage: "90%"
-  },
-
-];
 
 const FacialLogin = [
   { field: 'Name', headerName: 'Name', width: 160 },

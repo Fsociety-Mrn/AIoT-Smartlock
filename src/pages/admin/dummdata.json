@@ -1,117 +1,1796 @@
 {
-    "Familaran,Ivan": {
-      "Nov 1 2023": {
-        "1:31:44 PM": {
-          "Access_type": "Facial Login",
-          "Percentage": 64.63496886969651
-        },
-        "1:32:22 PM": {
-          "Access_type": "Facial Login",
-          "Percentage": 79.47212969880968
-        },
-        "1:33:24 PM": {
-          "Access_type": "Facial Login",
-          "Percentage": 78.38061617409736
-        },
-        "1:35:16 PM": {
-          "Access_type": "PIN Login"
-        },
-        "1:35:35 PM": {
-          "Access_type": "PIN Login"
-        },
-        "1:35:52 PM": {
-          "Access_type": "PIN Login"
-        }
-      },
-      "Oct 23 2023": {
-        "1:31:44 PM": {
-          "Access_type": "Facial Login",
-          "Percentage": 64.63496886969651
-        },
-        "1:32:22 PM": {
-          "Access_type": "Facial Login",
-          "Percentage": 79.47212969880968
-        },
-        "1:33:24 PM": {
-          "Access_type": "Facial Login",
-          "Percentage": 78.38061617409736
-        },
-        "1:35:16 PM": {
-          "Access_type": "PIN Login"
-        },
-        "1:35:35 PM": {
-          "Access_type": "PIN Login"
-        },
-        "1:35:52 PM": {
-          "Access_type": "PIN Login"
-        }
+  "ART LISBOA": {
+    "Dec 13 2023": {
+      "10:26:44 PM": {
+        "Access_type": "IoT Access"
       }
     },
-    "Gajunera,Roger": {
-      "Nov 26 2023": {
-        "1:34:21 PM": {
-          "Access_type": "Facial Login",
-          "Percentage": 27.555763721466057
-        },
-        "1:34:30 PM": {
-          "Access_type": "Facial Login",
-          "Percentage": 22.333085536956784
-        },
-        "1:34:38 PM": {
-          "Access_type": "Facial Login",
-          "Percentage": 24.79411164919535
-        },
-        "1:35:04 PM": {
-          "Access_type": "PIN Login"
-        },
-        "1:35:44 PM": {
-          "Access_type": "PIN Login"
-        },
-        "1:35:48 PM": {
-          "Access_type": "PIN Login"
-        },
-        "1:36:01 PM": {
-          "Access_type": "PIN Login"
-        },
-        "1:36:02 PM": {
-          "Access_type": "PIN Login"
-        },
-        "1:36:04 PM": {
-          "Access_type": "PIN Login"
-        },
-        "1:36:08 PM": {
-          "Access_type": "PIN Login"
-        },
-        "1:36:09 PM": {
-          "Access_type": "PIN Login"
-        },
-        "1:36:10 PM": {
-          "Access_type": "PIN Login"
-        },
-        "1:36:15 PM": {
-          "Access_type": "PIN Login"
-        },
-        "1:36:16 PM": {
-          "Access_type": "PIN Login"
-        },
-        "1:36:18 PM": {
-          "Access_type": "PIN Login"
-        },
-        "1:36:19 PM": {
-          "Access_type": "PIN Login"
-        },
-        "1:36:20 PM": {
-          "Access_type": "PIN Login"
-        },
-        "1:36:22 PM": {
-          "Access_type": "PIN Login"
-        },
-        "1:36:24 PM": {
-          "Access_type": "PIN Login"
-        },
-        "1:36:27 PM": {
-          "Access_type": "PIN Login"
-        }
+    "Dec 22 2023": {
+      "12:32:57 AM": {
+        "Access_type": "IoT Access"
+      },
+      "12:33:05 AM": {
+        "Access_type": "IoT Access"
+      }
+    },
+    "Dec 24 2023": {
+      "9:44:53 AM": {
+        "Access_type": "PIN Login"
+      },
+      "9:50:44 AM": {
+        "Access_type": "PIN Login"
+      }
+    },
+    "Dec 3 2023": {
+      "1:24:54 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 90.17095287583811
+      },
+      "1:25:53 PM": {
+        "Access_type": "PIN Login"
+      },
+      "3:13:54 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 85.49630441020705
+      },
+      "3:14:39 PM": {
+        "Access_type": "PIN Login"
+      }
+    },
+    "Dec 5 2023": {
+      "03:51:23 PM": {
+        "Access_type": "IoT Access"
+      },
+      "03:51:31 PM": {
+        "Access_type": "IoT Access"
+      },
+      "3:03:51 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 69.77140970967088
+      },
+      "3:11:34 PM": {
+        "Access_type": "PIN Login"
+      },
+      "3:22:01 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 87.89592237852324
+      },
+      "3:25:22 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 71.96996565611468
+      },
+      "3:26:30 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 82.75339716196045
+      },
+      "3:26:48 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 86.93993708311316
+      },
+      "3:27:05 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 88.13652956642512
+      },
+      "3:27:34 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 88.27440899299292
+      },
+      "3:27:49 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 86.49269056708873
+      },
+      "3:28:06 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 90.03498344226097
+      },
+      "3:28:19 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 84.7531102311869
+      },
+      "3:28:33 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 83.9144157566564
+      },
+      "3:28:55 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 79.00785635714026
+      },
+      "3:29:55 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 73.50618247484145
+      },
+      "3:30:52 PM": {
+        "Access_type": "PIN Login"
+      },
+      "3:31:12 PM": {
+        "Access_type": "PIN Login"
+      },
+      "3:31:21 PM": {
+        "Access_type": "PIN Login"
+      },
+      "3:49:30 PM": {
+        "Access_type": "PIN Login"
+      },
+      "3:49:48 PM": {
+        "Access_type": "PIN Login"
+      },
+      "3:50:12 PM": {
+        "Access_type": "PIN Login"
+      },
+      "3:52:12 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 89.85366400267
+      },
+      "3:52:41 PM": {
+        "Access_type": "PIN Login"
+      }
+    },
+    "Dec 6 2023": {
+      "03:08:29 PM": {
+        "Access_type": "IoT Access"
+      },
+      "03:08:36 PM": {
+        "Access_type": "IoT Access"
+      }
+    },
+    "Dec 7 2023": {
+      "03:12:01 PM": {
+        "Access_type": "IoT Access"
+      },
+      "3:17:24 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 89.35921544219548
+      },
+      "4:32:40 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 80.8202832955119
+      },
+      "4:33:46 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 81.95258948667016
+      },
+      "4:38:57 PM": {
+        "Access_type": "PIN Login"
+      },
+      "4:39:22 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 87.86896621443807
+      },
+      "4:39:53 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 62.971962287380755
+      },
+      "4:53:09 PM": {
+        "Access_type": "Facial Login"
+      },
+      "4:53:21 PM": {
+        "Access_type": "PIN Login"
+      },
+      "5:01:01 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 78.96218820033872
+      },
+      "5:01:16 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 81.5542512371955
+      },
+      "5:02:32 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 79.18275531538576
+      },
+      "5:05:40 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 85.24885251224634
+      },
+      "5:06:05 PM": {
+        "Access_type": "PIN Login"
+      },
+      "5:39:37 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 69.36736585804537
+      },
+      "6:02:39 PM": {
+        "Access_type": "Facial Login"
+      },
+      "6:30:32 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 85.3621225057845
+      },
+      "6:31:42 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 88.09572527666343
+      },
+      "6:32:34 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 87.96380361060291
+      },
+      "8:09:01 PM": {
+        "Access_type": "Facial Login"
+      }
+    },
+    "Nov 1 2023": {
+      "05:57:44 PM": {
+        "Access_type": "IoT Access"
+      },
+      "07:14:56 PM": {
+        "Access_type": "IoT Access"
+      },
+      "1:31:44 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 64.63496886969651
+      },
+      "1:32:22 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 79.47212969880968
+      },
+      "1:33:24 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 78.38061617409736
+      },
+      "1:35:16 PM": {
+        "Access_type": "PIN Login"
+      },
+      "1:35:35 PM": {
+        "Access_type": "PIN Login"
+      },
+      "1:35:52 PM": {
+        "Access_type": "PIN Login"
+      },
+      "2:37:11 PM": {
+        "Access_type": "PIN Login"
+      }
+    },
+    "Nov 10 2023": {
+      "4:28:27 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 74.98547099567033
+      }
+    },
+    "Nov 11 2023": {
+      "11:04:56 AM": {
+        "Access_type": "Facial Login",
+        "Percentage": 82.60003938511109
+      },
+      "11:05:29 AM": {
+        "Access_type": "Facial Login",
+        "Percentage": 71.97918582811944
+      },
+      "11:28:14 AM": {
+        "Access_type": "Facial Login",
+        "Percentage": 78.37664991984981
+      },
+      "11:28:46 AM": {
+        "Access_type": "Facial Login",
+        "Percentage": 81.52365372306028
+      },
+      "11:29:14 AM": {
+        "Access_type": "Facial Login",
+        "Percentage": 64.74142442656041
+      },
+      "12:01:37 PM": {
+        "Access_type": "PIN Login"
+      },
+      "12:04:00 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 82.62495569695648
+      },
+      "12:06:36 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 81.83654927971611
+      },
+      "12:09:10 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 94.0854090635896
+      },
+      "12:09:41 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 90.11294504212637
+      }
+    },
+    "Nov 13 2023": {
+      "10:01:14 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 90.01203851237973
+      },
+      "11:28:07 AM": {
+        "Access_type": "Facial Login",
+        "Percentage": 87.01147752786842
+      },
+      "11:28:39 AM": {
+        "Access_type": "Facial Login",
+        "Percentage": 86.25733447972085
+      },
+      "11:29:20 AM": {
+        "Access_type": "Facial Login",
+        "Percentage": 84.78328602596012
+      },
+      "2:58:37 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 89.77242676532735
+      },
+      "2:59:07 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 90.62392289841536
+      },
+      "3:10:54 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 85.22030876062982
+      },
+      "3:11:22 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 77.32845118238636
+      },
+      "3:15:30 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 92.83604463081637
+      },
+      "3:16:58 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 89.95574584967237
+      },
+      "3:17:36 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 90.02506198383004
+      },
+      "3:18:26 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 89.24326998392277
+      },
+      "3:22:06 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 81.9171678043577
+      },
+      "3:23:03 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 91.48800947666902
+      },
+      "3:23:58 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 88.7248735198407
+      },
+      "3:27:17 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 88.93473941723943
+      },
+      "3:34:10 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 92.45614264506762
+      },
+      "3:35:56 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 91.35999815344708
+      },
+      "3:38:39 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 90.84459883182868
+      },
+      "3:39:13 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 85.70554613913576
+      },
+      "3:41:08 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 85.19301240408306
+      },
+      "3:41:40 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 90.65554329897274
+      },
+      "3:53:27 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 90.40978592028056
+      },
+      "3:54:57 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 91.89481163637502
+      },
+      "3:56:04 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 92.83027791031306
+      },
+      "4:01:08 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 90.85947184593526
+      }
+    },
+    "Nov 14 2023": {
+      "01:09:14 PM": {
+        "Access_type": "IoT Access"
+      },
+      "12:54:17 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 89.4424847238809
+      },
+      "12:54:45 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 88.61201628957518
+      },
+      "12:56:05 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 89.59471938612229
+      },
+      "12:56:07 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 92.21690181758288
+      },
+      "12:58:22 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 90.19159089662607
+      },
+      "12:58:48 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 88.63427615982651
+      },
+      "12:59:12 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 86.82855109529241
+      },
+      "2:15:21 PM": {
+        "Access_type": "Facial Login"
+      },
+      "2:15:58 PM": {
+        "Access_type": "Facial Login"
+      },
+      "2:16:13 PM": {
+        "Access_type": "PIN Login"
+      },
+      "2:17:13 PM": {
+        "Access_type": "PIN Login"
+      },
+      "2:17:22 PM": {
+        "Access_type": "PIN Login"
+      },
+      "2:50:33 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 86.14094135313665
+      },
+      "2:51:11 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 88.73263377097018
+      },
+      "2:51:58 PM": {
+        "Access_type": "PIN Login"
+      },
+      "6:03:06 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 87.50786172364784
+      },
+      "6:03:31 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 89.76079472663719
+      },
+      "6:25:02 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 87.53533967982402
+      },
+      "6:28:18 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 91.2617424785603
+      },
+      "6:29:00 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 89.89588651462836
+      },
+      "6:29:29 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 91.97621368209006
+      },
+      "6:29:55 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 86.64229666595111
+      },
+      "6:31:27 PM": {
+        "Access_type": "PIN Login"
+      },
+      "6:31:35 PM": {
+        "Access_type": "PIN Login"
+      },
+      "6:40:50 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 80.10370250767278
+      },
+      "6:41:16 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 85.59741672809288
+      },
+      "6:41:41 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 75.58645537503057
+      },
+      "6:42:08 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 78.4424942939308
+      },
+      "6:42:32 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 70.29445393980312
+      },
+      "6:43:23 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 75.23895815456547
+      },
+      "6:46:23 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 76.42248003002715
+      },
+      "6:48:15 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 89.30135205143831
+      },
+      "6:48:51 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 81.50846953254648
+      }
+    },
+    "Nov 15 2023": {
+      "02:33:11 PM": {
+        "Access_type": "IoT Access"
+      },
+      "12:49:41 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 83.75962487404969
+      },
+      "12:49:47 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 84.60602265250893
+      },
+      "12:49:50 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 85.36773190409045
+      },
+      "12:50:51 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 86.8028211424677
+      },
+      "12:51:30 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 83.81303609605723
+      },
+      "12:52:25 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 76.36067086027958
+      },
+      "12:52:51 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 86.52869273793127
+      },
+      "12:54:20 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 86.27441316210445
+      },
+      "12:54:42 PM": {
+        "Access_type": "PIN Login"
+      },
+      "12:54:52 PM": {
+        "Access_type": "PIN Login"
+      },
+      "12:55:18 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 79.13270617437882
+      },
+      "12:55:21 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 87.67470152663326
+      },
+      "12:56:19 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 90.43552440330807
+      },
+      "12:57:14 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 89.31729102569572
+      }
+    },
+    "Nov 16 2023": {
+      "12:01:43 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 90.80918106721934
+      },
+      "12:02:20 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 90.7733181081142
+      }
+    },
+    "Nov 22 2023": {
+      "03:09:45 PM": {
+        "Access_type": "IoT Access"
+      },
+      "2:42:53 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 89.28440138984818
+      },
+      "3:00:20 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 92.88193587292308
+      },
+      "3:00:24 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 90.75694221166027
+      },
+      "3:00:35 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 90.84260635161962
+      },
+      "3:00:39 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 91.15934066484105
+      },
+      "3:00:43 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 92.29948376214507
+      },
+      "3:01:06 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 82.16562342620189
+      },
+      "3:02:35 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 89.44344001053757
+      },
+      "3:02:39 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 88.78804720221403
+      },
+      "3:04:33 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 84.70025474829774
+      },
+      "3:07:49 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 82.28701245477419
+      },
+      "3:08:08 PM": {
+        "Access_type": "PIN Login"
+      },
+      "4:06:08 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 71.66484445518738
+      },
+      "4:06:33 PM": {
+        "Access_type": "PIN Login"
+      },
+      "4:15:21 PM": {
+        "Access_type": "PIN Login"
+      }
+    },
+    "Nov 26 2023": {
+      "01:53:57 AM": {
+        "Access_type": "IoT Access"
+      }
+    },
+    "Nov 27 2023": {
+      "11:39:38 AM": {
+        "Access_type": "IoT Access"
+      }
+    },
+    "Nov 28 2023": {
+      "10:38:58 PM": {
+        "Access_type": "IoT Access"
+      }
+    },
+    "Nov 3 2023": {
+      "08:04:19 PM": {
+        "Access_type": "IoT Access"
+      },
+      "08:04:56 PM": {
+        "Access_type": "IoT Access"
+      },
+      "08:08:42 PM": {
+        "Access_type": "IoT Access"
+      },
+      "08:08:51 PM": {
+        "Access_type": "IoT Access"
+      },
+      "08:09:44 PM": {
+        "Access_type": "IoT Access"
+      },
+      "08:10:43 PM": {
+        "Access_type": "IoT Access"
+      },
+      "08:12:06 PM": {
+        "Access_type": "IoT Access"
+      },
+      "09:37:10 PM": {
+        "Access_type": "IoT Access"
+      }
+    },
+    "Nov 4 2023": {
+      "05:37:06 PM": {
+        "Access_type": "IoT Access"
+      },
+      "05:56:47 PM": {
+        "Access_type": "IoT Access"
+      },
+      "06:29:14 PM": {
+        "Access_type": "IoT Access"
+      },
+      "06:29:43 PM": {
+        "Access_type": "IoT Access"
+      },
+      "06:29:53 PM": {
+        "Access_type": "IoT Access"
+      },
+      "06:33:52 PM": {
+        "Access_type": "IoT Access"
+      },
+      "06:34:10 PM": {
+        "Access_type": "IoT Access"
+      },
+      "06:34:17 PM": {
+        "Access_type": "IoT Access"
+      },
+      "06:37:45 PM": {
+        "Access_type": "IoT Access"
+      },
+      "06:38:05 PM": {
+        "Access_type": "IoT Access"
+      },
+      "06:38:21 PM": {
+        "Access_type": "IoT Access"
+      },
+      "06:38:50 PM": {
+        "Access_type": "IoT Access"
+      },
+      "06:39:07 PM": {
+        "Access_type": "IoT Access"
+      },
+      "06:40:01 PM": {
+        "Access_type": "IoT Access"
+      }
+    },
+    "Nov 5 2023": {
+      "01:22:19 PM": {
+        "Access_type": "IoT Access"
+      },
+      "01:22:31 PM": {
+        "Access_type": "IoT Access"
+      },
+      "01:42:10 PM": {
+        "Access_type": "IoT Access"
+      },
+      "01:42:46 PM": {
+        "Access_type": "IoT Access"
+      },
+      "01:46:21 PM": {
+        "Access_type": "IoT Access"
+      },
+      "01:46:30 PM": {
+        "Access_type": "IoT Access"
+      },
+      "2:49:00 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 88.17137976458703
+      }
+    },
+    "Nov 6 2023": {
+      "02:20:14 PM": {
+        "Access_type": "IoT Access"
+      },
+      "02:22:58 PM": {
+        "Access_type": "IoT Access"
+      },
+      "02:23:04 PM": {
+        "Access_type": "IoT Access"
+      },
+      "02:23:21 PM": {
+        "Access_type": "IoT Access"
+      },
+      "02:43:57 PM": {
+        "Access_type": "IoT Access"
+      },
+      "2:44:19 PM": {
+        "Access_type": "PIN Login"
+      },
+      "2:45:20 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 81.15111941280567
+      },
+      "2:55:24 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 82.45907288780212
+      }
+    },
+    "Nov 7 2023": {
+      "10:02:40 PM": {
+        "Access_type": "PIN Login"
+      },
+      "10:03:24 PM": {
+        "Access_type": "PIN Login"
+      },
+      "10:04:41 PM": {
+        "Access_type": "IoT Access"
+      },
+      "10:13:38 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 84.91235987978335
+      },
+      "10:17:31 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 75.55267184282431
+      },
+      "10:18:02 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 72.58734165638131
+      },
+      "10:18:29 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 76.54277264848233
+      },
+      "10:19:03 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 81.86290263085732
+      },
+      "10:20:41 PM": {
+        "Access_type": "PIN Login"
+      },
+      "10:20:53 PM": {
+        "Access_type": "IoT Access"
+      },
+      "10:21:33 PM": {
+        "Access_type": "IoT Access"
+      },
+      "10:25:27 PM": {
+        "Access_type": "IoT Access"
+      },
+      "10:25:41 PM": {
+        "Access_type": "IoT Access"
+      },
+      "10:32:00 PM": {
+        "Access_type": "IoT Access"
+      },
+      "10:32:18 PM": {
+        "Access_type": "IoT Access"
+      },
+      "10:32:30 PM": {
+        "Access_type": "IoT Access"
+      },
+      "10:50:32 PM": {
+        "Access_type": "PIN Login"
+      }
+    },
+    "Nov 8 2023": {
+      "3:49:03 PM": {
+        "Access_type": "PIN Login"
+      }
+    },
+    "Nov 9 2023": {
+      "03:22:44 PM": {
+        "Access_type": "IoT Access"
+      },
+      "12:04:48 PM": {
+        "Access_type": "IoT Access"
+      },
+      "12:05:01 PM": {
+        "Access_type": "IoT Access"
+      }
+    },
+    "Oct 31 2023": {
+      "05:57:44 pm": {
+        "Access_type": "Facial Login",
+        "Percentage": 90.88
       }
     }
+  },
+  "IVAN FAMILARAN": {
+    "Dec 24 2023": {
+      "09:42:38 AM": {
+        "Access_type": "IoT Access"
+      },
+      "12:26:17 PM": {
+        "Access_type": "PIN Login"
+      },
+      "12:27:41 PM": {
+        "Access_type": "PIN Login"
+      },
+      "9:46:03 AM": {
+        "Access_type": "PIN Login"
+      }
+    },
+    "Dec 6 2023": {
+      "02:53:15 PM": {
+        "Access_type": "IoT Access"
+      }
+    },
+    "Nov 10 2023": {
+      "4:02:13 PM": {
+        "Access_type": "PIN Login"
+      },
+      "4:04:53 PM": {
+        "Access_type": "PIN Login"
+      },
+      "4:22:43 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 89.17638177088286
+      }
+    },
+    "Nov 3 2023": {
+      "09:59:39 PM": {
+        "Access_type": "IoT Access"
+      }
+    },
+    "Nov 4 2023": {
+      "08:04:26 AM": {
+        "Access_type": "IoT Access"
+      }
+    }
+  },
+  "KEYT LISBOA": {
+    "Nov 7 2023": {
+      "10:31:58 PM": {
+        "Access_type": "IoT Access"
+      },
+      "10:32:08 PM": {
+        "Access_type": "IoT Access"
+      },
+      "10:32:21 PM": {
+        "Access_type": "IoT Access"
+      },
+      "10:32:32 PM": {
+        "Access_type": "IoT Access"
+      },
+      "10:35:53 PM": {
+        "Access_type": "PIN Login"
+      },
+      "10:36:16 PM": {
+        "Access_type": "PIN Login"
+      },
+      "10:37:05 PM": {
+        "Access_type": "PIN Login"
+      },
+      "10:38:52 PM": {
+        "Access_type": "PIN Login"
+      },
+      "10:45:53 PM": {
+        "Access_type": "PIN Login"
+      }
+    },
+    "Nov 9 2023": {
+      "07:01:11 PM": {
+        "Access_type": "IoT Access"
+      },
+      "12:09:43 PM": {
+        "Access_type": "IoT Access"
+      },
+      "12:09:48 PM": {
+        "Access_type": "IoT Access"
+      },
+      "12:27:52 PM": {
+        "Access_type": "IoT Access"
+      },
+      "12:28:00 PM": {
+        "Access_type": "IoT Access"
+      },
+      "12:28:07 PM": {
+        "Access_type": "IoT Access"
+      },
+      "12:28:31 PM": {
+        "Access_type": "IoT Access"
+      },
+      "12:28:38 PM": {
+        "Access_type": "IoT Access"
+      },
+      "12:28:52 PM": {
+        "Access_type": "IoT Access"
+      }
+    }
+  },
+  "No match detected": {
+    "Dec 24 2023": {
+      "12:19:28 PM": {
+        "Access_type": "PIN Login"
+      },
+      "12:22:21 PM": {
+        "Access_type": "PIN Login"
+      },
+      "12:23:24 PM": {
+        "Access_type": "PIN Login"
+      },
+      "12:23:41 PM": {
+        "Access_type": "PIN Login"
+      },
+      "12:24:27 PM": {
+        "Access_type": "PIN Login"
+      },
+      "12:24:54 PM": {
+        "Access_type": "PIN Login"
+      },
+      "12:25:03 PM": {
+        "Access_type": "PIN Login"
+      },
+      "12:25:47 PM": {
+        "Access_type": "PIN Login"
+      },
+      "9:41:58 AM": {
+        "Access_type": "PIN Login"
+      },
+      "9:42:15 AM": {
+        "Access_type": "PIN Login"
+      },
+      "9:43:12 AM": {
+        "Access_type": "PIN Login"
+      },
+      "9:43:19 AM": {
+        "Access_type": "PIN Login"
+      },
+      "9:43:28 AM": {
+        "Access_type": "PIN Login"
+      },
+      "9:43:36 AM": {
+        "Access_type": "PIN Login"
+      }
+    },
+    "Dec 3 2023": {
+      "1:25:37 PM": {
+        "Access_type": "PIN Login"
+      },
+      "1:25:45 PM": {
+        "Access_type": "PIN Login"
+      }
+    },
+    "Dec 5 2023": {
+      "3:26:23 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 48.6418604850769
+      },
+      "3:30:42 PM": {
+        "Access_type": "PIN Login"
+      },
+      "3:30:46 PM": {
+        "Access_type": "PIN Login"
+      },
+      "3:30:59 PM": {
+        "Access_type": "PIN Login"
+      },
+      "3:31:03 PM": {
+        "Access_type": "PIN Login"
+      },
+      "3:31:27 PM": {
+        "Access_type": "PIN Login"
+      },
+      "3:31:28 PM": {
+        "Access_type": "PIN Login"
+      },
+      "3:31:29 PM": {
+        "Access_type": "PIN Login"
+      },
+      "3:31:30 PM": {
+        "Access_type": "PIN Login"
+      },
+      "3:31:31 PM": {
+        "Access_type": "PIN Login"
+      },
+      "3:31:32 PM": {
+        "Access_type": "PIN Login"
+      },
+      "3:31:33 PM": {
+        "Access_type": "PIN Login"
+      },
+      "3:31:34 PM": {
+        "Access_type": "PIN Login"
+      },
+      "3:32:13 PM": {
+        "Access_type": "PIN Login"
+      },
+      "3:32:14 PM": {
+        "Access_type": "PIN Login"
+      },
+      "3:32:15 PM": {
+        "Access_type": "PIN Login"
+      },
+      "3:32:16 PM": {
+        "Access_type": "PIN Login"
+      },
+      "3:32:18 PM": {
+        "Access_type": "PIN Login"
+      },
+      "3:32:19 PM": {
+        "Access_type": "PIN Login"
+      },
+      "3:32:57 PM": {
+        "Access_type": "PIN Login"
+      },
+      "3:32:58 PM": {
+        "Access_type": "PIN Login"
+      },
+      "3:33:01 PM": {
+        "Access_type": "PIN Login"
+      },
+      "3:33:02 PM": {
+        "Access_type": "PIN Login"
+      },
+      "3:33:05 PM": {
+        "Access_type": "PIN Login"
+      },
+      "3:33:06 PM": {
+        "Access_type": "PIN Login"
+      },
+      "3:33:08 PM": {
+        "Access_type": "PIN Login"
+      },
+      "3:49:26 PM": {
+        "Access_type": "PIN Login"
+      },
+      "3:49:39 PM": {
+        "Access_type": "PIN Login"
+      },
+      "3:49:57 PM": {
+        "Access_type": "PIN Login"
+      },
+      "3:52:35 PM": {
+        "Access_type": "PIN Login"
+      }
+    },
+    "Dec 7 2023": {
+      "3:13:31 PM": {
+        "Access_type": "PIN Login"
+      },
+      "3:13:33 PM": {
+        "Access_type": "PIN Login"
+      },
+      "3:13:34 PM": {
+        "Access_type": "PIN Login"
+      },
+      "4:33:39 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 48.47154021263122
+      },
+      "4:39:16 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 2.263039350509643
+      },
+      "5:00:56 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 44.176091750462845
+      },
+      "5:02:27 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 43.00443331400553
+      },
+      "5:39:28 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 19.07798647880554
+      },
+      "5:39:32 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 23.84938796361287
+      }
+    },
+    "Nov 1 2023": {
+      "1:34:21 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 27.555763721466057
+      },
+      "1:34:30 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 22.333085536956784
+      },
+      "1:34:38 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 24.79411164919535
+      },
+      "1:35:04 PM": {
+        "Access_type": "PIN Login"
+      },
+      "1:35:44 PM": {
+        "Access_type": "PIN Login"
+      },
+      "1:35:48 PM": {
+        "Access_type": "PIN Login"
+      },
+      "1:36:01 PM": {
+        "Access_type": "PIN Login"
+      },
+      "1:36:02 PM": {
+        "Access_type": "PIN Login"
+      },
+      "1:36:04 PM": {
+        "Access_type": "PIN Login"
+      },
+      "1:36:08 PM": {
+        "Access_type": "PIN Login"
+      },
+      "1:36:09 PM": {
+        "Access_type": "PIN Login"
+      },
+      "1:36:10 PM": {
+        "Access_type": "PIN Login"
+      },
+      "1:36:15 PM": {
+        "Access_type": "PIN Login"
+      },
+      "1:36:16 PM": {
+        "Access_type": "PIN Login"
+      },
+      "1:36:18 PM": {
+        "Access_type": "PIN Login"
+      },
+      "1:36:19 PM": {
+        "Access_type": "PIN Login"
+      },
+      "1:36:20 PM": {
+        "Access_type": "PIN Login"
+      },
+      "1:36:22 PM": {
+        "Access_type": "PIN Login"
+      },
+      "1:36:24 PM": {
+        "Access_type": "PIN Login"
+      },
+      "1:36:27 PM": {
+        "Access_type": "PIN Login"
+      },
+      "1:43:57 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 20.68221569061279
+      },
+      "1:44:07 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 26.514798402786248
+      },
+      "1:44:54 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 22.623558839162186
+      },
+      "4:16:17 PM": {
+        "Access_type": "PIN Login"
+      },
+      "4:16:18 PM": {
+        "Access_type": "PIN Login"
+      },
+      "4:16:19 PM": {
+        "Access_type": "PIN Login"
+      },
+      "4:16:24 PM": {
+        "Access_type": "PIN Login"
+      },
+      "4:16:25 PM": {
+        "Access_type": "PIN Login"
+      },
+      "4:16:26 PM": {
+        "Access_type": "PIN Login"
+      },
+      "4:16:29 PM": {
+        "Access_type": "PIN Login"
+      },
+      "4:16:30 PM": {
+        "Access_type": "PIN Login"
+      },
+      "4:16:32 PM": {
+        "Access_type": "PIN Login"
+      },
+      "4:17:09 PM": {
+        "Access_type": "PIN Login"
+      },
+      "4:17:11 PM": {
+        "Access_type": "PIN Login"
+      },
+      "4:17:13 PM": {
+        "Access_type": "PIN Login"
+      },
+      "4:17:19 PM": {
+        "Access_type": "PIN Login"
+      },
+      "4:17:20 PM": {
+        "Access_type": "PIN Login"
+      },
+      "4:17:21 PM": {
+        "Access_type": "PIN Login"
+      },
+      "4:17:25 PM": {
+        "Access_type": "PIN Login"
+      },
+      "4:17:27 PM": {
+        "Access_type": "PIN Login"
+      },
+      "4:17:29 PM": {
+        "Access_type": "PIN Login"
+      },
+      "4:18:40 PM": {
+        "Access_type": "PIN Login"
+      },
+      "4:18:42 PM": {
+        "Access_type": "PIN Login"
+      },
+      "4:18:43 PM": {
+        "Access_type": "PIN Login"
+      },
+      "4:18:46 PM": {
+        "Access_type": "PIN Login"
+      },
+      "4:18:47 PM": {
+        "Access_type": "PIN Login"
+      },
+      "4:18:49 PM": {
+        "Access_type": "PIN Login"
+      },
+      "4:18:50 PM": {
+        "Access_type": "PIN Login"
+      },
+      "4:18:51 PM": {
+        "Access_type": "PIN Login"
+      }
+    },
+    "Nov 10 2023": {
+      "3:56:33 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 37.185147404670715
+      },
+      "3:56:49 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 26.08945220708847
+      },
+      "3:57:17 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 45.904822647571564
+      },
+      "4:18:11 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 47.613292932510376
+      },
+      "4:18:19 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 46.86523228883743
+      },
+      "4:18:24 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 48.36773872375488
+      },
+      "4:26:46 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 42.35974699258804
+      },
+      "4:26:52 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 41.86171293258667
+      },
+      "4:26:56 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 42.73374378681183
+      },
+      "4:27:22 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 43.47545653581619
+      },
+      "4:27:26 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 42.26262867450714
+      },
+      "4:27:28 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 42.316436767578125
+      }
+    },
+    "Nov 11 2023": {
+      "11:06:03 AM": {
+        "Access_type": "Facial Login",
+        "Percentage": 42.354017496109
+      },
+      "11:06:08 AM": {
+        "Access_type": "Facial Login",
+        "Percentage": 48.45183094342549
+      },
+      "11:06:12 AM": {
+        "Access_type": "Facial Login",
+        "Percentage": 44.11502679189046
+      },
+      "11:06:34 AM": {
+        "Access_type": "Facial Login",
+        "Percentage": 43.38345925013224
+      },
+      "11:06:40 AM": {
+        "Access_type": "Facial Login",
+        "Percentage": 38.83670767148335
+      },
+      "11:06:45 AM": {
+        "Access_type": "Facial Login",
+        "Percentage": 48.19712042808532
+      },
+      "11:07:43 AM": {
+        "Access_type": "Facial Login",
+        "Percentage": 47.725478808085114
+      },
+      "11:07:48 AM": {
+        "Access_type": "Facial Login",
+        "Percentage": 42.01799631118774
+      },
+      "11:07:54 AM": {
+        "Access_type": "Facial Login",
+        "Percentage": 48.93046617507934
+      },
+      "11:27:16 AM": {
+        "Access_type": "Facial Login",
+        "Percentage": 43.373852968215935
+      },
+      "11:27:22 AM": {
+        "Access_type": "Facial Login",
+        "Percentage": 44.9529488881429
+      },
+      "11:27:26 AM": {
+        "Access_type": "Facial Login",
+        "Percentage": 44.325431187947586
+      },
+      "11:30:03 AM": {
+        "Access_type": "Facial Login",
+        "Percentage": 39.45961594581603
+      },
+      "11:30:11 AM": {
+        "Access_type": "Facial Login",
+        "Percentage": 44.637074073155716
+      },
+      "11:30:18 AM": {
+        "Access_type": "Facial Login",
+        "Percentage": 23.278872172037758
+      },
+      "11:48:28 AM": {
+        "Access_type": "Facial Login",
+        "Percentage": 40.90937972068786
+      },
+      "11:51:05 AM": {
+        "Access_type": "Facial Login",
+        "Percentage": 35.04726290702819
+      },
+      "11:51:12 AM": {
+        "Access_type": "Facial Login",
+        "Percentage": 38.93749912579854
+      },
+      "12:01:32 PM": {
+        "Access_type": "PIN Login"
+      }
+    },
+    "Nov 14 2023": {
+      "2:17:03 PM": {
+        "Access_type": "PIN Login"
+      },
+      "2:17:07 PM": {
+        "Access_type": "PIN Login"
+      },
+      "6:57:39 PM": {
+        "Access_type": "PIN Login"
+      }
+    },
+    "Nov 15 2023": {
+      "12:31:23 PM": {
+        "Access_type": "PIN Login"
+      },
+      "12:31:25 PM": {
+        "Access_type": "PIN Login"
+      },
+      "12:31:26 PM": {
+        "Access_type": "PIN Login"
+      },
+      "12:31:29 PM": {
+        "Access_type": "PIN Login"
+      },
+      "12:31:30 PM": {
+        "Access_type": "PIN Login"
+      },
+      "12:31:31 PM": {
+        "Access_type": "PIN Login"
+      },
+      "12:31:34 PM": {
+        "Access_type": "PIN Login"
+      },
+      "12:31:35 PM": {
+        "Access_type": "PIN Login"
+      },
+      "12:31:36 PM": {
+        "Access_type": "PIN Login"
+      },
+      "12:51:55 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 44.73080237706502
+      },
+      "12:51:58 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 47.92468746503194
+      },
+      "12:52:01 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 41.01025064786275
+      },
+      "12:57:24 PM": {
+        "Access_type": "PIN Login"
+      },
+      "12:57:25 PM": {
+        "Access_type": "PIN Login"
+      },
+      "12:57:26 PM": {
+        "Access_type": "PIN Login"
+      },
+      "12:57:28 PM": {
+        "Access_type": "PIN Login"
+      },
+      "12:57:29 PM": {
+        "Access_type": "PIN Login"
+      },
+      "12:57:30 PM": {
+        "Access_type": "PIN Login"
+      },
+      "12:57:32 PM": {
+        "Access_type": "PIN Login"
+      },
+      "12:57:33 PM": {
+        "Access_type": "PIN Login"
+      },
+      "12:57:34 PM": {
+        "Access_type": "PIN Login"
+      },
+      "12:57:35 PM": {
+        "Access_type": "PIN Login"
+      },
+      "12:57:36 PM": {
+        "Access_type": "PIN Login"
+      },
+      "12:57:37 PM": {
+        "Access_type": "PIN Login"
+      },
+      "12:57:42 PM": {
+        "Access_type": "PIN Login"
+      },
+      "12:57:43 PM": {
+        "Access_type": "PIN Login"
+      },
+      "1:01:23 PM": {
+        "Access_type": "PIN Login"
+      },
+      "1:01:24 PM": {
+        "Access_type": "PIN Login"
+      },
+      "1:01:26 PM": {
+        "Access_type": "PIN Login"
+      },
+      "1:01:27 PM": {
+        "Access_type": "PIN Login"
+      },
+      "1:01:28 PM": {
+        "Access_type": "PIN Login"
+      },
+      "1:01:30 PM": {
+        "Access_type": "PIN Login"
+      },
+      "1:01:31 PM": {
+        "Access_type": "PIN Login"
+      }
+    },
+    "Nov 22 2023": {
+      "3:12:16 PM": {
+        "Access_type": "PIN Login"
+      },
+      "3:12:17 PM": {
+        "Access_type": "PIN Login"
+      },
+      "3:12:19 PM": {
+        "Access_type": "PIN Login"
+      },
+      "3:12:20 PM": {
+        "Access_type": "PIN Login"
+      },
+      "3:12:21 PM": {
+        "Access_type": "PIN Login"
+      },
+      "3:13:04 PM": {
+        "Access_type": "PIN Login"
+      },
+      "3:13:05 PM": {
+        "Access_type": "PIN Login"
+      },
+      "3:13:06 PM": {
+        "Access_type": "PIN Login"
+      },
+      "3:13:12 PM": {
+        "Access_type": "PIN Login"
+      },
+      "3:13:13 PM": {
+        "Access_type": "PIN Login"
+      },
+      "3:13:18 PM": {
+        "Access_type": "PIN Login"
+      },
+      "3:13:19 PM": {
+        "Access_type": "PIN Login"
+      },
+      "3:13:20 PM": {
+        "Access_type": "PIN Login"
+      },
+      "3:13:55 PM": {
+        "Access_type": "PIN Login"
+      },
+      "3:13:56 PM": {
+        "Access_type": "PIN Login"
+      },
+      "3:14:01 PM": {
+        "Access_type": "PIN Login"
+      },
+      "3:14:02 PM": {
+        "Access_type": "PIN Login"
+      },
+      "3:14:03 PM": {
+        "Access_type": "PIN Login"
+      },
+      "3:14:08 PM": {
+        "Access_type": "PIN Login"
+      },
+      "3:14:09 PM": {
+        "Access_type": "PIN Login"
+      },
+      "3:14:10 PM": {
+        "Access_type": "PIN Login"
+      },
+      "4:06:24 PM": {
+        "Access_type": "PIN Login"
+      },
+      "4:06:26 PM": {
+        "Access_type": "PIN Login"
+      },
+      "4:06:50 PM": {
+        "Access_type": "PIN Login"
+      },
+      "4:06:52 PM": {
+        "Access_type": "PIN Login"
+      },
+      "4:06:54 PM": {
+        "Access_type": "PIN Login"
+      },
+      "4:07:01 PM": {
+        "Access_type": "PIN Login"
+      },
+      "4:07:03 PM": {
+        "Access_type": "PIN Login"
+      },
+      "4:07:05 PM": {
+        "Access_type": "PIN Login"
+      },
+      "4:09:08 PM": {
+        "Access_type": "PIN Login"
+      },
+      "4:09:09 PM": {
+        "Access_type": "PIN Login"
+      },
+      "4:09:10 PM": {
+        "Access_type": "PIN Login"
+      },
+      "4:09:44 PM": {
+        "Access_type": "PIN Login"
+      },
+      "4:09:45 PM": {
+        "Access_type": "PIN Login"
+      },
+      "4:10:11 PM": {
+        "Access_type": "PIN Login"
+      },
+      "4:10:12 PM": {
+        "Access_type": "PIN Login"
+      },
+      "4:10:13 PM": {
+        "Access_type": "PIN Login"
+      },
+      "4:10:18 PM": {
+        "Access_type": "PIN Login"
+      },
+      "4:10:19 PM": {
+        "Access_type": "PIN Login"
+      },
+      "4:10:20 PM": {
+        "Access_type": "PIN Login"
+      },
+      "4:10:52 PM": {
+        "Access_type": "PIN Login"
+      },
+      "4:10:53 PM": {
+        "Access_type": "PIN Login"
+      },
+      "4:10:57 PM": {
+        "Access_type": "PIN Login"
+      },
+      "4:10:58 PM": {
+        "Access_type": "PIN Login"
+      },
+      "4:10:59 PM": {
+        "Access_type": "PIN Login"
+      },
+      "4:11:02 PM": {
+        "Access_type": "PIN Login"
+      },
+      "4:11:03 PM": {
+        "Access_type": "PIN Login"
+      }
+    },
+    "Nov 6 2023": {
+      "2:45:14 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 49.40602183341979
+      }
+    },
+    "Nov 7 2023": {
+      "10:03:17 PM": {
+        "Access_type": "PIN Login"
+      },
+      "10:13:31 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 45.10408639907836
+      },
+      "10:13:36 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 41.033834218978875
+      },
+      "10:17:26 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 42.9254670937856
+      },
+      "10:17:57 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 40.93987743059794
+      },
+      "10:20:18 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 33.44299644231796
+      },
+      "10:20:25 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 42.126357555389404
+      },
+      "10:20:28 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 40.47786444425583
+      },
+      "10:33:31 PM": {
+        "Access_type": "PIN Login"
+      },
+      "10:33:40 PM": {
+        "Access_type": "PIN Login"
+      },
+      "10:34:14 PM": {
+        "Access_type": "PIN Login"
+      },
+      "10:34:27 PM": {
+        "Access_type": "PIN Login"
+      },
+      "10:46:21 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 40.276698768138885
+      },
+      "10:46:24 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 38.793839514255524
+      },
+      "10:46:27 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 33.729150891304016
+      },
+      "10:49:48 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 32.60327875614166
+      },
+      "10:49:51 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 37.847839295864105
+      },
+      "10:49:55 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 27.9804989695549
+      }
+    },
+    "Nov 8 2023": {
+      "3:48:21 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 39.93632644414902
+      },
+      "3:48:27 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 31.92092478275299
+      },
+      "3:48:31 PM": {
+        "Access_type": "Facial Login",
+        "Percentage": 31.82622790336609
+      },
+      "3:48:57 PM": {
+        "Access_type": "PIN Login"
+      }
+    },
+    "Oct 3 2023": {
+      "5:42 PM": "PIN Login denied",
+      "6:09 PM": "Access Denied",
+      "6:10 PM": "Access Denied"
+    }
   }
+}
