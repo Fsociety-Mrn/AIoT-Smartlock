@@ -92,27 +92,6 @@ const getFormattedTodayDate = () => {
   return formattedDate;
 };
 
-const getAccessCountByTypeAndDate  = (targetDate) =>{
-  console.log(transformDataToArray(data)
-  .filter(entry => entry.Date === targetDate).length)
-  return {
-    TodayAccess: transformDataToArray(data)
-                .filter(entry => entry.Date === targetDate).length,
-    FacialLogin: transformDataToArray(data)
-                .filter(entry => entry.Date === targetDate && 
-                  entry.AccessType === 'Facial Login').length,
-    PINLogin: transformDataToArray(data)
-                .filter(entry => entry.Date === targetDate && 
-                  entry.AccessType === 'PIN Login').length,
-    IoTLogin: transformDataToArray(data)
-                .filter(entry => entry.Date === targetDate && 
-                  entry.AccessType === 'IoT Login').length,
-    AccessDenied: transformDataToArray(data)
-                .filter(entry => entry.Date === targetDate && 
-                  entry.Name === 'No match detected').length
-  }
-}
-
 const Dashboard = () => {
   const [paddinSize, setPaddingSize] = React.useState()
   const [value, setValue] = React.useState(0);
@@ -122,7 +101,15 @@ const Dashboard = () => {
   const [selectedSort, setSelectedSort] = React.useState(''); 
   const [anchorEl, setAnchorEl] = React.useState(null); // To manage Menu anchor
   
-  const [ totalAccess,setTotalAccess] = React.useState(getAccessCountByTypeAndDate(getFormattedTodayDate()))
+  const [ totalAccess, setTotalAccess] = React.useState({
+    TodayAccess: transformDataToArray(data)
+                .filter(entry => entry.Date === getFormattedTodayDate()).length,
+
+    FacialLogin: filterDataByDateAndAccessType(getFormattedTodayDate(),'Facial Login').length,
+    PINLogin: filterDataByDateAndAccessType(getFormattedTodayDate(),'PIN Login').length,
+    IoTLogin: filterDataByDateAndAccessType(getFormattedTodayDate(),'IoT Access').length,
+    AccessDenied: filterDataByDateAndAccessType(getFormattedTodayDate(),'Access Denied').length
+  })
   const [dataFrom,setDataFrom] = React.useState(filterDataByDateAndAccessType(getFormattedTodayDate(),'Facial Login'));
 
   const isExpired = (expirationDateTime) => {
@@ -226,7 +213,19 @@ const Dashboard = () => {
     setSelectedSort(sortType); // Set selected sort option
     console.log(sortType)
     setDataFrom(filterDataByDateAndAccessType(sortType,'Facial Login'))
-  
+    setTotalAccess(
+      {
+        TodayAccess: transformDataToArray(data)
+                    .filter(entry => entry.Date === sortType).length,
+    
+        FacialLogin: filterDataByDateAndAccessType(sortType,'Facial Login').length,
+        PINLogin: filterDataByDateAndAccessType(sortType,'PIN Login').length,
+        IoTLogin: filterDataByDateAndAccessType(sortType,'IoT Access').length,
+        AccessDenied: filterDataByDateAndAccessType(sortType,'Access Denied').length
+      }
+    )
+
+    setValue(0);
     // handleSortTodayAccess(sortType); // Perform sorting
     setAnchorEl(null); // Close the dropdown menu
   };
