@@ -24,10 +24,6 @@ import Table from '../../Components/Table';
 
 import { get_AIoT_unlock, remove_token_data,getHistory } from '../../firebase/Realtime_Db';
 
-import dummyData from "./dummdata.json"
-
-// const data = dummyData
-
 // transform data
 const transformDataToArray = (data) => {
   const result = [];
@@ -69,6 +65,14 @@ const extractUniqueDates = (data) => {
 
 const filterDataByDateAndAccessType = (data,targetDate, targetAccessType) => {
 
+  if (targetDate === 'Today Access'){
+      return transformDataToArray(data).filter(entry => 
+    entry.Date === getFormattedTodayDate() && 
+    entry.AccessType === targetAccessType &&
+    entry.Name !== 'No match detected'
+  );
+  }
+
   if (targetAccessType === "Access Denied"){
 
     return transformDataToArray(data).filter(entry => 
@@ -88,7 +92,7 @@ const getFormattedTodayDate = () => {
   const today = new Date();
   const options = { month: 'short', day: 'numeric', year: 'numeric' };
   const formattedDate = today.toLocaleDateString('en-US', options);
-  return formattedDate;
+  return String(formattedDate).replace(',','');
 };
 
 const Dashboard = () => {
@@ -102,15 +106,13 @@ const Dashboard = () => {
   const [anchorEl, setAnchorEl] = React.useState(null); // To manage Menu anchor
   
   const [ totalAccess, setTotalAccess] = React.useState({
-    TodayAccess: transformDataToArray(data)
-                .filter(entry => entry.Date === getFormattedTodayDate()).length,
-
-    FacialLogin: filterDataByDateAndAccessType(data,getFormattedTodayDate(),'Facial Login').length,
-    PINLogin: filterDataByDateAndAccessType(data,getFormattedTodayDate(),'PIN Login').length,
-    IoTLogin: filterDataByDateAndAccessType(data,getFormattedTodayDate(),'IoT Access').length,
-    AccessDenied: filterDataByDateAndAccessType(data,getFormattedTodayDate(),'Access Denied').length
-  })
-  const [dataFrom,setDataFrom] = React.useState(filterDataByDateAndAccessType(getFormattedTodayDate(),'Facial Login'));
+                                          TodayAccess: 0,
+                                          FacialLogin: 0,
+                                          PINLogin: 0,
+                                          IoTLogin: 0,
+                                          AccessDenied: 0
+                                        })
+  const [dataFrom,setDataFrom] = React.useState({});
 
   const isExpired = (expirationDateTime) => {
     // Convert the expiration date string to a Date object
@@ -130,7 +132,28 @@ const Dashboard = () => {
     if(cleanup)
     {
 
-      getHistory().then(data=>setData(data)).catch(error=>setData({}))
+      // Get data from firebase
+      getHistory()
+        .then(data=>{
+          // set data
+          const Data = data;
+          console.log(Data)
+          setData(Data);
+          setDataFrom(filterDataByDateAndAccessType(Data,getFormattedTodayDate(),'Facial Login'))
+
+          setTotalAccess({
+            TodayAccess: transformDataToArray(Data)
+                        .filter(entry => entry.Date === getFormattedTodayDate()).length,
+            FacialLogin: filterDataByDateAndAccessType(Data,getFormattedTodayDate(),'Facial Login').length,
+            PINLogin: filterDataByDateAndAccessType(Data,getFormattedTodayDate(),'PIN Login').length,
+            IoTLogin: filterDataByDateAndAccessType(Data,getFormattedTodayDate(),'IoT Access').length,
+            AccessDenied: filterDataByDateAndAccessType(Data,getFormattedTodayDate(),'Access Denied').length
+          })
+
+        })
+        .catch(error=>setData({}))
+
+
     // check if AIoT Smartlock is Lock
     get_AIoT_unlock().then(data=>{
 
@@ -151,8 +174,6 @@ const Dashboard = () => {
     setResponsiveness();
 
     window.addEventListener("resize", () => setResponsiveness());
-
- 
 
     return () => {
       cleanup = false
@@ -192,6 +213,7 @@ const Dashboard = () => {
         setDataFrom(filterDataByDateAndAccessType(data,selectedSort,'PIN Login'))
       break;
       case 2:
+        console.log("IoT Access: ", data)
         setDataFrom(filterDataByDateAndAccessType(data,selectedSort,'IoT Access'))
       break;
       case 3:
@@ -203,16 +225,15 @@ const Dashboard = () => {
     }
   };
 
+  // drop down click changes
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
-    console.log(extractUniqueDates(data))
   };
 
-
   const handleSort = (sortType) => {
-    // console.log(dataFrom)
+
     setSelectedSort(sortType); // Set selected sort option
-    console.log(sortType)
+
     setDataFrom(filterDataByDateAndAccessType(data, sortType,'Facial Login'))
     setTotalAccess(
       {
@@ -250,11 +271,12 @@ const Dashboard = () => {
         <Grid item xs={12} md={10} sm={12}>
 
             <Collapse in={alert}>
-            <Alert variant="filled" severity="error" sx={{ width: '100%' }} 
-            action={(    
-              <Button color="inherit"  variant="filled" size="small" fullWidth onClick={()=>setOpen(true)}>
-              Unlock
-              </Button>)}>
+
+              <Alert variant="filled" severity="error" sx={{ width: '100%' }} 
+              action={(    
+                <Button color="inherit"  variant="filled" size="small" fullWidth onClick={()=>setOpen(true)}>
+                Unlock
+                </Button>)}>
 
               <Typography noWrap color="white">AIoT Smartlock is Lock!</Typography>
             
@@ -324,7 +346,7 @@ const Dashboard = () => {
         open={Boolean(anchorEl)}
         onClose={() => setAnchorEl(null)}
         >
-          <MenuItem onClick={() => handleSort(getFormattedTodayDate())}>Today Access</MenuItem>
+          <MenuItem onClick={() => handleSort('Today Access')}>Today Access</MenuItem>
 
           {extractUniqueDates(data)
             .filter(date=> date !== getFormattedTodayDate())
