@@ -66,11 +66,12 @@ const extractUniqueDates = (data) => {
 const filterDataByDateAndAccessType = (data,targetDate, targetAccessType) => {
 
   if (targetDate === 'Today Access'){
-      return transformDataToArray(data).filter(entry => 
-    entry.Date === getFormattedTodayDate() && 
-    entry.AccessType === targetAccessType &&
-    entry.Name !== 'No match detected'
-  );
+    return transformDataToArray(data)
+          .filter(entry => 
+            entry.Date === getFormattedTodayDate() && 
+            entry.AccessType === targetAccessType &&
+            entry.Name !== 'No match detected'
+          );
   }
 
   if (targetAccessType === "Access Denied"){
@@ -102,7 +103,7 @@ const Dashboard = () => {
   const [open, setOpen] = React.useState(false);
   const [alert, setAlert] = React.useState();
   const [dataToken, setTokenData] = React.useState()
-  const [selectedSort, setSelectedSort] = React.useState(''); 
+  const [selectedSort, setSelectedSort] = React.useState('Today Access'); 
   const [anchorEl, setAnchorEl] = React.useState(null); // To manage Menu anchor
   
   const [ totalAccess, setTotalAccess] = React.useState({

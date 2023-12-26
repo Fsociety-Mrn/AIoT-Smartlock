@@ -17,6 +17,7 @@ import { statusLogin } from '../../firebase/FirebaseConfig'
 import { 
   checkPin, 
   openLocker, 
+  pushHistory, 
   pushToken, 
   removeToken 
 } from '../../firebase/Realtime_Db';
@@ -144,7 +145,7 @@ const MyLocker = () => {
       FullName: userDetails.Name,
       value: !sliderValue,
       number: userDetails.LockerNumber
-    })
+    }).then(result => pushHistory(userDetails.Name))
 
   };
 

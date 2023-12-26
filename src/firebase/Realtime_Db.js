@@ -346,16 +346,50 @@ export const getHistory = async () => {
   });
 }
 
+// push History
+export const pushHistory = async (FullName) => {
+  try {
+
+      const now = new Date();
+
+      const dateOptions = {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+      };
+
+      const timeOptions = {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true,
+      };
+
+      const dateNow = String(now.toLocaleString('en-US', dateOptions)).replace(",", "");
+      const timeNow = now.toLocaleString('en-US', timeOptions);
+
+
+      const keyRef = ref(RTdb, `History/${FullName}/${dateNow}/${timeNow}`);
+
+      set(keyRef,{
+          "Access_type": String("IoT Access")
+      });
+  } catch (err) {
+      console.error(err);
+  }
+}
+
+
 // remove History of user
 export const removeUser = async (KeyName,Name) =>{
   const keyRef = ref(RTdb, `${KeyName}/${Name}`);
   
   remove(keyRef)
     .then(() => {
-      console.log(`removed successfully.`);
+      console.log(`removeUser(): removed successfully.`);
     })
     .catch((error) => {
-      console.error(`Error removing:`, error);
+      console.error(`removeUser(): Error removing:`, error);
     });
 }
 
