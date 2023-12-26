@@ -375,7 +375,7 @@ const UserDashboard = (props) => {
               </div>}
 
               {checkPIN && <Button
-              variant="primary"
+              variant="danger"
               className="p-2"
               type="button"
               style={{
