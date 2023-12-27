@@ -1,16 +1,16 @@
 from Firebase.firebase import firebaseRead, lockerUpdate
-import RPi.GPIO as GPIO
+# import RPi.GPIO as GPIO
 import time
 import threading
 
-GPIO.setmode(GPIO.BCM)
-GPIO.setwarnings(False)
+# GPIO.setmode(GPIO.BCM)
+# GPIO.setwarnings(False)
 
 batch_one_locker = [21,20,16,12,7,8,25]
 
-for number in batch_one_locker:
-    GPIO.setup(number,GPIO.OUT)
-    GPIO.output(number,True)
+# for number in batch_one_locker:
+#     GPIO.setup(number,GPIO.OUT)
+#     GPIO.output(number,True)
 
 def openLocker():
     try:
@@ -28,7 +28,7 @@ def openLocker():
         
 def gpio_manual(key,value):
     print(key,value)
-    GPIO.output(int(key),value)
+    # GPIO.output(int(key),value)
     
 def OpenLockers(name,key,value):
 
@@ -36,9 +36,9 @@ def OpenLockers(name,key,value):
         print("Open Lockers: ")
         print(key,value)
         
-        gpio_manual(int(key),GPIO.LOW)
-        time.sleep(2)
-        gpio_manual(int(key),GPIO.HIGH)
+        # gpio_manual(int(key),GPIO.LOW)
+        # time.sleep(2)
+        # gpio_manual(int(key),GPIO.HIGH)
         
         lockerUpdate(name=name, value=False)
         

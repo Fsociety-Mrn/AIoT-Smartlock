@@ -175,7 +175,7 @@ class facialRegister(QtWidgets.QFrame):
         self.capture.setText(_translate("facialRegistration", "0"))
         self.status.setText(_translate("facialRegistration", "Please be ready at 16"))
         self.Name.setText(_translate("facialRegistration", "Art Lisboa"))
-
+        gpio_manual(self.Light_PIN,True)
     # =================== for Lights Button =================== #
 
     def toggle_light(self):
@@ -190,7 +190,7 @@ class facialRegister(QtWidgets.QFrame):
         icon1 = QtGui.QIcon()
                 
         # Update the button text and icon based on the state of the lights
-        if not self.lights_on:
+        if self.lights_on:
             
             icon1 = QtGui.QIcon()
             icon1.addPixmap(QtGui.QPixmap("Images/lights_on.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)

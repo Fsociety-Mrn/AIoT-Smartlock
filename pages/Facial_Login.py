@@ -25,7 +25,7 @@ class FacialLogin(QtWidgets.QFrame):
         
         self.Light_PIN = 25
         
-        self.lights_on = True
+        self.lights_on = False
         
         self.start_start = time.time()
         
@@ -231,7 +231,7 @@ class FacialLogin(QtWidgets.QFrame):
 
     def toggle_light(self):
         # Toggle the state of the lights
-        self.lights_on = False if self.lights_on else True
+        self.lights_on = not self.lights_on 
 
         # Update the button text and icon
         self.update_button_icon()
@@ -241,21 +241,21 @@ class FacialLogin(QtWidgets.QFrame):
         icon1 = QtGui.QIcon()
                 
         # Update the button text and icon based on the state of the lights
-        if not self.lights_on:
+        if self.lights_on:
             
             icon1 = QtGui.QIcon()
             icon1.addPixmap(QtGui.QPixmap("Images/lights_on.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
 
             self.Lights.setIcon(icon1)
             
-            gpio_manual(self.Light_PIN,True)
+            gpio_manual(self.Light_PIN,False)
         else:
             
             icon1 = QtGui.QIcon()
             icon1.addPixmap(QtGui.QPixmap("Images/lights_off.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
   
             self.Lights.setIcon(icon1)
-            gpio_manual(self.Light_PIN,False)
+            gpio_manual(self.Light_PIN,True)
 
     
     # message box
