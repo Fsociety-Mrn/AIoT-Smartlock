@@ -33,7 +33,7 @@ def gpio_manual(key,value):
 def OpenLockers(name,key,value):
 
     if value:
-        print("Open Lockers")
+        print("Open Lockers: ")
         print(key,value)
         
         gpio_manual(int(key),GPIO.LOW)
@@ -42,6 +42,5 @@ def OpenLockers(name,key,value):
         
         lockerUpdate(name=name, value=False)
         
-        print(key,False)
         
 # GPIO.cleanup()

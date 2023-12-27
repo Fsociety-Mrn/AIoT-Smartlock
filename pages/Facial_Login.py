@@ -77,7 +77,7 @@ class FacialLogin(QtWidgets.QFrame):
         # EAR of eye
         self.blink_threshold = 0.3
         self.blink_counter = 0
-        self.blink = True
+        self.blink = False
         self.last_dilation_time  = 0
 
         # haar cascade face detection
@@ -231,7 +231,7 @@ class FacialLogin(QtWidgets.QFrame):
 
     def toggle_light(self):
         # Toggle the state of the lights
-        self.lights_on = not self.lights_on
+        self.lights_on = False if self.lights_on else True
 
         # Update the button text and icon
         self.update_button_icon()
@@ -241,7 +241,7 @@ class FacialLogin(QtWidgets.QFrame):
         icon1 = QtGui.QIcon()
                 
         # Update the button text and icon based on the state of the lights
-        if self.lights_on:
+        if not self.lights_on:
             
             icon1 = QtGui.QIcon()
             icon1.addPixmap(QtGui.QPixmap("Images/lights_on.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)

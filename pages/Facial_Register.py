@@ -16,7 +16,7 @@ class facialRegister(QtWidgets.QFrame):
             self.main_menu = parent
             
             self.Light_PIN = 25
-            self.lights_on = True
+            self.lights_on = False
 
             # message box
             self.MessageBox = QtWidgets.QMessageBox()
@@ -190,7 +190,7 @@ class facialRegister(QtWidgets.QFrame):
         icon1 = QtGui.QIcon()
                 
         # Update the button text and icon based on the state of the lights
-        if self.lights_on:
+        if not self.lights_on:
             
             icon1 = QtGui.QIcon()
             icon1.addPixmap(QtGui.QPixmap("Images/lights_on.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)

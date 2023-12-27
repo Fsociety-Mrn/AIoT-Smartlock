@@ -6,6 +6,7 @@ from Firebase.firebase import firebaseVerifyPincode,lockerList
 
 from Raspberry.Raspberry import openLocker
 import socket
+import os
 
 class MainWindow(QtWidgets.QFrame):
     def __init__(self,parent=None):
@@ -181,24 +182,24 @@ class MainWindow(QtWidgets.QFrame):
         self.settings.setStyleSheet("border-radius: 100px;")
         self.settings.setText("")
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap("Images/user-avatar.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon1.addPixmap(QtGui.QPixmap("Images/setting.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.settings.setIcon(icon1)
         self.settings.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.settings.setIconSize(QtCore.QSize(32, 32))
         self.settings.setObjectName("settings")
         
         # turn Off
-        self.turnOff = QtWidgets.QPushButton(self.widget_2)
-        self.turnOff.setEnabled(True)
-        self.turnOff.setGeometry(QtCore.QRect(440, 50, 51, 51))
-        self.turnOff.setStyleSheet("border-radius: 100px;")
-        self.turnOff.setText("")
-        icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap("Images/power-button.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.turnOff.setIcon(icon1)
-        self.turnOff.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.turnOff.setIconSize(QtCore.QSize(32, 32))
-        self.turnOff.setObjectName("settings")
+        # self.turnOff = QtWidgets.QPushButton(self.widget_2)
+        # self.turnOff.setEnabled(True)
+        # self.turnOff.setGeometry(QtCore.QRect(440, 50, 51, 51))
+        # self.turnOff.setStyleSheet("border-radius: 100px;")
+        # self.turnOff.setText("")
+        # icon1 = QtGui.QIcon()
+        # icon1.addPixmap(QtGui.QPixmap("Images/power-button.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        # self.turnOff.setIcon(icon1)
+        # self.turnOff.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        # self.turnOff.setIconSize(QtCore.QSize(32, 32))
+        # self.turnOff.setObjectName("settings")
         
         # about
         # self.about = QtWidgets.QPushButton(self.widget_2)
@@ -283,11 +284,10 @@ class MainWindow(QtWidgets.QFrame):
         
         # main menu
         self.menu = QMenu(self)
-        # self.menu.addAction(QAction("Option 1", self, triggered=self.option1_action))
-        # self.menu.addAction(QAction("Option 2", self, triggered=self.option2_action))
-        # self.menu.addAction(QAction("Option 3", self, triggered=self.option3_action))
-        self.menu.addAction(QAction("Update Face Recognition", self, triggered=self.updateFace))
-        self.menu.addAction(QAction("turn off", self, triggered=self.closeEvent))
+
+        self.menu.addAction(QAction("Facial Update", self, triggered=self.updateFace))
+        self.menu.addAction(QAction("Restart", self, triggered=self.rebootEvent))
+        self.menu.addAction(QAction("Shutdown", self, triggered=self.closeEvent))
 
     def retranslateUi(self):
         _translate = QtCore.QCoreApplication.translate
@@ -309,12 +309,7 @@ class MainWindow(QtWidgets.QFrame):
         
         self.label_3.setText(_translate("mainMenu", "Wed,Jun 3 2023"))
         
-        # self.checkFail.setText(_translate("mainMenu", ""))
-        
-        # self.checkOnline.setText(_translate("mainMenu", "Online"))
-        self.settings.clicked.connect(self.updateFace)
-        
-        self.turnOff.clicked.connect(self.closeEvent)
+        self.settings.clicked.connect(self.showMenu)
 
     def checkFacialUpdate(self):
         if total_fail("Facial_update") >= 6:
@@ -322,6 +317,7 @@ class MainWindow(QtWidgets.QFrame):
             delete_table("Facial_update")
         
         return
+
             
         
 # ******* LOCK FAILED
@@ -505,9 +501,6 @@ class MainWindow(QtWidgets.QFrame):
             socket.create_connection(("8.8.8.8", 53))
             self.label.setText("<html><head/><body><p>AIoT Smartlock is <Strong>online<strong/></p></body></html>")
             
-            # updateToDatabase()
-            # openLocker()
-            
         except OSError:
             
             pass
@@ -614,14 +607,29 @@ class MainWindow(QtWidgets.QFrame):
         # show a message box asking for confirmation
         message_box = QtWidgets.QMessageBox(None)
         message_box.setWindowTitle('AIoT Smartlock')
-        message_box.setText("Are you sure you want to exit?")
+        message_box.setText("Are you sure you want to shutdown this system ?")
         message_box.setStandardButtons(QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
         message_box.setDefaultButton(QtWidgets.QMessageBox.No)
 
         reply = message_box.exec_()
         # if the user confirms, exit the application
         if reply == QtWidgets.QMessageBox.Yes:
-            QtWidgets.qApp.quit()
+            os.system("sudo shutdown now")
+        else:
+            message_box.close()
+    def rebootEvent(self, event):
+        
+        # show a message box asking for confirmation
+        message_box = QtWidgets.QMessageBox(None)
+        message_box.setWindowTitle('AIoT Smartlock')
+        message_box.setText("Are you sure you want to restart the system ?")
+        message_box.setStandardButtons(QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+        message_box.setDefaultButton(QtWidgets.QMessageBox.No)
+
+        reply = message_box.exec_()
+        # if the user confirms, exit the application
+        if reply == QtWidgets.QMessageBox.Yes:
+            os.system("sudo reboot")
         else:
             message_box.close()
             
