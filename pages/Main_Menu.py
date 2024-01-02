@@ -4,13 +4,15 @@ from PyQt5.QtWidgets import *
 from Firebase.Offline import total_fail,delete_table,offline_insert,updateToDatabase,delete_table
 from Firebase.firebase import firebaseVerifyPincode,lockerList
 
-from Raspberry.Raspberry import openLocker
+from Raspberry.Raspberry import openLocker,gpio_manual
 import socket
 import os
 
 class MainWindow(QtWidgets.QFrame):
     def __init__(self,parent=None):
         super().__init__(parent)
+        
+        self.Light_PIN = 25
         
         # message box
         self.MessageBox = QtWidgets.QMessageBox()
