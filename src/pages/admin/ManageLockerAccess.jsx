@@ -29,7 +29,7 @@ import GenerateTokenModal from '../../Components/Modal/GenerateTokenModal'
 import ModalConfirm from '../../Components/Modal/ModalConfirm';
 
 // data
-import { userData,promoteAdmin, deleteUser,setUserStatus } from '../../firebase/Firestore'
+import { userData,promoteAdmin, deleteUser,setUserStatus,updateLocker } from '../../firebase/Firestore'
 import { TokenList, getHistory, removeUser } from '../../firebase/Realtime_Db';
 
 // Icons
@@ -87,6 +87,8 @@ const Card = ({ imgSrc, title, user, isActive, LockerNumber, Data, isAdmin, id  
     await removeUser("LOCK", user)
     await removeUser("PIN", user)
     setUserStatus(id,!isActive);
+  
+
   }
 
   return (

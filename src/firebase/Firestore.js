@@ -6,6 +6,7 @@ import {
   ref, 
   uploadBytes
 } from "firebase/storage";
+import { WindowSharp } from "@mui/icons-material";
 
 
 const storage = getStorage();
@@ -175,6 +176,10 @@ export const getUserDetails = async (UID) =>{
 // update Locker Number
 export const updateLocker = async (UID=null, LockerNumber=null) =>{
 
+  if (LockerNumber === null){
+    return 
+  }
+
   await updateDoc(doc(Fdb, "users", UID), {
     LockerNumber: LockerNumber
   })
@@ -205,10 +210,12 @@ export const promoteAdmin = async (UID,Name) =>{
 export const setUserStatus = async (UID,status) =>{
 
   await updateDoc(doc(Fdb, "users", UID), {
-    isActive: status
+    isActive: status,
+    LockerNumber: null
   })
   .then(()=>{
-    window.location.reload();
+    console.log("user updated")
+    window.location.reload()
   })
   .catch(err=>console.log(err));
 }
@@ -231,3 +238,4 @@ export const deleteUser =  (UID) =>{
   })
 
 }
+
