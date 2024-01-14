@@ -434,6 +434,17 @@ const MobileView = (props) => {
   
 
       <Grid item xs={7} md={3} sm={7}>
+
+
+        
+        <Stack
+        direction="column"
+        justifyContent="center"
+        alignItems="center"
+        spacing={2}
+        >
+     
+
         <Button variant='contained' fullWidth startIcon={<KeyOutlinedIcon fontSize='large'/>}
         style={{ borderRadius: "10px", padding: "8px" }}
         onClick={()=>{
@@ -462,7 +473,13 @@ const MobileView = (props) => {
 
         setOpenModal(!openModal);
         }}>Generate OTP </Button>
+
+        <Button fullWidth> Inactive User</Button>
+
+        </Stack>
       </Grid>
+
+      
 
       <Grid item xs={12} sm={12} />
 
