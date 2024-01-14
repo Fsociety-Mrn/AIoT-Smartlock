@@ -15,7 +15,10 @@ import {
   IconButton, 
   Menu,
   MenuItem,
-  ListItemIcon
+  ListItemIcon,
+  Divider,
+  FormControlLabel,
+  Switch
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import FormatName from '../../Components/FormatName'; 
@@ -26,7 +29,7 @@ import GenerateTokenModal from '../../Components/Modal/GenerateTokenModal'
 import ModalConfirm from '../../Components/Modal/ModalConfirm';
 
 // data
-import { userData,promoteAdmin, deleteUser } from '../../firebase/Firestore'
+import { userData,promoteAdmin, deleteUser,setUserStatus } from '../../firebase/Firestore'
 import { TokenList, getHistory, removeUser } from '../../firebase/Realtime_Db';
 
 // Icons
@@ -36,7 +39,9 @@ import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import LockResetIcon from '@mui/icons-material/LockReset';
 import ModalLocker from '../../Components/Modal/ModalLocker';
-
+import PersonOffIcon from '@mui/icons-material/PersonOff';
+import KeyIcon from '@mui/icons-material/Key';
+import PersonIcon from '@mui/icons-material/Person';
 
 //  user s
 const Card = ({ imgSrc, title, user, isActive, LockerNumber, Data, isAdmin, id  }) => {
@@ -71,6 +76,17 @@ const Card = ({ imgSrc, title, user, isActive, LockerNumber, Data, isAdmin, id  
     await deleteUser(id)
 
     window.location.reload()
+  }
+
+  const resetPIN = async () =>{
+    await removeUser("PIN", user)
+    window.location.reload()
+  }
+
+  const changeuserStatus = async () =>{
+    await removeUser("LOCK", user)
+    await removeUser("PIN", user)
+    setUserStatus(id,!isActive);
   }
 
   return (
@@ -129,7 +145,7 @@ const Card = ({ imgSrc, title, user, isActive, LockerNumber, Data, isAdmin, id  
           'aria-labelledby': 'basic-button',
         }}
         >
-          {!isAdmin && 
+          {!isAdmin && isActive &&
           <MenuItem onClick={()=>promoteAdmin(id,user)}>
           
             <ListItemIcon>
@@ -140,15 +156,42 @@ const Card = ({ imgSrc, title, user, isActive, LockerNumber, Data, isAdmin, id  
           </MenuItem>
           }
 
+          {isActive &&
           <MenuItem onClick={()=>setChangeLocker(true)}>
             <ListItemIcon>
               <LockResetIcon fontSize="medium" color="primary"/>
             </ListItemIcon>
 
             Change Locker
-          </MenuItem>
+          </MenuItem>}
+          
+          {isActive &&
+          <MenuItem onClick={()=>resetPIN()}>
+            <ListItemIcon>
+              <KeyIcon fontSize="medium" color="primary"/>
+            </ListItemIcon>
+            Reset pin
+          </MenuItem>}
 
-          <MenuItem onClick={()=>setOpenModal(true)}>
+          {isActive && <Divider /> }
+          
+          {isActive &&
+          <MenuItem onClick={()=>setUserStatus(id,!isActive)}>
+            <ListItemIcon>
+              <PersonOffIcon fontSize="medium" color="primary"/>
+            </ListItemIcon>
+            Deactivate Account
+          </MenuItem>}
+
+          {!isActive &&
+          <MenuItem onClick={changeuserStatus}>
+            <ListItemIcon>
+              <PersonIcon fontSize="medium" color="primary"/>
+            </ListItemIcon>
+            Activate Account
+          </MenuItem>}
+
+          <MenuItem onClick={changeuserStatus}>
             <ListItemIcon>
               <PersonRemoveIcon fontSize="medium" color='error'/>
             </ListItemIcon>
@@ -315,7 +358,7 @@ const ManageLockerAccess = () => {
   )
 }
 
-// Desktopview
+// Desktop view
 const DesktopView = ()=>{
   return (
     <div>
@@ -340,8 +383,11 @@ const MobileView = (props) => {
   const [Data,setData] = React.useState()
   const [openModal,setOpenModal] = React.useState(false)
   const [listTokens, setListTokesn] = React.useState("")
+  const [checked, setChecked] = React.useState(true);
 
-
+  const handleChangeSwitch = (event) => {
+    setChecked(event.target.checked);
+  };
 
   // Function to sort the data by date
   const sortDataByDate = (data) => {
@@ -474,7 +520,12 @@ const MobileView = (props) => {
         setOpenModal(!openModal);
         }}>Generate OTP </Button>
 
-        <Button fullWidth> Inactive User</Button>
+          <FormControlLabel
+          value="end"
+          control={<Switch color="primary" checked={checked} onChange={handleChangeSwitch}/>}
+          label={checked ? "Active User" : "Inactive User"}
+          labelPlacement="end"
+          />
 
         </Stack>
       </Grid>
@@ -486,7 +537,7 @@ const MobileView = (props) => {
 
 
       {/* Person List */}
-      {dataUser.map((person, index) => (
+      {dataUser.filter(person => person.isActive === checked).map((person, index) => (
         
         <Grid item key={index} xl={3} md={3} sm={4}>
 

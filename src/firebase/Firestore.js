@@ -200,6 +200,19 @@ export const promoteAdmin = async (UID,Name) =>{
   .catch(err=>console.log(err));
 }
 
+
+// update a username
+export const setUserStatus = async (UID,status) =>{
+
+  await updateDoc(doc(Fdb, "users", UID), {
+    isActive: status
+  })
+  .then(()=>{
+    window.location.reload();
+  })
+  .catch(err=>console.log(err));
+}
+
 // delete User
 export const deleteUser =  (UID) =>{
 
