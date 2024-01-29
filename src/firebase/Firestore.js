@@ -6,7 +6,6 @@ import {
   ref, 
   uploadBytes
 } from "firebase/storage";
-import { WindowSharp } from "@mui/icons-material";
 
 
 const storage = getStorage();
@@ -228,11 +227,11 @@ export const deleteUser =  (UID) =>{
 
       const userDoc = doc(Fdb, "users", UID);
       await deleteDoc(userDoc);  
-      alert("Successful remove")
+     
       resolve("Successful remove")
   
     }catch(e){
-      alert("Error removing")
+
       reject("Error removing")
     }
   })
