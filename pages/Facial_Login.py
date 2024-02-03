@@ -201,6 +201,7 @@ class FacialLogin(QtWidgets.QFrame):
         # Timer
         self.timer = QtCore.QTimer(self)
         self.timer.timeout.connect(self.videoStreaming)
+        
         self.last_recognition_time = time.time()
         self.last_check = time.time()
         self.timer.start(30)
