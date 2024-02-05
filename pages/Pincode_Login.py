@@ -517,8 +517,14 @@ class PincodeLogin(QtWidgets.QFrame):
     def cancel(self):
         self.main_menu.timers(False)
         self.close()
-        
+    
     def enterPINcode(self):
+        try:
+            self.enterPINcodes()
+        except Exception as e:
+            print(e)
+    def enterPINcodes(self):
+            
             
         self.checkFail()
         
