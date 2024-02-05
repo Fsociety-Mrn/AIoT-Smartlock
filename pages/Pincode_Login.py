@@ -8,6 +8,8 @@ from Firebase.firebase import firebaseHistory
 from Firebase.Offline import pinCodeLogin,offline_history,delete_table,offline_insert
 from Raspberry.Raspberry import OpenLockers
 
+from pages.Custom_MessageBox import MessageBox
+
 class PincodeLogin(QtWidgets.QFrame):
     def __init__(self, parent):
         super().__init__(parent)
@@ -17,20 +19,43 @@ class PincodeLogin(QtWidgets.QFrame):
         self.failed = 1
         
         # message box
-        self.MessageBox = QtWidgets.QMessageBox()
+        # self.MessageBox = QtWidgets.QMessageBox()
+        self.MessageBox = MessageBox()
         self.MessageBox.setStyleSheet("""
-                  QMessageBox { 
-                      text-align: center;
-                  }
-                  QMessageBox::icon {
-                      subcontrol-position: center;
-                  }
-                  QPushButton { 
+                      QLabel{
+                          min-width: 600px; 
+                          min-height: 50px; 
+                          font-size: 20px;
+                           padding-top: 10px; /* Add padding at the top */
+                padding-bottom: 10px; /* Add padding at the bottom */
+                        }
+                QPushButton { 
                       width: 250px; 
                       height: 30px; 
                       font-size: 15px;
                   }
-        """)
+                    """)
+
+        
+        # self.MessageBox.setStyleSheet("""
+        #           QMessageBox { 
+        #               text-align: center;
+        #           }
+        #           QMessageBox::icon {
+        #               subcontrol-position: center;
+        #           }
+        #         QMessageBox QLabel {
+        #           font-size: 20px; /* Adjust the font size to your preference */
+        #               text-align: center;
+        #            min-width: 600px;
+        #            min-height: 300px;
+        #         }
+        #           QPushButton { 
+        #               width: 250px; 
+        #               height: 30px; 
+        #               font-size: 15px;
+        #           }
+        # """)
         
         # frame settings
         self.setObjectName("Facial Login")
@@ -548,7 +573,7 @@ class PincodeLogin(QtWidgets.QFrame):
             self.messageBoxShow(
                 icon=self.MessageBox.Information,
                 title="PIN LOGIN",
-                text="Welcome " + str(data[0]) + "!",
+                text="Welcome " + str(data[0]) + "!<br>Locker Number: " + str(data[1]),
                 buttons=self.MessageBox.Ok
             )
             
@@ -564,7 +589,7 @@ class PincodeLogin(QtWidgets.QFrame):
     def messageBoxShow(self, icon=None, title=None, text=None, buttons=None):
 
         # Set the window icon, title, and text
-        self.MessageBox.setIcon(icon)
+ 
         self.MessageBox.setWindowTitle(title)
         self.MessageBox.setText(text)
 

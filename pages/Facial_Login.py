@@ -12,7 +12,7 @@ from Raspberry.Raspberry import OpenLockers,gpio_manual
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import *
 
-
+from pages.Custom_MessageBox import MessageBox
 
 from Firebase.firebase import firebaseHistory
 from Firebase.Offline import delete_table,offline_history,offline_insert
@@ -41,20 +41,22 @@ class FacialLogin(QtWidgets.QFrame):
         self.LockerNumber = 0
         
         # message box
-        self.MessageBox = QtWidgets.QMessageBox()
+        # self.MessageBox = QtWidgets.QMessageBox()
+        self.MessageBox = MessageBox()
         self.MessageBox.setStyleSheet("""
-                  QMessageBox { 
-                      text-align: center;
-                  }
-                  QMessageBox::icon {
-                      subcontrol-position: center;
-                  }
-                  QPushButton { 
-                      width: 250px; 
-                      height: 30px; 
-                      font-size: 15px;
-                  }
-        """)
+                        QLabel{
+                            min-width: 600px; 
+                            min-height: 50px; 
+                            font-size: 20px;
+                            padding-top: 10px; 
+                            padding-bottom: 10px; 
+                        }
+                        QPushButton { 
+                            width: 250px; 
+                            height: 30px; 
+                            font-size: 15px;
+                         }
+                    """)
 
         # ========= for facial detection ========= #
 
@@ -263,7 +265,7 @@ class FacialLogin(QtWidgets.QFrame):
     def messageBoxShow(self, icon=None, title=None, text=None, buttons=None):
 
         # Set the window icon, title, and text
-        self.MessageBox.setIcon(icon)
+        # self.MessageBox.setIcon(icon)
         self.MessageBox.setWindowTitle(title)
         self.MessageBox.setText(text)
 
@@ -529,7 +531,7 @@ class FacialLogin(QtWidgets.QFrame):
 
                     self.last_recognition_time = current_time
 
-                    self.status.setText("please blink")
+                    self.status.setText("please blink at least 1 second")
                     self.matchs = ""
 
                 # yellow
@@ -537,7 +539,7 @@ class FacialLogin(QtWidgets.QFrame):
                     self.G = 255
                     self.B = 0
                     
-                self.status.setText("please blink")
+                self.status.setText("please blink at least 1 second")
 
             else:
                 self.status.setText("Camera is blurr")     
