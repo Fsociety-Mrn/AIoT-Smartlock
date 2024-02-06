@@ -67,7 +67,7 @@ class MainWindow(QtWidgets.QFrame):
         font.setStrikeOut(False)
         font.setBold(True) 
         self.admin_2.setFont(font)
-        self.admin_2.setStyleSheet("color:  #ffffff;")
+        self.admin_2.setStyleSheet("color: #ffffff;background-color: rgba(255, 255, 255, 0);")
         self.admin_2.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.admin_2.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
         self.admin_2.setObjectName("admin_2")
@@ -80,7 +80,7 @@ class MainWindow(QtWidgets.QFrame):
         font.setStrikeOut(False)
    
         self.admin_1.setFont(font)
-        self.admin_1.setStyleSheet("color:  #ffffff;")
+        self.admin_1.setStyleSheet("color: #ffffff;background-color: rgba(255, 255, 255, 0);")
         self.admin_1.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.admin_1.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
         self.admin_1.setObjectName("admin_1")
@@ -93,7 +93,7 @@ class MainWindow(QtWidgets.QFrame):
         font.setStrikeOut(False)
         font.setBold(True)
         self.user_3.setFont(font)
-        self.user_3.setStyleSheet("color: #ffffff;")
+        self.user_3.setStyleSheet("color: #ffffff;background-color: rgba(255, 255, 255, 0);")
         self.user_3.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.user_3.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
         self.user_3.setObjectName("user_3")
@@ -105,7 +105,7 @@ class MainWindow(QtWidgets.QFrame):
         font.setPointSize(11)
         font.setStrikeOut(False)
         self.user_2.setFont(font)
-        self.user_2.setStyleSheet("color: #ffffff;")
+        self.user_2.setStyleSheet("color: #ffffff;background-color: rgba(255, 255, 255, 0);")
         self.user_2.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.user_2.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
         self.user_2.setObjectName("user_2")
@@ -117,7 +117,7 @@ class MainWindow(QtWidgets.QFrame):
         font.setPointSize(11)
         font.setStrikeOut(False)
         self.user_1.setFont(font)
-        self.user_1.setStyleSheet("color: #ffffff;")
+        self.user_1.setStyleSheet("color: #ffffff;background-color: rgba(255, 255, 255, 0);")
         self.user_1.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.user_1.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
         self.user_1.setObjectName("user_1")
@@ -142,8 +142,7 @@ class MainWindow(QtWidgets.QFrame):
         font.setPointSize(12)
         font.setStrikeOut(False)
         self.label_locker_2.setFont(font)
-        self.label_locker_2.setStyleSheet("color: #ffffff;\n"
-        "border-top-left-radius: 0px;")
+        self.label_locker_2.setStyleSheet("color: #ffffff;background-color: rgba(255, 255, 255, 0);")
         self.label_locker_2.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.label_locker_2.setAlignment(QtCore.Qt.AlignCenter)
         self.label_locker_2.setObjectName("label_locker_2")
@@ -155,7 +154,7 @@ class MainWindow(QtWidgets.QFrame):
         font.setPointSize(11)
         font.setStrikeOut(False)
         self.label_locker.setFont(font)
-        self.label_locker.setStyleSheet("color: #ffffff;")
+        self.label_locker.setStyleSheet("color: #ffffff;background-color: rgba(255, 255, 255, 0);")
         self.label_locker.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.label_locker.setAlignment(QtCore.Qt.AlignCenter)
         self.label_locker.setObjectName("label_locker")
@@ -194,8 +193,8 @@ class MainWindow(QtWidgets.QFrame):
         self._21.setFont(font)
         self._21.setStyleSheet("background-color:#F5F0F0;\n"
 "border-top-left-radius: 0px;\n"
-"border: 2px solid red;\n"
-"color:red;")
+"border: 2px solid #63727B;\n"
+"color:#63727B;")
         self._21.setIconSize(QtCore.QSize(30, 30))
         self._21.setObjectName("_21")
         
@@ -246,6 +245,12 @@ class MainWindow(QtWidgets.QFrame):
 "border-bottom-right-radius: 50px;\n"
 "\n"
 "")
+        # self.widget_2.setStyleSheet("\n"
+        # "background-image:url(:/background/Images/background.jpg);\n"
+        # "background-color:#F5F0F0;\n"
+        # "border-bottom-right-radius: 50px;\n"
+        # "\n"
+        # "")
         self.widget_2.setObjectName("widget_2")
         
         # facial register
@@ -304,7 +309,7 @@ class MainWindow(QtWidgets.QFrame):
         font.setPointSize(10)
         font.setStrikeOut(False)
         self.label.setFont(font)
-        self.label.setStyleSheet("color:  rgba(11, 131, 120, 219)")
+        self.label.setStyleSheet("color: rgba(11, 131, 120, 219)")
         self.label.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.label.setAlignment(QtCore.Qt.AlignCenter)
         self.label.setObjectName("label")
@@ -342,7 +347,7 @@ class MainWindow(QtWidgets.QFrame):
         font.setPointSize(42)
         font.setStrikeOut(False)
         self.label_2.setFont(font)
-        self.label_2.setStyleSheet("color:  rgba(11, 131, 120, 219)")
+        self.label_2.setStyleSheet("background-color: rgba(0, 0, 0, 0); color: rgba(11, 131, 120, 219);")
         self.label_2.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.label_2.setAlignment(QtCore.Qt.AlignCenter)
         self.label_2.setObjectName("label_2")
@@ -357,7 +362,7 @@ class MainWindow(QtWidgets.QFrame):
         font.setWeight(75)
         font.setStrikeOut(False)
         self.checkFail.setFont(font)
-        self.checkFail.setStyleSheet("color:  red;")
+        self.checkFail.setStyleSheet("color: red; background-color: rgba(255, 255, 255, 0);")
         self.checkFail.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.checkFail.setAlignment(QtCore.Qt.AlignCenter)
         self.checkFail.setObjectName("status")
@@ -370,7 +375,7 @@ class MainWindow(QtWidgets.QFrame):
         font.setPointSize(13)
         font.setStrikeOut(False)
         self.label_3.setFont(font)
-        self.label_3.setStyleSheet("color:  rgba(11, 131, 120, 219)")
+        self.label_3.setStyleSheet("color:  rgba(11, 131, 120, 219); background-color: rgba(255, 255, 255, 0);")
         self.label_3.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.label_3.setAlignment(QtCore.Qt.AlignCenter)
         self.label_3.setObjectName("label_3")
@@ -402,6 +407,8 @@ class MainWindow(QtWidgets.QFrame):
         
         # main menu
         self.menu = QMenu(self)
+        
+        self.status = True
 
         self.menu.addAction(QAction("Facial Update", self, triggered=self.updateFace))
         self.menu.addAction(QAction("Restart", self, triggered=self.rebootEvent))
@@ -426,6 +433,7 @@ class MainWindow(QtWidgets.QFrame):
         self.user_1.setText(_translate("mainMenu", "  Scan this qr code for user website ---->"))
         
         self._20.setText(_translate("mainMenu", "20"))
+        self._20.clicked.connect(lambda: self.change_status(status=self.status ,button=self._20))
         self._12.setText(_translate("mainMenu", "12"))
         self._21.setText(_translate("mainMenu", "21"))
         self._7.setText(_translate("mainMenu", "7"))
@@ -452,8 +460,7 @@ class MainWindow(QtWidgets.QFrame):
             delete_table("Facial_update")
         
         return
-
-              
+            
 # ******* LOCK FAILED
     def __showLocked(self):
         from pages.Admin_Lock import AdminLock
@@ -781,3 +788,26 @@ class MainWindow(QtWidgets.QFrame):
 
     def hellofriend(self):
         print("hello friend")
+        
+    # ========================== change locker status ========================== #
+    def change_status(self, status, button):
+        
+        text_color = "red" if status else "#63727B"
+    
+        current_stylesheet = button.styleSheet()
+    
+        # Extract the background color, border color, and border-top-left-radius from the current stylesheet
+        background_color = current_stylesheet.split("background-color:")[1].split(";")[0].strip()
+        border_radius = current_stylesheet.split("border-top-left-radius:")[1].split(";")[0].strip()
+        
+        # Reapply the extracted styles along with the new text color
+        new_stylesheet = f"""
+            background-color: {background_color};
+            border: 2px solid {text_color};
+            border-top-left-radius: {border_radius};
+            color: {text_color};
+        """
+        button.setStyleSheet(new_stylesheet)
+        
+        self.status = False if self.status else True
+
