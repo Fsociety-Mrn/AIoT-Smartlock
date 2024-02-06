@@ -478,8 +478,6 @@ class MainWindow(QtWidgets.QFrame):
     def checkFailss(self):
         
         self.seconds_left = 30
-        
- 
 
         if int(total_fail("Failed attempt")) >= 3:
             self.__showLocked()
@@ -590,12 +588,13 @@ class MainWindow(QtWidgets.QFrame):
 
     # ********************** check time ********************** #
     def update_time(self):
+        
+        self.check_internet_connection()
 
         current_date = QtCore.QDate.currentDate().toString("ddd, MMM d yyyy")
         
         current_time = QtCore.QTime.currentTime().toString("h:mm AP")
-        
-        self.check_internet_connection()
+    
         
         self.label_2.setText(current_time)
         self.label_3.setText(current_date)
@@ -604,21 +603,31 @@ class MainWindow(QtWidgets.QFrame):
     
     # download pincode
     def pinCode(self):
-        data = firebaseVerifyPincode()
+        try:
+            socket.create_connection(("8.8.8.8", 53))
+            data = firebaseVerifyPincode()
         
-        if not data == None:
-            delete_table("PIN")
-            for key in data:
-                offline_insert(TableName="PIN", data=key)
+            if not data == None:
+                delete_table("PIN")
+                for key in data:
+                    offline_insert(TableName="PIN", data=key)
+                    
+        except OSError:
+            print("no internet")
                 
     # List of Locker
     def locker(self):
-        data = lockerList()
+        try:
+            socket.create_connection(("8.8.8.8", 53))
+       
+            data = lockerList()
         
-        if not data == None:
-            delete_table("LOCK")
-            for key in data:
-                offline_insert(TableName="LOCK", data=key)
+            if not data == None:
+                delete_table("LOCK")
+                for key in data:
+                    offline_insert(TableName="LOCK", data=key)
+        except OSError:
+            print("no internet")
             
     # check internet
     def check_internet_connection(self):
@@ -647,6 +656,7 @@ class MainWindow(QtWidgets.QFrame):
     def update_data(self):
         try:
             
+            socket.create_connection(("8.8.8.8", 53))
             updateToDatabase()
             openLocker()
             

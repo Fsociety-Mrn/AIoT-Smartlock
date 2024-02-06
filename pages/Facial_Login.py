@@ -485,8 +485,6 @@ class FacialLogin(QtWidgets.QFrame):
 
         current_time = time.time()
 
-        cv2.putText(frame, "CPU Temperature: " + self.cpu, (430, 70), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,255), 1)
-
         # display the result
         if len(faces) == 1:
             x, y, w, h = faces[0]
