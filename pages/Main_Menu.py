@@ -63,8 +63,9 @@ class MainWindow(QtWidgets.QFrame):
         self.admin_2.setGeometry(QtCore.QRect(30, 490, 281, 21))
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
-        font.setPointSize(11)
+        font.setPointSize(10)
         font.setStrikeOut(False)
+        font.setBold(True) 
         self.admin_2.setFont(font)
         self.admin_2.setStyleSheet("color:  #ffffff;")
         self.admin_2.setFrameShape(QtWidgets.QFrame.NoFrame)
@@ -77,6 +78,7 @@ class MainWindow(QtWidgets.QFrame):
         font.setFamily("Segoe UI")
         font.setPointSize(11)
         font.setStrikeOut(False)
+   
         self.admin_1.setFont(font)
         self.admin_1.setStyleSheet("color:  #ffffff;")
         self.admin_1.setFrameShape(QtWidgets.QFrame.NoFrame)
@@ -89,6 +91,7 @@ class MainWindow(QtWidgets.QFrame):
         font.setFamily("Segoe UI")
         font.setPointSize(11)
         font.setStrikeOut(False)
+        font.setBold(True)
         self.user_3.setFont(font)
         self.user_3.setStyleSheet("color: #ffffff;")
         self.user_3.setFrameShape(QtWidgets.QFrame.NoFrame)
@@ -132,8 +135,21 @@ class MainWindow(QtWidgets.QFrame):
         self.qr.setObjectName("qr")
                 
         # Locker CEA label
+        self.label_locker_2 = QtWidgets.QLabel(self.widget)
+        self.label_locker_2.setGeometry(QtCore.QRect(30, 300, 441, 61))
+        font = QtGui.QFont()
+        font.setFamily("Segoe UI")
+        font.setPointSize(12)
+        font.setStrikeOut(False)
+        self.label_locker_2.setFont(font)
+        self.label_locker_2.setStyleSheet("color: #ffffff;\n"
+        "border-top-left-radius: 0px;")
+        self.label_locker_2.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.label_locker_2.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_locker_2.setObjectName("label_locker_2")
+        
         self.label_locker = QtWidgets.QLabel(self.widget)
-        self.label_locker.setGeometry(QtCore.QRect(70, 60, 361, 21))
+        self.label_locker.setGeometry(QtCore.QRect(30, 280, 441, 31))
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(11)
@@ -146,7 +162,7 @@ class MainWindow(QtWidgets.QFrame):
         
         # Locker Status / List
         self._20 = QtWidgets.QPushButton(self.widget)
-        self._20.setGeometry(QtCore.QRect(70, 90, 121, 121))
+        self._20.setGeometry(QtCore.QRect(70, 30, 121, 121))
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(24)
@@ -158,7 +174,7 @@ class MainWindow(QtWidgets.QFrame):
         self._20.setObjectName("_20")
         
         self._12 = QtWidgets.QPushButton(self.widget)
-        self._12.setGeometry(QtCore.QRect(70, 210, 121, 121))
+        self._12.setGeometry(QtCore.QRect(70, 150, 121, 121))
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(24)
@@ -171,7 +187,7 @@ class MainWindow(QtWidgets.QFrame):
         self._12.setObjectName("_12")
         
         self._21 = QtWidgets.QPushButton(self.widget)
-        self._21.setGeometry(QtCore.QRect(190, 90, 121, 121))
+        self._21.setGeometry(QtCore.QRect(190, 30, 121, 121))
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(24)
@@ -184,7 +200,7 @@ class MainWindow(QtWidgets.QFrame):
         self._21.setObjectName("_21")
         
         self._7 = QtWidgets.QPushButton(self.widget)
-        self._7.setGeometry(QtCore.QRect(190, 210, 121, 121))
+        self._7.setGeometry(QtCore.QRect(190, 150, 121, 121))
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(24)
@@ -196,7 +212,7 @@ class MainWindow(QtWidgets.QFrame):
         self._7.setObjectName("_7")
         
         self._16 = QtWidgets.QPushButton(self.widget)
-        self._16.setGeometry(QtCore.QRect(310, 90, 121, 121))
+        self._16.setGeometry(QtCore.QRect(310, 30, 121, 121))
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(24)
@@ -209,7 +225,7 @@ class MainWindow(QtWidgets.QFrame):
         self._16.setObjectName("_16")
         
         self._8 = QtWidgets.QPushButton(self.widget)
-        self._8.setGeometry(QtCore.QRect(310, 210, 121, 121))
+        self._8.setGeometry(QtCore.QRect(310, 150, 121, 121))
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(24)
@@ -232,20 +248,6 @@ class MainWindow(QtWidgets.QFrame):
 "")
         self.widget_2.setObjectName("widget_2")
         
-        # # check online status
-        # self.checkOnline = QtWidgets.QLabel(self.widget_2)
-        # self.checkOnline.setGeometry(QtCore.QRect(15, 20, 131, 31))
-        # font = QtGui.QFont()
-        # font.setFamily("Segoe UI")
-        # font.setPointSize(10)
-        # font.setStrikeOut(False)
-        # self.checkOnline.setFont(font)
-        # self.checkOnline.setStyleSheet("color:  rgba(11, 131, 120, 219)")
-        # self.checkOnline.setFrameShape(QtWidgets.QFrame.NoFrame)
-        # self.checkOnline.setAlignment(QtCore.Qt.AlignCenter)
-        # self.checkOnline.setObjectName("checkOnline")
-        
-
         # facial register
         self.facialRegister = QtWidgets.QPushButton(self.widget_2)
         self.facialRegister.setGeometry(QtCore.QRect(60, 420, 380, 51))
@@ -308,7 +310,6 @@ class MainWindow(QtWidgets.QFrame):
         self.label.setObjectName("label")
         
         # icon
-        
         self.label_6 = QtWidgets.QPushButton(self.widget_2)
         self.label_6.setEnabled(True)
         self.label_6.setGeometry(QtCore.QRect(0, 20, 501, 61))
@@ -319,27 +320,6 @@ class MainWindow(QtWidgets.QFrame):
         self.label_6.setIcon(icon3)
         self.label_6.setIconSize(QtCore.QSize(40, 40))
         self.label_6.setObjectName("label_6")
-        
-        # self.label_6 = QtWidgets.QLabel(self.widget_2)
-        # self.label_6.setAutoFillBackground(False)
-        # self.label_6.setStyleSheet("")
-        # self.label_6.setText("")
-        # self.label_6.setPixmap(QtGui.QPixmap(":/background/Images/logo192x192.png"))
-        # self.label_6.setAlignment(QtCore.Qt.AlignCenter)
-        # self.label_6.setObjectName("label_6")
-        
-        
-        # self.onlineStat = QtWidgets.QPushButton(self.widget_2)
-        # self.onlineStat.setEnabled(True)
-        # self.onlineStat.setGeometry(QtCore.QRect(280, 412, 41, 41))
-        # self.onlineStat.setStyleSheet("border-radius: 100px;")
-        # self.onlineStat.setText("")
-        # icon3 = QtGui.QIcon()
-        # icon3.addPixmap(QtGui.QPixmap("Images/online.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        # self.onlineStat.setIcon(icon3)
-        # self.onlineStat.setIconSize(QtCore.QSize(10, 10))
-        # self.onlineStat.setObjectName("onlineStat")
-        
         
         # settings
         self.settings = QtWidgets.QPushButton(self.widget_2)
@@ -354,35 +334,9 @@ class MainWindow(QtWidgets.QFrame):
         self.settings.setIconSize(QtCore.QSize(32, 32))
         self.settings.setObjectName("settings")
         
-        # turn Off
-        # self.turnOff = QtWidgets.QPushButton(self.widget_2)
-        # self.turnOff.setEnabled(True)
-        # self.turnOff.setGeometry(QtCore.QRect(440, 50, 51, 51))
-        # self.turnOff.setStyleSheet("border-radius: 100px;")
-        # self.turnOff.setText("")
-        # icon1 = QtGui.QIcon()
-        # icon1.addPixmap(QtGui.QPixmap("Images/power-button.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        # self.turnOff.setIcon(icon1)
-        # self.turnOff.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        # self.turnOff.setIconSize(QtCore.QSize(32, 32))
-        # self.turnOff.setObjectName("settings")
-        
-        # about
-        # self.about = QtWidgets.QPushButton(self.widget_2)
-        # self.about.setEnabled(True)
-        # self.about.setGeometry(QtCore.QRect(10, 410, 41, 41))
-        # self.about.setStyleSheet("border-radius: 100px;")
-        # self.about.setText("")
-        # icon2 = QtGui.QIcon()
-        # icon2.addPixmap(QtGui.QPixmap(":/background/Images/info.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        # self.about.setIcon(icon2)
-        # self.about.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        # self.about.setIconSize(QtCore.QSize(24, 24))
-        # self.about.setObjectName("about")
-        
         # time
         self.label_2 = QtWidgets.QLabel(self.widget_2)
-        self.label_2.setGeometry(QtCore.QRect(55, 80 + 40, 401, 61))
+        self.label_2.setGeometry(QtCore.QRect(10, 130, 481, 71))
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(42)
@@ -410,7 +364,7 @@ class MainWindow(QtWidgets.QFrame):
         
         # date
         self.label_3 = QtWidgets.QLabel(self.widget_2)
-        self.label_3.setGeometry(QtCore.QRect(90 + 55, 150 + 40, 211, 20))
+        self.label_3.setGeometry(QtCore.QRect(10, 210, 481, 31))
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(13)
@@ -441,7 +395,6 @@ class MainWindow(QtWidgets.QFrame):
         self.updateData.timeout.connect(self.update_data)
         self.updateData.start(1000)
         
-        
         self.closeEvent = self.closeEvent
         self.horizontalLayout.addWidget(self.widget_2) 
         self.retranslateUi()
@@ -467,17 +420,20 @@ class MainWindow(QtWidgets.QFrame):
         
         self.admin_2.setText(_translate("mainMenu", "  https://aiot-smartlock.firebaseapp.com"))
         self.admin_1.setText(_translate("mainMenu", "  for admin website just visit this"))
-        self.user_3.setText(_translate("mainMenu", "  https:// user-aiot-smartlock.web.app"))
+     
+        self.user_3.setText(_translate("mainMenu", "  https://user-aiot-smartlock.web.app"))
         self.user_2.setText(_translate("mainMenu", "  or just visit this:"))
         self.user_1.setText(_translate("mainMenu", "  Scan this qr code for user website ---->"))
+        
         self._20.setText(_translate("mainMenu", "20"))
         self._12.setText(_translate("mainMenu", "12"))
         self._21.setText(_translate("mainMenu", "21"))
         self._7.setText(_translate("mainMenu", "7"))
         self._16.setText(_translate("mainMenu", "16"))
         self._8.setText(_translate("mainMenu", "8"))
-        self.label_locker.setText(_translate("mainMenu", "CEA FACULTY LOCKER IN RTU PASIG CAMPUS"))
         
+        self.label_locker.setText(_translate("mainMenu", "CEA FACULTY LOCKER IN RTU PASIG CAMPUS"))
+        self.label_locker_2.setText(_translate("mainMenu", "NOTE: Red color indicates your locker is open,<br> default color signifies your locker is closed."))
 
         self.pincodeLogin.setText(_translate("mainMenu", "Pin Login"))
         self.pincodeLogin.clicked.connect(self.openPincodeLogin)
@@ -497,8 +453,7 @@ class MainWindow(QtWidgets.QFrame):
         
         return
 
-            
-        
+              
 # ******* LOCK FAILED
     def __showLocked(self):
         from pages.Admin_Lock import AdminLock

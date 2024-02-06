@@ -415,9 +415,9 @@ border: 2px solid #63727B;</string>
       <property name="geometry">
        <rect>
         <x>30</x>
-        <y>310</y>
+        <y>300</y>
         <width>441</width>
-        <height>41</height>
+        <height>61</height>
        </rect>
       </property>
       <property name="font">
@@ -428,7 +428,8 @@ border: 2px solid #63727B;</string>
        </font>
       </property>
       <property name="styleSheet">
-       <string notr="true">color: #ffffff;</string>
+       <string notr="true">color: #ffffff;
+border-top-left-radius: 0px;</string>
       </property>
       <property name="frameShape">
        <enum>QFrame::NoFrame</enum>
@@ -440,6 +441,20 @@ border: 2px solid #63727B;</string>
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
+     <zorder>qr</zorder>
+     <zorder>admin_2</zorder>
+     <zorder>admin_1</zorder>
+     <zorder>user_3</zorder>
+     <zorder>user_2</zorder>
+     <zorder>user_1</zorder>
+     <zorder>_20</zorder>
+     <zorder>_12</zorder>
+     <zorder>_21</zorder>
+     <zorder>_7</zorder>
+     <zorder>_16</zorder>
+     <zorder>_8</zorder>
+     <zorder>label_locker_2</zorder>
+     <zorder>label_locker</zorder>
     </widget>
    </item>
    <item>
