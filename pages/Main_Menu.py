@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import *
 from Firebase.Offline import total_fail,delete_table,offline_insert,updateToDatabase,delete_table
 from Firebase.firebase import firebaseVerifyPincode,lockerList
 
-from Raspberry.Raspberry import openLocker,gpio_manual
+from Raspberry.Raspberry import openLocker
 import socket
 import os
 

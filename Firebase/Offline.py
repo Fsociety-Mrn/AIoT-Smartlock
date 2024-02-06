@@ -1,4 +1,4 @@
-from tinydb import TinyDB, Query
+from tinydb import TinyDB
 from Firebase.firebase import firebaseHistory
 
 # Function to create a database and a table
