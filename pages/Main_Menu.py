@@ -597,7 +597,6 @@ class MainWindow(QtWidgets.QFrame):
         
         self.check_internet_connection()
         
-
         self.label_2.setText(current_time)
         self.label_3.setText(current_date)
     
