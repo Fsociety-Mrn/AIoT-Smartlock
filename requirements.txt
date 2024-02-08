@@ -1,9 +1,0 @@
-facenet_pytorch==2.5.3
-numpy==1.24.3
-opencv_python==4.5.5.64
-PyQt5==5.15.10
-PyQt5_sip==12.13.0
-Pyrebase4==4.7.1
-tinydb==4.8.0
-torch==2.0.1
-torchvision==0.15.2
