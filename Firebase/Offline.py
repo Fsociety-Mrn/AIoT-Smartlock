@@ -1,9 +1,9 @@
-from tinydb import TinyDB
+from tinydb import TinyDB, Query
 from Firebase.firebase import firebaseHistory
 
 # Function to create a database and a table
 def __create_database_and_table(table_name):
-    db = TinyDB("Firebase/offline.json")
+    db = TinyDB("/home/aiotsmartlock/Downloads/AIoT_Smartlock/Firebase/offline.json")
     table = db.table(table_name)
     return db, table
 
@@ -20,7 +20,7 @@ def offline_insert(TableName, data):
 # Function to get print 
 def total_fail(Table_Name):
     
-    db = TinyDB("Firebase/offline.json")
+    db = TinyDB("/home/aiotsmartlock/Downloads/AIoT_Smartlock/Firebase/offline.json")
     query_result = db.table(Table_Name).all()
  
     # Offline Insert
@@ -29,7 +29,7 @@ def total_fail(Table_Name):
     return len(query_result)
     
 def delete_table(Table_Name):
-    db = TinyDB("Firebase/offline.json")    
+    db = TinyDB("/home/aiotsmartlock/Downloads/AIoT_Smartlock/Firebase/offline.json")    
     
     # Check if the table exists before attempting to delete it
     if Table_Name in db.tables():
@@ -45,7 +45,7 @@ def delete_table(Table_Name):
 
 # ******* for History
 def offline_history(name=None, date=None, time=None, access_type=None, Percentage=None):
-    db = TinyDB("Firebase/offline.json")
+    db = TinyDB("/home/aiotsmartlock/Downloads/AIoT_Smartlock/Firebase/offline.json")
     table = db.table("History")
     
     data = {
@@ -69,7 +69,7 @@ def updateToDatabase():
     try:
 
         
-        db = TinyDB("Firebase/offline.json")
+        db = TinyDB("/home/aiotsmartlock/Downloads/AIoT_Smartlock/Firebase/offline.json")
         table = db.table("History")
 
         # Retrieve all records from the table
@@ -96,32 +96,36 @@ def updateToDatabase():
         
 # ************** PIN LOGIN ************** #
 def pinCodeLogin(pin):
-    db = TinyDB("Firebase/offline.json")
-    table = db.table("PIN")
-
-    # Retrieve all records from the table
-    records = table.all()
-
-    pins = pin.split("-")
     
-    # Initialize variables to store the name and the first part of the pin
-    name_found = None
-    first_pin_part = None
+    try:
+        db = TinyDB("/home/aiotsmartlock/Downloads/AIoT_Smartlock/Firebase/offline.json")
+        table = db.table("PIN")
+
+        # Retrieve all records from the table
+        records = table.all()
+
+        pins = pin.split("-")
     
-    for each in records:
-        for name,value in each.items():
-            for key,values in value.items():
-                if (values == pin):
+        # Initialize variables to store the name and the first part of the pin
+        name_found = None
+        first_pin_part = None
+    
+        for each in records:
+            for name,value in each.items():
+                for key,values in value.items():
+                    if (values == pin):
                     
-                    name_found = name
-                    first_pin_part = pins[0]
-                    break  # Exit the innermost loop once we've found a match
+                        name_found = name
+                        first_pin_part = pins[0]
+                        break  # Exit the innermost loop once we've found a match
 
-    return name_found, first_pin_part
+        return name_found, first_pin_part
+    except:
+        return "None", "0"
 
 # ************** LOCKERS ************** #
 def checkLocker(NAME):
-    db = TinyDB("Firebase/offline.json")
+    db = TinyDB("/home/aiotsmartlock/Downloads/AIoT_Smartlock/Firebase/offline.json")
     table = db.table("LOCK")
 
     # Retrieve all records from the table

@@ -11,8 +11,8 @@ from Raspberry.Raspberry import OpenLockers,gpio_manual
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import *
-
 from pages.Custom_MessageBox import MessageBox
+
 
 from Firebase.firebase import firebaseHistory
 from Firebase.Offline import delete_table,offline_history,offline_insert
@@ -41,7 +41,6 @@ class FacialLogin(QtWidgets.QFrame):
         self.LockerNumber = 0
         
         # message box
-        # self.MessageBox = QtWidgets.QMessageBox()
         self.MessageBox = MessageBox()
         self.MessageBox.setStyleSheet("""
                         QLabel{
@@ -89,7 +88,7 @@ class FacialLogin(QtWidgets.QFrame):
         self.dlib_faceDetcetoor = dlib.get_frontal_face_detector()
 
         # using dlib landmark detector
-        self.landmark_detector = dlib.shape_predictor('Model/shape_predictor_68_face_landmarks.dat')
+        self.landmark_detector = dlib.shape_predictor('/home/aiotsmartlock/Downloads/AIoT_Smartlock/Model/shape_predictor_68_face_landmarks.dat')
 
         # =============================================================================================================== #
 
@@ -193,7 +192,7 @@ class FacialLogin(QtWidgets.QFrame):
                 "padding:10px")
         self.Lights.setText("")
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap("Images/lights_on.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon1.addPixmap(QtGui.QPixmap("/home/aiotsmartlock/Downloads/AIoT_Smartlock/Images/lights_on.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.Lights.setIcon(icon1)
         self.Lights.setIconSize(QtCore.QSize(42, 42))
         self.Lights.setFlat(False)
@@ -203,7 +202,6 @@ class FacialLogin(QtWidgets.QFrame):
         # Timer
         self.timer = QtCore.QTimer(self)
         self.timer.timeout.connect(self.videoStreaming)
-        
         self.last_recognition_time = time.time()
         self.last_check = time.time()
         self.timer.start(30)
@@ -221,6 +219,8 @@ class FacialLogin(QtWidgets.QFrame):
         self.setWindowTitle(_translate("facialLogin", "Frame"))
         self.status.setText(_translate("facialLogin", "<html><head/><body><p>Please wait, camera is loading.</p></body></html>"))
         self.back.setText(_translate("facialLogin", "Back "))
+        
+        gpio_manual(self.Light_PIN,False)
         
     def backTomain(self):
         
@@ -247,7 +247,7 @@ class FacialLogin(QtWidgets.QFrame):
         if self.lights_on:
             
             icon1 = QtGui.QIcon()
-            icon1.addPixmap(QtGui.QPixmap("Images/lights_on.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+            icon1.addPixmap(QtGui.QPixmap("/home/aiotsmartlock/Downloads/AIoT_Smartlock/Images/lights_on.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
 
             self.Lights.setIcon(icon1)
             
@@ -255,7 +255,7 @@ class FacialLogin(QtWidgets.QFrame):
         else:
             
             icon1 = QtGui.QIcon()
-            icon1.addPixmap(QtGui.QPixmap("Images/lights_off.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+            icon1.addPixmap(QtGui.QPixmap("/home/aiotsmartlock/Downloads/AIoT_Smartlock/Images/lights_off.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
   
             self.Lights.setIcon(icon1)
             gpio_manual(self.Light_PIN,True)
@@ -265,7 +265,7 @@ class FacialLogin(QtWidgets.QFrame):
     def messageBoxShow(self, icon=None, title=None, text=None, buttons=None):
 
         # Set the window icon, title, and text
-        # self.MessageBox.setIcon(icon)
+        self.MessageBox.setIcon(icon)
         self.MessageBox.setWindowTitle(title)
         self.MessageBox.setText(text)
 
@@ -297,7 +297,7 @@ class FacialLogin(QtWidgets.QFrame):
         if name == "":
             return
         
-        directory = f"Known_Faces/{name}"
+        directory = f"/home/aiotsmartlock/Downloads/AIoT_Smartlock/Known_Faces/{name}"
         # Get the list of files in the directory
         files = os.listdir(directory)
 
@@ -332,8 +332,8 @@ class FacialLogin(QtWidgets.QFrame):
         current_date = QtCore.QDate.currentDate().toString("MMM d yyyy")
         current_time = QtCore.QTime.currentTime().toString("h:mm:ss AP")
         
-        print(result[1])
-
+        self.LockerNumber = checkLocker(str(result[0]))
+        
         if result[0] == 'No match detected':
             self.validation = ""
             self.matchs = str(result[0])
@@ -364,11 +364,11 @@ class FacialLogin(QtWidgets.QFrame):
             self.matchs = str(result[0])
          
             self.validation = "Authenticated"
-    
+            
             self.messageBoxShow(
                 icon=self.MessageBox.Information,
                 title="Facial Recognition",
-                text="Welcome " + str(result[0]) + "!",
+                text="Welcome " + str(result[0]) + "!\nLocker Number: " + str(self.LockerNumber),
                 buttons=self.MessageBox.Ok
             )
             
@@ -395,11 +395,12 @@ class FacialLogin(QtWidgets.QFrame):
             delete_table("Failed attempt")
             delete_table("Fail History")
             
-            self.LockerNumber = checkLocker(str(result[0]))
+            # self.LockerNumber = checkLocker(str(result[0]))
 
             self.status.setText("Please align your face to the camera")
             
             # OpenLockers(name=result[0],key=self.LockerNumber,value=True)
+            
             
             
     # for facial detection
@@ -484,6 +485,8 @@ class FacialLogin(QtWidgets.QFrame):
                                                     flags=cv2.CASCADE_SCALE_IMAGE)
 
         current_time = time.time()
+
+        cv2.putText(frame, "CPU Temperature: " + self.cpu, (430, 70), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,255), 1)
 
         # display the result
         if len(faces) == 1:
@@ -670,3 +673,4 @@ class FacialLogin(QtWidgets.QFrame):
 #     New_menu.show() 
 
 #     sys.exit(app.exec_())
+

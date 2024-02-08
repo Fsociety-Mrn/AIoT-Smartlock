@@ -10,6 +10,7 @@ from Raspberry.Raspberry import OpenLockers
 
 from pages.Custom_MessageBox import MessageBox
 
+
 class PincodeLogin(QtWidgets.QFrame):
     def __init__(self, parent):
         super().__init__(parent)
@@ -19,7 +20,6 @@ class PincodeLogin(QtWidgets.QFrame):
         self.failed = 1
         
         # message box
-        # self.MessageBox = QtWidgets.QMessageBox()
         self.MessageBox = MessageBox()
         self.MessageBox.setStyleSheet("""
                       QLabel{
@@ -35,27 +35,6 @@ class PincodeLogin(QtWidgets.QFrame):
                       font-size: 15px;
                   }
                     """)
-
-        
-        # self.MessageBox.setStyleSheet("""
-        #           QMessageBox { 
-        #               text-align: center;
-        #           }
-        #           QMessageBox::icon {
-        #               subcontrol-position: center;
-        #           }
-        #         QMessageBox QLabel {
-        #           font-size: 20px; /* Adjust the font size to your preference */
-        #               text-align: center;
-        #            min-width: 600px;
-        #            min-height: 300px;
-        #         }
-        #           QPushButton { 
-        #               width: 250px; 
-        #               height: 30px; 
-        #               font-size: 15px;
-        #           }
-        # """)
         
         # frame settings
         self.setObjectName("Facial Login")
@@ -87,7 +66,7 @@ class PincodeLogin(QtWidgets.QFrame):
         
         # show password
         self.checkBox = QtWidgets.QCheckBox(self)
-        self.checkBox.setGeometry(QtCore.QRect(130, 300, 131, 17))
+        self.checkBox.setGeometry(QtCore.QRect(130, 300, 135, 17))
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(11)
@@ -365,7 +344,7 @@ class PincodeLogin(QtWidgets.QFrame):
         self.seven_11.setText("")
         
         icon = QtGui.QIcon()
-        pixmap = QtGui.QPixmap("Images/check.png")
+        pixmap = QtGui.QPixmap("/home/aiotsmartlock/Downloads/AIoT_Smartlock/Images/check.png")
         icon.addPixmap(pixmap, QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.seven_11.setIcon(icon)
         self.seven_11.setIconSize(QtCore.QSize(20, 20))
@@ -391,7 +370,7 @@ class PincodeLogin(QtWidgets.QFrame):
 "}")
         self.seven_12.setText("")
         icon1 = QtGui.QIcon()
-        pixmap = QtGui.QPixmap("Images/backspace.png")
+        pixmap = QtGui.QPixmap("/home/aiotsmartlock/Downloads/AIoT_Smartlock/Images/backspace.png")
         icon1.addPixmap(pixmap, QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.seven_12.setIcon(icon1)
         self.seven_12.setIconSize(QtCore.QSize(24, 24))
@@ -517,19 +496,19 @@ class PincodeLogin(QtWidgets.QFrame):
     def cancel(self):
         self.main_menu.timers(False)
         self.close()
-    
+        
     def enterPINcode(self):
-        try:
-            self.enterPINcodes()
-        except Exception as e:
-            print(e)
-    def enterPINcodes(self):
-            
             
         self.checkFail()
         
         current_date = QtCore.QDate.currentDate().toString("MMM d yyyy")
         current_time = QtCore.QTime.currentTime().toString("h:mm:ss AP")
+        
+        if self.TokenID_3.text() == "":
+            return
+        
+        if len(self.TokenID_3.text()) < 3:
+            return
         
         pins = self.TokenID_3.text().split("-")        
             
@@ -595,7 +574,7 @@ class PincodeLogin(QtWidgets.QFrame):
     def messageBoxShow(self, icon=None, title=None, text=None, buttons=None):
 
         # Set the window icon, title, and text
- 
+    
         self.MessageBox.setWindowTitle(title)
         self.MessageBox.setText(text)
 
@@ -626,3 +605,4 @@ if __name__ == "__main__":
     New_menu.show() 
 
     sys.exit(app.exec_())
+

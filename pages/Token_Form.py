@@ -1007,7 +1007,7 @@ class TokenForm(QtWidgets.QFrame):
     
     # Function to delete folders recursively
     def delete_folders(self): 
-        path= "Known_Faces"
+        path= "/home/aiotsmartlock/Downloads/AIoT_Smartlock/Known_Faces"
         # Read data from Firebase
         data = firebaseRead("LOCK")
         folders_to_keep = list(data.keys())
@@ -1050,7 +1050,7 @@ class TokenForm(QtWidgets.QFrame):
         # print(self.rearranged_string)
 
         # # Define the path for the known faces folder
-        path = f"Known_Faces/{str(result)}"
+        path = f"/home/aiotsmartlock/Downloads/AIoT_Smartlock/Known_Faces/{str(result)}"
         
         if os.path.exists(path):
             

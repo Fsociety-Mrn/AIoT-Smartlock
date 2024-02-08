@@ -2,7 +2,6 @@ from Firebase.firebase import firebaseRead, lockerUpdate
 # import RPi.GPIO as GPIO
 # import time
 import threading
-
 import requests
 
 # GPIO.setmode(GPIO.BCM)

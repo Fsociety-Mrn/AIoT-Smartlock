@@ -60,7 +60,7 @@ class MainWindow(QtWidgets.QFrame):
         
         # website instruction
         self.admin_2 = QtWidgets.QLabel(self.widget)
-        self.admin_2.setGeometry(QtCore.QRect(30, 490, 281, 21))
+        self.admin_2.setGeometry(QtCore.QRect(15, 490, 295, 21))
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(10)
@@ -73,7 +73,7 @@ class MainWindow(QtWidgets.QFrame):
         self.admin_2.setObjectName("admin_2")
         
         self.admin_1 = QtWidgets.QLabel(self.widget)
-        self.admin_1.setGeometry(QtCore.QRect(30, 470, 281, 21))
+        self.admin_1.setGeometry(QtCore.QRect(15, 470, 281, 21))
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(11)
@@ -86,10 +86,10 @@ class MainWindow(QtWidgets.QFrame):
         self.admin_1.setObjectName("admin_1")
         
         self.user_3 = QtWidgets.QLabel(self.widget)
-        self.user_3.setGeometry(QtCore.QRect(30, 420, 281, 21))
+        self.user_3.setGeometry(QtCore.QRect(15, 420, 281, 21))
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
-        font.setPointSize(11)
+        font.setPointSize(10)
         font.setStrikeOut(False)
         font.setBold(True)
         self.user_3.setFont(font)
@@ -99,7 +99,7 @@ class MainWindow(QtWidgets.QFrame):
         self.user_3.setObjectName("user_3")
         
         self.user_2 = QtWidgets.QLabel(self.widget)
-        self.user_2.setGeometry(QtCore.QRect(30, 400, 281, 21))
+        self.user_2.setGeometry(QtCore.QRect(15, 400, 281, 21))
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(11)
@@ -111,7 +111,7 @@ class MainWindow(QtWidgets.QFrame):
         self.user_2.setObjectName("user_2")
         
         self.user_1 = QtWidgets.QLabel(self.widget)
-        self.user_1.setGeometry(QtCore.QRect(30, 380, 281, 21))
+        self.user_1.setGeometry(QtCore.QRect(15, 380, 281+15, 21))
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(11)
@@ -129,7 +129,7 @@ class MainWindow(QtWidgets.QFrame):
         self.qr.setStyleSheet("border-radius: 100px;")
         self.qr.setText("")
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap("Images/USER_QR.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon1.addPixmap(QtGui.QPixmap("/home/aiotsmartlock/Downloads/AIoT_Smartlock/Images/USER_QR.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.qr.setIcon(icon1)
         self.qr.setIconSize(QtCore.QSize(150, 150))
         self.qr.setObjectName("qr")
@@ -430,7 +430,7 @@ class MainWindow(QtWidgets.QFrame):
      
         self.user_3.setText(_translate("mainMenu", "  https://user-aiot-smartlock.web.app"))
         self.user_2.setText(_translate("mainMenu", "  or just visit this:"))
-        self.user_1.setText(_translate("mainMenu", "  Scan this qr code for user website ---->"))
+        self.user_1.setText(_translate("mainMenu", "  Scan this qr code for user website --->"))
         
         self._20.setText(_translate("mainMenu", "20"))
         self._20.clicked.connect(lambda: self.change_status(status=self.status ,button=self._20))
@@ -810,4 +810,5 @@ class MainWindow(QtWidgets.QFrame):
         button.setStyleSheet(new_stylesheet)
         
         self.status = False if self.status else True
+
 

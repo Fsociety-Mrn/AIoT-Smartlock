@@ -19,7 +19,6 @@ db = firebase.database() # realTime database
 def firebaseRead(keyName):
     return db.child(keyName).get().val()
 
-
 # read the specific data with child
 def firebaseReadChild(keyName,valueName):
     try:
@@ -97,6 +96,19 @@ def firebaseHistory(name=None, date=None, time=None, access_type=None, percentag
         # offline_history(name=None, date=None, time=None, access_type=None)
         return False
 
+# add Facial/ Pincode Login
+def firebaseHistoryUpdate(key,data):
+    try:    
+        requests.head("http://www.google.com/", timeout=timeout)
+        
+        # Push the new entry to the database under the specified name, date, and time
+        db.child("History").child(key).update(data)
+
+        return True
+    except:
+        print("error")
+        return False
+
 # verify pincode
 def firebaseVerifyPincode(username=None, pincode=None):
     try:
@@ -155,8 +167,6 @@ def lockerList():
 
 def firebaseHistoryUpdate(key,data):
     try:    
-        requests.head("http://www.google.com/", timeout=timeout)
-        
         # Push the new entry to the database under the specified name, date, and time
         db.child("History").child(key).update(data)
 

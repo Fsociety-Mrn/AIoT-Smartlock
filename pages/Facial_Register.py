@@ -3,6 +3,8 @@ from PyQt5.QtWidgets import *
 from Face_Recognition.JoloRecognition import JoloRecognition as JL
 from Raspberry.Raspberry import gpio_manual
 
+from pages.Custom_MessageBox import MessageBox
+
 import cv2
 import time
 import dlib
@@ -16,10 +18,10 @@ class facialRegister(QtWidgets.QFrame):
             self.main_menu = parent
             
             self.Light_PIN = 25
-            self.lights_on = False
+            self.lights_on = True
 
             # message box
-            self.MessageBox = QtWidgets.QMessageBox()
+            self.MessageBox = MessageBox()
             self.MessageBox.setStyleSheet("""
                   QMessageBox { 
                       text-align: center;
@@ -134,7 +136,7 @@ class facialRegister(QtWidgets.QFrame):
             # face detector: Haar, dlib,landmark
             self.face_detector = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
             self.dlib_faceDetcetoor = dlib.get_frontal_face_detector()
-            self.landmark_detector = dlib.shape_predictor('Model/shape_predictor_68_face_landmarks.dat')
+            self.landmark_detector = dlib.shape_predictor('/home/aiotsmartlock/Downloads/AIoT_Smartlock/Model/shape_predictor_68_face_landmarks.dat')
 
 
             # turn on the switch 
@@ -152,7 +154,7 @@ class facialRegister(QtWidgets.QFrame):
                 "padding:10px")
             self.Lights.setText("")
             icon1 = QtGui.QIcon()
-            icon1.addPixmap(QtGui.QPixmap("Images/lights_on.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+            icon1.addPixmap(QtGui.QPixmap("/home/aiotsmartlock/Downloads/AIoT_Smartlock/Images/lights_on.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
             self.Lights.setIcon(icon1)
             self.Lights.setIconSize(QtCore.QSize(42, 42))
             self.Lights.setFlat(False)
@@ -175,7 +177,7 @@ class facialRegister(QtWidgets.QFrame):
         self.capture.setText(_translate("facialRegistration", "0"))
         self.status.setText(_translate("facialRegistration", "Please be ready at 16"))
         self.Name.setText(_translate("facialRegistration", "Art Lisboa"))
-        gpio_manual(self.Light_PIN,True)
+        gpio_manual(self.Light_PIN,False)
     # =================== for Lights Button =================== #
 
     def toggle_light(self):
@@ -193,18 +195,18 @@ class facialRegister(QtWidgets.QFrame):
         if self.lights_on:
             
             icon1 = QtGui.QIcon()
-            icon1.addPixmap(QtGui.QPixmap("Images/lights_on.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+            icon1.addPixmap(QtGui.QPixmap("/home/aiotsmartlock/Downloads/AIoT_Smartlock/Images/lights_on.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
 
             self.Lights.setIcon(icon1)
             
-            gpio_manual(self.Light_PIN,True)
+            gpio_manual(self.Light_PIN,False)
         else:
             
             icon1 = QtGui.QIcon()
-            icon1.addPixmap(QtGui.QPixmap("Images/lights_off.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+            icon1.addPixmap(QtGui.QPixmap("/home/aiotsmartlock/Downloads/AIoT_Smartlock/Images/lights_off.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
   
             self.Lights.setIcon(icon1)
-            gpio_manual(self.Light_PIN,False)
+            gpio_manual(self.Light_PIN,True)
 
     # receivce data from Token Form
     def receive(self,data):
@@ -230,7 +232,7 @@ class facialRegister(QtWidgets.QFrame):
         # Save captured images if capture count is less than 20
         if self.captureStat <= 20:
 
-            path = f"Known_Faces/{self.Name.text()}/{self.captureStat}.png"
+            path = f"/home/aiotsmartlock/Downloads/AIoT_Smartlock/Known_Faces/{self.Name.text()}/{self.captureStat}.png"
             
             # cv2.imwrite(path, frame)
             # self.captureStat += 1
@@ -250,6 +252,7 @@ class facialRegister(QtWidgets.QFrame):
             
             return False
         else:
+            gpio_manual(self.Light_PIN,True)
             return True
 
     def facialTraining(self):
@@ -367,7 +370,7 @@ class facialRegister(QtWidgets.QFrame):
     def messageBoxShow(self, icon=None, title=None, text=None, buttons=None):
 
                 # Set the window icon, title, and text
-                self.MessageBox.setIcon(icon)
+    
                 self.MessageBox.setWindowTitle(title)
                 self.MessageBox.setText(text)
 
