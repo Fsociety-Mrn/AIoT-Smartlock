@@ -61,12 +61,10 @@ class JoloRecognition:
                 
                 
                 # self.Embeding_List is the load data.pt 
-                
                 for idx, emb_db in enumerate(self.Embeding_List):
 
                     # torch.dist = is use to compare the face detected into batch of faceas in self embediing
                     dist = torch.dist(emb, emb_db).item()
-                    # print(dist)
                       
                     # append the comparing result
                     match_list.append(dist)
@@ -85,12 +83,11 @@ class JoloRecognition:
                     # print("threshold value: ",min_dist )
                     percentage = self.__thresh_to_percent(face_distance=min_dist,face_match_threshold=threshold)
                     percentage = percentage * 100
+                    
                     if min_dist < threshold:
                         
                         idx_min = match_list.index(min_dist)
-                        
 
-                        # print(min_dist)
                         return (self.Name_List[idx_min], percentage)
                     else:
 
@@ -115,44 +112,46 @@ class JoloRecognition:
     def Face_Train(self, Dataset_Folder="Known_Faces", location="Model"):
         try:
 
-            cplusplus = 1
-        # define a function to collate data
+            training_batch = 1
+            
+            # define a function to collate data
             def collate_fn(x):
                 return x[0]
             
-        # locate the dataset of known faces
+            # locate the dataset of known faces
             dataset = datasets.ImageFolder(Dataset_Folder)
 
-        # load the folder name in dataset
+            # load the folder name in dataset
             label_names = {i: c for c, i in dataset.class_to_idx.items()}
 
-        # load the dataset
+            # load the dataset
             loader = DataLoader(dataset, batch_size=20, collate_fn=collate_fn, pin_memory=True)
 
-        # create empty lists for storing embeddings and names
+            # create empty lists for storing embeddings and names
             name_list = []
             embedding_list = []
 
             for images, label in loader:
-                print(str(cplusplus) + " Training...")
+
                 with torch.no_grad():
 
-                # for facial detection level 2 --- Using MTCNN model
+                    # for facial detection level 2 --- Using MTCNN model
                     face, prob = self.mtcnn(images, return_prob=True)
 
-                # check if there is a detected face and has probability of 90%
+                    # check if there is a detected face and has probability of 90%
                     if face is not None and prob > 0.90:
-                    # calculate face distance
+                        
+                        # calculate face distance
                         emb = self.facenet(face.unsqueeze(0))
 
                         embedding_list.append(emb.detach())
                         name_list.append(label_names[label])
 
-                        cplusplus +=1
+                        training_batch +=1
 
             data = [embedding_list, name_list]
 
-        # save the calculated face distance into data.pt
+            # save the calculated face distance into data.pt
             torch.save(data, location + '/data.pt')
 
             return "Successfully trained"
