@@ -245,12 +245,7 @@ class MainWindow(QtWidgets.QFrame):
 "border-bottom-right-radius: 50px;\n"
 "\n"
 "")
-        # self.widget_2.setStyleSheet("\n"
-        # "background-image:url(:/background/Images/background.jpg);\n"
-        # "background-color:#F5F0F0;\n"
-        # "border-bottom-right-radius: 50px;\n"
-        # "\n"
-        # "")
+
         self.widget_2.setObjectName("widget_2")
         
         # facial register
