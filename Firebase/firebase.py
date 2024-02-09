@@ -263,3 +263,14 @@ def firebase_set_unlock(value):
     except Exception as e:
         print("Error:", e)
         return None
+    
+def locker_sensor(keyName,value):
+    try:
+        requests.head("http://www.google.com/", timeout=timeout)
+        db.child("Locker").child(keyName).set(value)
+        return True
+            
+    except Exception as e:
+        print("Error:", e)
+        return None
+

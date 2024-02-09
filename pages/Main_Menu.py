@@ -2,9 +2,9 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import *
 
 from Firebase.Offline import total_fail,delete_table,offline_insert,updateToDatabase,delete_table
-from Firebase.firebase import firebaseVerifyPincode,lockerList
+from Firebase.firebase import firebaseVerifyPincode,lockerList,locker_sensor
 
-from Raspberry.Raspberry import openLocker
+from Raspberry.Raspberry import openLocker,door_status
 import socket
 import os
 
@@ -245,12 +245,7 @@ class MainWindow(QtWidgets.QFrame):
 "border-bottom-right-radius: 50px;\n"
 "\n"
 "")
-        # self.widget_2.setStyleSheet("\n"
-        # "background-image:url(:/background/Images/background.jpg);\n"
-        # "background-color:#F5F0F0;\n"
-        # "border-bottom-right-radius: 50px;\n"
-        # "\n"
-        # "")
+
         self.widget_2.setObjectName("widget_2")
         
         # facial register
@@ -333,7 +328,7 @@ class MainWindow(QtWidgets.QFrame):
         self.settings.setStyleSheet("border-radius: 100px;")
         self.settings.setText("")
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap("Images/setting.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon1.addPixmap(QtGui.QPixmap("/home/aiotsmartlock/Downloads/AIoT_Smartlock/Images/setting.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.settings.setIcon(icon1)
         self.settings.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.settings.setIconSize(QtCore.QSize(32, 32))
@@ -639,6 +634,7 @@ class MainWindow(QtWidgets.QFrame):
     # check internet
     def check_internet_connection(self):
         try:
+            self.door_sensor_locker()
             
             if self.Fail:
                 self.facialRegister.setEnabled(True)
@@ -795,6 +791,7 @@ class MainWindow(QtWidgets.QFrame):
         text_color = "red" if status else "#63727B"
     
         current_stylesheet = button.styleSheet()
+         
     
         # Extract the background color, border color, and border-top-left-radius from the current stylesheet
         background_color = current_stylesheet.split("background-color:")[1].split(";")[0].strip()
@@ -809,6 +806,15 @@ class MainWindow(QtWidgets.QFrame):
         """
         button.setStyleSheet(new_stylesheet)
         
-        self.status = False if self.status else True
+        locker_sensor("_" + button.text(),status)
+        
+    def door_sensor_locker(self):
+        self.change_status(status=door_status(26) ,button=self._20)
+        self.change_status(status=door_status(19) ,button=self._21)
+        self.change_status(status=door_status(13) ,button=self._16)
+        self.change_status(status=door_status(6) ,button=self._12)
+        self.change_status(status=door_status(5) ,button=self._7)
+        self.change_status(status=door_status(11) ,button=self._8)
+       
 
 
