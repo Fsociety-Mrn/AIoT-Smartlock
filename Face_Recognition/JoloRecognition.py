@@ -2,6 +2,7 @@ import torch
 import torchvision.transforms as transforms
 import math 
 
+from PIL import Image
 from torchvision import datasets
 from torch.utils.data import DataLoader
 from facenet_pytorch import MTCNN,InceptionResnetV1
@@ -160,4 +161,105 @@ class JoloRecognition:
             print(f"Error occurred while training the model: {str(e)}")
             return "Error occurred while training the model"
 
-# JoloRecognition().Face_Train()
+    def __face_encodings(self, image_path):
+        
+        try:
+
+            with torch.no_grad():
+            # Load image using PIL
+                image = Image.open(image_path)
+                image = image.convert("RGB")  # Ensure image is in RGB mode
+            
+            # for facial detection level 2 --- Using MTCNN model
+                face, prob = self.mtcnn(image, return_prob=True)
+
+            # check if there is a detected face and has probability of 90%
+                if face is not None and prob > 0.90:
+                # calculate face distance
+                    emb = self.facenet(face.unsqueeze(0))
+                    return emb
+        except Exception as e:
+            print("__face_encodings:",e)
+            return e
+    
+    def spam_detection(self, Dataset_Folder="spam_detection", image=None,threshold=0.6):
+        try:
+            
+            # face2 = self.__face_encodings(image)
+            
+            face2, prob = self.mtcnn(image, return_prob=True)
+            
+             # check if there is a detected face and has probability of 90%
+            if face2 is None and prob < 0.90:
+                return
+            
+            face2 = self.facenet(face2.unsqueeze(0))
+            
+            # define a function to collate data
+            def collate_fn(x):
+                return x[0]
+            
+            # locate the dataset of known faces
+            dataset = datasets.ImageFolder(Dataset_Folder)
+
+            # load the folder name in dataset
+            label_names = {i: c for c, i in dataset.class_to_idx.items()}
+
+            # load the dataset
+            loader = DataLoader(
+                dataset, 
+                batch_size=20, 
+                collate_fn=collate_fn, 
+                pin_memory=True)
+
+            # create empty lists for storing embeddings and names
+            name_list = []
+            embedding_list = []
+
+            for images, label in loader:
+
+                with torch.no_grad():
+
+                    # for facial detection level 2 --- Using MTCNN model
+                    face, prob = self.mtcnn(images, return_prob=True)
+
+                    # check if there is a detected face and has probability of 90%
+                    if face is not None and prob > 0.90:
+                        
+                        # calculate face distance
+                        emb = self.facenet(face.unsqueeze(0))
+
+                        embedding_list.append(emb.detach())
+                        name_list.append(label_names[label])
+                        
+                        dist = torch.dist(emb, face2).item()
+                        
+                        if dist < threshold:
+                            return (label_names[label], dist,True,None)
+
+            return (None, None,False,None)
+
+        except Exception as e:
+            print(f"spam_detection - Error occurred while training the model: {str(e)}")
+            return (None, None,False,f"spam_detection: {str(e)}")
+         
+    def face_compare_result(self,face_one,face_two):
+        with torch.no_grad():
+            
+            face1 = self.__face_encodings(face_one)
+            face2 = self.__face_encodings(face_two)
+            
+            # torch.dist = is use to compare the face detected into batch of faceas in self embediing
+            dist = torch.dist(face1, face2).item()
+            
+            print(dist)
+            return dist
+            
+            
+# JoloRecognition().face_compare_result(
+#     face_one="Known_Faces/FRANZ MANECLANG/1.png",
+#     face_two ="Known_Faces/Art Lisboa/7.png"
+#     )
+
+# result = JoloRecognition().spam_detection(image="Images/2.png")
+# print(result)
