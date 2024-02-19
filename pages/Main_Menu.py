@@ -129,7 +129,7 @@ class MainWindow(QtWidgets.QFrame):
         self.qr.setStyleSheet("border-radius: 100px;")
         self.qr.setText("")
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap("/home/aiotsmartlock/Downloads/AIoT_Smartlock/Images/USER_QR.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon1.addPixmap(QtGui.QPixmap("Images/USER_QR.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.qr.setIcon(icon1)
         self.qr.setIconSize(QtCore.QSize(150, 150))
         self.qr.setObjectName("qr")
@@ -328,7 +328,7 @@ class MainWindow(QtWidgets.QFrame):
         self.settings.setStyleSheet("border-radius: 100px;")
         self.settings.setText("")
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap("/home/aiotsmartlock/Downloads/AIoT_Smartlock/Images/setting.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon1.addPixmap(QtGui.QPixmap("Images/setting.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.settings.setIcon(icon1)
         self.settings.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.settings.setIconSize(QtCore.QSize(32, 32))
@@ -377,7 +377,7 @@ class MainWindow(QtWidgets.QFrame):
         
         self.timer = QtCore.QTimer(self)
         self.timer.timeout.connect(self.update_time)
-        self.timer.start(1000)
+        # self.timer.start(1000)
     
         # for countdown
         self.failedCountdown = QtCore.QTimer(self)
@@ -389,11 +389,11 @@ class MainWindow(QtWidgets.QFrame):
         # This timer whether the system is lock or not
         self.checkFailDetailsssss = QtCore.QTimer(self)
         self.checkFailDetailsssss.timeout.connect(self.checkFailss)
-        self.checkFailDetailsssss.start(1000)
+        # self.checkFailDetailsssss.start(1000)
 
         self.updateData = QtCore.QTimer(self)
         self.updateData.timeout.connect(self.update_data)
-        self.updateData.start(1000)
+        # self.updateData.start(1000)
         
         self.closeEvent = self.closeEvent
         self.horizontalLayout.addWidget(self.widget_2) 
@@ -473,9 +473,11 @@ class MainWindow(QtWidgets.QFrame):
             self.checkFailDetailsssss.stop()
             self.timer.stop()
             self.failedCountdown.stop()
+            self.updateData.stop()
         else:
             self.checkFailDetailsssss.start()
             self.timer.start()
+            self.updateData.start()
     
     def checkFailss(self):
         

@@ -1,21 +1,21 @@
 from Firebase.firebase import firebaseRead, lockerUpdate
-import RPi.GPIO as GPIO
+# import RPi.GPIO as GPIO
 import time
 import threading
 import requests
 
-GPIO.setmode(GPIO.BCM)
-GPIO.setwarnings(False)
+# GPIO.setmode(GPIO.BCM)
+# GPIO.setwarnings(False)
 
-batch_one_locker = [21,20,16,12,7,8,25]
-batch_one_doorSensor = [26,19,13,6,5,8,11]
+# batch_one_locker = [21,20,16,12,7,8,25]
+# batch_one_doorSensor = [26,19,13,6,5,8,11]
 
-for number in batch_one_locker:
-    GPIO.setup(number,GPIO.OUT)
-    GPIO.output(number,True)
+# for number in batch_one_locker:
+#     GPIO.setup(number,GPIO.OUT)
+#     GPIO.output(number,True)
     
-for pin in batch_one_doorSensor:
-    GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+# for pin in batch_one_doorSensor:
+#     GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 
 def openLocker():
@@ -33,7 +33,7 @@ def openLocker():
         
 def gpio_manual(key,value):
     print(key,value)
-    GPIO.output(int(key),value)
+    # GPIO.output(int(key),value)
     
 def OpenLockers(name,key,value):
 
@@ -41,14 +41,14 @@ def OpenLockers(name,key,value):
         print("Open Lockers: ")
         print(key,value)
         
-        gpio_manual(int(key),GPIO.LOW)
-        time.sleep(2)
-        gpio_manual(int(key),GPIO.HIGH)
+        # gpio_manual(int(key),GPIO.LOW)
+        # time.sleep(2)
+        # gpio_manual(int(key),GPIO.HIGH)
         
         lockerUpdate(name=name, value=False)
         
 def door_status(pin):
-    door = True if GPIO.input(pin) == GPIO.LOW else False
-    return door
+    # door = True if GPIO.input(pin) == GPIO.LOW else False
+    # return door
 
-    # return False
+    return False

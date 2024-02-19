@@ -344,7 +344,7 @@ class PincodeLogin(QtWidgets.QFrame):
         self.seven_11.setText("")
         
         icon = QtGui.QIcon()
-        pixmap = QtGui.QPixmap("/home/aiotsmartlock/Downloads/AIoT_Smartlock/Images/check.png")
+        pixmap = QtGui.QPixmap("Images/check.png")
         icon.addPixmap(pixmap, QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.seven_11.setIcon(icon)
         self.seven_11.setIconSize(QtCore.QSize(20, 20))
@@ -370,7 +370,7 @@ class PincodeLogin(QtWidgets.QFrame):
 "}")
         self.seven_12.setText("")
         icon1 = QtGui.QIcon()
-        pixmap = QtGui.QPixmap("/home/aiotsmartlock/Downloads/AIoT_Smartlock/Images/backspace.png")
+        pixmap = QtGui.QPixmap("Images/backspace.png")
         icon1.addPixmap(pixmap, QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.seven_12.setIcon(icon1)
         self.seven_12.setIconSize(QtCore.QSize(24, 24))

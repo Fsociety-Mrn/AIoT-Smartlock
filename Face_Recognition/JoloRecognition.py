@@ -36,13 +36,6 @@ class JoloRecognition:
             range = face_match_threshold
             linear_val = 1.0 - (face_distance / (range * 2.0))
             return linear_val + ((1.0 - linear_val) * math.pow((linear_val - 0.5) * 2, 0.2)) 
-    
-    # for face recognition
-    def Face_Compare(self, face, threshold=0.7):
-        try:
-            return self.FaceCompare(face,threshold=threshold)
-        except:
-            return ('No match detected', None)
             
     def FaceCompare(self, face, threshold=0.7):
     
@@ -55,12 +48,10 @@ class JoloRecognition:
             if face  is not None and prob > 0.90:
                 
                 # calculcate the face distance
-                emb  = self.facenet(face.unsqueeze(0)).detach()
+                emb = self.facenet(face.unsqueeze(0)).detach()
                 
                 match_list = []
 
-                
-                
                 # self.Embeding_List is the load data.pt 
                 for idx, emb_db in enumerate(self.Embeding_List):
 
@@ -100,15 +91,6 @@ class JoloRecognition:
             else:
                 return ('No match detected', None)
             
-    # Multiple Face Compare
-    def __Face_Multiple_Compare(self,face):
-        with torch.no_grad():
-            
-            # Run face detection
-            boxes, probs = self.mtcnn.detect(face)
-            
-            print(probs)
-    
     # training from dataset
     def Face_Train(self, Dataset_Folder="Known_Faces", location="Model"):
         try:
@@ -263,3 +245,5 @@ class JoloRecognition:
 
 # result = JoloRecognition().spam_detection(image="Images/2.png")
 # print(result)
+
+# JoloRecognition().Face_Train()

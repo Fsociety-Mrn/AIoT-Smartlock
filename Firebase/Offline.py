@@ -3,7 +3,7 @@ from Firebase.firebase import firebaseHistory
 
 # Function to create a database and a table
 def __create_database_and_table(table_name):
-    db = TinyDB("/home/aiotsmartlock/Downloads/AIoT_Smartlock/Firebase/offline.json")
+    db = TinyDB("Firebase/offline.json")
     table = db.table(table_name)
     return db, table
 
@@ -20,7 +20,7 @@ def offline_insert(TableName, data):
 # Function to get print 
 def total_fail(Table_Name):
     
-    db = TinyDB("/home/aiotsmartlock/Downloads/AIoT_Smartlock/Firebase/offline.json")
+    db = TinyDB("Firebase/offline.json")
     query_result = db.table(Table_Name).all()
  
     # Offline Insert
@@ -29,7 +29,7 @@ def total_fail(Table_Name):
     return len(query_result)
     
 def delete_table(Table_Name):
-    db = TinyDB("/home/aiotsmartlock/Downloads/AIoT_Smartlock/Firebase/offline.json")    
+    db = TinyDB("Firebase/offline.json")    
     
     # Check if the table exists before attempting to delete it
     if Table_Name in db.tables():
@@ -45,7 +45,7 @@ def delete_table(Table_Name):
 
 # ******* for History
 def offline_history(name=None, date=None, time=None, access_type=None, Percentage=None):
-    db = TinyDB("/home/aiotsmartlock/Downloads/AIoT_Smartlock/Firebase/offline.json")
+    db = TinyDB("Firebase/offline.json")
     table = db.table("History")
     
     data = {
@@ -69,7 +69,7 @@ def updateToDatabase():
     try:
 
         
-        db = TinyDB("/home/aiotsmartlock/Downloads/AIoT_Smartlock/Firebase/offline.json")
+        db = TinyDB("Firebase/offline.json")
         table = db.table("History")
 
         # Retrieve all records from the table
@@ -98,7 +98,7 @@ def updateToDatabase():
 def pinCodeLogin(pin):
     
     try:
-        db = TinyDB("/home/aiotsmartlock/Downloads/AIoT_Smartlock/Firebase/offline.json")
+        db = TinyDB("Firebase/offline.json")
         table = db.table("PIN")
 
         # Retrieve all records from the table
@@ -125,7 +125,7 @@ def pinCodeLogin(pin):
 
 # ************** LOCKERS ************** #
 def checkLocker(NAME):
-    db = TinyDB("/home/aiotsmartlock/Downloads/AIoT_Smartlock/Firebase/offline.json")
+    db = TinyDB("Firebase/offline.json")
     table = db.table("LOCK")
 
     # Retrieve all records from the table

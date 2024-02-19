@@ -136,7 +136,7 @@ class facialRegister(QtWidgets.QFrame):
             # face detector: Haar, dlib,landmark
             self.face_detector = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
             self.dlib_faceDetcetoor = dlib.get_frontal_face_detector()
-            self.landmark_detector = dlib.shape_predictor('/home/aiotsmartlock/Downloads/AIoT_Smartlock/Model/shape_predictor_68_face_landmarks.dat')
+            self.landmark_detector = dlib.shape_predictor('Model/shape_predictor_68_face_landmarks.dat')
 
 
             # turn on the switch 
@@ -154,7 +154,7 @@ class facialRegister(QtWidgets.QFrame):
                 "padding:10px")
             self.Lights.setText("")
             icon1 = QtGui.QIcon()
-            icon1.addPixmap(QtGui.QPixmap("/home/aiotsmartlock/Downloads/AIoT_Smartlock/Images/lights_on.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+            icon1.addPixmap(QtGui.QPixmap("Images/lights_on.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
             self.Lights.setIcon(icon1)
             self.Lights.setIconSize(QtCore.QSize(42, 42))
             self.Lights.setFlat(False)
@@ -195,7 +195,7 @@ class facialRegister(QtWidgets.QFrame):
         if self.lights_on:
             
             icon1 = QtGui.QIcon()
-            icon1.addPixmap(QtGui.QPixmap("/home/aiotsmartlock/Downloads/AIoT_Smartlock/Images/lights_on.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+            icon1.addPixmap(QtGui.QPixmap("Images/lights_on.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
 
             self.Lights.setIcon(icon1)
             
@@ -203,7 +203,7 @@ class facialRegister(QtWidgets.QFrame):
         else:
             
             icon1 = QtGui.QIcon()
-            icon1.addPixmap(QtGui.QPixmap("/home/aiotsmartlock/Downloads/AIoT_Smartlock/Images/lights_off.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+            icon1.addPixmap(QtGui.QPixmap("Images/lights_off.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
   
             self.Lights.setIcon(icon1)
             gpio_manual(self.Light_PIN,True)
@@ -232,7 +232,7 @@ class facialRegister(QtWidgets.QFrame):
         # Save captured images if capture count is less than 20
         if self.captureStat <= 20:
 
-            path = f"/home/aiotsmartlock/Downloads/AIoT_Smartlock/Known_Faces/{self.Name.text()}/{self.captureStat}.png"
+            path = f"Known_Faces/{self.Name.text()}/{self.captureStat}.png"
             
             # cv2.imwrite(path, frame)
             # self.captureStat += 1
@@ -241,7 +241,7 @@ class facialRegister(QtWidgets.QFrame):
             # check if the frame is blured
             laplacian_var = cv2.Laplacian(cropFrame, cv2.CV_64F).var()
             print("Blurered level",laplacian_var)
-            if laplacian_var < 300:
+            if laplacian_var < 0:
                 self.status.setText("cant capture it is blured")
                 
             else:

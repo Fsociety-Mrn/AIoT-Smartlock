@@ -30,12 +30,12 @@ class FacialLogin(QtWidgets.QFrame):
         self.start_start = time.time()
         
         self.main_menu = main_menu
+        
         # for video streaming variable
         self.videoStream = cv2.VideoCapture(1) if cv2.VideoCapture(1).isOpened() else cv2.VideoCapture(0)
         self.videoStream.set(4, 1080)
         
-        # Define a flag to ensure self.aiVoice runs only once
-        self.ai_voice_executed = False
+
         
         # Locker Number
         self.LockerNumber = 0
@@ -58,23 +58,15 @@ class FacialLogin(QtWidgets.QFrame):
                     """)
 
         # ========= for facial detection ========= #
-
         
-        self.matchs = ""
-        self.validation = ""
+        # facial status
+        self.facial_result = ("","")
         
         self.failure = 0
         
-        # grey
-        # self.R = 115
-        # self.G = 115
-        # self.B = 115
-        
         # yellow
-        self.R = 255
-        self.G = 255
-        self.B = 0
-
+        self.R,self.G ,self.B = (255,255,0)
+     
         # EAR of eye
         self.blink_threshold = 0.3
         self.blink_counter = 0
@@ -88,7 +80,7 @@ class FacialLogin(QtWidgets.QFrame):
         self.dlib_faceDetcetoor = dlib.get_frontal_face_detector()
 
         # using dlib landmark detector
-        self.landmark_detector = dlib.shape_predictor('/home/aiotsmartlock/Downloads/AIoT_Smartlock/Model/shape_predictor_68_face_landmarks.dat')
+        self.landmark_detector = dlib.shape_predictor('Model/shape_predictor_68_face_landmarks.dat')
 
         # =============================================================================================================== #
 
@@ -175,7 +167,7 @@ class FacialLogin(QtWidgets.QFrame):
         self.back.setIconSize(QtCore.QSize(42, 42))
         self.back.setFlat(False)
         self.back.setObjectName("back")
-        self.back.clicked.connect(self.backTomain)
+        self.back.clicked.connect(self.back_to_main)
         
         # turn on the switch 
         self.Lights = QtWidgets.QPushButton(self)
@@ -192,7 +184,7 @@ class FacialLogin(QtWidgets.QFrame):
                 "padding:10px")
         self.Lights.setText("")
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap("/home/aiotsmartlock/Downloads/AIoT_Smartlock/Images/lights_on.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon1.addPixmap(QtGui.QPixmap("Images/lights_on.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.Lights.setIcon(icon1)
         self.Lights.setIconSize(QtCore.QSize(42, 42))
         self.Lights.setFlat(False)
@@ -204,7 +196,7 @@ class FacialLogin(QtWidgets.QFrame):
         self.timer.timeout.connect(self.videoStreaming)
         self.last_recognition_time = time.time()
         self.last_check = time.time()
-        self.timer.start(30)
+        self.timer.start()
         
         self.status.raise_()
         self.back.raise_()
@@ -222,16 +214,17 @@ class FacialLogin(QtWidgets.QFrame):
         
         gpio_manual(self.Light_PIN,False)
         
-    def backTomain(self):
+    def back_to_main(self):
         
         self.main_menu.timers(False)
+        
+        self.timer.stop()
 
         self.videoStream.release()
         cv2.destroyAllWindows()
         self.close()
 
     # =================== for Lights Button =================== #
-
     def toggle_light(self):
         # Toggle the state of the lights
         self.lights_on = not self.lights_on 
@@ -247,25 +240,25 @@ class FacialLogin(QtWidgets.QFrame):
         if self.lights_on:
             
             icon1 = QtGui.QIcon()
-            icon1.addPixmap(QtGui.QPixmap("/home/aiotsmartlock/Downloads/AIoT_Smartlock/Images/lights_on.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+            icon1.addPixmap(QtGui.QPixmap("Images/lights_on.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
 
             self.Lights.setIcon(icon1)
             
             gpio_manual(self.Light_PIN,False)
-        else:
             
-            icon1 = QtGui.QIcon()
-            icon1.addPixmap(QtGui.QPixmap("/home/aiotsmartlock/Downloads/AIoT_Smartlock/Images/lights_off.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+            return
+        
+        icon1 = QtGui.QIcon()
+        icon1.addPixmap(QtGui.QPixmap("Images/lights_off.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
   
-            self.Lights.setIcon(icon1)
-            gpio_manual(self.Light_PIN,True)
+        self.Lights.setIcon(icon1)
+        gpio_manual(self.Light_PIN,True)
 
-    
     # message box
-    def messageBoxShow(self, icon=None, title=None, text=None, buttons=None):
+    def messageBoxShow(self,title=None, text=None, buttons=None):
 
         # Set the window icon, title, and text
-        self.MessageBox.setIcon(icon)
+        # self.MessageBox.setIcon(icon)
         self.MessageBox.setWindowTitle(title)
         self.MessageBox.setText(text)
 
@@ -292,12 +285,12 @@ class FacialLogin(QtWidgets.QFrame):
         self.videoStream.open(0)
     
     # LIFO
-    def LastIn_FirstOut(self,name, new_image):
+    def LastIn_FirstOut(self,name,new_image):
         
         if name == "":
             return
         
-        directory = f"/home/aiotsmartlock/Downloads/AIoT_Smartlock/Known_Faces/{name}"
+        directory = f"Known_Faces/{name}"
         # Get the list of files in the directory
         files = os.listdir(directory)
 
@@ -324,88 +317,57 @@ class FacialLogin(QtWidgets.QFrame):
         # Save the new image using cv2.imwrite()
         cv2.imwrite(new_image_path, new_image)
         
-
-    #  for facial recognition
     def FacialRecognition(self, frame):
-        result = Jolo().Face_Compare(frame)
+        result = Jolo().FaceCompare(frame)
         
         current_date = QtCore.QDate.currentDate().toString("MMM d yyyy")
         current_time = QtCore.QTime.currentTime().toString("h:mm:ss AP")
         
         self.LockerNumber = checkLocker(str(result[0]))
-        
-        if result[0] == 'No match detected':
-            self.validation = ""
-            self.matchs = str(result[0])
-            # self.status.setText(result[0])
-            self.R = 255
-            self.G = 0
-            self.B = 0
-   
-            self.messageBoxShow(
-                icon=self.MessageBox.Information,
-                title="Facial Recognition",
-                text="Access Denied!\nuse pinCode if you are not recognize",
-                buttons=self.MessageBox.Ok
-            )
 
-        
-            # update history firebase
-            results = firebaseHistory(name=str(result[0]),
-                            access_type="Facial Login",
-                            percentage=result[1],
-                            date=str(current_date),
-                            time=str(current_time))
+        if not result[0] == 'No match detected':
             
+            text="Welcome " + str(result[0]) + "!\nLocker Number: " + str(self.LockerNumber)
+            self.R,self.G,self.B = (0,255,0)
+            self.facial_result = ("Authenticated",result[0])
             
             self.failure = self.failure + 1
-
-        else:
-            self.matchs = str(result[0])
-         
-            self.validation = "Authenticated"
-            
-            self.messageBoxShow(
-                icon=self.MessageBox.Information,
-                title="Facial Recognition",
-                text="Welcome " + str(result[0]) + "!\nLocker Number: " + str(self.LockerNumber),
-                buttons=self.MessageBox.Ok
-            )
-            
-            
-            # self.status.setText(result[0])
-            self.R = 0
-            self.G = 255
-            self.B = 0
-            
-            self.status.setText("Good day! " + str(result[0]))
-            
-            results = firebaseHistory(name=result[0],
-                            percentage=result[1],
-                            access_type="Facial Login",
-                            date=str(current_date),
-                            time=str(current_time))
-            
-            if not results:
-                offline_history(name=result[0],
-                            access_type="Facial Login",
-                            date=str(current_date),
-                            time=str(current_time))
-            
             delete_table("Failed attempt")
             delete_table("Fail History")
             
-            # self.LockerNumber = checkLocker(str(result[0]))
+        else:
+            
+            text = "Access Denied!\nuse pinCode if you are not recognize"
+            self.R,self.G,self.B = (255,0,0)
+            self.facial_result = ("",result[0])
+            
+    
 
-            self.status.setText("Please align your face to the camera")
+        results = firebaseHistory(
+                    name=result[0],
+                    percentage=result[1],
+                    access_type="Facial Login",
+                    date=str(current_date),
+                    time=str(current_time))
+        
+        if not results:
+            offline_history(name=result[0],
+                access_type="Facial Login",
+                date=str(current_date),
+                time=str(current_time))
+                        
+        self.status.setText("Please align your face to the camera")
             
-            # OpenLockers(name=result[0],key=self.LockerNumber,value=True)
-            
-            
+        self.messageBoxShow(
+            title="Facial Recognition",
+            text=text,
+            buttons=self.MessageBox.Ok
+        )
             
     # for facial detection
-    def curveBox(self,frame=None,p1=None,p2=None,curvedRadius=30):
-    
+    def curveBox(self,frame=None,p1=None,p2=None,curvedRadius=30,BGR=(255,255,0)):
+        B,G,R = BGR
+
         # upper left curve
         cv2.ellipse(
                 img=frame, 
@@ -414,7 +376,7 @@ class FacialLogin(QtWidgets.QFrame):
                 angle=180, 
                 startAngle=0, 
                 endAngle=90, 
-                color=(self.B, self.G, self.R), # BGR
+                color=(B,G,R), # BGR
                 thickness=3)
         
         # bottom left curve
@@ -425,7 +387,7 @@ class FacialLogin(QtWidgets.QFrame):
                 angle=90, 
                 startAngle=0, 
                 endAngle=90, 
-                color=(self.B, self.G, self.R), # BGR
+                color=(B,G,R), # BGR
                 thickness=3)
         
         # upper right curve
@@ -435,7 +397,7 @@ class FacialLogin(QtWidgets.QFrame):
                 angle=270, 
                 startAngle=0, 
                 endAngle=90, 
-                color=(self.B, self.G, self.R), # BGR
+                color=(B,G,R), # BGR
                 thickness=3)
                 
         # bottom right curve
@@ -446,12 +408,14 @@ class FacialLogin(QtWidgets.QFrame):
                 angle=0, 
                 startAngle=0, 
                 endAngle=90, 
-                color=(self.B, self.G, self.R), # BGR
+                color=(B,G,R), # BGR
                 thickness=3)
 
     # for video streaming
     def videoStreaming(self):
         ret, frame = self.videoStream.read()
+        
+        validation,result = self.facial_result
         
         # if no detected frames
         if not ret:
@@ -462,18 +426,11 @@ class FacialLogin(QtWidgets.QFrame):
         # attempt failure
         if self.failure == 3:
             offline_insert(data={'Fail': "Facial Failure"},TableName="Fail History")
-                    
-            self.videoStream.release()
-            cv2.destroyAllWindows()
-            
-            self.main_menu.timers(False)
-            self.close()
-    
+            self.back_to_main()
             return
         
         # process the frame
         frame = cv2.flip(frame, 1)
-        framesS = cv2.flip(frame, 1)
 
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     
@@ -483,88 +440,97 @@ class FacialLogin(QtWidgets.QFrame):
                                                     minNeighbors=20,
                                                     minSize=(180, 180),
                                                     flags=cv2.CASCADE_SCALE_IMAGE)
-
+        
         current_time = time.time()
 
-        cv2.putText(frame, "CPU Temperature: " + self.cpu, (430, 70), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,255), 1)
-
-        # display the result
+        # detect one face only
         if len(faces) == 1:
+            
             x, y, w, h = faces[0]
-            
-            
             faceCrop = frame[y:y+h, x:x+w]
             face_gray = cv2.cvtColor(faceCrop, cv2.COLOR_BGR2GRAY)
             
-            # Calculate the Laplacian
-            laplacian = cv2.Laplacian(face_gray, cv2.CV_64F)
-    
-            # Calculate the variance of the Laplacian
-            variance = laplacian.var()
+            # face blurred level
+            face_blurred = self.detect_blur_in_face(face_gray=face_gray,frame=frame)
             
-            Face_blurreness = float("{:.2f}".format(variance))
-            
-            cv2.putText(frame, "Face Blurreness: " + str(Face_blurreness), (30, 440), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (self.B, self.G, self.R), 1)
-            
-            if not Face_blurreness < 300:
+            # check if user is Authenticated
+            if validation == "Authenticated" and face_blurred > 0:
                 
-                # if authenticated
-                if self.validation == "Authenticated":
-                    if not Face_blurreness < 300:
-                        
-                        self.LastIn_FirstOut(name=str(self.matchs),new_image=framesS)
-                        OpenLockers(name=str(self.matchs),key=self.LockerNumber,value=True)
-                        self.LockerNumber = 0
-                        offline_insert(TableName="Facial_update", data={"data" : "Facial Login"})
-                        self.backTomain()
-             
-                self.curveBox(frame=frame,p1=(x,y),p2=(x+w,y+h))
-
-                # cv2.rectangle(frame, (x, y), (x + w, y + h), (self.B, self.G, self.R), 2)
-                cv2.putText(frame, str(self.matchs), (x, y + h + 30), cv2.FONT_HERSHEY_COMPLEX, 1, (self.B, self.G, self.R),1)
-
-                if self.eyeBlink(gray=gray, frame=frame):
-                    self.FacialRecognition(frame=frame)
-  
-                # check if ervery 5 second
-    
-                if current_time - self.last_recognition_time >= 5 and not Face_blurreness < 300:
-
-                    self.last_recognition_time = current_time
-
-                    self.status.setText("please blink at least 1 second")
-                    self.matchs = ""
-
-                # yellow
-                    self.R = 255
-                    self.G = 255
-                    self.B = 0
-                    
-                self.status.setText("please blink at least 1 second")
-
-            else:
-                self.status.setText("Camera is blurr")     
-
+                self.LastIn_FirstOut(name=result,new_image=frame)
+                OpenLockers(name=result,key=self.LockerNumber,value=True)
+                self.LockerNumber = 0
+                offline_insert(TableName="Facial_update", data={"data" : "Facial Login"})
+                
+                return self.back_to_main()
+                
+            self.single_face_process(faces=faces,frame=frame,gray=gray, face_blurred=face_blurred,current_time=current_time)
+            
+        # Multiple Face Detected
         elif len(faces) >= 1:
             
-            self.B = 0 
-            self.G = 0
-            self.R = 255
-            
+            self.B,self.G,self.R = (0,0,255)
             for (x, y, w, h) in faces:
-                self.curveBox(frame=frame,p1=(x,y),p2=(x+w,y+h))
+                self.curveBox(frame=frame,p1=(x,y),p2=(x+w,y+h),BGR=(self.B,self.G,self.R))
+
             self.status.setText("more than 1 faces is detected")
+
+        # No face detected
         else:
-            self.status.setText("Align your face to unlock the Locker" if self.validation == "Authenticated" else "No face is detected")
+            self.status.setText("Align your face to unlock the Locker" if validation == "Authenticated" else "No face is detected")
 
+        self.show_frame(frame)
+        
+    # =================== Frame and Face detection utility =================== #
+    
+    # for single face process
+    def single_face_process(self,frame,gray,faces, face_blurred,current_time):
 
-        # display the frame on the label
+        x, y, w, h = faces[0]
+        
+        # check blurred level
+        if face_blurred > 0:
+
+            # set default color if 5 seconds has pass
+            result = current_time - self.last_recognition_time >= 5 and not face_blurred < 0
+
+            self.B, self.G, self.R = (0, 255, 255) if result else (self.B, self.G, self.R)
+            self.last_recognition_time = current_time  if result else self.last_recognition_time
+
+            # set instruction and detect faces
+            self.status.setText("please blink at least 1 second")
+            self.curveBox(frame=frame,p1=(x,y),p2=(x+w,y+h),BGR=(self.B,self.G,self.R))
+                    
+            # eye blink status
+            if self.eyeBlink(gray=gray, frame=frame):
+                self.FacialRecognition(frame=frame)
+                
+            return
+        
+        self.status.setText("Camera is blurr")
+        return
+        
+    # display the frame on the label
+    def show_frame(self,frame):
         height, width, channel = frame.shape
         bytesPerLine = channel * width
         qImg = QtGui.QImage(frame.data, width, height, bytesPerLine, QtGui.QImage.Format_BGR888)
         pixmap = QtGui.QPixmap.fromImage(qImg)
         self.video.setPixmap(pixmap)
-
+    
+    # check face blured level
+    def detect_blur_in_face(self,face_gray,frame):
+        # Calculate the Laplacian
+        laplacian = cv2.Laplacian(face_gray, cv2.CV_64F)
+    
+        # Calculate the variance of the Laplacian
+        variance = laplacian.var()
+        
+        Face_blured = float("{:.2f}".format(variance))
+            
+        cv2.putText(frame, "Face Blurreness: " + str(Face_blured), (30, 440), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (self.B, self.G, self.R), 1)
+        
+        return Face_blured
+        
     # =================== for eye blinking detection functions =================== #
     def eyeBlink(self, gray, frame):
 
@@ -653,24 +619,10 @@ class FacialLogin(QtWidgets.QFrame):
             self.blink = True
         return False
 
-
     def display_stats_on_frame(self, frame, EAR):
         cv2.putText(frame, "Blink Counter: {}".format(self.blink_counter), (30, 70), cv2.FONT_HERSHEY_SIMPLEX, 0.5,
                     (self.B, self.G, self.R),1)
         # cv2.putText(frame, "E.A.R: {}".format(EAR), (30, 90), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (self.B, self.G, self.R), 1)
         cv2.putText(frame, "Eye Status: {}".format("OPEN" if self.blink else "CLOSE"), (30, 420), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (self.B, self.G, self.R),1)
 
-    # when close the frame
-
-
-# if __name__ == "__main__":
-
-#     import sys,background
-#     # Create a new QApplication object
-#     app = QApplication(sys.argv)
-
-#     New_menu = FacialLogin()
-#     New_menu.show() 
-
-#     sys.exit(app.exec_())
 
