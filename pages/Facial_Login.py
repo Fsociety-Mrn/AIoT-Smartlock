@@ -285,28 +285,18 @@ class FacialLogin(QtWidgets.QFrame):
         self.videoStream.open(0)
     
     # LIFO
-    def LastIn_FirstOut(self,name,new_image):
-        
-        if name == "":
-            return
-        
-        directory = f"Known_Faces/{name}"
+    def LastIn_FirstOut(self,directory,new_image):
+                
         # Get the list of files in the directory
         files = os.listdir(directory)
-
+        
         # Filter the list to include only image files
         image_files = [file for file in files if file.endswith((".png", ".jpg", ".jpeg"))]
 
         # Sort the image file names numerically in ascending order
         sorted_image_files = sorted(image_files, key=lambda x: int(os.path.splitext(x)[0]))
 
-        # Remove the first image if it exists
-        if sorted_image_files:
-            oldest_image = sorted_image_files[0]
-            os.remove(os.path.join(directory, oldest_image))
-            sorted_image_files = sorted_image_files[1:]
-
-        # Get the highest numeric value in the remaining image files
+        # Get the highest numeric value in the remaining image files 
         highest_value = max([int(os.path.splitext(file)[0]) for file in sorted_image_files]) if sorted_image_files else 0
 
         # Generate the new image path with an incremental value
@@ -317,6 +307,13 @@ class FacialLogin(QtWidgets.QFrame):
         # Save the new image using cv2.imwrite()
         cv2.imwrite(new_image_path, new_image)
         
+        # remove first image if images are greather than 20
+        if len(files) > 19:
+            oldest_image = sorted_image_files[0]
+            os.remove(os.path.join(directory, oldest_image))
+            sorted_image_files = sorted_image_files[1:]
+    
+    # Facial Recognition
     def FacialRecognition(self, frame):
         result = Jolo().FaceCompare(frame)
         
@@ -339,10 +336,8 @@ class FacialLogin(QtWidgets.QFrame):
             
             text = "Access Denied!\nuse pinCode if you are not recognize"
             self.R,self.G,self.B = (255,0,0)
-            self.facial_result = ("",result[0])
+            self.facial_result = ("Denied",result[0])
             
-    
-
         results = firebaseHistory(
                     name=result[0],
                     percentage=result[1],
@@ -363,7 +358,50 @@ class FacialLogin(QtWidgets.QFrame):
             text=text,
             buttons=self.MessageBox.Ok
         )
+    
+    # spam recognition
+    def anti_spam(self, result=False, image=None):        
+
+        if result:
+            return "Access Denied!\nuse pinCode if you are not recognize"  
+        
+        directory = "spam_detection"
+        
+        # Get the list of files in the directory
+        files = os.listdir(directory)
+        
+        new_dir = f"{directory}/person_{len(files)}"
+        
+        # Check if the directory exists or if it's empty
+        if not os.path.exists(directory) or not os.listdir(directory):
             
+            os.makedirs(new_dir, exist_ok=True)
+            self.LastIn_FirstOut(directory=new_dir, new_image=image)
+
+            return "Access Denied!\nuse pinCode if you are not recognize"
+        
+        # check spam detection
+        result = Jolo().spam_detection(image=image,threshold=0.7)
+        
+        person = result[0]
+        spam_detected = result[2]
+        error_occur = result[3]
+
+        # if detected it will save images
+        if spam_detected and error_occur == None:
+            
+            dir=f"{directory}/{person}"
+            self.LastIn_FirstOut(directory=dir, new_image=image)
+            return "Access Denied!\nuse pinCode if you are not recognize"
+        
+        # if not detected it will create folder
+        if not spam_detected and error_occur == None:
+            os.makedirs(new_dir, exist_ok=True)
+            self.LastIn_FirstOut(directory=new_dir, new_image=image)
+            return "Access Denied!\nuse pinCode if you are not recognize"
+        
+        return "Access Denied!\nuse pinCode if you are not recognize"
+         
     # for facial detection
     def curveBox(self,frame=None,p1=None,p2=None,curvedRadius=30,BGR=(255,255,0)):
         B,G,R = BGR
@@ -451,20 +489,26 @@ class FacialLogin(QtWidgets.QFrame):
             face_gray = cv2.cvtColor(faceCrop, cv2.COLOR_BGR2GRAY)
             
             # face blurred level
-            face_blurred = self.detect_blur_in_face(face_gray=face_gray,frame=frame)
+            face_blurred = self.detect_blur_in_face(face_gray=face_gray)
             
             # check if user is Authenticated
             if validation == "Authenticated" and face_blurred > 0:
                 
-                self.LastIn_FirstOut(name=result,new_image=frame)
+                self.LastIn_FirstOut(directory=f"Known_Faces/{result}",new_image=frame)
                 OpenLockers(name=result,key=self.LockerNumber,value=True)
                 self.LockerNumber = 0
                 offline_insert(TableName="Facial_update", data={"data" : "Facial Login"})
                 
                 return self.back_to_main()
+            
+            # check if user i not authenticated
+            if validation == "Denied" and face_blurred > 0:
+                self.anti_spam(image=frame)
+                self.facial_result = (False,result)
                 
             self.single_face_process(faces=faces,frame=frame,gray=gray, face_blurred=face_blurred,current_time=current_time)
-            
+            cv2.putText(frame, "Face Blurreness: " + str(face_blurred), (30, 440), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (self.B, self.G, self.R), 1)
+        
         # Multiple Face Detected
         elif len(faces) >= 1:
             
@@ -517,8 +561,9 @@ class FacialLogin(QtWidgets.QFrame):
         pixmap = QtGui.QPixmap.fromImage(qImg)
         self.video.setPixmap(pixmap)
     
-    # check face blured level
-    def detect_blur_in_face(self,face_gray,frame):
+    # check face blurred level
+    def detect_blur_in_face(self,face_gray):
+        
         # Calculate the Laplacian
         laplacian = cv2.Laplacian(face_gray, cv2.CV_64F)
     
@@ -527,8 +572,6 @@ class FacialLogin(QtWidgets.QFrame):
         
         Face_blured = float("{:.2f}".format(variance))
             
-        cv2.putText(frame, "Face Blurreness: " + str(Face_blured), (30, 440), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (self.B, self.G, self.R), 1)
-        
         return Face_blured
         
     # =================== for eye blinking detection functions =================== #
@@ -624,5 +667,6 @@ class FacialLogin(QtWidgets.QFrame):
                     (self.B, self.G, self.R),1)
         # cv2.putText(frame, "E.A.R: {}".format(EAR), (30, 90), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (self.B, self.G, self.R), 1)
         cv2.putText(frame, "Eye Status: {}".format("OPEN" if self.blink else "CLOSE"), (30, 420), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (self.B, self.G, self.R),1)
+        
 
 

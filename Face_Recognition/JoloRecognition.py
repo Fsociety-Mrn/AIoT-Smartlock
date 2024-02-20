@@ -216,6 +216,7 @@ class JoloRecognition:
                         
                         dist = torch.dist(emb, face2).item()
                         
+                        print("spam recognition: ", dist)
                         if dist < threshold:
                             return (label_names[label], dist,True,None)
 
