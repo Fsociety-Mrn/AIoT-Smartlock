@@ -285,7 +285,7 @@ class FacialLogin(QtWidgets.QFrame):
         self.videoStream.open(0)
     
     # LIFO
-    def LastIn_FirstOut(self,directory,new_image):
+    def LastIn_FirstOut(self,directory=None,new_image=None,batch=19):
                 
         # Get the list of files in the directory
         files = os.listdir(directory)
@@ -308,7 +308,7 @@ class FacialLogin(QtWidgets.QFrame):
         cv2.imwrite(new_image_path, new_image)
         
         # remove first image if images are greather than 20
-        if len(files) > 19:
+        if len(files) > batch:
             oldest_image = sorted_image_files[0]
             os.remove(os.path.join(directory, oldest_image))
             sorted_image_files = sorted_image_files[1:]
@@ -376,7 +376,7 @@ class FacialLogin(QtWidgets.QFrame):
         if not os.path.exists(directory) or not os.listdir(directory):
             
             os.makedirs(new_dir, exist_ok=True)
-            self.LastIn_FirstOut(directory=new_dir, new_image=image)
+            self.LastIn_FirstOut(directory=new_dir, new_image=image,batch=4)
 
             return "Access Denied!\nuse pinCode if you are not recognize"
         
@@ -391,13 +391,13 @@ class FacialLogin(QtWidgets.QFrame):
         if spam_detected and error_occur == None:
             
             dir=f"{directory}/{person}"
-            self.LastIn_FirstOut(directory=dir, new_image=image)
+            self.LastIn_FirstOut(directory=dir, new_image=image,batch=4)
             return "Access Denied!\nuse pinCode if you are not recognize"
         
         # if not detected it will create folder
         if not spam_detected and error_occur == None:
             os.makedirs(new_dir, exist_ok=True)
-            self.LastIn_FirstOut(directory=new_dir, new_image=image)
+            self.LastIn_FirstOut(directory=new_dir, new_image=image,batch=4)
             return "Access Denied!\nuse pinCode if you are not recognize"
         
         return "Access Denied!\nuse pinCode if you are not recognize"
@@ -503,11 +503,10 @@ class FacialLogin(QtWidgets.QFrame):
             
             # check if user i not authenticated
             if validation == "Denied" and face_blurred > 0:
-                self.anti_spam(image=frame)
-                self.facial_result = (False,result)
+                self.facial_result = (False,self.anti_spam(image=frame))
                 
             self.single_face_process(faces=faces,frame=frame,gray=gray, face_blurred=face_blurred,current_time=current_time)
-            cv2.putText(frame, "Face Blurreness: " + str(face_blurred), (30, 440), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (self.B, self.G, self.R), 1)
+            cv2.putText(frame, "Face blurriness: " + str(face_blurred), (30, 440), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (self.B, self.G, self.R), 1)
         
         # Multiple Face Detected
         elif len(faces) >= 1:

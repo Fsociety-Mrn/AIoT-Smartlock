@@ -139,4 +139,5 @@ def checkLocker(NAME):
                 LockerNumber = value["Locker Number"]
                 
     return LockerNumber
-    
+
+# ************** SPAM RECOGNITION ************** #

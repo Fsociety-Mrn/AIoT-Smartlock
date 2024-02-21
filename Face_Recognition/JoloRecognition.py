@@ -190,7 +190,7 @@ class JoloRecognition:
             # load the dataset
             loader = DataLoader(
                 dataset, 
-                batch_size=20, 
+                batch_size=1, 
                 collate_fn=collate_fn, 
                 pin_memory=True)
 
@@ -215,8 +215,7 @@ class JoloRecognition:
                         name_list.append(label_names[label])
                         
                         dist = torch.dist(emb, face2).item()
-                        
-                        print("spam recognition: ", dist)
+                         
                         if dist < threshold:
                             return (label_names[label], dist,True,None)
 
