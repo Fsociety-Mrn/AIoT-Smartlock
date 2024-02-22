@@ -1,5 +1,6 @@
-from tinydb import TinyDB, Query
+from tinydb import TinyDB
 from Firebase.firebase import firebaseHistory
+from datetime import datetime,timedelta
 
 # Function to create a database and a table
 def __create_database_and_table(table_name):
@@ -34,7 +35,7 @@ def delete_table(Table_Name):
     # Check if the table exists before attempting to delete it
     if Table_Name in db.tables():
         
-        print("wala kuys")
+        print("delete_table: wala kuys")
         
         # Drop (delete) the specified table
         db.drop_table(Table_Name)
@@ -141,3 +142,70 @@ def checkLocker(NAME):
     return LockerNumber
 
 # ************** SPAM RECOGNITION ************** #
+def __insert_person_permanent_banned(personID):
+
+    db = TinyDB("Firebase/banned_and_temporary_list.json")
+    table = db.table("permanent_banned")
+    table.insert({ "name": personID })
+    
+def __insert_date_and_time(personID):
+    
+    # Create a TinyDB instance and open the database file
+    db = TinyDB("Firebase/banned_and_temporary_list.json")
+    
+    # Get the current date and time with formatted date add 1 minute
+    current_datetime = datetime.now()
+
+    formatted_datetime = current_datetime.strftime("%b %d %Y at %I:%M %p")
+    
+    # Get the table or create it if it doesn't exist
+    table = db.table(personID)
+    
+    table.insert( {"date": formatted_datetime})
+    
+    return False
+    
+
+def check_person_banned(personID):
+    db = TinyDB("Firebase/banned_and_temporary_list.json")
+    table = db.table("permanent_banned")
+
+    # Retrieve all records from the table
+    records = table.all()
+    
+    for each in records:
+        for name,value in each.items():
+            if value==personID:
+                return True
+
+    return False
+
+def is_person_temporary_banned(personID):
+    db = TinyDB("Firebase/banned_and_temporary_list.json")
+    table = db.table(personID)
+
+    # Retrieve a ll records from the table
+    records = table.all()
+    
+    for each in records:
+        for key,date in each.items():
+            print(date)
+    
+    # default value
+    value = False
+    
+    if len(records) == 3:
+        value = True
+    
+    if len(records) == 6:
+        value = True
+    
+    if len(records) == 9:
+        __insert_person_permanent_banned(personID)
+        return True
+    
+    __insert_date_and_time(personID)
+    return value
+
+
+

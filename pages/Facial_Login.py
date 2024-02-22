@@ -4,6 +4,7 @@ import dlib
 import numpy as np
 import torch
 import os
+import uuid
 
 from Face_Recognition.JoloRecognition import JoloRecognition as Jolo
 from Firebase.Offline import offline_insert,checkLocker
@@ -366,11 +367,14 @@ class FacialLogin(QtWidgets.QFrame):
             return "Access Denied!\nuse pinCode if you are not recognize"  
         
         directory = "spam_detection"
+                
+        # Generate a random UUID (version 4)
+        unique_id = uuid.uuid4()
+    
+        # Convert UUID to a hexadecimal string and return the first 8 characters
+        personID = "person_" + str(unique_id).upper()[:5]
         
-        # Get the list of files in the directory
-        files = os.listdir(directory)
-        
-        new_dir = f"{directory}/person_{len(files)}"
+        new_dir = f"{directory}/{personID}"
         
         # Check if the directory exists or if it's empty
         if not os.path.exists(directory) or not os.listdir(directory):
