@@ -149,12 +149,12 @@ def __insert_person_permanent_banned(personID):
     table.insert({ "name": personID })
     
 def __insert_date_and_time(personID):
-    
+        
     # Create a TinyDB instance and open the database file
     db = TinyDB("Firebase/banned_and_temporary_list.json")
     
     # Get the current date and time with formatted date add 1 minute
-    current_datetime = datetime.now()
+    current_datetime = datetime.now() + timedelta(minutes=1)
 
     formatted_datetime = current_datetime.strftime("%b %d %Y at %I:%M %p")
     
@@ -162,10 +162,27 @@ def __insert_date_and_time(personID):
     table = db.table(personID)
     
     table.insert( {"date": formatted_datetime})
-    
-    return False
-    
 
+def __is_date_expired(records,date):
+    # NOTE: return True if date is not yet expired else False
+    try:
+
+        date_string = records[date]['date']
+        
+        # Convert the date string to a datetime object
+        date_format = "%b %d %Y at %I:%M %p"
+        date = datetime.strptime(date_string, date_format)
+    
+        # Get the current datetime
+        current_date = datetime.now()
+    
+        # Compare if the date is in the past
+        return date >= current_date
+    
+    except Exception as e:
+        print("error")
+        return False
+    
 def check_person_banned(personID):
     db = TinyDB("Firebase/banned_and_temporary_list.json")
     table = db.table("permanent_banned")
@@ -176,6 +193,7 @@ def check_person_banned(personID):
     for each in records:
         for name,value in each.items():
             if value==personID:
+                db.drop_table(personID)
                 return True
 
     return False
@@ -187,25 +205,32 @@ def is_person_temporary_banned(personID):
     # Retrieve a ll records from the table
     records = table.all()
     
-    for each in records:
-        for key,date in each.items():
-            print(date)
-    
-    # default value
-    value = False
-    
-    if len(records) == 3:
-        value = True
-    
-    if len(records) == 6:
-        value = True
+    if len(records) == 3 and __is_date_expired(records,2):
+        return False
+
+    if len(records) == 6 and __is_date_expired(records,5):
+        return False
     
     if len(records) == 9:
         __insert_person_permanent_banned(personID)
-        return True
+        return False
     
     __insert_date_and_time(personID)
-    return value
+    return True
 
+def create_person_temporarily_banned(Person_ID):
+    
+    # check if person is permanent banned
+    if check_person_banned(Person_ID):
+        text= f""" You have been temporarily suspended due to multiple unauthorized access attempts. please contact support for further assistance. 
+        your suspended ID: {Person_ID}
+            """
+        return text
+
+    # check if person is temporary banned
+    if is_person_temporary_banned(Person_ID):
+        return "Access Denied\nPlease consider using PIN Login as an alternative access method." 
+
+    return 'You have multiple unauthorized access attempts.\nPlease return in a minute.'
 
 

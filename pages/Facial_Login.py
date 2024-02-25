@@ -16,7 +16,7 @@ from pages.Custom_MessageBox import MessageBox
 
 
 from Firebase.firebase import firebaseHistory
-from Firebase.Offline import delete_table,offline_history,offline_insert
+from Firebase.Offline import delete_table,offline_history,offline_insert,create_person_temporarily_banned
 
 class FacialLogin(QtWidgets.QFrame):
     def __init__(self,main_menu):
@@ -325,7 +325,6 @@ class FacialLogin(QtWidgets.QFrame):
 
         if not result[0] == 'No match detected':
             
-            text="Welcome " + str(result[0]) + "!\nLocker Number: " + str(self.LockerNumber)
             self.R,self.G,self.B = (0,255,0)
             self.facial_result = ("Authenticated",result[0])
             
@@ -333,10 +332,13 @@ class FacialLogin(QtWidgets.QFrame):
             delete_table("Failed attempt")
             delete_table("Fail History")
             
-        else:
+            self.messageBoxShow(
+                title="Facial Recognition",
+                text="Welcome " + str(result[0]) + "!\nLocker Number: " + str(self.LockerNumber),
+                buttons=self.MessageBox.Ok
+            )
             
-            text = "Access Denied!\nuse pinCode if you are not recognize"
-            self.R,self.G,self.B = (255,0,0)
+        else:
             self.facial_result = ("Denied",result[0])
             
         results = firebaseHistory(
@@ -354,11 +356,7 @@ class FacialLogin(QtWidgets.QFrame):
                         
         self.status.setText("Please align your face to the camera")
             
-        self.messageBoxShow(
-            title="Facial Recognition",
-            text=text,
-            buttons=self.MessageBox.Ok
-        )
+
     
     # spam recognition
     def anti_spam(self, result=False, image=None):        
@@ -396,15 +394,24 @@ class FacialLogin(QtWidgets.QFrame):
             
             dir=f"{directory}/{person}"
             self.LastIn_FirstOut(directory=dir, new_image=image,batch=4)
-            return "Access Denied!\nuse pinCode if you are not recognize"
+            text = create_person_temporarily_banned(person)
         
         # if not detected it will create folder
         if not spam_detected and error_occur == None:
             os.makedirs(new_dir, exist_ok=True)
             self.LastIn_FirstOut(directory=new_dir, new_image=image,batch=4)
-            return "Access Denied!\nuse pinCode if you are not recognize"
+            text = create_person_temporarily_banned(personID)
+            
         
-        return "Access Denied!\nuse pinCode if you are not recognize"
+        self.messageBoxShow(
+            title="Facial Recognition",
+            text=text,
+            buttons=self.MessageBox.Ok
+        )
+        
+        self.R,self.G,self.B = (255,0,0)
+        
+        return text
          
     # for facial detection
     def curveBox(self,frame=None,p1=None,p2=None,curvedRadius=30,BGR=(255,255,0)):
@@ -538,7 +545,7 @@ class FacialLogin(QtWidgets.QFrame):
         if face_blurred > 0:
 
             # set default color if 5 seconds has pass
-            result = current_time - self.last_recognition_time >= 5 and not face_blurred < 0
+            result = current_time - self.last_recognition_time >= 15 and not face_blurred < 0
 
             self.B, self.G, self.R = (0, 255, 255) if result else (self.B, self.G, self.R)
             self.last_recognition_time = current_time  if result else self.last_recognition_time
@@ -553,7 +560,7 @@ class FacialLogin(QtWidgets.QFrame):
                 
             return
         
-        self.status.setText("Camera is blurr")
+        self.status.setText("Camera is blurred")
         return
         
     # display the frame on the label
