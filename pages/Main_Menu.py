@@ -393,7 +393,7 @@ class MainWindow(QtWidgets.QFrame):
         # for timer start()
         self.timer = QtCore.QTimer(self)
         self.timer.timeout.connect(self.update_time)
-        self.timer.start()        
+        self.timer.start(200)        
         
         self.updateData = QtCore.QTimer(self)
         self.updateData.timeout.connect(self.update_data)
@@ -460,16 +460,13 @@ class MainWindow(QtWidgets.QFrame):
     # ========== to stop the timer and start it again ========== #
     def timers(self, isAble): 
         if isAble:
-            # print("timers: all stop")
-            # self.checkFailDetailsssss.stop()
+            print("timers: all stop")
             self.timer.stop()
-            # self.failedCountdown.stop()
             self.updateData.stop()
         else:
-            # print("timers: start")
-            # self.checkFailDetailsssss.start()
-            self.timer.start()
-            self.updateData.start()
+            print("timers: start")
+            self.timer.start(200)
+            self.run_once = True
 
     # message box
     def messageBoxShow(self, icon=None, title=None, text=None, buttons=None):
@@ -521,8 +518,6 @@ class MainWindow(QtWidgets.QFrame):
         self.pincodeLogin.setText("Pin Login")
         self.facialLogin.setText("Facial Login")
         
-        
-        
         self.facialLogin.isEnabled = True
         self.facialRegister.isEnabled = True
         self.pincodeLogin.isEnabled = True
@@ -531,7 +526,7 @@ class MainWindow(QtWidgets.QFrame):
     def update_time(self):
         
         self.check_internet_connection()
-
+        
         # Update Time
         current_date = QtCore.QDate.currentDate().toString("ddd, MMM d yyyy")
         current_time = QtCore.QTime.currentTime().toString("h:mm AP")
@@ -580,33 +575,42 @@ class MainWindow(QtWidgets.QFrame):
             # Attempt to create a socket connection to a known server (e.g., Google DNS)
             socket.create_connection(("8.8.8.8", 53))
             self.label.setText("<html><head/><body><p>AIoT Smartlock is <Strong>online<strong/></p></body></html>")
-            
-            # Open the Locker Remotely
-            openLocker()
+                       
+            # Update to database
+            if self.run_once == True:
+                
+                updateToDatabase()
+                
+                self.run_once = False
+                self.facialRegister.setEnabled(True)
+                self.facialRegister.setText("Facial Register")
+                
+                self.updateData.start(1000)
+                
             
         except OSError:
             pass
+        
+            self.updateData.stop()
+            self.run_once = True
+            
+            # check door status
+            self.door_sensor_locker(net=False)
+            
             self.facialRegister.setEnabled(False)
-            self.facialRegister.setText(".......")
+            self.facialRegister.setText("....")
             self.label.setText("<html><head/><body><p><Strong>No Internet<strong/> Connection</p></body></html>")
             
     def update_data(self):
         try:
-            
             socket.create_connection(("8.8.8.8", 53))
+            # Open the Locker Remotely
+            openLocker()
             
             # check door status
             self.door_sensor_locker()
-            
-            # Update to database
-            if self.run_once == True:
-                updateToDatabase()
-                self.run_once = False
-            
-        except OSError:
+        except:
             pass
-            self.run_once = True
-            print("No Internet")
     # ===================== open facial Login ===================== #
 
     def openFacialLogin(self):
@@ -727,7 +731,7 @@ class MainWindow(QtWidgets.QFrame):
         print("hello friend")
         
     # ========================== change locker status ========================== #
-    def change_status(self, status, button):
+    def change_status(self, status=None, button=None,net=True):
         
         text_color = "red" if status else "#63727B"
     
@@ -752,10 +756,11 @@ class MainWindow(QtWidgets.QFrame):
         """
         button.setStyleSheet(new_stylesheet)
         
-        # update to database online
-        locker_sensor("_" + button.text(),status)
+        if net:
+            # update to database online
+            locker_sensor("_" + button.text(),status)
         
-    def door_sensor_locker(self):
+    def door_sensor_locker(self,net=True):
         pins_to_check = {
             26: self._20, 
             19: self._21, 
@@ -765,7 +770,7 @@ class MainWindow(QtWidgets.QFrame):
             11: self._8
         }
         for pin, button in pins_to_check.items():
-            self.change_status(status=door_status(pin), button=button)
+            self.change_status(status=door_status(pin), button=button,net=net)
 
        
 

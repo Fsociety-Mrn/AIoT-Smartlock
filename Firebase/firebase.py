@@ -15,6 +15,7 @@ config = {
 firebase = pyrebase.initialize_app(config)
 db = firebase.database() # realTime database
 
+
 # read the specific data
 def firebaseRead(keyName):
     return db.child(keyName).get().val()
@@ -46,9 +47,11 @@ def firebaseUpdateChild(keyName,keyChild,value):
         db.child(keyName).child(keyChild).set(value)
        
     except requests.ConnectionError:
+        pass
         #print("Walang Internet")
         return False
     except:
+        pass
         return False
     finally:
         return True 
@@ -69,6 +72,7 @@ def firebaseTokenVerify(token):
         
     except Exception as e:
         print(f"Error: {e}")
+        pass
         return None
 
 # delete token after it verify
@@ -78,6 +82,7 @@ def firebaseDeleteVerifiedToken(name=None):
         db.child("GenerateToken_FacialUpdate").child(name).remove()
         print("field deleted successfully.")
     except Exception as e:
+        pass
         print("An error occurred:", e)
 
 # add Facial/ Pincode Login
@@ -93,6 +98,7 @@ def firebaseHistory(name=None, date=None, time=None, access_type=None, percentag
 
         return True
     except:
+        pass
         # offline_history(name=None, date=None, time=None, access_type=None)
         return False
 
@@ -107,6 +113,7 @@ def firebaseHistoryUpdate(key,data):
         return True
     except:
         print("error")
+        pass
         return False
 
 # verify pincode
@@ -120,6 +127,7 @@ def firebaseVerifyPincode(username=None, pincode=None):
         return None
     except Exception as e:
         print("Error:", e)
+        pass
         return None
     
 # verify pincode
@@ -134,6 +142,7 @@ def firebaseVerifyPincode():
             
     except Exception as e:
         print("Error:", e)
+        pass
         return None
     
 def lockerList():
@@ -147,6 +156,7 @@ def lockerList():
             
     except Exception as e:
         print("Error:", e)
+        pass
         return None
 # print(firebaseVerifyPincode(username="artlisboa", pincode="1010"))
 
@@ -173,6 +183,7 @@ def firebaseHistoryUpdate(key,data):
         return True
     except:
         print("error")
+        pass
         return False
     
 # ************************* CHECK LOCK ************************* #
@@ -190,6 +201,7 @@ def firebaseCheckLock():
         
     except Exception as e:
         print(f"Error: {e}")
+        pass
         return False
     
 
@@ -199,6 +211,7 @@ def firebaseSetLock(isLock=None):
         db.child("AIoT Lock").child("isLock").set(isLock)
         return True
     except:
+        pass
         # offline_history(name=None, date=None, time=None, access_type=None)
         return False
     
@@ -210,6 +223,7 @@ def firebaseDeleteToken():
         print("field deleted successfully.")
     except Exception as e:
         print("An error occurred:", e)
+        pass
     
 def firebaseTokenLOCK(token):
     try:
@@ -223,6 +237,7 @@ def firebaseTokenLOCK(token):
     
     except Exception as e:
         print(f"Error: {e}")
+        pass
         return False
 
 def firebase_check_expiration():
@@ -244,6 +259,7 @@ def firebase_check_expiration():
     
     except Exception as e:
         print(f"Error: {e}")
+        pass
         return True
     
 def lockerUpdate(name,value):
@@ -253,6 +269,7 @@ def lockerUpdate(name,value):
             
     except Exception as e:
         print("Error:", e)
+        pass
         return None
     
 def firebase_set_unlock(value):
@@ -262,15 +279,17 @@ def firebase_set_unlock(value):
             
     except Exception as e:
         print("Error:", e)
+        pass
         return None
     
 def locker_sensor(keyName,value):
     try:
-        requests.head("http://www.google.com/", timeout=timeout)
+        
         db.child("Locker").child(keyName).set(value)
         return True
             
     except Exception as e:
         print("locker_sensor:", e)
+        pass
         return False
 

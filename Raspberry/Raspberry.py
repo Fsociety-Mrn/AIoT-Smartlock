@@ -2,7 +2,6 @@ from Firebase.firebase import firebaseRead, lockerUpdate
 # import RPi.GPIO as GPIO
 import time
 import threading
-import requests
 
 # GPIO.setmode(GPIO.BCM)
 # GPIO.setwarnings(False)
@@ -21,16 +20,15 @@ import requests
 # Open the Locker Remotely
 def openLocker():
     try:
-        requests.head("https://www.google.com/", timeout=1)
         data = firebaseRead("LOCK")
-        
+     
         for key,value in data.items():
                         
             if key: 
                 threading.Thread(target=OpenLockers, args=(key, int(value['Locker Number']),value['Locker Status'],)).start()
     
     except Exception as e:
-        print("Error Open Locker: ", e)
+        print("Open Locker: ", e)
         
 def gpio_manual(key,value):
     print(key,value)
@@ -52,4 +50,4 @@ def door_status(pin):
     # door = True if GPIO.input(pin) == GPIO.LOW else False
     # return not GPIO.input(pin)
 
-    return True
+    return False
