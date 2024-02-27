@@ -168,6 +168,9 @@ class MainWindow(QtWidgets.QFrame):
         self._20.setFont(font)
         self._20.setStyleSheet("background-color:#F5F0F0;\n"
 "border-top-left-radius: 20px;\n"
+"border-top-right-radius: 0px;\n"
+"border-bottom-left-radius: 0px;\n"
+"border-bottom-right-radius: 0px;\n"
 "border: 2px solid #63727B;\n"
 "color:#63727B;")
         self._20.setObjectName("_20")
@@ -180,7 +183,9 @@ class MainWindow(QtWidgets.QFrame):
         self._12.setFont(font)
         self._12.setStyleSheet("background-color:#F5F0F0;\n"
 "border-top-left-radius: 0px;\n"
+"border-top-right-radius: 0px;\n"
 "border-bottom-left-radius: 20px;\n"
+"border-bottom-right-radius: 0px;\n"
 "border: 2px solid #63727B;\n"
 "color:#63727B;")
         self._12.setObjectName("_12")
@@ -193,6 +198,9 @@ class MainWindow(QtWidgets.QFrame):
         self._21.setFont(font)
         self._21.setStyleSheet("background-color:#F5F0F0;\n"
 "border-top-left-radius: 0px;\n"
+"border-top-right-radius: 0px;\n"
+"border-bottom-left-radius: 0px;\n"
+"border-bottom-right-radius: 0px;\n"
 "border: 2px solid #63727B;\n"
 "color:#63727B;")
         self._21.setIconSize(QtCore.QSize(30, 30))
@@ -206,6 +214,9 @@ class MainWindow(QtWidgets.QFrame):
         self._7.setFont(font)
         self._7.setStyleSheet("background-color:#F5F0F0;\n"
 "border-top-left-radius: 0px;\n"
+"border-top-right-radius: 0px;\n"
+"border-bottom-left-radius: 0px;\n"
+"border-bottom-right-radius: 0px;\n"
 "border: 2px solid #63727B;\n"
 "color:#63727B;")
         self._7.setObjectName("_7")
@@ -219,6 +230,8 @@ class MainWindow(QtWidgets.QFrame):
         self._16.setStyleSheet("background-color:#F5F0F0;\n"
 "border-top-left-radius: 0px;\n"
 "border-top-right-radius: 20px;\n"
+"border-bottom-left-radius: 0px;\n"
+"border-bottom-right-radius: 0px;\n"
 "border: 2px solid #63727B;\n"
 "color:#63727B;")
         self._16.setObjectName("_16")
@@ -232,6 +245,8 @@ class MainWindow(QtWidgets.QFrame):
         self._8.setStyleSheet("background-color:#F5F0F0;\n"
 "color:#63727B;\n"
 "border-top-left-radius: 0px;\n"
+"border-top-right-radius: 0px;\n"
+"border-bottom-left-radius: 0px;\n"
 "border-bottom-right-radius: 20px;\n"
 "border: 2px solid #63727B;")
         self._8.setObjectName("_8")
@@ -376,8 +391,14 @@ class MainWindow(QtWidgets.QFrame):
         self.label_3.setObjectName("label_3")
         
         # for timer start()
+        self.timer = QtCore.QTimer(self)
+        self.timer.timeout.connect(self.update_time)
+        self.timer.start()        
         
-        
+        self.updateData = QtCore.QTimer(self)
+        self.updateData.timeout.connect(self.update_data)
+        self.updateData.start(1000)  
+        self.run_once = True 
          
         self.closeEvent = self.closeEvent
         self.horizontalLayout.addWidget(self.widget_2) 
@@ -387,8 +408,6 @@ class MainWindow(QtWidgets.QFrame):
         # main menu
         self.menu = QMenu(self)
         
-        self.status = True
-
         self.menu.addAction(QAction("Facial Update", self, triggered=self.updateFace))
         self.menu.addAction(QAction("Restart", self, triggered=self.rebootEvent))
         self.menu.addAction(QAction("Shutdown", self, triggered=self.closeEvent))
@@ -412,7 +431,6 @@ class MainWindow(QtWidgets.QFrame):
         self.user_1.setText(_translate("mainMenu", "  Scan this qr code for user website --->"))
         
         self._20.setText(_translate("mainMenu", "20"))
-        self._20.clicked.connect(lambda: self.change_status(status=self.status ,button=self._20))
         self._12.setText(_translate("mainMenu", "12"))
         self._21.setText(_translate("mainMenu", "21"))
         self._7.setText(_translate("mainMenu", "7"))
@@ -437,88 +455,22 @@ class MainWindow(QtWidgets.QFrame):
         if total_fail("Facial_update") >= 6:
             self.updateFace(delay=500)
             delete_table("Facial_update")
-        
         return
             
-# ******* LOCK FAILED
-    def __showLocked(self):
-        from pages.Admin_Lock import AdminLock
-        
-
-        
-        self.resize(1024, 565)
-        Token = AdminLock(self)
-
-        Token.show()
-    
     # ========== to stop the timer and start it again ========== #
     def timers(self, isAble): 
         if isAble:
-            print("timers: all stop")
+            # print("timers: all stop")
             # self.checkFailDetailsssss.stop()
-            # self.timer.stop()
+            self.timer.stop()
             # self.failedCountdown.stop()
-            # self.updateData.stop()
+            self.updateData.stop()
         else:
-            print("timers: start")
+            # print("timers: start")
             # self.checkFailDetailsssss.start()
-            # self.timer.start()
-            # self.updateData.start()
-    
-    def checkFailss(self):
-        
-        self.seconds_left = 30
+            self.timer.start()
+            self.updateData.start()
 
-        if int(total_fail("Failed attempt")) >= 3:
-            self.__showLocked()
-            return 
-        
-        if int(total_fail("Fail History")) >= 1:
-            attempLeft = 3 - int(total_fail("Fail History"))
-            self.checkFail.setText(f'you have {attempLeft} attempt left')
-            
-
-        if int(total_fail("Fail History")) >= 3:
-            self.failedCountdown.start(1000)
-            self.updateCountdown()
-            self.checkFailDetailsssss.stop()
-            
-            self.failedAttempt =  self.failedAttempt + 1
-            
-            offline_insert(TableName="Failed attempt",data={"attempt": int(self.failedAttempt)})
-            
-            self.Fail = False
-            self.disabled(isEnable=False)
-      
-    def disabled(self,isEnable):
-        self.facialLogin.setEnabled(isEnable)
-        self.facialRegister.setEnabled(isEnable)
-        self.pincodeLogin.setEnabled(isEnable)
-        self.settings.setEnabled(isEnable)
-        
-        if not isEnable:
-            self.facialLogin.setText("...........")
-            self.facialRegister.setText("...........")
-            self.pincodeLogin.setText("...........")
-        else:
-            self.facialRegister.setText("Facial Register")
-            self.pincodeLogin.setText("Pin Login")
-            self.facialLogin.setText("Facial Login")
-            
-    # failed
-    def updateCountdown(self):
-        if self.seconds_left > 0:
-            self.checkFail.setText(f'AIoT Smartlock is disabled try again in {self.seconds_left} seconds')
-            self.seconds_left -= 1
-        else:
-            self.failedCountdown.stop()
-            self.checkFail.setText('')
-            delete_table("Fail History")
-            self.checkFailDetailsssss.start(100)
-            self.failedCountdown.stop()
-            self.Fail = True
-            self.disabled(isEnable=True)
-            
     # message box
     def messageBoxShow(self, icon=None, title=None, text=None, buttons=None):
 
@@ -580,19 +532,20 @@ class MainWindow(QtWidgets.QFrame):
         
         self.check_internet_connection()
 
+        # Update Time
         current_date = QtCore.QDate.currentDate().toString("ddd, MMM d yyyy")
-        
         current_time = QtCore.QTime.currentTime().toString("h:mm AP")
     
-        
         self.label_2.setText(current_time)
         self.label_3.setText(current_date)
-    
+
     # ********************* Offline Mode ********************* #
     
     # download pincode
     def pinCode(self):
         try:
+            
+            # Note: to update all PIN in locker
             socket.create_connection(("8.8.8.8", 53))
             data = firebaseVerifyPincode()
         
@@ -606,6 +559,8 @@ class MainWindow(QtWidgets.QFrame):
                 
     # List of Locker
     def locker(self):
+        
+        # Note: to update Locker Number
         try:
             socket.create_connection(("8.8.8.8", 53))
        
@@ -615,44 +570,42 @@ class MainWindow(QtWidgets.QFrame):
                 delete_table("LOCK")
                 for key in data:
                     offline_insert(TableName="LOCK", data=key)
+                    
         except OSError:
             print("no internet")
             
     # check internet
     def check_internet_connection(self):
         try:
-            self.door_sensor_locker()
-            
-            if self.Fail:
-                self.facialRegister.setEnabled(True)
-                self.facialRegister.setText("Facial Register")
-            
-            self.checkFacialUpdate()
-
             # Attempt to create a socket connection to a known server (e.g., Google DNS)
             socket.create_connection(("8.8.8.8", 53))
             self.label.setText("<html><head/><body><p>AIoT Smartlock is <Strong>online<strong/></p></body></html>")
             
+            # Open the Locker Remotely
+            openLocker()
+            
         except OSError:
-            
             pass
-            
             self.facialRegister.setEnabled(False)
             self.facialRegister.setText(".......")
             self.label.setText("<html><head/><body><p><Strong>No Internet<strong/> Connection</p></body></html>")
-            
-            self.checkFacialUpdate()
             
     def update_data(self):
         try:
             
             socket.create_connection(("8.8.8.8", 53))
-            updateToDatabase()
-            openLocker()
+            
+            # check door status
+            self.door_sensor_locker()
+            
+            # Update to database
+            if self.run_once == True:
+                updateToDatabase()
+                self.run_once = False
             
         except OSError:
-            
             pass
+            self.run_once = True
             print("No Internet")
     # ===================== open facial Login ===================== #
 
@@ -664,21 +617,21 @@ class MainWindow(QtWidgets.QFrame):
         
         # download updated Locker Number
         self.locker()
+        
+        # disable all timers
+        self.timers(True)
 
         # Delay the creation of the FacialLogin object by 100 milliseconds
-        QtCore.QTimer.singleShot(100, self.clickFacialLogin)
+        QtCore.QTimer.singleShot(50, self.clickFacialLogin)
 
     def clickFacialLogin(self):
 
         from pages.Facial_Login import FacialLogin
         print("start loading facial login")
         
-
-
         self.resize(1024, 565)
         Facial_Login = FacialLogin(self)
         Facial_Login.show()
-        
 
         self.facialLogin.setText("Facial Login")
 
@@ -690,9 +643,12 @@ class MainWindow(QtWidgets.QFrame):
         self.facialLogin.isEnabled = False
         self.facialRegister.isEnabled = False
         self.pincodeLogin.isEnabled = False
+        
+        # disable all timers
+        self.timers(True)
 
         # Delay the creation of the FacialLogin object by 100 milliseconds
-        QtCore.QTimer.singleShot(100, self.clickFacialRegister)
+        QtCore.QTimer.singleShot(50, self.clickFacialRegister)
 
     def clickFacialRegister(self):
      
@@ -713,9 +669,12 @@ class MainWindow(QtWidgets.QFrame):
         self.facialRegister.isEnabled = False
 
         self.pinCode()
+        
+        # disable all timers
+        self.timers(True)
                
         # Delay the creation of the FacialLogin object by 100 milliseconds
-        QtCore.QTimer.singleShot(100, self.clickPincodeLogin)
+        QtCore.QTimer.singleShot(50, self.clickPincodeLogin)
 
     def clickPincodeLogin(self):
      
@@ -764,7 +723,7 @@ class MainWindow(QtWidgets.QFrame):
     def showMenu(self):
         self.menu.exec_(self.settings.mapToGlobal(self.settings.rect().bottomLeft()))
 
-    def hellofriend(self):
+    def hello_friend(self):
         print("hello friend")
         
     # ========================== change locker status ========================== #
@@ -774,29 +733,40 @@ class MainWindow(QtWidgets.QFrame):
     
         current_stylesheet = button.styleSheet()
          
-    
         # Extract the background color, border color, and border-top-left-radius from the current stylesheet
         background_color = current_stylesheet.split("background-color:")[1].split(";")[0].strip()
-        border_radius = current_stylesheet.split("border-top-left-radius:")[1].split(";")[0].strip()
+        border_top_left_radius = current_stylesheet.split("border-top-left-radius:")[1].split(";")[0].strip()
+        border_top_right_radius = current_stylesheet.split("border-top-right-radius:")[1].split(";")[0].strip()
+        border_bottom_left_radius = current_stylesheet.split("border-bottom-left-radius:")[1].split(";")[0].strip()
+        border_bottom_right_radius = current_stylesheet.split("border-bottom-right-radius:")[1].split(";")[0].strip()    
         
         # Reapply the extracted styles along with the new text color
         new_stylesheet = f"""
             background-color: {background_color};
             border: 2px solid {text_color};
-            border-top-left-radius: {border_radius};
+            border-top-left-radius: {border_top_left_radius};
+            border-top-right-radius: {border_top_right_radius};
+            border-bottom-left-radius: {border_bottom_left_radius};
+            border-bottom-right-radius: {border_bottom_right_radius};
             color: {text_color};
         """
         button.setStyleSheet(new_stylesheet)
         
+        # update to database online
         locker_sensor("_" + button.text(),status)
         
     def door_sensor_locker(self):
-        self.change_status(status=door_status(26) ,button=self._20)
-        self.change_status(status=door_status(19) ,button=self._21)
-        self.change_status(status=door_status(13) ,button=self._16)
-        self.change_status(status=door_status(6) ,button=self._12)
-        self.change_status(status=door_status(5) ,button=self._7)
-        self.change_status(status=door_status(11) ,button=self._8)
+        pins_to_check = {
+            26: self._20, 
+            19: self._21, 
+            13: self._16, 
+            6: self._12, 
+            5: self._7, 
+            11: self._8
+        }
+        for pin, button in pins_to_check.items():
+            self.change_status(status=door_status(pin), button=button)
+
        
 
 

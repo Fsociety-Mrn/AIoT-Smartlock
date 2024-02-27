@@ -18,6 +18,7 @@ import requests
 #     GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 
+# Open the Locker Remotely
 def openLocker():
     try:
         requests.head("https://www.google.com/", timeout=1)
@@ -49,6 +50,6 @@ def OpenLockers(name,key,value):
         
 def door_status(pin):
     # door = True if GPIO.input(pin) == GPIO.LOW else False
-    # return door
+    # return not GPIO.input(pin)
 
-    return False
+    return True

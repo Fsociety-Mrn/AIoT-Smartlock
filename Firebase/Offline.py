@@ -72,6 +72,11 @@ def updateToDatabase():
         
         db = TinyDB("Firebase/offline.json")
         table = db.table("History")
+        
+        print("History")
+        # Check if the table exists before attempting to delete it        
+        if "History" in db.tables():
+            return 
 
         # Retrieve all records from the table
         records = table.all()
@@ -93,7 +98,7 @@ def updateToDatabase():
             delete_table("History")
     except Exception as e:
         pass
-        print("error")
+        print(f"updateToDatabase: {e}")
         
 # ************** PIN LOGIN ************** #
 def pinCodeLogin(pin):

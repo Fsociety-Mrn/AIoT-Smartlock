@@ -127,9 +127,9 @@ def firebaseVerifyPincode():
     try:
         user_data = db.child("PIN").get().val()
         data = []
-        for name,valuesss in user_data.items():
+        for name,value in user_data.items():
 
-            data.append({name:valuesss})
+            data.append({ name:value })
         return data
             
     except Exception as e:
@@ -140,9 +140,9 @@ def lockerList():
     try:
         user_data = db.child("LOCK").get().val()
         data = []
-        for name,valuesss in user_data.items():
+        for name,value in user_data.items():
 
-            data.append({name:valuesss})
+            data.append({ name: value})
         return data
             
     except Exception as e:
@@ -271,6 +271,6 @@ def locker_sensor(keyName,value):
         return True
             
     except Exception as e:
-        print("Error:", e)
-        return None
+        print("locker_sensor:", e)
+        return False
 
