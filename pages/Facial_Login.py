@@ -356,8 +356,6 @@ class FacialLogin(QtWidgets.QFrame):
                         
         self.status.setText("Please align your face to the camera")
             
-
-    
     # spam recognition
     def anti_spam(self, result=False, image=None):        
 
@@ -388,19 +386,20 @@ class FacialLogin(QtWidgets.QFrame):
         person = result[0]
         spam_detected = result[2]
         error_occur = result[3]
+        text,result = ("",True)
 
         # if detected it will save images
         if spam_detected and error_occur == None:
             
             dir=f"{directory}/{person}"
             self.LastIn_FirstOut(directory=dir, new_image=image,batch=4)
-            text = create_person_temporarily_banned(person)
+            text,result = create_person_temporarily_banned(person)
         
         # if not detected it will create folder
         if not spam_detected and error_occur == None:
             os.makedirs(new_dir, exist_ok=True)
             self.LastIn_FirstOut(directory=new_dir, new_image=image,batch=4)
-            text = create_person_temporarily_banned(personID)
+            text,result = create_person_temporarily_banned(personID)
             
         
         self.messageBoxShow(
@@ -411,7 +410,10 @@ class FacialLogin(QtWidgets.QFrame):
         
         self.R,self.G,self.B = (255,0,0)
         
-        return text
+        if result == False:
+            return text
+        
+        return self.back_to_main()
          
     # for facial detection
     def curveBox(self,frame=None,p1=None,p2=None,curvedRadius=30,BGR=(255,255,0)):

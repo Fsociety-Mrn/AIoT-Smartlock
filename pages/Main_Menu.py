@@ -375,26 +375,10 @@ class MainWindow(QtWidgets.QFrame):
         self.label_3.setAlignment(QtCore.Qt.AlignCenter)
         self.label_3.setObjectName("label_3")
         
-        self.timer = QtCore.QTimer(self)
-        self.timer.timeout.connect(self.update_time)
-        # self.timer.start(1000)
-    
-        # for countdown
-        self.failedCountdown = QtCore.QTimer(self)
-        self.failedCountdown.timeout.connect(self.updateCountdown)
-        self.seconds_left = 30
-        self.Fail = True
-        self.failedAttempt= 0
+        # for timer start()
         
-        # This timer whether the system is lock or not
-        self.checkFailDetailsssss = QtCore.QTimer(self)
-        self.checkFailDetailsssss.timeout.connect(self.checkFailss)
-        # self.checkFailDetailsssss.start(1000)
-
-        self.updateData = QtCore.QTimer(self)
-        self.updateData.timeout.connect(self.update_data)
-        # self.updateData.start(1000)
         
+         
         self.closeEvent = self.closeEvent
         self.horizontalLayout.addWidget(self.widget_2) 
         self.retranslateUi()
@@ -460,7 +444,7 @@ class MainWindow(QtWidgets.QFrame):
     def __showLocked(self):
         from pages.Admin_Lock import AdminLock
         
-        self.timers(isAble=True)
+
         
         self.resize(1024, 565)
         Token = AdminLock(self)
@@ -470,14 +454,16 @@ class MainWindow(QtWidgets.QFrame):
     # ========== to stop the timer and start it again ========== #
     def timers(self, isAble): 
         if isAble:
-            self.checkFailDetailsssss.stop()
-            self.timer.stop()
-            self.failedCountdown.stop()
-            self.updateData.stop()
+            print("timers: all stop")
+            # self.checkFailDetailsssss.stop()
+            # self.timer.stop()
+            # self.failedCountdown.stop()
+            # self.updateData.stop()
         else:
-            self.checkFailDetailsssss.start()
-            self.timer.start()
-            self.updateData.start()
+            print("timers: start")
+            # self.checkFailDetailsssss.start()
+            # self.timer.start()
+            # self.updateData.start()
     
     def checkFailss(self):
         
@@ -574,7 +560,6 @@ class MainWindow(QtWidgets.QFrame):
         JoloRecognition().Face_Train()
         
         self.messageBoxShow(
-                icon=self.MessageBox.Information,
                 title="AIoT Smartlock",
                 text="Facial Updating is done",
                 buttons=self.MessageBox.Ok
@@ -686,9 +671,9 @@ class MainWindow(QtWidgets.QFrame):
     def clickFacialLogin(self):
 
         from pages.Facial_Login import FacialLogin
-        print("start loading facuial login")
+        print("start loading facial login")
         
-        self.timers(True)
+
 
         self.resize(1024, 565)
         Facial_Login = FacialLogin(self)
@@ -715,9 +700,7 @@ class MainWindow(QtWidgets.QFrame):
 
         self.resize(1024, 565)
         Token = TokenForm(self)
-    
-        self.timers(True)
-        
+
         Token.show()
         self.facialRegister.setText("Facial Register")
     
@@ -730,9 +713,7 @@ class MainWindow(QtWidgets.QFrame):
         self.facialRegister.isEnabled = False
 
         self.pinCode()
-        
-        self.timers(True)
-        
+               
         # Delay the creation of the FacialLogin object by 100 milliseconds
         QtCore.QTimer.singleShot(100, self.clickPincodeLogin)
 
@@ -741,9 +722,7 @@ class MainWindow(QtWidgets.QFrame):
         from pages.Pincode_Login import PincodeLogin
         
         Token = PincodeLogin(self)
-        
-        self.timers(True)
-
+    
         Token.show()
         self.pincodeLogin.setText("Pincode Login")
         
@@ -765,6 +744,7 @@ class MainWindow(QtWidgets.QFrame):
             os.system("sudo shutdown now")
         else:
             message_box.close()
+            
     def rebootEvent(self, event):
         
         # show a message box asking for confirmation

@@ -29,18 +29,18 @@ def total_fail(Table_Name):
     
     return len(query_result)
     
-def delete_table(Table_Name):
-    db = TinyDB("Firebase/offline.json")    
+def delete_table(Table_Name=None,dir="Firebase/offline.json"):
+    db = TinyDB(dir)    
     
     # Check if the table exists before attempting to delete it
     if Table_Name in db.tables():
         
-        print("delete_table: wala kuys")
+        print(f"delete_table: table delete {Table_Name}")
         
         # Drop (delete) the specified table
         db.drop_table(Table_Name)
     else:
-        print("Offline: delete_table")
+        print(f"delete_table: {Table_Name} not found")
         # Close the TinyDB instance
     db.close()
 
@@ -109,7 +109,7 @@ def pinCodeLogin(pin):
     
         # Initialize variables to store the name and the first part of the pin
         name_found = None
-        first_pin_part = None
+        first_pin_part = "0"
     
         for each in records:
             for name,value in each.items():
@@ -122,7 +122,7 @@ def pinCodeLogin(pin):
 
         return name_found, first_pin_part
     except:
-        return "None", "0"
+        return None, "0"
 
 # ************** LOCKERS ************** #
 def checkLocker(NAME):
@@ -153,8 +153,8 @@ def __insert_date_and_time(personID):
     # Create a TinyDB instance and open the database file
     db = TinyDB("Firebase/banned_and_temporary_list.json")
     
-    # Get the current date and time with formatted date add 1 minute
-    current_datetime = datetime.now() + timedelta(minutes=1)
+    # Get the current date and time with formatted date add 2 minute
+    current_datetime = datetime.now() + timedelta(minutes=2)
 
     formatted_datetime = current_datetime.strftime("%b %d %Y at %I:%M %p")
     
@@ -218,19 +218,20 @@ def is_person_temporary_banned(personID):
     __insert_date_and_time(personID)
     return True
 
-def create_person_temporarily_banned(Person_ID):
+def create_person_temporarily_banned(Person_ID=None,error="PIN"):
     
     # check if person is permanent banned
     if check_person_banned(Person_ID):
         text= f""" You have been temporarily suspended due to multiple unauthorized access attempts. please contact support for further assistance. 
         your suspended ID: {Person_ID}
             """
-        return text
+            
+        return text,True
 
     # check if person is temporary banned
     if is_person_temporary_banned(Person_ID):
-        return "Access Denied\nPlease consider using PIN Login as an alternative access method." 
+        return f"Access Denied\nFor smoother access, try {error} Login or use our AIoT Smartlock website for remote unlocking. If you haven't registered your face, please register it. If already registered, ensure your facial biometrics is up to date.",False
 
-    return 'You have multiple unauthorized access attempts.\nPlease return in a minute.'
+    return 'You have multiple unauthorized access attempts.\nPlease return in a minute.',True
 
 

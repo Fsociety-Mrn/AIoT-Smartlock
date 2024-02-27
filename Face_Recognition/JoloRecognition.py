@@ -23,7 +23,7 @@ class JoloRecognition:
         
         # load known faces data
         self.Saved_Data = torch.load('Model/data.pt', map_location='cpu')
-        self.Embeding_List = self.Saved_Data[0]
+        self.Embedding_List = self.Saved_Data[0]
         self.Name_List = self.Saved_Data[1]
     
     # convert threshold to percent 
@@ -47,13 +47,13 @@ class JoloRecognition:
             # check if there is face and probability of 90%
             if face  is not None and prob > 0.90:
                 
-                # calculcate the face distance
+                # calculate the face distance
                 emb = self.facenet(face.unsqueeze(0)).detach()
                 
                 match_list = []
 
-                # self.Embeding_List is the load data.pt 
-                for idx, emb_db in enumerate(self.Embeding_List):
+                # self.Embedding_List is the load data.pt 
+                for idx, emb_db in enumerate(self.Embedding_List):
 
                     # torch.dist = is use to compare the face detected into batch of faceas in self embediing
                     dist = torch.dist(emb, emb_db).item()

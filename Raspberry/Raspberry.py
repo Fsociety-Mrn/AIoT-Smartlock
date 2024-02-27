@@ -42,7 +42,7 @@ def OpenLockers(name,key,value):
         print(key,value)
         
         # gpio_manual(int(key),GPIO.LOW)
-        # time.sleep(2)
+        time.sleep(2)
         # gpio_manual(int(key),GPIO.HIGH)
         
         lockerUpdate(name=name, value=False)
