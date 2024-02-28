@@ -397,7 +397,7 @@ class MainWindow(QtWidgets.QFrame):
         
         self.updateData = QtCore.QTimer(self)
         self.updateData.timeout.connect(self.update_data)
-        self.updateData.start(1000)  
+        self.updateData.start(500)  
         self.run_once = True 
          
         self.closeEvent = self.closeEvent
@@ -585,7 +585,7 @@ class MainWindow(QtWidgets.QFrame):
                 self.facialRegister.setEnabled(True)
                 self.facialRegister.setText("Facial Register")
                 
-                self.updateData.start(1000)
+                self.updateData.start(500)
                 
             
         except OSError:

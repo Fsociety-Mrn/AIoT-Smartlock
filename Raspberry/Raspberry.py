@@ -3,6 +3,7 @@ from Firebase.Offline import save_firebase_data_to_json,view_firebase_data_in_js
 # import RPi.GPIO as GPIO
 import time
 import threading
+import requests
 
 # GPIO.setmode(GPIO.BCM)
 # GPIO.setwarnings(False)
@@ -17,21 +18,29 @@ import threading
 # for pin in batch_one_doorSensor:
 #     GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
+def insert_to_firebase(name):
+    try:
+        requests.head("https://www.google.com/", timeout=1)
+        lockerUpdate(name=name, value=False)
+    except:
+        pass
 
 # Open the Locker Remotely
 def openLocker():
     try:
         data = firebaseRead("LOCK")
-        
+
         if not data == False:
             save_firebase_data_to_json(TableName="LOCK", data=data)
+   
             
         data = view_firebase_data_in_json("LOCK")
-     
+
         for key,value in data:
-            if key: 
+            if key and value['Locker Number'] and value['Locker Status']:
+                insert_to_firebase(key)
                 threading.Thread(target=OpenLockers, args=(key, int(value['Locker Number']),value['Locker Status'],)).start()
-    
+ 
     except Exception as e:
         print("Open Locker: ", e)
         
@@ -43,13 +52,13 @@ def OpenLockers(name,key,value):
 
     if value:
         print("Open Lockers: ")
-        print(key,value)
+        print(name,value)
         
         # gpio_manual(int(key),GPIO.LOW)
         time.sleep(2)
         # gpio_manual(int(key),GPIO.HIGH)
-        
-        lockerUpdate(name=name, value=False)
+        print("Open Lockers: ")
+        print(name,False)
         
 def door_status(pin):
     # door = True if GPIO.input(pin) == GPIO.LOW else False

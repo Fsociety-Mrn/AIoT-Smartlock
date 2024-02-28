@@ -1,4 +1,4 @@
-from tinydb import TinyDB
+from tinydb import TinyDB,Query
 from Firebase.firebase import firebaseHistory
 from datetime import datetime,timedelta
 
@@ -155,6 +155,28 @@ def save_firebase_data_to_json(TableName,data):
         
     table = db.table(TableName) 
     table.insert(data)
+    
+def insert_into_json(TableName=None, name=None,data=None):
+    # Load the TinyDB database
+    db = TinyDB("Firebase/insert_firebase_data.json")
+    table = db.table(TableName)
+    
+    # Check if the name already exists in the table
+    query = Query()
+    existing_data = table.search(query.name == name)
+    
+    # If the name exists, update the existing record; otherwise, insert a new record
+    if not existing_data:
+        table.insert({"name": name})
+        print(f"Data for {name} inserted successfully.") 
+        return
+    
+    # Assuming each name is unique, updating the first occurrence
+    table.update(data, query.name == name)
+    print(f"Data for {name} updated successfully.")
+
+        
+        
     
 def view_firebase_data_in_json(TableName):
     db = TinyDB("Firebase/firebase_data.json")

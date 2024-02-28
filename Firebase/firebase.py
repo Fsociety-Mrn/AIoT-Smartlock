@@ -275,7 +275,7 @@ def lockerUpdate(name,value):
     except Exception as e:
         print("Error:", e)
         pass
-        return None
+        return False
     
 def firebase_set_unlock(value):
     try:
