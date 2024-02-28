@@ -608,8 +608,8 @@ class MainWindow(QtWidgets.QFrame):
             # Open the Locker Remotely
             openLocker()
             
-            # check door status
-            self.door_sensor_locker()
+            # # check door status
+            # self.door_sensor_locker()
         except:
             pass
     # ===================== open facial Login ===================== #
