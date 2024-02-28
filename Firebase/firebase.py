@@ -27,11 +27,11 @@ def firebaseRead(keyName):
  
         return db.child(keyName).get().val()
     except requests.exceptions.Timeout:
-        print("Request timed out")
-        return None
+        print("firebaseRead: Request timed out")
+        return False
     except requests.exceptions.RequestException as e:
-        print(f"Request failed: {e}")
-        return None
+        print(f"firebaseRead: Request failed - {e}")
+        return False
 
 # read the specific data with child
 def firebaseReadChild(keyName,valueName):
@@ -243,7 +243,7 @@ def firebaseTokenLOCK(token):
         data = db.child("AIoT Lock").child("data").child("token").get().val()
     
         if str(data) == str(token):
-            print("Goodshit")
+           
             return True
         
         return False
@@ -277,11 +277,20 @@ def firebase_check_expiration():
     
 def lockerUpdate(name,value):
     try:
-       db.child("LOCK").child(name).child("Locker Status").set(value)
-       return True
+        requests.head("http://www.google.com/", timeout=timeout)
+        
+        db.child("LOCK").child(name).child("Locker Status").set(value)
+        return True
+    
+    except requests.exceptions.Timeout:
+        print("lockerUpdate: Request timed out")
+        return False
+    except requests.exceptions.RequestException as e:
+        print(f"lockerUpdate: Request failed - {e}")
+        return False
             
     except Exception as e:
-        print("Error:", e)
+        print("lockerUpdate:", e)
         pass
         return False
     

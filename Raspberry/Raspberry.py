@@ -22,10 +22,10 @@ import requests
 # Open the Locker Remotely
 def openLocker():
     try:
-        data = firebaseRead("LOCK")
+        data_firebase = firebaseRead("LOCK")
 
-        if not data == False:
-            save_firebase_data_to_json(TableName="LOCK", data=data)
+        if not data_firebase == False:
+            save_firebase_data_to_json(TableName="LOCK", data=data_firebase)
             
         data = view_firebase_data_in_json("LOCK")
 
