@@ -146,6 +146,33 @@ def checkLocker(NAME):
                 
     return LockerNumber
 
+def save_firebase_data_to_json(TableName,data):
+    db = TinyDB("Firebase/firebase_data.json")
+    
+    # Check if the table exists before attempting to delete it
+    if TableName in db.tables():
+        db.drop_table(TableName)
+        
+    table = db.table(TableName) 
+    table.insert(data)
+    
+def view_firebase_data_in_json(TableName):
+    db = TinyDB("Firebase/firebase_data.json")
+    table = db.table(TableName)
+    
+    return table.all()[0].items()
+
+    # Iterate over each key in the "LOCK" dictionary
+    # for Name, value in table.all()[0].items():
+    #     print()
+    #     print(f"{Name}:")
+    #     print("Locker Number: ",value['Locker Number'])
+    #     print("Locker Status: ",value['Locker Status'])
+    
+
+    
+    
+
 # ************** SPAM RECOGNITION ************** #
 def __insert_person_permanent_banned(personID):
 

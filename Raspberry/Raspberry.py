@@ -1,4 +1,5 @@
 from Firebase.firebase import firebaseRead, lockerUpdate
+from Firebase.Offline import save_firebase_data_to_json,view_firebase_data_in_json
 # import RPi.GPIO as GPIO
 import time
 import threading
@@ -21,9 +22,13 @@ import threading
 def openLocker():
     try:
         data = firebaseRead("LOCK")
+        
+        if not data == False:
+            save_firebase_data_to_json(TableName="LOCK", data=data)
+            
+        data = view_firebase_data_in_json("LOCK")
      
-        for key,value in data.items():
-                        
+        for key,value in data:
             if key: 
                 threading.Thread(target=OpenLockers, args=(key, int(value['Locker Number']),value['Locker Status'],)).start()
     

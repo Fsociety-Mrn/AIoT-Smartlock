@@ -604,6 +604,7 @@ class MainWindow(QtWidgets.QFrame):
     def update_data(self):
         try:
             socket.create_connection(("8.8.8.8", 53))
+            
             # Open the Locker Remotely
             openLocker()
             

@@ -18,7 +18,12 @@ db = firebase.database() # realTime database
 
 # read the specific data
 def firebaseRead(keyName):
-    return db.child(keyName).get().val()
+    try:
+        requests.head("https://www.google.com/", timeout=timeout)
+        return db.child(keyName).get().val()
+    except:
+        pass
+        return False
 
 # read the specific data with child
 def firebaseReadChild(keyName,valueName):
