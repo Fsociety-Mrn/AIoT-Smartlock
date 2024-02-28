@@ -32,13 +32,12 @@ def openLocker():
 
         if not data == False:
             save_firebase_data_to_json(TableName="LOCK", data=data)
-   
             
         data = view_firebase_data_in_json("LOCK")
 
         for key,value in data:
             if key and value['Locker Number'] and value['Locker Status']:
-                insert_to_firebase(key)
+                lockerUpdate(name=key, value=False)
                 threading.Thread(target=OpenLockers, args=(key, int(value['Locker Number']),value['Locker Status'],)).start()
  
     except Exception as e:
