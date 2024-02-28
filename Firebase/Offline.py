@@ -1,6 +1,9 @@
+import requests
+
 from tinydb import TinyDB,Query
 from Firebase.firebase import firebaseHistory
 from datetime import datetime,timedelta
+
 
 # Function to create a database and a table
 def __create_database_and_table(table_name):
@@ -69,11 +72,11 @@ def updateToDatabase():
     
     try:
 
+        requests.head("https://www.google.com/", timeout=1)
         
         db = TinyDB("Firebase/offline.json")
         table = db.table("History")
         
-        print("History")
         # Check if the table exists before attempting to delete it        
         if "History" in db.tables():
             return 
@@ -86,7 +89,7 @@ def updateToDatabase():
                 for date, value in value.items():
                     for time, access_type in value.items():
                     
-                    # I-convert ang dictionary sa listahan ng mga tuples
+                        # I-convert ang dictionary sa listahan ng mga tuples
                         key_value_list = [(key, value) for key, value in access_type.items()]
            
                         firebaseHistory(name=name,
@@ -96,9 +99,17 @@ def updateToDatabase():
                                     percentage=key_value_list[1][1])
                 
             delete_table("History")
+            
+    except requests.exceptions.Timeout:
+        print("updateToDatabase: Request timed out")
+        return None
+    except requests.exceptions.RequestException as e:
+        print(f"updateToDatabase: Request failed - {e}")
+        return None
     except Exception as e:
         pass
         print(f"updateToDatabase: {e}")
+        return None
         
 # ************** PIN LOGIN ************** #
 def pinCodeLogin(pin):

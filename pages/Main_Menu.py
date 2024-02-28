@@ -602,16 +602,13 @@ class MainWindow(QtWidgets.QFrame):
             self.label.setText("<html><head/><body><p><Strong>No Internet<strong/> Connection</p></body></html>")
             
     def update_data(self):
-        try:
-            socket.create_connection(("8.8.8.8", 53))
+        
+        # Open the Locker Remotely
+        openLocker()
             
-            # Open the Locker Remotely
-            openLocker()
-            
-            # # check door status
-            # self.door_sensor_locker()
-        except:
-            pass
+        # # check door status
+        # self.door_sensor_locker()
+
     # ===================== open facial Login ===================== #
 
     def openFacialLogin(self):

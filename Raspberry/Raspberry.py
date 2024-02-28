@@ -18,12 +18,6 @@ import requests
 # for pin in batch_one_doorSensor:
 #     GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
-def insert_to_firebase(name):
-    try:
-        requests.head("https://www.google.com/", timeout=1)
-        lockerUpdate(name=name, value=False)
-    except:
-        pass
 
 # Open the Locker Remotely
 def openLocker():
@@ -37,7 +31,9 @@ def openLocker():
 
         for key,value in data:
             if key and value['Locker Number'] and value['Locker Status']:
+                
                 lockerUpdate(name=key, value=False)
+                
                 threading.Thread(target=OpenLockers, args=(key, int(value['Locker Number']),value['Locker Status'],)).start()
  
     except Exception as e:
@@ -56,6 +52,7 @@ def OpenLockers(name,key,value):
         # gpio_manual(int(key),GPIO.LOW)
         time.sleep(2)
         # gpio_manual(int(key),GPIO.HIGH)
+        
         print("Open Lockers: ")
         print(name,False)
         

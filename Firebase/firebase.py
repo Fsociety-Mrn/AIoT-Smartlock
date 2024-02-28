@@ -19,17 +19,19 @@ db = firebase.database() # realTime database
 # read the specific data
 def firebaseRead(keyName):    
     try:
-        response = requests.head("https://www.google.com/", timeout=1)
-        if not response.status_code == 200:
-            print(f"Request failed with status code: {response.status_code}")
+        requests.head("https://www.google.com/", timeout=1)
+        # if not response.status_code == 200:
+        #     print(f"Request failed with status code: {response.status_code}")
             
-        print(f"Request successful: {response.status_code}")
+        # print(f"Request successful: {response.status_code}")
  
         return db.child(keyName).get().val()
     except requests.exceptions.Timeout:
         print("Request timed out")
+        return None
     except requests.exceptions.RequestException as e:
         print(f"Request failed: {e}")
+        return None
 
 # read the specific data with child
 def firebaseReadChild(keyName,valueName):
