@@ -1042,7 +1042,7 @@ class TokenForm(QtWidgets.QFrame):
                 text=formatted_text + " To perform Facial Updates/Facial Register, you must generate a valid token from the AIoT Smartlock webApp.",
                 buttons=self.MessageBox.Ok)
         
-        # delete un registered folder
+        # delete unregistered folder
         self.delete_folders()
 
         # words = str(result).split(',')

@@ -16,6 +16,23 @@ firebase = pyrebase.initialize_app(config)
 db = firebase.database() # realTime database
 
 
+# remove key
+def firebaseRemove(keyName):
+    try:
+        requests.head("https://www.google.com/", timeout=1)
+        # if not response.status_code == 200:
+        #     print(f"Request failed with status code: {response.status_code}")
+            
+        # print(f"Request successful: {response.status_code}")
+ 
+        return db.child(keyName).remove()
+    except requests.exceptions.Timeout:
+        print("firebaseRemove: Request timed out")
+        return False
+    except requests.exceptions.RequestException as e:
+        print(f"firebaseRemove: Request failed - {e}")
+        return False
+    
 # read the specific data
 def firebaseRead(keyName):    
     try:
@@ -32,6 +49,10 @@ def firebaseRead(keyName):
     except requests.exceptions.RequestException as e:
         print(f"firebaseRead: Request failed - {e}")
         return False
+    except Exception as e:
+        pass
+        print(f"firebaseRead: keyname is not existed")
+        return False
 
 # read the specific data with child
 def firebaseReadChild(keyName,valueName):
@@ -47,21 +68,20 @@ def firebaseUpdate(keyName, value):
     try:
         db.child(keyName).set(value)
     except:
-        #print("Walang Internet")
         return False 
-    finally:
-        print(db.child(keyName).get().val())
-        # print("pumasok sa database")
-        return True
 
 def firebaseUpdateChild(keyName,keyChild,value):
     try:
-        requests.head("http://www.google.com/", timeout=timeout)
+        requests.head("http://www.google.com/", timeout=3)
         db.child(keyName).child(keyChild).set(value)
-       
-    except requests.ConnectionError:
+        return True
+    except requests.exceptions.Timeout:
         pass
-        #print("Walang Internet")
+        print("firebaseUpdateChild: Request timed out")
+        return False
+    except requests.exceptions.RequestException as e:
+        pass
+        print(f"firebaseUpdateChild: Request failed - {e}")
         return False
     except:
         pass
@@ -98,10 +118,12 @@ def firebaseDeleteVerifiedToken(name=None):
         pass
         print("An error occurred:", e)
 
-# add Facial/ Pincode Login
+# add Facial or Pin code Login
 def firebaseHistory(name=None, date=None, time=None, access_type=None, percentage=None):
     
     try:    
+        requests.head("http://www.google.com/", timeout=timeout)
+        
         # Push the new entry to the database under the specified name, date, and time
         db.child("History").child(name).child(date).child(time).set(
             {
@@ -110,12 +132,19 @@ def firebaseHistory(name=None, date=None, time=None, access_type=None, percentag
             })
 
         return True
+    
+    except requests.exceptions.Timeout:
+        print("firebaseHistory: Request timed out")
+        return False
+    except requests.exceptions.RequestException as e:
+        print(f"firebaseHistory: Request failed - {e}")
+        return False
     except:
         pass
         # offline_history(name=None, date=None, time=None, access_type=None)
         return False
 
-# add Facial/ Pincode Login
+# add Facial or Pincode Login
 def firebaseHistoryUpdate(key,data):
     try:    
         requests.head("http://www.google.com/", timeout=timeout)
@@ -124,6 +153,14 @@ def firebaseHistoryUpdate(key,data):
         db.child("History").child(key).update(data)
 
         return True
+    
+    except requests.exceptions.Timeout:
+        print("firebaseHistoryUpdate: Request timed out")
+        return False
+    except requests.exceptions.RequestException as e:
+        print(f"firebaseHistoryUpdate: Request failed - {e}")
+        return False
+    
     except:
         print("error")
         pass
@@ -132,43 +169,70 @@ def firebaseHistoryUpdate(key,data):
 # verify pincode
 def firebaseVerifyPincode(username=None, pincode=None):
     try:
+        requests.head("http://www.google.com/", timeout=timeout)
+        
         user_data = db.child("PIN").get().val()
         for key, value in user_data.items():
             if str(value["username"]) == username and str(value["pincode"]) == pincode:
                 return key  # Ibalik ang pangalan ng key (hal. "Name" o "Name2") na nauugnay sa username at pincode
         
         return None
+    
+    except requests.exceptions.Timeout:
+        print("firebaseVerifyPincode: Request timed out")
+        return None
+    except requests.exceptions.RequestException as e:
+        print(f"firebaseVerifyPincode: Request failed - {e}")
+        return None
+    
     except Exception as e:
         print("Error:", e)
         pass
         return None
     
 # verify pincode
-def firebaseVerifyPincode():
+def firebaseVerify_Pincode():
     try:
+        requests.head("http://www.google.com/", timeout=timeout)
+        
         user_data = db.child("PIN").get().val()
         data = []
         for name,value in user_data.items():
 
             data.append({ name:value })
         return data
-            
+    
+    except requests.exceptions.Timeout:
+        print("firebaseVerifyPincode: Request timed out")
+        return None
+    except requests.exceptions.RequestException as e:
+        print(f"firebaseVerifyPincode: Request failed - {e}")
+        return None
+    
     except Exception as e:
-        print("Error:", e)
+        print("firebaseVerifyPincode:", e)
         pass
         return None
     
 def lockerList():
     try:
+        requests.head("http://www.google.com/", timeout=timeout)
+        
         user_data = db.child("LOCK").get().val()
         data = []
         for name,value in user_data.items():
 
             data.append({ name: value})
         return data
-            
+    
+    except requests.exceptions.Timeout:
+        print("lockerList: Request timed out")
+        return None
+    except requests.exceptions.RequestException as e:
+        print(f"lockerList: Request failed - {e}")
+        return None         
     except Exception as e:
-        print("Error:", e)
+        print("lockerList:", e)
         pass
         return None
 # print(firebaseVerifyPincode(username="artlisboa", pincode="1010"))

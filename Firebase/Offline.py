@@ -1,7 +1,7 @@
 import requests
 
 from tinydb import TinyDB,Query
-from Firebase.firebase import firebaseHistory
+from Firebase.firebase import firebaseHistory,firebaseUpdateChild,firebaseRemove
 from datetime import datetime,timedelta
 
 
@@ -71,16 +71,18 @@ def offline_history(name=None, date=None, time=None, access_type=None, Percentag
 def updateToDatabase():
     
     try:
-
-        requests.head("https://www.google.com/", timeout=1)
         
         db = TinyDB("Firebase/offline.json")
         table = db.table("History")
         
-        # Check if the table exists before attempting to delete it        
-        if "History" in db.tables():
-            return 
 
+        # Check if the table exists before attempting to delete it        
+        if not "History" in db.tables():
+            print("History not exist: ", False)
+            return 
+        
+        requests.head("https://www.google.com/", timeout=2)
+        
         # Retrieve all records from the table
         records = table.all()
     
@@ -179,21 +181,25 @@ def insert_into_json(TableName=None, name=None,data=None):
     # If the name exists, update the existing record; otherwise, insert a new record
     if not existing_data:
         table.insert({"name": name})
-        print(f"Data for {name} inserted successfully.") 
+        # print(f"Data for {name} inserted successfully.") 
         return
     
     # Assuming each name is unique, updating the first occurrence
     table.update(data, query.name == name)
-    print(f"Data for {name} updated successfully.")
-
-        
-        
+    # print(f"Data for {name} updated successfully.")
     
+def view_data_in_json(TableName):
+    db = TinyDB("Firebase/insert_firebase_data.json")
+    table = db.table(TableName)
+    
+    return table.all()
+
 def view_firebase_data_in_json(TableName):
     db = TinyDB("Firebase/firebase_data.json")
     table = db.table(TableName)
     
     return table.all()[0].items()
+
 
     # Iterate over each key in the "LOCK" dictionary
     # for Name, value in table.all()[0].items():
@@ -201,10 +207,7 @@ def view_firebase_data_in_json(TableName):
     #     print(f"{Name}:")
     #     print("Locker Number: ",value['Locker Number'])
     #     print("Locker Status: ",value['Locker Status'])
-    
-
-    
-    
+     
 
 # ************** SPAM RECOGNITION ************** #
 def __insert_person_permanent_banned(personID):
@@ -299,4 +302,23 @@ def create_person_temporarily_banned(Person_ID=None,error="PIN"):
 
     return 'You have multiple unauthorized access attempts.\nPlease return in a minute.',True
 
+def upload_to_firebase_banned():
+    db = TinyDB("Firebase/banned_and_temporary_list.json")
+    table = db.table("permanent_banned")
+    
+    # Retrieve all records from the table
+    records = table.all()
+    
+    firebaseRemove(keyName="suspended")
+    for each in records:
+        firebaseUpdateChild(keyName="suspended",keyChild=each['name'],value=True)
 
+def delete_person_from_JSON(name_to_delete):
+    db = TinyDB("Firebase/banned_and_temporary_list.json")
+    banned_table = db.table('permanent_banned')
+    Person = Query()
+
+    # Find and delete the person with the specified name
+    banned_table.remove(Person.name == name_to_delete)
+
+    db.close()

@@ -60,4 +60,4 @@ def door_status(pin):
     # door = True if GPIO.input(pin) == GPIO.LOW else False
     # return not GPIO.input(pin)
 
-    return False
+    return True

@@ -22,11 +22,8 @@ class FacialLogin(QtWidgets.QFrame):
     def __init__(self,main_menu):
         super().__init__(main_menu)
         
-        self.cpu = ""
-        
-        self.Light_PIN = 25
-        
-        self.lights_on = False
+
+        self.Light_PIN,self.lights_on = 25, False
         
         self.start_start = time.time()
         
@@ -35,8 +32,6 @@ class FacialLogin(QtWidgets.QFrame):
         # for video streaming variable
         self.videoStream = cv2.VideoCapture(1) if cv2.VideoCapture(1).isOpened() else cv2.VideoCapture(0)
         self.videoStream.set(4, 1080)
-        
-
         
         # Locker Number
         self.LockerNumber = 0
@@ -62,18 +57,13 @@ class FacialLogin(QtWidgets.QFrame):
         
         # facial status
         self.facial_result = ("","")
-        
-        self.failure = 0
-        
+
         # yellow
         self.R,self.G ,self.B = (255,255,0)
      
         # EAR of eye
-        self.blink_threshold = 0.3
-        self.blink_counter = 0
-        self.blink = False
-        self.last_dilation_time  = 0
-
+        self.blink_threshold, self.blink_counter, self.blink, self.last_dilation_time = 0.3,0,False,0
+    
         # haar cascade face detection
         self.face_detector = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 
@@ -216,13 +206,13 @@ class FacialLogin(QtWidgets.QFrame):
         gpio_manual(self.Light_PIN,False)
         
     def back_to_main(self):
-        
-        self.main_menu.timers(False)
-        
         self.timer.stop()
-
         self.videoStream.release()
         cv2.destroyAllWindows()
+        
+        self.main_menu.upload_banned_person()
+        self.main_menu.checkFacialUpdate()
+        
         self.close()
 
     # =================== for Lights Button =================== #
@@ -328,9 +318,9 @@ class FacialLogin(QtWidgets.QFrame):
             self.R,self.G,self.B = (0,255,0)
             self.facial_result = ("Authenticated",result[0])
             
-            self.failure = self.failure + 1
             delete_table("Failed attempt")
             delete_table("Fail History")
+            offline_insert(TableName="Facial_update", data={"data" : "Facial Login"})
             
             self.messageBoxShow(
                 title="Facial Recognition",
@@ -473,12 +463,7 @@ class FacialLogin(QtWidgets.QFrame):
             self.status.setText("Please wait camera is loading")
             self.video.setPixmap(QtGui.QPixmap(":/background/Images/loading.png"))
             return
-        
-        # attempt failure
-        if self.failure == 3:
-            offline_insert(data={'Fail': "Facial Failure"},TableName="Fail History")
-            self.back_to_main()
-            return
+
         
         # process the frame
         frame = cv2.flip(frame, 1)
