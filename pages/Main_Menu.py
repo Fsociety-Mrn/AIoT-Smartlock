@@ -580,10 +580,11 @@ class MainWindow(QtWidgets.QFrame):
 
             self.internet = True
             
-            # Update to database
             if self.run_once == True:
                 
+                # Update database to history
                 updateToDatabase()
+                
                 self.run_once = False
                 
                 self.facialRegister.setEnabled(True)
@@ -598,7 +599,7 @@ class MainWindow(QtWidgets.QFrame):
             self.internet = False
             
             # check door status
-            self.door_sensor_locker(net=False)
+            self.door_sensor_locker()
             
             self.facialRegister.setEnabled(False)
             self.facialRegister.setText("....")
@@ -612,7 +613,7 @@ class MainWindow(QtWidgets.QFrame):
             self.internet = False
             
             # check door status
-            self.door_sensor_locker(net=False)
+            self.door_sensor_locker()
             
             self.facialRegister.setEnabled(False)
             self.facialRegister.setText("....")
@@ -627,7 +628,7 @@ class MainWindow(QtWidgets.QFrame):
             self.internet = False
             
             # check door status
-            self.door_sensor_locker(net=False)
+            self.door_sensor_locker()
             
             self.facialRegister.setEnabled(False)
             self.facialRegister.setText("....")
@@ -797,7 +798,7 @@ class MainWindow(QtWidgets.QFrame):
                         )
         # locker_sensor("_" + button.text(),status)
         
-    def door_sensor_locker(self,net=True):
+    def door_sensor_locker(self):
         pins_to_check = {
             26: self._20, 
             19: self._21, 
@@ -813,6 +814,10 @@ class MainWindow(QtWidgets.QFrame):
     
     def update_door_status_in_firebase(self):
         try:
+        
+            if self.internet == False:
+                return
+            
             data = view_data_in_json("Locker")
             for each in data:
                 locker_sensor(each['name'],each['status'])
