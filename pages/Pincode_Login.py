@@ -512,10 +512,13 @@ class PincodeLogin(QtWidgets.QFrame):
             self.TokenID_3.setText(updated_text)
             
     def cancel(self):
-        self.main_menu.timers(False)
         self.videoStream.release()
         cv2.destroyAllWindows()
         self.timer.stop()
+        
+        self.main_menu.upload_banned_person()
+        self.main_menu.timers(False)
+
         self.close()
         
     def enterPINcode(self):
