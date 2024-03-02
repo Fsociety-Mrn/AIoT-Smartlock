@@ -217,7 +217,10 @@ def __insert_person_permanent_banned(personID):
     table.insert({ "name": personID })
     
 def __insert_date_and_time(personID):
-        
+    
+    if personID == None:
+        return
+    
     # Create a TinyDB instance and open the database file
     db = TinyDB("Firebase/banned_and_temporary_list.json")
     

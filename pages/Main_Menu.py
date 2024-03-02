@@ -682,6 +682,9 @@ class MainWindow(QtWidgets.QFrame):
         
         # disable all timers
         self.timers(True)
+        
+        # check banned person
+        self.update_banned_person()
 
         # Delay the creation of the FacialLogin object by 100 milliseconds
         QtCore.QTimer.singleShot(50, self.clickFacialRegister)

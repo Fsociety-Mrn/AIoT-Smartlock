@@ -98,7 +98,6 @@ def firebaseTokenVerify(token):
     try:
         data = db.child("GenerateToken_FacialUpdate").get().val()
         
-              
         # If the token matches, get the name
         name = [name for name, tk in data.items() if tk == token][0]
         return name

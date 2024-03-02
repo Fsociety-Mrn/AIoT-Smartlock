@@ -433,8 +433,6 @@ class PincodeLogin(QtWidgets.QFrame):
         # Timer
         self.timer = QtCore.QTimer(self)
         self.timer.timeout.connect(self.videoStreaming)
-        # self.last_recognition_time = time.time()
-        # self.last_check = time.time()
         self.timer.start()
         
         self.state = True
@@ -628,9 +626,9 @@ class PincodeLogin(QtWidgets.QFrame):
         # if no detected frames
         if not ret:
             self.messageBoxShow(
-            title="PIN LOGIN",
-            text="Unable to open camera. Please contact the administrator for assistance.",
-            buttons=self.MessageBox.Ok
+                title="PIN LOGIN",
+                text="Unable to open camera. Please contact the administrator for assistance.",
+                buttons=self.MessageBox.Ok
             )
             self.cancel()
             return

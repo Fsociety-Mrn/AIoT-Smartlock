@@ -2,7 +2,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import *
 from Face_Recognition.JoloRecognition import JoloRecognition as JL
 from Raspberry.Raspberry import gpio_manual
-
+from Firebase.Offline import delete_table
 from pages.Custom_MessageBox import MessageBox
 
 import cv2
@@ -10,6 +10,8 @@ import time
 import dlib
 import torch
 import numpy as np
+import os
+import shutil
 
 class facialRegister(QtWidgets.QFrame):
     def __init__(self,parent=None):
@@ -17,9 +19,8 @@ class facialRegister(QtWidgets.QFrame):
             
             self.main_menu = parent
             
-            self.Light_PIN = 25
-            self.lights_on = True
-
+            self.Light_PIN,self.lights_on = 25, True
+  
             # message box
             self.MessageBox = MessageBox()
             self.MessageBox.setStyleSheet("""
@@ -37,9 +38,7 @@ class facialRegister(QtWidgets.QFrame):
               """)
 
             # EAR of eye
-            self.blink_threshold = 0.35
-            self.blink_counter = 0
-            self.blink = True
+            self.blink_threshold,self.blink_counter,self.blink = 0.35,0,True
 
             #frame
             self.setObjectName("facialRegistration")
@@ -94,7 +93,6 @@ class facialRegister(QtWidgets.QFrame):
             self.default_image = QtGui.QPixmap("Images/loading.png")
 
         
-
             self.captureStat = 1
             # camera capture
             self.label = QtWidgets.QLabel(self)
@@ -208,16 +206,14 @@ class facialRegister(QtWidgets.QFrame):
             self.Lights.setIcon(icon1)
             gpio_manual(self.Light_PIN,True)
 
-    # receivce data from Token Form
+    # receive data from Token Form
     def receive(self,data):
         self.Name.setText(data)
 
     # capture and Train Images
     def captureSave(self, current_time=None, frame=None, cropFrame=None):
 
-
         # self.status.setText("Please blink" if self.capture >= 20 else "Face capture left" + str(21 - self.captureStat))
-        
         self.capture.setText(str(21-self.captureStat))
         
         if self.captureStat >= 20:
@@ -233,14 +229,10 @@ class facialRegister(QtWidgets.QFrame):
         if self.captureStat <= 20:
 
             path = f"Known_Faces/{self.Name.text()}/{self.captureStat}.png"
-            
-            # cv2.imwrite(path, frame)
-            # self.captureStat += 1
-            # self.status.setText("Please align your face properly")
-            
-            # check if the frame is blured
+
+            # check if the frame is blurred
             laplacian_var = cv2.Laplacian(cropFrame, cv2.CV_64F).var()
-            print("Blurered level",laplacian_var)
+   
             if laplacian_var < 0:
                 self.status.setText("cant capture it is blured")
                 
@@ -255,15 +247,15 @@ class facialRegister(QtWidgets.QFrame):
             gpio_manual(self.Light_PIN,True)
             return True
 
-    def facialTraining(self):
+    def facialTraining(self,image):
+        
+        # remove folder on banned system
+        self.remove_suspended_person(image)
         
         self.timer.stop()
-        
         self.cap.release()
         cv2.destroyAllWindows()
 
-
-        
         self.status.setText("Facial training please wait")
         self.video.setPixmap(self.default_image)
         
@@ -273,7 +265,7 @@ class facialRegister(QtWidgets.QFrame):
         QtCore.QTimer.singleShot(100, self.startFacialTraining)
         
     def startFacialTraining(self):
-        
+                
         # Train the facial recognition model
         JL().Face_Train()
         
@@ -283,7 +275,24 @@ class facialRegister(QtWidgets.QFrame):
         icon = self.MessageBox.Information
         self.messageBoxShow(title=title, text=text, buttons=self.MessageBox.Ok, icon=icon)
         
-        self.main_menu.close()
+        self.main_menu.backTomain()
+        
+    def remove_suspended_person(self,image):
+
+        # spam recognition
+        result = JL().spam_detection(image=image)
+        person = result[0]
+
+        if result[0] == None:
+            return
+        
+        # remove temporary suspended
+        delete_table(Table_Name=person,dir="Firebase/banned_and_temporary_list.json")
+        
+        # remove folder
+        path = f"spam_detection/{person}"
+        if os.path.exists(path):
+            shutil.rmtree(path)
 
     # video Streaming
     def videoStreaming(self):
@@ -307,8 +316,8 @@ class facialRegister(QtWidgets.QFrame):
                                                     minSize=(100, 100),
                                                     flags=cv2.CASCADE_SCALE_IMAGE)
         
+        # check time 10 seconds
         current_time = time.time()
-
         if current_time - self.start_start <= 11:
             
             self.status.setText(f"please be ready at {int(10)-int(current_time - self.start_start)}")
@@ -353,7 +362,7 @@ class facialRegister(QtWidgets.QFrame):
             
             if statusCap:
                 if not self.eyeBlink(gray=gray):
-                    self.facialTraining() 
+                    self.facialTraining(image=frame) 
                   
         elif len(faces) >= 1:
             self.status.setText("Multiple face is detected")
