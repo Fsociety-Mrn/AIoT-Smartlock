@@ -140,7 +140,7 @@ class PincodeLogin(QtWidgets.QFrame):
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(12)
-        font.setBold(False)
+        font.setBold(True)
         font.setWeight(10)
         self.errorMessage.setFont(font)
         self.errorMessage.setStyleSheet("color: red")
@@ -445,6 +445,8 @@ class PincodeLogin(QtWidgets.QFrame):
         self.setWindowTitle(_translate("Pincode", "Frame"))
         self.TokenID_3.setPlaceholderText(_translate("MainWindow", "eg: LN-XXXX"))
 
+        self.errorMessage.setText(_translate("MainWindow", "<strong> Enter your Locker Number </strong>"))
+               
         self.seven_2.setText(_translate("MainWindow", "1"))
         self.seven_3.setText(_translate("MainWindow", "2"))
         self.seven_4.setText(_translate("MainWindow", "3"))
@@ -492,22 +494,40 @@ class PincodeLogin(QtWidgets.QFrame):
                 self.TokenID_3.setEchoMode(QtWidgets.QLineEdit.Password)
                 
         # self.TokenID_3.setEchoMode(QtWidgets.QLineEdit.Password if state else QtWidgets.QLineEdit.Normal)
+    
+    def input_digit_instruction(self, text):
 
+        if len(text) <= 1:
+            self.errorMessage.setText("<strong> Enter your Locker Number </strong>")
+            return
+                
+        self.errorMessage.setText("<strong> Enter your 4 digit pin code </strong>")
+                
+        if len(text) >= 6:
+            self.errorMessage.setText("<strong> You can now proceed with PIN login. </strong>")
+
+            
+        
     def input_digit(self, digit):
             
-        self.errorMessage.setText("")
         current_text = self.TokenID_3.text()
+        self.input_digit_instruction(current_text)
+        
         if len(current_text) == 2:
-                current_text = current_text + "-"
+            current_text = current_text + "-"
                 
         if len(current_text) != 7:   
-                self.TokenID_3.setText(current_text + digit)
+            self.TokenID_3.setText(current_text + digit)
+                
+        
 
     def backspace(self):
         current_text = self.TokenID_3.text()
         if current_text:
             updated_text = current_text[:-1]  # Remove the last character
             self.TokenID_3.setText(updated_text)
+            
+        self.input_digit_instruction(current_text)
             
     def cancel(self):
         self.videoStream.release()
@@ -559,7 +579,7 @@ class PincodeLogin(QtWidgets.QFrame):
         
         # pin verify
         if data[0] == None:
-            errorMessage = "Invalid PIN, please try again."
+            errorMessage = "<strong> Invalid PIN, please try again. </strong>"
             name = "No match detected"
             text = self.create_dir(person=person,image=frame)
         else:
