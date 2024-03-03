@@ -568,21 +568,12 @@ class PincodeLogin(QtWidgets.QFrame):
             text="Welcome " + str(data[0]) + "!<br>Locker Number: " + str(data[1])
             delete_table(Table_Name=person,dir="Firebase/banned_and_temporary_list.json")
             self.delete_folder(person)
-            
-        # add to firebase
-        result = firebaseHistory(
-                    name=name,
-                    date=current_date,
-                    time=current_time,
-                    access_type="PIN Login")
-        
-        # if no internet
-        if not result:
-            offline_history(
-                    name=name,
-                    date=current_date,
-                    time=current_time,
-                    access_type="PIN Login")
+
+        offline_history(
+                name=name,
+                date=current_date,
+                time=current_time,
+                access_type="PIN Login")
 
         
         self.errorMessage.setText(errorMessage)
@@ -750,14 +741,13 @@ class PincodeLogin(QtWidgets.QFrame):
         spam_detected = result[2] # if detected
         error_occur = result[3]
         
-        text,result = "",False
-
-        # if detected it will save images
-        if spam_detected and error_occur == None:
-            
-            # verify person is in database
-            text,result = create_person_temporarily_banned(person,"Facial")
+        # verify person is in database
+        text,result = create_person_temporarily_banned(person,"Facial",False)
         
+        # if detected it will save images
+        if spam_detected and error_occur == None and result:
+            create_person_temporarily_banned(person,"Facial")
+            
         # return Text result 
         return text,result,person,image
 
