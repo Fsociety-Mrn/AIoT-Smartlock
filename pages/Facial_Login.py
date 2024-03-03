@@ -5,6 +5,7 @@ import numpy as np
 import torch
 import os
 import uuid
+import shutil
 
 from Face_Recognition.JoloRecognition import JoloRecognition as Jolo
 from Firebase.Offline import offline_insert,checkLocker
@@ -14,15 +15,12 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import *
 from pages.Custom_MessageBox import MessageBox
 
-
-from Firebase.firebase import firebaseHistory
 from Firebase.Offline import delete_table,offline_history,offline_insert,create_person_temporarily_banned
 
 class FacialLogin(QtWidgets.QFrame):
     def __init__(self,main_menu):
         super().__init__(main_menu)
         
-
         self.Light_PIN,self.lights_on = 25, False
         
         self.start_start = time.time()
@@ -57,6 +55,7 @@ class FacialLogin(QtWidgets.QFrame):
         
         # facial status
         self.facial_result = ("","")
+        self.result = "","",False,False,None
 
         # yellow
         self.R,self.G ,self.B = (255,255,0)
@@ -304,8 +303,30 @@ class FacialLogin(QtWidgets.QFrame):
             os.remove(os.path.join(directory, oldest_image))
             sorted_image_files = sorted_image_files[1:]
     
+    def delete_folder(self,person):
+        try:
+            dir = f"spam_detection/{person}"
+            shutil.rmtree(dir)
+            print(f"Folder '{dir}' deleted successfully.")
+        except Exception as e:
+            print(f"Error: {dir} : {e}")
+            
     # Facial Recognition
     def FacialRecognition(self, frame):
+        
+        # check spam recognition first
+        result = Jolo().spam_detection(image=frame,threshold=0.7)
+        person, __, spam_detected, error_occur = result
+        
+        # verify person is in database
+        text,result_ = create_person_temporarily_banned(person,"Facial",False)
+        self.result = person,text,result_,spam_detected,error_occur
+        
+        if spam_detected and error_occur == None and result_:
+            self.facial_result = ("Denied",'No match detected')
+            return
+
+        # facial recognition
         result = Jolo().FaceCompare(frame)
         
         current_date = QtCore.QDate.currentDate().toString("MMM d yyyy")
@@ -320,8 +341,10 @@ class FacialLogin(QtWidgets.QFrame):
             
             delete_table("Failed attempt")
             delete_table("Fail History")
+            delete_table(Table_Name=person,dir="Firebase/banned_and_temporary_list.json")
+            self.delete_folder(person)
             offline_insert(TableName="Facial_update", data={"data" : "Facial Login"})
-            
+   
             self.messageBoxShow(
                 title="Facial Recognition",
                 text="Welcome " + str(result[0]) + "!\nLocker Number: " + str(self.LockerNumber),
@@ -329,69 +352,43 @@ class FacialLogin(QtWidgets.QFrame):
             )
             
         else:
+            self.R,self.G,self.B = (255,0,0)
             self.facial_result = ("Denied",result[0])
             
-        results = firebaseHistory(
-                    name=result[0],
-                    percentage=result[1],
-                    access_type="Facial Login",
-                    date=str(current_date),
-                    time=str(current_time))
-        
-        if not results:
-            offline_history(name=result[0],
-                access_type="Facial Login",
-                date=str(current_date),
-                time=str(current_time))
+        offline_history(name=result[0],
+            access_type="Facial Login",
+            date=str(current_date),
+            time=str(current_time))
                         
         self.status.setText("Please align your face to the camera")
             
     # spam recognition
-    def anti_spam(self, result=False, image=None):        
+    def anti_spam(self,image=None):   
+             
+        personID,text,result,spam_detected,error_occur = self.result
 
-        if result:
-            return "Access Denied!\nuse pinCode if you are not recognize"  
-        
-        directory = "spam_detection"
-                
-        # Generate a random UUID (version 4)
-        unique_id = uuid.uuid4()
+        if personID == None:
+            # Generate a random UUID (version 4)
+            unique_id = uuid.uuid4()
     
-        # Convert UUID to a hexadecimal string and return the first 8 characters
-        personID = "person_" + str(unique_id).upper()[:5]
+            # Convert UUID to a hexadecimal string and return the first 8 characters
+            personID = "person_" + str(unique_id).upper()[:5]
+            
+                    
+        # insert banned person
+        create_person_temporarily_banned(personID,"Facial")
         
+        # directory for banned person
+        directory = "spam_detection"    
         new_dir = f"{directory}/{personID}"
-        
-        # Check if the directory exists or if it's empty
-        if not os.path.exists(directory) or not os.listdir(directory):
-            
-            os.makedirs(new_dir, exist_ok=True)
-            self.LastIn_FirstOut(directory=new_dir, new_image=image,batch=4)
-
-            return "Access Denied!\nuse pinCode if you are not recognize"
-        
-        # check spam detection
-        result = Jolo().spam_detection(image=image,threshold=0.7)
-        
-        person = result[0]
-        spam_detected = result[2]
-        error_occur = result[3]
-        text,result = ("",True)
-
-        # if detected it will save images
-        if spam_detected and error_occur == None:
-            
-            dir=f"{directory}/{person}"
-            self.LastIn_FirstOut(directory=dir, new_image=image,batch=4)
-            text,result = create_person_temporarily_banned(person)
         
         # if not detected it will create folder
         if not spam_detected and error_occur == None:
             os.makedirs(new_dir, exist_ok=True)
-            self.LastIn_FirstOut(directory=new_dir, new_image=image,batch=4)
-            text,result = create_person_temporarily_banned(personID)
             
-        
+        # if detected it will save images
+        self.LastIn_FirstOut(directory=new_dir, new_image=image,batch=4)
+          
         self.messageBoxShow(
             title="Facial Recognition",
             text=text,
@@ -501,7 +498,7 @@ class FacialLogin(QtWidgets.QFrame):
             
             # check if user i not authenticated
             if validation == "Denied" and face_blurred > 0:
-                self.facial_result = (False,self.anti_spam(image=frame))
+                self.facial_result = False,self.anti_spam(image=frame)
                 
             self.single_face_process(faces=faces,frame=frame,gray=gray, face_blurred=face_blurred,current_time=current_time)
             cv2.putText(frame, "Face blurriness: " + str(face_blurred), (30, 440), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (self.B, self.G, self.R), 1)

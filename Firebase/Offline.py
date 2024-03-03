@@ -269,7 +269,7 @@ def check_person_banned(personID):
 
     return False
 
-def is_person_temporary_banned(personID):
+def is_person_temporary_banned(personID,insert):
     db = TinyDB("Firebase/banned_and_temporary_list.json")
     table = db.table(personID)
 
@@ -286,21 +286,21 @@ def is_person_temporary_banned(personID):
         __insert_person_permanent_banned(personID)
         return False
     
-    __insert_date_and_time(personID)
+    if insert:
+        __insert_date_and_time(personID)
     return True
 
-def create_person_temporarily_banned(Person_ID=None,error="PIN"):
+def create_person_temporarily_banned(Person_ID=None,error="PIN",insert=True):
     
     # check if person is permanent banned
     if check_person_banned(Person_ID):
         text= f""" You have been temporarily suspended due to multiple unauthorized access attempts. please contact support for further assistance. 
         your suspended ID: {Person_ID}
             """
-            
         return text,True
 
     # check if person is temporary banned
-    if is_person_temporary_banned(Person_ID):
+    if is_person_temporary_banned(Person_ID,insert):
         return f"Access Denied\nFor smoother access, try {error} Login or use our AIoT Smartlock website for remote unlocking. If you haven't registered your face, please register it. If already registered, ensure your facial biometrics is up to date.",False
 
     return 'You have multiple unauthorized access attempts.\nPlease return in a minute.',True

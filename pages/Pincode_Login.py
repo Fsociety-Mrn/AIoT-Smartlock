@@ -537,7 +537,7 @@ class PincodeLogin(QtWidgets.QFrame):
         
         if result:
             
-            # check if person
+            # check if person is suspended
             self.messageBoxShow(
                 title="PIN LOGIN",
                 text=name,
