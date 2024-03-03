@@ -1046,6 +1046,13 @@ class TokenForm(QtWidgets.QFrame):
         # delete unregistered folder
         self.delete_folders()
         
+        # check if TokenID is not empty
+        if not self.TokenID.text():
+            return self.messageBoxShow(
+                title="AIoT Smartlock",
+                text="Token field cannot be empty",
+                buttons=self.MessageBox.Ok)
+            
         # spam recognition result
         text,result_spam,__,__ = self.anti_spam()
         
@@ -1056,15 +1063,6 @@ class TokenForm(QtWidgets.QFrame):
             return self.messageBoxShow(
                 title="AIoT Smartlock",
                 text=text,
-                buttons=self.MessageBox.Ok)
-            
-        
-        # check if TokenID is not empty
-        if not self.TokenID.text():
-            return self.messageBoxShow(
-                icon=self.MessageBox.Warning,
-                title="AIoT Smartlock",
-                text="Name cannot be empty",
                 buttons=self.MessageBox.Ok)
         
         result = firebaseTokenVerify(self.TokenID.text())  
