@@ -96,16 +96,24 @@ def firebaseCreate(keyName, value):
 # verify token User
 def firebaseTokenVerify(token):
     try:
+        requests.head("http://www.google.com/", timeout=3)
         data = db.child("GenerateToken_FacialUpdate").get().val()
         
         # If the token matches, get the name
         name = [name for name, tk in data.items() if tk == token][0]
-        return name
-        
+        return name,False
+    except requests.exceptions.Timeout:
+        pass
+        print("firebaseTokenVerify: Request timed out")
+        return None,True
+    except requests.exceptions.RequestException as e:
+        pass
+        print(f"firebaseTokenVerify: Request failed - {e}")
+        return None ,True   
     except Exception as e:
         print(f"Error: {e}")
         pass
-        return None
+        return None,False
 
 # delete token after it verify
 def firebaseDeleteVerifiedToken(name=None):

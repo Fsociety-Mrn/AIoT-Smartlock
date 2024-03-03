@@ -497,7 +497,7 @@ class PincodeLogin(QtWidgets.QFrame):
     
     def input_digit_instruction(self, text):
 
-        if len(text) <= 1:
+        if len(text) < 1:
             self.errorMessage.setText("<strong> Enter your Locker Number </strong>")
             return
                 

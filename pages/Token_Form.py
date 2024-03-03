@@ -992,16 +992,10 @@ class TokenForm(QtWidgets.QFrame):
 
     def input_digit(self, digit):
             
-        # self.errorMessage.setText("")
         current_text = self.TokenID.text()
-        # if len(current_text) == 1:
-        #         current_text = current_text + "-"
-
         
         if len(current_text) != 6:   
             self.TokenID.setText(current_text + digit) 
-                
-        # self.TokenID.setText(current_text + digit)
                 
     def backspace(self):
         current_text = self.TokenID.text()
@@ -1068,13 +1062,23 @@ class TokenForm(QtWidgets.QFrame):
         result = firebaseTokenVerify(self.TokenID.text())  
         
         # if invalid Token
-        if result == None:
+        if result[0] == None and result[1] == False:
             formatted_text = "<b>Invalid Token Detected!</b>"
             
             return self.messageBoxShow(
                 title="AIoT Smartlock",
-                text=formatted_text + " To perform Facial Updates/Facial Register, you must generate a valid token from the AIoT Smartlock webApp.",
+                text=formatted_text + "\n To perform Facial Register, you must generate a valid token from the AIoT Smartlock webApp.",
                 buttons=self.MessageBox.Ok)
+            
+        # no internet 
+        if result[0] == None and result[1] == True:
+            self.messageBoxShow(
+                title="AIoT Smartlock",
+                text="No Internet Connection",
+                buttons=self.MessageBox.Ok
+                )
+            
+            return self.backTomain()
         
         # words = str(result).split(',')
         self.rearranged_string = str(result)
