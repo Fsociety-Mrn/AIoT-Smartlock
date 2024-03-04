@@ -1,28 +1,26 @@
 import { 
-  Alert,
   Grid, 
   Button, 
   Tab, 
   Tabs,
-  Typography,
-  Collapse,
   MenuItem, 
   Menu
 
 } from '@mui/material'
 import { ExpandMore } from '@mui/icons-material';
 
-import ModalAlert from '../../Components/Modal/ModalAlert';
 
 import CardItem from "../../Components/Card"
 import React from 'react'
-
+ 
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 
 import Table from '../../Components/Table';
 
-import { get_AIoT_unlock, remove_token_data,getHistory } from '../../firebase/Realtime_Db';
+// import Data from './dummyData.json'
+
+import { getHistory } from '../../firebase/Realtime_Db';
 
 // transform data
 const transformDataToArray = (data) => {
@@ -75,7 +73,7 @@ const filterDataByDateAndAccessType = (data,targetDate, targetAccessType) => {
   }
 
   if (targetAccessType === "Access Denied"){
-
+    console.log(targetAccessType)
     return transformDataToArray(data).filter(entry => 
       entry.Date === targetDate && 
       entry.Name === 'No match detected'
@@ -100,9 +98,6 @@ const Dashboard = () => {
   const [data,setData] = React.useState({})
   const [paddinSize, setPaddingSize] = React.useState()
   const [value, setValue] = React.useState(0);
-  const [open, setOpen] = React.useState(false);
-  const [alert, setAlert] = React.useState();
-  const [dataToken, setTokenData] = React.useState()
   const [selectedSort, setSelectedSort] = React.useState('Today Access'); 
   const [anchorEl, setAnchorEl] = React.useState(null); // To manage Menu anchor
   
@@ -115,17 +110,6 @@ const Dashboard = () => {
                                         })
   const [dataFrom,setDataFrom] = React.useState({});
 
-  const isExpired = (expirationDateTime) => {
-    // Convert the expiration date string to a Date object
-    const expirationDate = new Date(expirationDateTime.date + ' ' + expirationDateTime.time);
-  
-    // Get the current date and time
-    const currentDate = new Date();
-  
-    // Compare the current date and time with the expiration date and time
-    return currentDate.getTime() > expirationDate.getTime();
-  }
-
   React.useEffect(()=>{
 
     let cleanup = true;
@@ -133,12 +117,23 @@ const Dashboard = () => {
     if(cleanup)
     {
 
+      // setData(Data);
+      // setDataFrom(filterDataByDateAndAccessType(Data,getFormattedTodayDate(),'Facial Login'))
+
+      // setTotalAccess({
+      //   TodayAccess: transformDataToArray(Data)
+      //               .filter(entry => entry.Date === getFormattedTodayDate()).length,
+      //   FacialLogin: filterDataByDateAndAccessType(Data,getFormattedTodayDate(),'Facial Login').length,
+      //   PINLogin: filterDataByDateAndAccessType(Data,getFormattedTodayDate(),'PIN Login').length,
+      //   IoTLogin: filterDataByDateAndAccessType(Data,getFormattedTodayDate(),'IoT Access').length,
+      //   AccessDenied: filterDataByDateAndAccessType(Data,getFormattedTodayDate(),'Access Denied').length
+      // })
+
       // Get data from firebase
       getHistory()
         .then(data=>{
           // set data
           const Data = data;
-          console.log(Data)
           setData(Data);
           setDataFrom(filterDataByDateAndAccessType(Data,getFormattedTodayDate(),'Facial Login'))
 
@@ -155,16 +150,6 @@ const Dashboard = () => {
         .catch(error=>setData({}))
 
 
-    // check if AIoT Smartlock is Lock
-    get_AIoT_unlock().then(data=>{
-
-      // set alert
-      setAlert(data.isLock)
-      if (data.data){
-        setTokenData(data.data)
-        isExpired(data.data.expiration) === true && remove_token_data()
-      }
-    })
        
   }
 
@@ -205,6 +190,7 @@ const Dashboard = () => {
 
   // Tab Change
   const handleChange = (event, newValue) => {
+
     setValue(newValue);
     switch (newValue){
       case 0:
@@ -214,11 +200,10 @@ const Dashboard = () => {
         setDataFrom(filterDataByDateAndAccessType(data,selectedSort,'PIN Login'))
       break;
       case 2:
-        console.log("IoT Access: ", data)
         setDataFrom(filterDataByDateAndAccessType(data,selectedSort,'IoT Access'))
       break;
       case 3:
-        setDataFrom(filterDataByDateAndAccessType(data,selectedSort,'Access Denied'))
+        setDataFrom(filterDataByDateAndAccessType(data,selectedSort === 'Today Access' ? getFormattedTodayDate() : selectedSort,'Access Denied'))
       break;
       default:
         setDataFrom(filterDataByDateAndAccessType(data,selectedSort,'Facial Login'))
@@ -236,15 +221,17 @@ const Dashboard = () => {
     setSelectedSort(sortType); // Set selected sort option
 
     setDataFrom(filterDataByDateAndAccessType(data, sortType,'Facial Login'))
+
+    // get total type
     setTotalAccess(
       {
         TodayAccess: transformDataToArray(data)
-                    .filter(entry => entry.Date === sortType).length,
+                    .filter(entry => entry.Date === getFormattedTodayDate()).length,
     
         FacialLogin: filterDataByDateAndAccessType(data,sortType,'Facial Login').length,
         PINLogin: filterDataByDateAndAccessType(data,sortType,'PIN Login').length,
         IoTLogin: filterDataByDateAndAccessType(data,sortType,'IoT Access').length,
-        AccessDenied: filterDataByDateAndAccessType(data,sortType,'Access Denied').length
+        AccessDenied: filterDataByDateAndAccessType(data,sortType === 'Today Access' ? getFormattedTodayDate() : sortType,'Access Denied').length
       }
     )
 
@@ -257,7 +244,6 @@ const Dashboard = () => {
     <div 
     style={{ minHeight: "100vh" }} >
 
-      <ModalAlert setOpen={setOpen} open={open} data={dataToken}  />
 
       <Grid
       container
@@ -267,24 +253,6 @@ const Dashboard = () => {
       marginTop={paddinSize}
       spacing={2}
       padding={2}>
-
-        {/* Alert for unlock */}
-        <Grid item xs={12} md={10} sm={12}>
-
-            <Collapse in={alert}>
-
-              <Alert variant="filled" severity="error" sx={{ width: '100%' }} 
-              action={(    
-                <Button color="inherit"  variant="filled" size="small" fullWidth onClick={()=>setOpen(true)}>
-                Unlock
-                </Button>)}>
-
-              <Typography noWrap color="white">AIoT Smartlock is Lock!</Typography>
-            
-            </Alert>
-            </Collapse>
-        </Grid>
-      
 
         {/* Status */}
         <Grid item xs={10}>

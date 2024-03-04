@@ -5,7 +5,8 @@ import {
   Button,
   Avatar,
   Stack,
-  IconButton
+  IconButton,
+  Slider
 } from '@mui/material';
 import React from 'react';
 
@@ -16,6 +17,7 @@ import { getUserDetails } from '../../firebase/Firestore'
 import { statusLogin } from '../../firebase/FirebaseConfig'
 import { 
   checkPin, 
+  getLockerSensor, 
   openLocker, 
   pushHistory, 
   pushToken, 
@@ -28,7 +30,55 @@ import { CreatePassword,ChangePassword } from '../../Components/Modal/PasswordMo
 
 import TokenGenerator from '../../Components/TokenGenerator'
 
+import { withStyles } from '@mui/styles';
+
+const IOSUnlockSlider = withStyles((theme) => ({
+  root: {
+    color: theme.palette.primary.main,
+    height: 6,
+    padding: '13px 0',
+  },
+  thumb: {
+    height: 30,
+    width: 30,
+    backgroundColor: '#ffff',
+    border: '2px solid currentColor',
+    marginTop: 0, // Adjusted to center the thumb vertically
+    marginLeft: -15,
+    // boxShadow: '#ebebeb 0px 2px 2px',
+    // '&:focus, &:hover, &$active': {
+    //   boxShadow: '#ccc 0px 2px 3px 1px',
+    // },
+    '& .bar': {
+      height: 9,
+      width: 1,
+      backgroundColor: 'currentColor',
+      marginLeft: 1,
+      marginRight: 1,
+    },
+  },
+  active: {},
+  valueLabel: {
+    left: 'calc(-50% + 4px)',
+    top: -22,
+    '& *': {
+      background: 'transparent',
+      color: '#000',
+    },
+  },
+  track: {
+    height: 30, // Adjust height of the track
+    borderRadius: 15,
+  },
+  rail: {
+    height: 30, // Adjust height of the track
+    borderRadius: 15,
+  },
+}))(Slider);
+
+
 const MyLocker = () => {
+
   const [paddinSize, setPaddingSize] = React.useState()
 
   const [userDetails, setUserDetaisl] = React.useState({
@@ -37,12 +87,17 @@ const MyLocker = () => {
     Name: "",
     LockerNumber: ""
   })
-  const [sliderValue, setSliderValue] = React.useState(false); 
+  const [sliderValue,setSliderValue] = React.useState(false); 
   const [openModal,setOpenModal] = React.useState(false)
   const [createModal,setCreateModal] = React.useState(false)
   const [changeModal,setChangeModal] = React.useState(false)
 
   const [checkPIN, setCheckPIN] = React.useState(false);
+
+  // for my slider
+  const [value, setValue] = React.useState(10);
+  const [disabled, setDisabled] = React.useState(false);
+  const [count, setCount] = React.useState(0);
 
   // State for the Update Faces
   const [Token,setToken] = React.useState()
@@ -58,18 +113,28 @@ const MyLocker = () => {
 
   React.useEffect(()=>{
     const setResponsiveness = () => {
-        return window.innerWidth < 700 ? setPaddingSize(15) : setPaddingSize(0);
+      return window.innerWidth < 700 ? setPaddingSize(15) : setPaddingSize(0);
     };
 
-    // Set openModal to false after 3 seconds
-    const timeoutId = setTimeout(() => {
-      setSliderValue(false);
-    }, 2000);
+      // *************** for Locker *************** //
+      if(count < 0){
+
+        setValue(10)
+        setCount(null)
+  
+        setDisabled(false)
+
+        openLocker({
+          FullName: userDetails.Name,
+          value: false,
+          number: userDetails.LockerNumber
+        })
+  
+        return
+      }
 
 
- 
-
-  // 30 SECONDS COUNTDOWN
+    // 30 SECONDS COUNTDOWN
   let countdown;
   if (isDisable && Timer > 0) {
     countdown = setInterval(() => {
@@ -80,27 +145,32 @@ const MyLocker = () => {
       clearInterval(countdown);
       setTimer(0);
       setIsdisable(false);
- 
   }
-    
+
 
     setResponsiveness();
-
-
-
     window.addEventListener("resize", () => setResponsiveness());
-    return () => {
 
-        window.removeEventListener("resize", () => setResponsiveness());
-        clearTimeout(timeoutId);
-        clearInterval(countdown);
+    const intervalId = setInterval(() => {
+      setCount(count - 1);
+    }, 1000);
+
+
+
+    return () => {
+      window.removeEventListener("resize", () => setResponsiveness());
+      clearInterval(countdown);
+      clearInterval(intervalId);
     };
-  },[sliderValue,Timer, isDisable])
+
+  },[value,Timer, count,isDisable])
 
   React.useEffect(()=>{
 
     let isMounted = true;
 
+    // Check Locker status
+    getLockerSensor("_" + String(userDetails.LockerNumber)).then(result=>setSliderValue(result))
 
   // make this one time call
     statusLogin().then(uid=>{
@@ -110,8 +180,6 @@ const MyLocker = () => {
 
           const name = FormatName(data.user)
 
-
-  
           checkpin(name);
 
           setUserDetaisl({
@@ -135,20 +203,6 @@ const MyLocker = () => {
 
   },[])
 
-
-
-  // To OPEN THE LOCKER
-  const handleClick = () => {
-    setSliderValue(!sliderValue)
-
-    openLocker({
-      FullName: userDetails.Name,
-      value: !sliderValue,
-      number: userDetails.LockerNumber
-    }).then(result => pushHistory(userDetails.Name))
-
-  };
-
   // handle to generate Token for faces
   const handleToken = e => {
 
@@ -164,10 +218,37 @@ const MyLocker = () => {
     }
 
 
+  // Handle change for slider
+  const handleChange = (event, newValue) => {
+
+    if (newValue >= 95){
+      setValue(100)
+      setDisabled(true)
+      openLocker({
+        FullName: userDetails.Name,
+        value: true,
+        number: userDetails.LockerNumber
+      }).then(result => pushHistory(userDetails.Name))
+
+
+      setCount(5)
+      // setStatus(`5 LEFT TO LOCK`)
+    }
+    else{
+      setValue(newValue)
+    }
+
+  };
+
   return (
-    <div 
-    style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: "100vh" }} 
-    >
+    <div style={{ 
+      display: 'flex', 
+      justifyContent: 'center', 
+      alignItems: 'center', 
+      minHeight: "100vh" 
+      }}
+
+       >
 
       <ModalLocker 
       open={openModal} 
@@ -283,16 +364,30 @@ const MyLocker = () => {
             alignItems="center"
             spacing={1}>
 
-              <Typography variant='h5' color="#0F2C3D" fontWeight="bold" fontSize="1.3rem">
-                Your locker is { !sliderValue ? "close" : "open"}
-              </Typography>  
+       
 
-              <IconButton size="large" onClick={handleClick} color='primary' >
-                {!sliderValue ? <LockOutlinedIcon fontSize='large'   style={{ fontSize: 100 }} /> 
-                : <LockOpenOutlinedIcon fontSize='large'   style={{ fontSize: 100 }} />}
+              <IconButton size="small" color='primary' >
+                {sliderValue ? <LockOutlinedIcon fontSize='large' style={{ fontSize: 70 }} /> 
+                : <LockOpenOutlinedIcon fontSize='large' style={{ fontSize: 70, color:'red' }} />}
               </IconButton>
 
-              <Typography variant='h5' color="#0F2C3D" fontWeight="lighter" fontSize="0.9rem">click to open your locker</Typography>
+              <Typography variant='h5' color="#0F2C3D" fontWeight="bold" fontSize="1rem">
+                your locker is { sliderValue ? "close" : "open"}
+              </Typography> 
+           
+              <IOSUnlockSlider
+              value={value}
+              min={0}
+              max={100}
+              onChange={handleChange}
+              disabled={disabled}
+              valueLabelDisplay="auto"
+              onTouchStart={event=>event.preventDefault()}
+              onTouchMove={event=>event.preventDefault()}
+              onTouchEnd={event=>event.preventDefault()}
+              />
+
+              <Typography variant='h5' color="#0F2C3D" fontWeight="lighter" fontSize="0.9rem">slide to open your locker {count}</Typography>
               
             </Stack>
           </Card>

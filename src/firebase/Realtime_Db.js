@@ -229,6 +229,25 @@ export const changeLockerNumber = async (KeyName,Name,LockerNumber) => {
   })
 }
 
+export const getLockerSensor = async (locker) => {
+  return new Promise((resolve, reject) => {
+    try {
+      const dbRef = ref(RTdb, `Locker/${locker}`);
+      onValue(dbRef, (snapshot) => 
+        {
+          const data = snapshot.val();
+          resolve(data) 
+        }, (error) => 
+        {
+          reject(error);
+        });
+
+    }catch(error){
+      reject(error);
+    }
+  });
+}
+
 // **************** generate a token and Remove Token **************** //
 export const pushToken = async (props) => {
   try {
