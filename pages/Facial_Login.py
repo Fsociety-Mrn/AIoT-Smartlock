@@ -357,6 +357,7 @@ class FacialLogin(QtWidgets.QFrame):
             
         offline_history(name=result[0],
             access_type="Facial Login",
+            Percentage=result[1],
             date=str(current_date),
             time=str(current_time))
                         
