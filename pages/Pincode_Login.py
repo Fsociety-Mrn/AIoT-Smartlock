@@ -9,7 +9,6 @@ from PyQt5.QtWidgets import  QLineEdit
 from PyQt5.QtWidgets import *
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-from Firebase.firebase import firebaseHistory
 from Firebase.Offline import pinCodeLogin,offline_history,delete_table,create_person_temporarily_banned
 from Raspberry.Raspberry import OpenLockers
 
@@ -741,7 +740,7 @@ class PincodeLogin(QtWidgets.QFrame):
             new_dir=f"{directory}/{person}"
             self.LastIn_FirstOut(directory=new_dir, new_image=image,batch=4)
             
-        return create_person_temporarily_banned(person)[0]
+        return create_person_temporarily_banned(Person_ID=person,error="Facial")[0]
          
     # spam recognition
     def anti_spam(self):

@@ -345,7 +345,7 @@ class MainWindow(QtWidgets.QFrame):
         # settings
         self.settings = QtWidgets.QPushButton(self.widget_2)
         self.settings.setEnabled(True)
-        self.settings.setGeometry(QtCore.QRect(440, 10, 51, 51))
+        self.settings.setGeometry(QtCore.QRect(410, 10, 51, 51))
         self.settings.setStyleSheet("border-radius: 100px;")
         self.settings.setText("")
         icon1 = QtGui.QIcon()

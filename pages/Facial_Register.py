@@ -244,7 +244,6 @@ class facialRegister(QtWidgets.QFrame):
             
             return False
         else:
-            gpio_manual(self.Light_PIN,True)
             return True
 
     def facialTraining(self,image):
