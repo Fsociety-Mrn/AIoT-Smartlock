@@ -6,7 +6,6 @@ import {
   Avatar,
   Stack,
   IconButton,
-  Slider
 } from '@mui/material';
 import React from 'react';
 
@@ -30,53 +29,6 @@ import { CreatePassword,ChangePassword } from '../../Components/Modal/PasswordMo
 
 import TokenGenerator from '../../Components/TokenGenerator'
 
-import { withStyles } from '@mui/styles';
-
-const IOSUnlockSlider = withStyles((theme) => ({
-  root: {
-    color: theme.palette.primary.main,
-    height: 6,
-    padding: '13px 0',
-  },
-  thumb: {
-    height: 30,
-    width: 30,
-    backgroundColor: '#ffff',
-    border: '2px solid currentColor',
-    marginTop: 0, // Adjusted to center the thumb vertically
-    marginLeft: -15,
-    // boxShadow: '#ebebeb 0px 2px 2px',
-    // '&:focus, &:hover, &$active': {
-    //   boxShadow: '#ccc 0px 2px 3px 1px',
-    // },
-    '& .bar': {
-      height: 9,
-      width: 1,
-      backgroundColor: 'currentColor',
-      marginLeft: 1,
-      marginRight: 1,
-    },
-  },
-  active: {},
-  valueLabel: {
-    left: 'calc(-50% + 4px)',
-    top: -22,
-    '& *': {
-      background: 'transparent',
-      color: '#000',
-    },
-  },
-  track: {
-    height: 30, // Adjust height of the track
-    borderRadius: 15,
-  },
-  rail: {
-    height: 30, // Adjust height of the track
-    borderRadius: 15,
-  },
-}))(Slider);
-
-
 const MyLocker = () => {
 
   const [paddinSize, setPaddingSize] = React.useState()
@@ -91,13 +43,9 @@ const MyLocker = () => {
   const [openModal,setOpenModal] = React.useState(false)
   const [createModal,setCreateModal] = React.useState(false)
   const [changeModal,setChangeModal] = React.useState(false)
-
   const [checkPIN, setCheckPIN] = React.useState(false);
-
-  // for my slider
-  const [value, setValue] = React.useState(10);
   const [disabled, setDisabled] = React.useState(false);
-  const [count, setCount] = React.useState(0);
+ 
 
   // State for the Update Faces
   const [Token,setToken] = React.useState()
@@ -116,54 +64,28 @@ const MyLocker = () => {
       return window.innerWidth < 700 ? setPaddingSize(15) : setPaddingSize(0);
     };
 
-      // *************** for Locker *************** //
-      if(count < 0){
-
-        setValue(10)
-        setCount(null)
-  
-        setDisabled(false)
-
-        openLocker({
-          FullName: userDetails.Name,
-          value: false,
-          number: userDetails.LockerNumber
-        })
-  
-        return
-      }
-
-
     // 30 SECONDS COUNTDOWN
-  let countdown;
-  if (isDisable && Timer > 0) {
-    countdown = setInterval(() => {
+    let countdown;
+    if (isDisable && Timer > 0) {
+      countdown = setInterval(() => {
       setTimer((prev) => prev - 1);
     }, 1000);
-  } else {
-    removeToken(userDetails.Name)
+    } else {
+      removeToken(userDetails.Name)
       clearInterval(countdown);
       setTimer(0);
       setIsdisable(false);
-  }
-
+    }
 
     setResponsiveness();
     window.addEventListener("resize", () => setResponsiveness());
 
-    const intervalId = setInterval(() => {
-      setCount(count - 1);
-    }, 1000);
-
-
-
     return () => {
       window.removeEventListener("resize", () => setResponsiveness());
       clearInterval(countdown);
-      clearInterval(intervalId);
     };
 
-  },[value,Timer, count,isDisable])
+  },[Timer,isDisable])
 
   React.useEffect(()=>{
 
@@ -219,24 +141,43 @@ const MyLocker = () => {
 
 
   // Handle change for slider
-  const handleChange = (event, newValue) => {
+  const handleChange = () => {
 
-    if (newValue >= 95){
-      setValue(100)
-      setDisabled(true)
+    console.log("true")
+    setDisabled(true); // Disable the button
+
       openLocker({
         FullName: userDetails.Name,
         value: true,
         number: userDetails.LockerNumber
       }).then(result => pushHistory(userDetails.Name))
 
+    setTimeout(() => {
+      console.log("false")
+      setDisabled(false); // Enable the button after 3 seconds
+      openLocker({
+        FullName: userDetails.Name,
+        value: false,
+        number: userDetails.LockerNumber
+      })
 
-      setCount(5)
-      // setStatus(`5 LEFT TO LOCK`)
-    }
-    else{
-      setValue(newValue)
-    }
+    }, 3000);
+    // if (newValue >= 95){
+    //   setValue(100)
+    //   setDisabled(true)
+    //   openLocker({
+    //     FullName: userDetails.Name,
+    //     value: true,
+    //     number: userDetails.LockerNumber
+    //   }).then(result => pushHistory(userDetails.Name))
+
+
+    //   setCount(5)
+    //   // setStatus(`5 LEFT TO LOCK`)
+    // }
+    // else{
+    //   setValue(newValue)
+    // }
 
   };
 
@@ -375,19 +316,19 @@ const MyLocker = () => {
                 your locker is { sliderValue ? "close" : "open"}
               </Typography> 
            
-              <IOSUnlockSlider
-              value={value}
-              min={0}
-              max={100}
-              onChange={handleChange}
+              <Button 
+              variant='contained' 
+              fullWidth 
               disabled={disabled}
-              valueLabelDisplay="auto"
-              onTouchStart={event=>event.preventDefault()}
-              onTouchMove={event=>event.preventDefault()}
-              onTouchEnd={event=>event.preventDefault()}
-              />
+              onClick={handleChange}
+              style={{
+                margin: '8px', // Adjust spacing around the button
+                fontSize: '1rem', // Adjust font size
+                textTransform: 'none', // Prevents text from being in all caps
+                borderRadius: "20px"
+              }}>click to open the locker</Button>
 
-              <Typography variant='h5' color="#0F2C3D" fontWeight="lighter" fontSize="0.9rem">slide to open your locker {count}</Typography>
+              
               
             </Stack>
           </Card>
