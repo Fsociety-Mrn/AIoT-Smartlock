@@ -1,9 +1,8 @@
 import React from 'react'
 import { Navigate, Route, Routes } from 'react-router'
 
-
-const Panel = React.lazy(()=> import('../../Components/Panel/Panel'))
-const Loading = React.lazy(()=> import('../../Components/Forms/Loading'))
+import Panel from "../../Components/Panel/Panel"
+import Loading from "../../Components/Forms/Loading"
 
 const Mainmenu = (props) => {
 

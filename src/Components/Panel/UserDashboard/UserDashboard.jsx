@@ -13,7 +13,7 @@ import {
   checkPin,
   createPIN,
   verifyPIN,
-  getData
+  getLockerSensor,
 } from "../../../utils/Firebase/Database/Database";
 
 // Firebase.Firestore
@@ -24,6 +24,8 @@ import { getLockerNumber } from "../../../utils/Firebase/Firestore/Firestore";
 import { pinSchema,NewpinSchema } from "../../../utils/Validation/Validation"
 
 import Code from "../../../utils/Code"
+import { Lock, Unlock } from "iconsax-react";
+
 
 
 
@@ -55,7 +57,7 @@ const UserDashboard = (props) => {
   const [isUnlocking, setIsUnlocking] = useState(false);
   const [status, setStatus] = useState("");
   const [count, setCount] = useState(0);
-
+  const [doorSensor, setDoorSensor] = useState(false);
   const [lockerNumber, setLockerNumber] = useState()
 
   // State for the Update Faces
@@ -63,7 +65,6 @@ const UserDashboard = (props) => {
   const [isDisable,setIsdisable] = useState(false)
   const [Timer,setTimer] = useState()
   const [tokenStatus, setTokenStatus] = useState("")
-  const [isLock, setIslock] = useState(false)
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const OpenLocker = async (FullName) => {
@@ -84,8 +85,7 @@ const UserDashboard = (props) => {
 
     const FullName = String(props.firstName + " " + props.lastName).toUpperCase()
 
-    getData("AIoT Lock", "isLock").then(data=>setIslock(data))
-  
+    getLockerSensor("_" + String(lockerNumber)).then(data=>setDoorSensor(data)).catch(error=>console.log(error))
 
     // *************** for Change PIN *************** // 
       checkPin(FullName).then(result=>setCheckPIN(result))
@@ -120,7 +120,6 @@ const UserDashboard = (props) => {
 
     const intervalId = setInterval(() => {
 
-     
         setCount(count - 1);
         setStatus(`${count} LEFT TO LOCK`)  
       
@@ -132,18 +131,11 @@ const UserDashboard = (props) => {
 
     }, 1000);
 
-    // alert("remove token")
-
-
-
     return () => {
-
       clearInterval(intervalId);
-
-
     };
 
-  }, [count, Timer, props.firstName, props.lastName, props.UID, OpenLocker,isLock]);
+  }, [count, Timer, props.firstName, props.lastName, props.UID, OpenLocker]);
 
   // Function to handle opening the modal
   const handleShowModal = () => {
@@ -261,6 +253,7 @@ const UserDashboard = (props) => {
 
     if (newValue >= 100){
 
+      setSliderValue(100)
       openLocker({
         FullName: FullName,
         value: true,
@@ -296,23 +289,30 @@ const UserDashboard = (props) => {
   return (
     <>
       <Titles
-      title={isLock ? "AIoT Smartlock is Lock!  🔒 ":"Welcome to the Dashboard! 🎉"}
-      text={isLock ? "Contact the administrator to unlock.":"Explore insights, take control, and make informed decisions with ease."}
-       
+      title="Welcome to the Dashboard! 🎉"
+      text="Explore insights, take control, and make informed decisions with ease."
       className="text-center text-nowrap"
       />
 
       <Container>
         <Row className="d-flex flex-column justify-content-center align-items-center mt-4">
 
-
           {/* open locker */}
           <Col md={10} sm={12}>
             <div className="d-flex flex-column justify-content-center align-items-center my-2 px-4" >
               
-              <p class="lead blockquote text-nowrap">your Locker Number: <strong>{lockerNumber}</strong> </p>
-              {!isLock && <h1 className="text-nowrap">{status}</h1>}
+              {/* Locker Status */}
+              {!doorSensor ? <Lock size="32" color="#555555" variant="Outline"/> : <>
+                <Unlock size="32" color="#800000" variant="Outline"/>
+                <p class="lead blockquote text-nowrap" style={{ fontSize: '0.8rem', color: "#800000" }}>your Locker is <strong>open</strong> </p>
+              </> }
 
+              {/* Locker Number */}
+              <p class="lead blockquote text-nowrap">your Locker Number: <strong>{lockerNumber}</strong> </p>
+ 
+
+              {/* SLIDE TO OPEN THE LOCKER */}
+              <h1 className="text-nowrap">{status}</h1>
               <input 
               type="range" 
               className="pullee"
@@ -320,7 +320,7 @@ const UserDashboard = (props) => {
               max="100"
               value={sliderValue}
               onChange={handleSliderChange}
-              disabled={isLock ? isLock : isUnlocking}
+              disabled={isUnlocking}
               />
 
             </div>
@@ -349,7 +349,7 @@ const UserDashboard = (props) => {
                 background: 'rgb(61, 152, 154)',
                 color: 'white' // Set the text color
               }}
-              disabled={isLock}
+
               >
                 generate face update OTP
               </Button>
@@ -364,7 +364,7 @@ const UserDashboard = (props) => {
                 color: 'white' // Set the text color
               }}
               onClick={handleShowModal} // Show modal on button click
-              disabled={isLock}
+   
               >
                  change locker pin
               </Button>}
@@ -383,7 +383,7 @@ const UserDashboard = (props) => {
                 color: 'white' // Set the text color
               }}
               onClick={handleShowModalCreate} // Show modal on button click
-              disabled={isLock}
+    
               >
                 create pin
               </Button>}

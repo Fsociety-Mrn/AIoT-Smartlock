@@ -34,3 +34,8 @@ yarn-error.log*
 /Model
 /dump
 /Validation
+/Firebase/banned_and_temporary_list.json
+/Firebase/firebase_data.json
+/Firebase/insert_firebase_data.json
+/Firebase/offline.json
+/spam_process.py
