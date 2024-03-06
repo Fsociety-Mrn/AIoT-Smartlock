@@ -236,6 +236,7 @@ export const getLockerSensor = async (locker) => {
       onValue(dbRef, (snapshot) => 
         {
           const data = snapshot.val();
+          console.log(data)
           resolve(data) 
         }, (error) => 
         {

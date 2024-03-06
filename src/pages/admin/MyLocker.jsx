@@ -91,9 +91,6 @@ const MyLocker = () => {
 
     let isMounted = true;
 
-    // Check Locker status
-    getLockerSensor("_" + String(userDetails.LockerNumber)).then(result=>setSliderValue(result))
-
   // make this one time call
     statusLogin().then(uid=>{
 
@@ -110,11 +107,17 @@ const MyLocker = () => {
             Name: name,
             LockerNumber: data.LockerNumber
           })
-  
+
+          // Check Locker status
+          getLockerSensor("_" + String(data.LockerNumber)).then(result=>setSliderValue(Boolean(result)))
+
+   
         })
       }
   
     })
+
+    
    
     // Cleanup function
     return () => {
@@ -143,7 +146,7 @@ const MyLocker = () => {
   // Handle change for slider
   const handleChange = () => {
 
-    console.log("true")
+ 
     setDisabled(true); // Disable the button
 
       openLocker({
@@ -308,7 +311,7 @@ const MyLocker = () => {
        
 
               <IconButton size="small" color='primary' >
-                {sliderValue ? <LockOutlinedIcon fontSize='large' style={{ fontSize: 70 }} /> 
+                {!sliderValue? <LockOutlinedIcon fontSize='large' style={{ fontSize: 70 }} /> 
                 : <LockOpenOutlinedIcon fontSize='large' style={{ fontSize: 70, color:'red' }} />}
               </IconButton>
 
