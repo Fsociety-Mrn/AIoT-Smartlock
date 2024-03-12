@@ -1081,10 +1081,10 @@ class TokenForm(QtWidgets.QFrame):
             return self.backTomain()
         
         # words = str(result).split(',')
-        self.rearranged_string = str(result)
+        self.rearranged_string = str(result[0])
 
         # Define the path for the known faces folder
-        path = f"Known_Faces/{str(result)}"
+        path = f"Known_Faces/{str(result[0])}"
         
         if os.path.exists(path):
             # Remove all contents of the folder
@@ -1099,7 +1099,7 @@ class TokenForm(QtWidgets.QFrame):
         self.pushButton_76.setEnabled(False)
         self.Cancel.setEnabled(False)
         
-        firebaseDeleteVerifiedToken(str(result))
+        firebaseDeleteVerifiedToken(str(result[0]))
         
         self.stop_streaming()
         
