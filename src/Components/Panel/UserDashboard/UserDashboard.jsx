@@ -135,7 +135,7 @@ const UserDashboard = (props) => {
       clearInterval(intervalId);
     };
 
-  }, [count, Timer, props.firstName, props.lastName, props.UID, OpenLocker]);
+  }, [count, Timer, props.firstName, props.lastName, props.UID, OpenLocker,lockerNumber]);
 
   // Function to handle opening the modal
   const handleShowModal = () => {
