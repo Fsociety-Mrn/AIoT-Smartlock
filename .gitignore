@@ -39,3 +39,4 @@ yarn-error.log*
 /Firebase/insert_firebase_data.json
 /Firebase/offline.json
 /spam_process.py
+/Firebase/__pycache__
