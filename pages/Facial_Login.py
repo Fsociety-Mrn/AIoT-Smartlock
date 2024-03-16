@@ -61,7 +61,7 @@ class FacialLogin(QtWidgets.QFrame):
         self.R,self.G ,self.B = (255,255,0)
      
         # EAR of eye
-        self.blink_threshold, self.blink_counter, self.blink, self.last_dilation_time = 0.3,0,False,0
+        self.blink_threshold, self.blink_counter, self.blink, self.last_dilation_time = 0.35,0,False,0
     
         # haar cascade face detection
         self.face_detector = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
