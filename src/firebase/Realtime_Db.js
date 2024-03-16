@@ -399,7 +399,6 @@ export const pushHistory = async (FullName) => {
   }
 }
 
-
 // remove History of user
 export const removeUser = async (KeyName,Name) =>{
   const keyRef = ref(RTdb, `${KeyName}/${Name}`);
@@ -413,3 +412,49 @@ export const removeUser = async (KeyName,Name) =>{
     });
 }
 
+// **************** view suspended person **************** //
+export const getSuspended = async () => {
+  return new Promise((resolve, reject) => {
+    try {
+      const dbRef = ref(RTdb, `suspended`);
+      onValue(dbRef, (snapshot) => 
+        {
+          const data = snapshot.val();
+
+          if (!data) {
+            resolve({});
+          } else {
+            // Transform the data into the desired format
+            const revisedData = Object.keys(data).reduce((acc, key) => {
+              acc[key] = {
+                personID: key,
+                status: data[key]
+              };
+              return acc;
+            }, {});
+            resolve(revisedData);
+
+          }
+        }, (error) => 
+        {
+          reject(error);
+        });
+
+    }catch(error){
+      reject(error);
+    }
+  });
+}
+
+export const updateSuspended = async (personID) => {
+  return new Promise((resolve, reject) => {
+    try {
+      const dbRef = ref(RTdb, `suspended/${personID}`);
+      set(dbRef,false);
+      resolve("okay")
+
+    }catch(error){
+      reject(error);
+    }
+  });
+}

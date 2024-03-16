@@ -30,7 +30,7 @@ import ModalConfirm from '../../Components/Modal/ModalConfirm';
 
 // data
 import { userData,promoteAdmin, deleteUser, setUserStatus } from '../../firebase/Firestore'
-import { TokenList, getHistory, removeUser } from '../../firebase/Realtime_Db';
+import { TokenList, getHistory, getSuspended, removeUser } from '../../firebase/Realtime_Db';
 
 // Icons
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -42,6 +42,8 @@ import ModalLocker from '../../Components/Modal/ModalLocker';
 import PersonOffIcon from '@mui/icons-material/PersonOff';
 import KeyIcon from '@mui/icons-material/Key';
 import PersonIcon from '@mui/icons-material/Person';
+import AdminPanelSettingsOutlinedIcon from '@mui/icons-material/AdminPanelSettingsOutlined';
+import ViewSuspended from '../../Components/Modal/ViewSuspended';
 
 //  user s
 const Card = ({ imgSrc, title, user, isActive, LockerNumber, Data, isAdmin, id  }) => {
@@ -388,6 +390,10 @@ const MobileView = (props) => {
   const [listTokens, setListTokesn] = React.useState("")
   const [checked, setChecked] = React.useState(true);
 
+  // view suspended
+  const [suspendedModal,setSuspendedModal] = React.useState(false);
+  const [suspendedData,setSuspendedData] = React.useState("");
+
   const handleChangeSwitch = (event) => {
     setChecked(event.target.checked);
   };
@@ -399,13 +405,9 @@ const MobileView = (props) => {
     // Iterate over each user
     Object.keys(data).forEach((user) => {
 
-      // console.log("NAME: ", user)
-
       // Sort the dates for each user
       const sortedDates = Object.keys(data[user]).sort((a, b) => new Date(b) - new Date(a))
 
-      // console.log("SORTED: ",sortedDates)
-  
       // Create a new object with sorted dates
       sortedData[user] = sortedDates.reduce((acc, date) => {
         acc[date] = data[user][date];
@@ -468,6 +470,12 @@ const MobileView = (props) => {
       tokenList={listTokens}
       />
 
+      <ViewSuspended 
+      open={suspendedModal} 
+      setOpen={setSuspendedModal} 
+      data={suspendedData}
+      />
+
     <Grid
     container
     direction="row"
@@ -484,8 +492,6 @@ const MobileView = (props) => {
 
       <Grid item xs={7} md={3} sm={7}>
 
-
-        
         <Stack
         direction="column"
         justifyContent="center"
@@ -522,6 +528,20 @@ const MobileView = (props) => {
 
         setOpenModal(!openModal);
         }}>Generate OTP </Button>
+
+          <Button 
+          variant='contained' 
+          fullWidth 
+          style={{ borderRadius: "10px", padding: "8px" }}
+          startIcon={<AdminPanelSettingsOutlinedIcon fontSize='large'/>}
+          onClick={()=>getSuspended()
+          .then(data=>{   
+              setSuspendedData(data)
+              setSuspendedModal(true)
+            })
+          }>
+          View Suspended
+          </Button>
 
           <FormControlLabel
           value="end"
