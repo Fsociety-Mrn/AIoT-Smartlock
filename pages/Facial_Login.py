@@ -386,6 +386,12 @@ class FacialLogin(QtWidgets.QFrame):
         # if not detected it will create folder
         if not spam_detected and error_occur == None:
             os.makedirs(new_dir, exist_ok=True)
+        
+        print("folder: ", not os.path.exists(new_dir) )
+        
+        # if folder is exist 
+        if not os.path.exists(new_dir) and not spam_detected:
+            os.makedirs(new_dir, exist_ok=True)
             
         # if detected it will save images
         self.LastIn_FirstOut(directory=new_dir, new_image=image,batch=4)
@@ -536,7 +542,7 @@ class FacialLogin(QtWidgets.QFrame):
             self.last_recognition_time = current_time  if result else self.last_recognition_time
 
             # set instruction and detect faces
-            self.status.setText("please blink at least 1 second")
+            self.status.setText("please blink at least 2 second")
             self.curveBox(frame=frame,p1=(x,y),p2=(x+w,y+h),BGR=(self.B,self.G,self.R))
                     
             # eye blink status
