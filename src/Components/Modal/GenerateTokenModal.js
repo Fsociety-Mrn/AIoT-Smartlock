@@ -123,22 +123,14 @@ const GenerateTokenModal = (props) => {
 
 
     const currencies = [
-        { value: 21, label: 21 },
-        { value: 20, label: 20 },
-        { value: 16, label: 16 },
-        { value: 12, label: 12 },
-        { value: 7, label: 7 },
-        { value: 8, label: 8 }
+        { value: 20, label: "Locker number 1" },
+        { value: 21, label: "Locker number 2"  },
+        { value: 16, label: "Locker number 3"  },
+        { value: 12, label: "Locker number 4"  },
+        { value: 7, label: "Locker number 5"  },
+        { value: 8, label: "Locker number 6"  }
         // Add more currencies as needed
       ];
-    
-    // const [selectedCurrency, setSelectedCurrency] = React.useState('');
-    // const [setToks,toks] = React.useState(true);
-    
-    // const handleCurrencyChange = (event) => {
-    //     setSelectedCurrency(event.target.value);
-    //     setToks(false);
-    // };
 
     const [selectedCurrency, setSelectedCurrency] = React.useState('');
     const [toks, setToks] = React.useState(true);
@@ -211,7 +203,7 @@ const GenerateTokenModal = (props) => {
                             <Grid item xs={12}>
 
                                 {props.tokenList ?
-                                    <div>
+                                <div style={{ overflowY: 'scroll', maxHeight: '200px' }}>
                                 {
                                     Object.values(props.tokenList)
                                     .map((data,key) => (
@@ -251,13 +243,14 @@ const GenerateTokenModal = (props) => {
                                 alignItems="center"
                                 >
 
-                                    <TextField
+                                <TextField
                                 select
                                 label="Locker Number"        
                                 helperText="Pick locker number, generate token"
                                 variant="outlined"
                                 value={selectedCurrency}
                                 onChange={handleCurrencyChange}
+                                // disabled={true}
                                 >
                                     {currencies.map((option) => (
                                         <MenuItem key={option.value} value={option.value}>
@@ -266,7 +259,7 @@ const GenerateTokenModal = (props) => {
                                     ))}
                                     </TextField>
                                 
-                                    <Button 
+                                <Button 
                                 fullWidth
                                 disabled={toks}
                                 variant='contained'

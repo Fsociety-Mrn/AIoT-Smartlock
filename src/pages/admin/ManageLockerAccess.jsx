@@ -464,70 +464,66 @@ const MobileView = (props) => {
 
   return(
     <>
+
+      {/* create user account */}
       <GenerateTokenModal 
       open={openModal} 
       setOpen={setOpenModal} 
       tokenList={listTokens}
       />
 
+      {/* view suspended person */}
       <ViewSuspended 
       open={suspendedModal} 
       setOpen={setSuspendedModal} 
       data={suspendedData}
       />
 
-    <Grid
-    container
-    direction="row"
-    justifyContent={props.jc}
-    alignItems="center"
-    paddingTop={props.size}
-    spacing={1}
-    style={{ 
-      minHeight: "100vh",
-    }}
-    >
+      <Grid
+      container
+      direction="row"
+      justifyContent={props.jc}
+      alignItems="center"
+      paddingTop={props.size}
+      spacing={1}
+      style={{ 
+        minHeight: "100vh",
+      }}
+      >
 
-  
-
-      <Grid item xs={7} md={3} sm={7}>
-
-        <Stack
-        direction="column"
-        justifyContent="center"
-        alignItems="center"
-        spacing={2}
-        >
+        <Grid item xs={7} md={3} sm={7}>
+          <Stack
+          direction="column"
+          justifyContent="center"
+          alignItems="center"
+          spacing={2}
+          >
      
-
-        <Button variant='contained' fullWidth startIcon={<KeyOutlinedIcon fontSize='large'/>}
-        style={{ borderRadius: "10px", padding: "8px" }}
-        onClick={()=>{
-
-
-        TokenList()
-        .then(tokenList => {
-
-          const formattedTokenList = tokenList.map((token, index) => {
-            const expirationDate = new Date(`${token.EXPIRATION.date} ${token.EXPIRATION.time}`);
-            return {
-              id: index + 1, // Assuming you want 1-based index
-              OTP: token.OTP,
-              LOCKERNUMBER: token.LockerNumber,
-              DATE: expirationDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
-              TIME: expirationDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }),
-            };
-          });
-
-          setListTokesn(formattedTokenList); 
-   
-        })
-        .catch(error => {
-          console.error(error);
-        });
-
-        setOpenModal(!openModal);
-        }}>Generate OTP </Button>
+            <Button 
+            variant='contained' 
+            fullWidth 
+            startIcon={<KeyOutlinedIcon fontSize='large'/>}
+            style={{ borderRadius: "10px", padding: "8px" }}
+            onClick={()=>{
+              TokenList()
+                .then(tokenList => {
+                  const formattedTokenList = tokenList.map((token, index) => {
+                    const expirationDate = new Date(`${token.EXPIRATION.date} ${token.EXPIRATION.time}`);
+                    return {
+                      id: index + 1, // Assuming you want 1-based index
+                      OTP: token.OTP,
+                      LOCKERNUMBER: token.LockerNumber,
+                      DATE: expirationDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+                      TIME: expirationDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }),
+                    };
+                });
+                setListTokesn(formattedTokenList); 
+              })
+            .catch(error => {
+              console.error(error);
+            });
+            setOpenModal(!openModal);
+            }}>Create user </Button>
 
           <Button 
           variant='contained' 
@@ -550,8 +546,8 @@ const MobileView = (props) => {
           labelPlacement="end"
           />
 
-        </Stack>
-      </Grid>
+          </Stack>
+        </Grid>
 
       
 
