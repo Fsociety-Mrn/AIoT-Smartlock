@@ -609,12 +609,7 @@ class FacialLogin(QtWidgets.QFrame):
 
             # update blink count and status
             blinks = self.update_blink_count_and_status(ear=ear)
-
-            # display blink count, EAR, and eye status on frame
-            self.display_stats_on_frame(frame, ear)
             
-            # print(f"left eye:{left_eye} right eye:{right_eye}")
-
             return blinks
 
     def extract_eye_coordinates(self, landmarks):
