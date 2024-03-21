@@ -838,6 +838,7 @@ class MainWindow(QtWidgets.QFrame):
             return
             
         data = firebaseRead("suspended")
+        print(data)
         
         if bool(data) == False:
             return

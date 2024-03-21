@@ -394,7 +394,7 @@ class FacialLogin(QtWidgets.QFrame):
             os.makedirs(new_dir, exist_ok=True)
             
         # if detected it will save images
-        self.LastIn_FirstOut(directory=new_dir, new_image=image,batch=4)
+        self.LastIn_FirstOut(directory=new_dir, new_image=image,batch=2)
           
         self.messageBoxShow(
             title="Facial Recognition",
@@ -490,13 +490,32 @@ class FacialLogin(QtWidgets.QFrame):
             faceCrop = frame[y:y+h, x:x+w]
             face_gray = cv2.cvtColor(faceCrop, cv2.COLOR_BGR2GRAY)
             
+            # Calculate new width and height
+            scale_factor = 1.2
+            new_w = int(w * scale_factor)
+            new_h = int(h * scale_factor)
+
+            # Adjust x and y to keep the center of the face in the crop
+            new_x = max(0, x - (new_w - w) // 2)
+            new_y = max(0, y - (new_h - h) // 2)
+
+            # Crop the image with the new dimensions
+            faceCrop = frame[new_y-40:new_y+new_h+30, new_x-40:new_x+new_w+30]
+            # face_gray = cv2.cvtColor(faceCrop, cv2.COLOR_BGR2GRAY) 
+            
             # face blurred level
             face_blurred = self.detect_blur_in_face(face_gray=face_gray)
             
-            # check if user is Authenticated
-            if validation == "Authenticated" and face_blurred > 0:
+            if not face_blurred > 0:
+                self.status.setText("Oops! Blurry camera. please clean lens or try face login again; if it persists, contact the admin for help!")
+                self.show_frame(frame)
+                return
                 
-                self.LastIn_FirstOut(directory=f"Known_Faces/{result}",new_image=frame)
+            
+            # check if user is Authenticated
+            if validation == "Authenticated":
+                
+                self.LastIn_FirstOut(directory=f"Known_Faces/{result}",new_image=faceCrop)
                 OpenLockers(name=result,key=self.LockerNumber,value=True)
                 self.LockerNumber = 0
                 offline_insert(TableName="Facial_update", data={"data" : "Facial Login"})
@@ -504,10 +523,16 @@ class FacialLogin(QtWidgets.QFrame):
                 return self.back_to_main()
             
             # check if user i not authenticated
-            if validation == "Denied" and face_blurred > 0:
-                self.facial_result = False,self.anti_spam(image=frame)
+            if validation == "Denied":
+                self.facial_result = False,self.anti_spam(image=faceCrop)
                 
-            self.single_face_process(faces=faces,frame=frame,gray=gray, face_blurred=face_blurred,current_time=current_time)
+            self.single_face_process(
+                faces=faces,
+                frame=frame,
+                face_gray=face_gray,
+                faceCrop=faceCrop,
+                current_time=current_time
+            )
             cv2.putText(frame, "Face blurriness: " + str(face_blurred), (30, 440), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (self.B, self.G, self.R), 1)
         
         # Multiple Face Detected
@@ -528,32 +553,24 @@ class FacialLogin(QtWidgets.QFrame):
     # =================== Frame and Face detection utility =================== #
     
     # for single face process
-    def single_face_process(self,frame,gray,faces, face_blurred,current_time):
+    def single_face_process(self,frame,faces, face_gray,current_time,faceCrop):
 
         x, y, w, h = faces[0]
-        
-        # check blurred level
-        if face_blurred > 0:
 
-            # set default color if 5 seconds has pass
-            result = current_time - self.last_recognition_time >= 15 and not face_blurred < 0
+        # set default color if 5 seconds has pass
+        result = current_time - self.last_recognition_time >= 15
 
-            self.B, self.G, self.R = (0, 255, 255) if result else (self.B, self.G, self.R)
-            self.last_recognition_time = current_time  if result else self.last_recognition_time
+        self.B, self.G, self.R = (0, 255, 255) if result else (self.B, self.G, self.R)
+        self.last_recognition_time = current_time  if result else self.last_recognition_time
 
-            # set instruction and detect faces
-            self.status.setText("please blink at least 2 second")
-            self.curveBox(frame=frame,p1=(x,y),p2=(x+w,y+h),BGR=(self.B,self.G,self.R))
+        # set instruction and detect faces
+        self.status.setText("please blink at least 2 second")
+        self.curveBox(frame=frame,p1=(x,y),p2=(x+w,y+h),BGR=(self.B,self.G,self.R))
                     
-            # eye blink status
-            if self.eyeBlink(gray=gray, frame=frame):
-                self.FacialRecognition(frame=frame)
+        # eye blink status
+        if self.eyeBlink(gray=face_gray, frame=faceCrop):
+            self.FacialRecognition(frame=faceCrop)
                 
-            return
-        
-        self.status.setText("Camera is blurred")
-        return
-        
     # display the frame on the label
     def show_frame(self,frame):
         height, width, channel = frame.shape
@@ -664,8 +681,8 @@ class FacialLogin(QtWidgets.QFrame):
         return False
 
     def display_stats_on_frame(self, frame, EAR):
-        cv2.putText(frame, "Blink Counter: {}".format(self.blink_counter), (30, 70), cv2.FONT_HERSHEY_SIMPLEX, 0.5,
-                    (self.B, self.G, self.R),1)
+        # cv2.putText(frame, "Blink Counter: {}".format(self.blink_counter), (30, 70), cv2.FONT_HERSHEY_SIMPLEX, 0.5,
+        #             (self.B, self.G, self.R),1)
         # cv2.putText(frame, "E.A.R: {}".format(EAR), (30, 90), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (self.B, self.G, self.R), 1)
         cv2.putText(frame, "Eye Status: {}".format("OPEN" if self.blink else "CLOSE"), (30, 420), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (self.B, self.G, self.R),1)
         
