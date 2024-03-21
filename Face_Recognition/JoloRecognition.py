@@ -38,58 +38,42 @@ class JoloRecognition:
             return linear_val + ((1.0 - linear_val) * math.pow((linear_val - 0.5) * 2, 0.2)) 
             
     def FaceCompare(self, face, threshold=0.7):
+        
+        try:
     
-        with torch.no_grad():
+            with torch.no_grad():
             
-            # check if there is detected faces
-            face,prob = self.mtcnn(face, return_prob=True)
+                # check if there is detected faces
+                face,prob = self.mtcnn(face, return_prob=True)
             
-            # check if there is face and probability of 90%
-            if face  is not None and prob > 0.90:
+                # check if there is face and probability of 90%
+                if face  is not None and prob > 0.90:
                 
-                # calculate the face distance
-                emb = self.facenet(face.unsqueeze(0)).detach()
+                    # calculate the face distance
+                    emb = self.facenet(face.unsqueeze(0)).detach()
                 
-                match_list = []
+                    # self.Embedding_List is the load data.pt 
+                    for idx, emb_db in enumerate(self.Embedding_List):
 
-                # self.Embedding_List is the load data.pt 
-                for idx, emb_db in enumerate(self.Embedding_List):
-
-                    # torch.dist = is use to compare the face detected into batch of faceas in self embediing
-                    dist = torch.dist(emb, emb_db).item()
-                      
-                    # append the comparing result
-                    match_list.append(dist)
-
-                
-                # check if there is recognize faces               
-                if len(match_list) > 0:
-                    
-                    # match_list is the result of comparing faces
-                    min_dist = min(match_list)
-
-                    # since it has result we need to setup the accuracy level 
-                    # threshold is the bias point number for accuracy
-                    # in this if statment we set a threshold value of 0.6
-                    # meaning all the result of comparing faces should atleast 0.6 value in order to recognize people
-                    # print("threshold value: ",min_dist )
-                    percentage = self.__thresh_to_percent(face_distance=min_dist,face_match_threshold=threshold)
-                    percentage = percentage * 100
-                    
-                    if min_dist < threshold:
+                        # torch.dist = is use to compare the face detected into batch of faceas in self embediing
+                        dist = torch.dist(emb, emb_db).item()
                         
-                        idx_min = match_list.index(min_dist)
+                        # percentage
+                        percentage = self.__thresh_to_percent(face_distance=dist,face_match_threshold=threshold)
+                        percentage = percentage * 100
+                        
+                        print("result: ",dist < threshold)
+                        if dist < threshold:
+                            return (self.Name_List[dist], percentage)
+                      
+                    return ('No match detected', percentage)
 
-                        return (self.Name_List[idx_min], percentage)
-                    else:
-
-                        return ('No match detected', percentage)
                 
                 else:
                     return ('No match detected', None)
                 
-            else:
-                return ('No match detected', None)
+        except:
+            return ('No match detected', None)
             
     # training from dataset
     def Face_Train(self, Dataset_Folder="Known_Faces", location="Model"):
@@ -194,12 +178,8 @@ class JoloRecognition:
                 collate_fn=collate_fn, 
                 pin_memory=True)
 
-            # create empty lists for storing embeddings and names
-            name_list = []
-            embedding_list = []
-
             for images, label in loader:
-
+                
                 with torch.no_grad():
 
                     # for facial detection level 2 --- Using MTCNN model
@@ -211,9 +191,6 @@ class JoloRecognition:
                         # calculate face distance
                         emb = self.facenet(face.unsqueeze(0))
 
-                        embedding_list.append(emb.detach())
-                        name_list.append(label_names[label])
-                        
                         dist = torch.dist(emb, face2).item()
                          
                         if dist < threshold:

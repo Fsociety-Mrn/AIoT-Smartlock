@@ -336,12 +336,21 @@ class facialRegister(QtWidgets.QFrame):
         if len(faces) == 1:
             
             x, y, w, h = faces[0]
-            
-
-            cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
-
+           
             faceCrop = notFlip[y:y+h, x:x+w]
             face_gray = cv2.cvtColor(faceCrop, cv2.COLOR_BGR2GRAY)
+            
+            # Calculate new width and height
+            scale_factor = 1.2
+            new_w = int(w * scale_factor)
+            new_h = int(h * scale_factor)
+
+            # Adjust x and y to keep the center of the face in the crop
+            new_x = max(0, x - (new_w - w) // 2)
+            new_y = max(0, y - (new_h - h) // 2)
+
+            # Crop the image with the new dimensions
+            faceCrop = frame[new_y-40:new_y+new_h+30, new_x-40:new_x+new_w+30]
             
             # Calculate the Laplacian
             laplacian = cv2.Laplacian(face_gray, cv2.CV_64F)
@@ -353,15 +362,19 @@ class facialRegister(QtWidgets.QFrame):
             Face_blurreness = float("{:.2f}".format(variance))
             
 
+
+            statusCap = self.captureSave(current_time=current_time, frame=faceCrop,cropFrame=face_gray)
+            
+            if statusCap:
+                if not self.eyeBlink(gray=face_gray,faceCrop=faceCrop):
+                    self.facialTraining(image=faceCrop) 
+                    
+            cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
             cv2.putText(frame, "Face percentage: " + str(Face_percentage) + "%", (30, 420), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,255,255), 1)
             # cv2.putText(frame, "Face percentage: " + str("{:.2f}".format(40 + Face_percentage)) + "%", (90, 400), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (self.B, self.G, self.R), 1)
             cv2.putText(frame, "Face Blurreness:" + str(Face_blurreness), (30, 400), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,255,255), 1)
             
-            statusCap = self.captureSave(current_time=current_time, frame=notFlip,cropFrame=face_gray)
-            
-            if statusCap:
-                if not self.eyeBlink(gray=gray):
-                    self.facialTraining(image=frame) 
+
                   
         elif len(faces) >= 1:
             self.status.setText("Multiple face is detected")
@@ -395,12 +408,13 @@ class facialRegister(QtWidgets.QFrame):
                 return result
 
     # =================== for eye blinking detection functions =================== #
-    def eyeBlink(self, gray):
+    def eyeBlink(self, gray,faceCrop):
 
-        # detect eyes using dlib
+        # # detect eyes using dlib
         faces = self.dlib_faceDetcetoor(gray, 0)
-        # status = None
+            # status = None
         for face in faces:
+            
             landmarks = self.landmark_detector(gray, face)
 
             # extract eye coordinates from facial landmarks
@@ -413,7 +427,7 @@ class facialRegister(QtWidgets.QFrame):
             status = self.update_blink_count_and_status(ear)
 
 
-        return self.blink
+            return status
 
     def extract_eye_coordinates(self, landmarks):
         left_eye = []

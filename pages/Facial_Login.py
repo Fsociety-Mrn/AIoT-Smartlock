@@ -28,7 +28,7 @@ class FacialLogin(QtWidgets.QFrame):
         self.main_menu = main_menu
         
         # for video streaming variable
-        self.videoStream = cv2.VideoCapture(1) if cv2.VideoCapture(1).isOpened() else cv2.VideoCapture(0)
+        self.videoStream = cv2.VideoCapture(0) if cv2.VideoCapture(0).isOpened() else cv2.VideoCapture(1)
         self.videoStream.set(4, 1080)
         
         # Locker Number
@@ -307,7 +307,6 @@ class FacialLogin(QtWidgets.QFrame):
         try:
             dir = f"spam_detection/{person}"
             shutil.rmtree(dir)
-            print(f"Folder '{dir}' deleted successfully.")
         except Exception as e:
             print(f"Error: {dir} : {e}")
             
@@ -317,6 +316,8 @@ class FacialLogin(QtWidgets.QFrame):
         # check spam recognition first
         result = Jolo().spam_detection(image=frame,threshold=0.7)
         person, __, spam_detected, error_occur = result
+        
+        
         
         # verify person is in database
         text,result_ = create_person_temporarily_banned(person,"Facial",False)
@@ -386,9 +387,7 @@ class FacialLogin(QtWidgets.QFrame):
         # if not detected it will create folder
         if not spam_detected and error_occur == None:
             os.makedirs(new_dir, exist_ok=True)
-        
-        print("folder: ", not os.path.exists(new_dir) )
-        
+                
         # if folder is exist 
         if not os.path.exists(new_dir) and not spam_detected:
             os.makedirs(new_dir, exist_ok=True)
