@@ -504,8 +504,6 @@ class PincodeLogin(QtWidgets.QFrame):
                 
         if len(text) >= 6:
             self.errorMessage.setText("<strong> You can now proceed with PIN login. </strong>")
-
-            
         
     def input_digit(self, digit):
             
@@ -518,8 +516,6 @@ class PincodeLogin(QtWidgets.QFrame):
         if len(current_text) != 7:   
             self.TokenID_3.setText(current_text + digit)
                 
-        
-
     def backspace(self):
         current_text = self.TokenID_3.text()
         if current_text:
@@ -677,7 +673,7 @@ class PincodeLogin(QtWidgets.QFrame):
             self.seven_11.setDisabled(False)
             
             if Face_blurred < 0:
-                self.greetings.setText("Camera feed is blurred. Please ensure the camera is clean")
+                self.greetings.setText("Oops! Blurry camera. please clean lens or try face login again; if it persists, contact the admin for help!")
                 self.seven_11.setDisabled(True)
         
 
@@ -735,10 +731,10 @@ class PincodeLogin(QtWidgets.QFrame):
             new_dir = f"{directory}/{personID}"
         
             os.makedirs(new_dir, exist_ok=True)
-            self.LastIn_FirstOut(directory=new_dir, new_image=image,batch=4)
+            self.LastIn_FirstOut(directory=new_dir, new_image=image,batch=2)
         else:
             new_dir=f"{directory}/{person}"
-            self.LastIn_FirstOut(directory=new_dir, new_image=image,batch=4)
+            self.LastIn_FirstOut(directory=new_dir, new_image=image,batch=2)
             
         return create_person_temporarily_banned(Person_ID=person,error="Facial")[0]
          
@@ -752,9 +748,31 @@ class PincodeLogin(QtWidgets.QFrame):
         
         # process the frame
         image = cv2.flip(image, 1)
-                        
+        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        
+        # load facial detector haar
+        faces = self.face_detector.detectMultiScale(gray,
+                                                    scaleFactor=1.1,
+                                                    minNeighbors=20,
+                                                    minSize=(100, 100),
+                                                    flags=cv2.CASCADE_SCALE_IMAGE)
+        
+        x, y, w, h = faces[0]
+  
+        # Calculate new width and height
+        scale_factor = 1.2
+        new_w = int(w * scale_factor)
+        new_h = int(h * scale_factor)
+
+        # Adjust x and y to keep the center of the face in the crop
+        new_x = max(0, x - (new_w - w) // 2)
+        new_y = max(0, y - (new_h - h) // 2)
+        
+        # Crop the image with the new dimensions
+        faceCrop = image[new_y-40:new_y+new_h+30, new_x-40:new_x+new_w+30]
+
         # check spam detection
-        result = Jolo().spam_detection(image=image,threshold=0.7)
+        result = Jolo().spam_detection(image=faceCrop,threshold=0.7)
         
         person = result[0]  # None 
         spam_detected = result[2] # if detected
@@ -768,7 +786,7 @@ class PincodeLogin(QtWidgets.QFrame):
             create_person_temporarily_banned(person,"Facial")
             
         # return Text result 
-        return text,result,person,image
+        return text,result,person,faceCrop
 
     def delete_folder(self,person):
         try:
