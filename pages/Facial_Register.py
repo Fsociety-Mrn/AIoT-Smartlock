@@ -360,8 +360,6 @@ class facialRegister(QtWidgets.QFrame):
             
             Face_percentage = float("{:.2f}".format(100 * (w * h) / (frame.shape[0] * frame.shape[1])))
             Face_blurreness = float("{:.2f}".format(variance))
-            
-
 
             statusCap = self.captureSave(current_time=current_time, frame=faceCrop,cropFrame=face_gray)
             
