@@ -1,11 +1,12 @@
+<p align="center">
+ <img width="150" height="133" src="https://github.com/Fsociety-Mrn/design-1-Smart-AioT/blob/main/Images/logo192x192.png" alt="Paro Paro G logo">
+</p>
 
-![Paro Paro G! Fly High Butterfly](https://github.com/Fsociety-Mrn/design-1-Smart-AioT/blob/main/Images/logo192x192.png)
+<h1 align="center">AIoT Smartlock</h1>
 
-
-# AIoT Smartlock
-
+<p align="center">
     A Smart Lock with AI and IoT interfacing in CEA Faculty in RTU Campus
-
+</p>
 
 ## Abstract
 
