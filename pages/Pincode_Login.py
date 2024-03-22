@@ -723,20 +723,29 @@ class PincodeLogin(QtWidgets.QFrame):
         # Generate a random UUID (version 4)
         unique_id = uuid.uuid4()
         
+       
         # person is none create folder and save images
         if person == None:
             
             # Convert UUID to a hexadecimal string and return the first 8 characters
             personID = "person_" + str(unique_id).upper()[:5]
             new_dir = f"{directory}/{personID}"
-        
+
             os.makedirs(new_dir, exist_ok=True)
-            self.LastIn_FirstOut(directory=new_dir, new_image=image,batch=2)
+            try:
+                self.LastIn_FirstOut(directory=new_dir, new_image=image,batch=2)
+            except:
+                self.delete_folder(person=personID)
+                return "please make sure your face is properly aligned at the center of the camera"
         else:
             new_dir=f"{directory}/{person}"
-            self.LastIn_FirstOut(directory=new_dir, new_image=image,batch=2)
+            try:
+                self.LastIn_FirstOut(directory=new_dir, new_image=image,batch=2)
+            except:
+                return "please make sure your face is properly aligned at the center of the camera"
             
         return create_person_temporarily_banned(Person_ID=person,error="Facial")[0]
+
          
     # spam recognition
     def anti_spam(self):

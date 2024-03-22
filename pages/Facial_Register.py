@@ -237,9 +237,12 @@ class facialRegister(QtWidgets.QFrame):
                 self.status.setText("cant capture it is blured")
                 
             else:
-                cv2.imwrite(path, frame)
-                self.captureStat += 1
-            
+                try:
+                    cv2.imwrite(path, frame)
+                    self.captureStat += 1
+                except:
+                    pass
+                
                 self.status.setText("Please align your face properly")
             
             return False

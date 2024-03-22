@@ -61,7 +61,7 @@ class FacialLogin(QtWidgets.QFrame):
         self.R,self.G ,self.B = (255,255,0)
      
         # EAR of eye
-        self.blink_threshold, self.blink_counter, self.blink, self.last_dilation_time = 0.35,0,False,0
+        self.blink_threshold, self.blink_counter, self.blink, self.last_dilation_time = 0.5,0,False,0
     
         # haar cascade face detection
         self.face_detector = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
@@ -391,9 +391,22 @@ class FacialLogin(QtWidgets.QFrame):
         # if folder is exist 
         if not os.path.exists(new_dir) and not spam_detected:
             os.makedirs(new_dir, exist_ok=True)
+        
+        try:
+            # if detected it will save images
+            self.LastIn_FirstOut(directory=new_dir, new_image=image,batch=2)
+        except:
+            # if folder is exist 
+            if os.path.exists(new_dir) and not spam_detected:
+                self.delete_folder(person=personID)
             
-        # if detected it will save images
-        self.LastIn_FirstOut(directory=new_dir, new_image=image,batch=2)
+            self.messageBoxShow(
+            title="Facial Recognition",
+            text="please make sure your face is properly aligned at the center of the camera",
+            buttons=self.MessageBox.Ok
+            )
+                    
+            return text
           
         self.messageBoxShow(
             title="Facial Recognition",
@@ -514,7 +527,10 @@ class FacialLogin(QtWidgets.QFrame):
             # check if user is Authenticated
             if validation == "Authenticated":
                 
-                self.LastIn_FirstOut(directory=f"Known_Faces/{result}",new_image=faceCrop)
+                try:
+                    self.LastIn_FirstOut(directory=f"Known_Faces/{result}",new_image=faceCrop)
+                except:
+                    pass
                 OpenLockers(name=result,key=self.LockerNumber,value=True)
                 self.LockerNumber = 0
                 offline_insert(TableName="Facial_update", data={"data" : "Facial Login"})
