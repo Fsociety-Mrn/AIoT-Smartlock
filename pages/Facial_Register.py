@@ -2,7 +2,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import *
 from Face_Recognition.JoloRecognition import JoloRecognition as JL
 from Raspberry.Raspberry import gpio_manual
-
+from Firebase.Offline import delete_table
 from pages.Custom_MessageBox import MessageBox
 
 import cv2
@@ -10,6 +10,8 @@ import time
 import dlib
 import torch
 import numpy as np
+import os
+import shutil
 
 class facialRegister(QtWidgets.QFrame):
     def __init__(self,parent=None):
@@ -17,9 +19,8 @@ class facialRegister(QtWidgets.QFrame):
             
             self.main_menu = parent
             
-            self.Light_PIN = 25
-            self.lights_on = True
-
+            self.Light_PIN,self.lights_on = 25, True
+  
             # message box
             self.MessageBox = MessageBox()
             self.MessageBox.setStyleSheet("""
@@ -37,9 +38,7 @@ class facialRegister(QtWidgets.QFrame):
               """)
 
             # EAR of eye
-            self.blink_threshold = 0.35
-            self.blink_counter = 0
-            self.blink = True
+            self.blink_threshold,self.blink_counter,self.blink = 0.35,0,True
 
             #frame
             self.setObjectName("facialRegistration")
@@ -91,10 +90,9 @@ class facialRegister(QtWidgets.QFrame):
             self.horizontalLayout.addWidget(self.video)
             
             # Set the default image to your custom image
-            self.default_image = QtGui.QPixmap("Images/loading.png")
+            self.default_image = QtGui.QPixmap("/home/aiotsmartlock/Downloads/AIoT_Smart-lock/Images/loading.png")
 
         
-
             self.captureStat = 1
             # camera capture
             self.label = QtWidgets.QLabel(self)
@@ -136,7 +134,7 @@ class facialRegister(QtWidgets.QFrame):
             # face detector: Haar, dlib,landmark
             self.face_detector = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
             self.dlib_faceDetcetoor = dlib.get_frontal_face_detector()
-            self.landmark_detector = dlib.shape_predictor('/home/aiotsmartlock/Downloads/AIoT_Smartlock/Model/shape_predictor_68_face_landmarks.dat')
+            self.landmark_detector = dlib.shape_predictor('/home/aiotsmartlock/Downloads/AIoT_Smart-lock/Model/shape_predictor_68_face_landmarks.dat')
 
 
             # turn on the switch 
@@ -154,7 +152,7 @@ class facialRegister(QtWidgets.QFrame):
                 "padding:10px")
             self.Lights.setText("")
             icon1 = QtGui.QIcon()
-            icon1.addPixmap(QtGui.QPixmap("/home/aiotsmartlock/Downloads/AIoT_Smartlock/Images/lights_on.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+            icon1.addPixmap(QtGui.QPixmap("/home/aiotsmartlock/Downloads/AIoT_Smart-lock/Images/lights_on.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
             self.Lights.setIcon(icon1)
             self.Lights.setIconSize(QtCore.QSize(42, 42))
             self.Lights.setFlat(False)
@@ -195,7 +193,7 @@ class facialRegister(QtWidgets.QFrame):
         if self.lights_on:
             
             icon1 = QtGui.QIcon()
-            icon1.addPixmap(QtGui.QPixmap("/home/aiotsmartlock/Downloads/AIoT_Smartlock/Images/lights_on.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+            icon1.addPixmap(QtGui.QPixmap("/home/aiotsmartlock/Downloads/AIoT_Smart-lock/Images/lights_on.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
 
             self.Lights.setIcon(icon1)
             
@@ -203,21 +201,19 @@ class facialRegister(QtWidgets.QFrame):
         else:
             
             icon1 = QtGui.QIcon()
-            icon1.addPixmap(QtGui.QPixmap("/home/aiotsmartlock/Downloads/AIoT_Smartlock/Images/lights_off.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+            icon1.addPixmap(QtGui.QPixmap("/home/aiotsmartlock/Downloads/AIoT_Smart-lock/Images/lights_off.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
   
             self.Lights.setIcon(icon1)
             gpio_manual(self.Light_PIN,True)
 
-    # receivce data from Token Form
+    # receive data from Token Form
     def receive(self,data):
         self.Name.setText(data)
 
     # capture and Train Images
     def captureSave(self, current_time=None, frame=None, cropFrame=None):
 
-
         # self.status.setText("Please blink" if self.capture >= 20 else "Face capture left" + str(21 - self.captureStat))
-        
         self.capture.setText(str(21-self.captureStat))
         
         if self.captureStat >= 20:
@@ -232,38 +228,36 @@ class facialRegister(QtWidgets.QFrame):
         # Save captured images if capture count is less than 20
         if self.captureStat <= 20:
 
-            path = f"/home/aiotsmartlock/Downloads/AIoT_Smartlock/Known_Faces/{self.Name.text()}/{self.captureStat}.png"
-            
-            # cv2.imwrite(path, frame)
-            # self.captureStat += 1
-            # self.status.setText("Please align your face properly")
-            
-            # check if the frame is blured
+            path = f"/home/aiotsmartlock/Downloads/AIoT_Smart-lock/Known_Faces/{self.Name.text()}/{self.captureStat}.png"
+
+            # check if the frame is blurred
             laplacian_var = cv2.Laplacian(cropFrame, cv2.CV_64F).var()
-            print("Blurered level",laplacian_var)
+   
             if laplacian_var < 300:
                 self.status.setText("cant capture it is blured")
                 
             else:
-                cv2.imwrite(path, frame)
-                self.captureStat += 1
+                try:
+                    cv2.imwrite(path, frame)
+                    self.captureStat += 1
+                except:
+                    pass
             
                 self.status.setText("Please align your face properly")
             
             return False
         else:
-            gpio_manual(self.Light_PIN,True)
             return True
 
-    def facialTraining(self):
+    def facialTraining(self,image):
+        
+        # remove folder on banned system
+        self.remove_suspended_person(image)
         
         self.timer.stop()
-        
         self.cap.release()
         cv2.destroyAllWindows()
 
-
-        
         self.status.setText("Facial training please wait")
         self.video.setPixmap(self.default_image)
         
@@ -273,7 +267,7 @@ class facialRegister(QtWidgets.QFrame):
         QtCore.QTimer.singleShot(100, self.startFacialTraining)
         
     def startFacialTraining(self):
-        
+                
         # Train the facial recognition model
         JL().Face_Train()
         
@@ -283,7 +277,24 @@ class facialRegister(QtWidgets.QFrame):
         icon = self.MessageBox.Information
         self.messageBoxShow(title=title, text=text, buttons=self.MessageBox.Ok, icon=icon)
         
-        self.main_menu.close()
+        self.main_menu.backTomain()
+        
+    def remove_suspended_person(self,image):
+
+        # spam recognition
+        result = JL().spam_detection(image=image)
+        person = result[0]
+
+        if result[0] == None:
+            return
+        
+        # remove temporary suspended
+        delete_table(Table_Name=person,dir="/home/aiotsmartlock/Downloads/AIoT_Smart-lock/Firebase/banned_and_temporary_list.json")
+        
+        # remove folder
+        path = f"/home/aiotsmartlock/Downloads/AIoT_Smart-lock/spam_detection/{person}"
+        if os.path.exists(path):
+            shutil.rmtree(path)
 
     # video Streaming
     def videoStreaming(self):
@@ -307,8 +318,8 @@ class facialRegister(QtWidgets.QFrame):
                                                     minSize=(100, 100),
                                                     flags=cv2.CASCADE_SCALE_IMAGE)
         
+        # check time 10 seconds
         current_time = time.time()
-
         if current_time - self.start_start <= 11:
             
             self.status.setText(f"please be ready at {int(10)-int(current_time - self.start_start)}")
@@ -328,12 +339,21 @@ class facialRegister(QtWidgets.QFrame):
         if len(faces) == 1:
             
             x, y, w, h = faces[0]
-            
-
-            cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
             faceCrop = notFlip[y:y+h, x:x+w]
             face_gray = cv2.cvtColor(faceCrop, cv2.COLOR_BGR2GRAY)
+            
+            # Calculate new width and height
+            scale_factor = 1.2
+            new_w = int(w * scale_factor)
+            new_h = int(h * scale_factor)
+
+            # Adjust x and y to keep the center of the face in the crop
+            new_x = max(0, x - (new_w - w) // 2)
+            new_y = max(0, y - (new_h - h) // 2)
+
+            # Crop the image with the new dimensions
+            faceCrop = frame[new_y-40:new_y+new_h+30, new_x-40:new_x+new_w+30]
             
             # Calculate the Laplacian
             laplacian = cv2.Laplacian(face_gray, cv2.CV_64F)
@@ -344,16 +364,19 @@ class facialRegister(QtWidgets.QFrame):
             Face_percentage = float("{:.2f}".format(100 * (w * h) / (frame.shape[0] * frame.shape[1])))
             Face_blurreness = float("{:.2f}".format(variance))
             
-
+            statusCap = self.captureSave(current_time=current_time, frame=faceCrop,cropFrame=face_gray)
+            
+            if statusCap:
+                if not self.eyeBlink(gray=face_gray):
+                    gpio_manual(self.Light_PIN,True)
+                    self.facialTraining(image=frame) 
+                    
+            
+            cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
             cv2.putText(frame, "Face percentage: " + str(Face_percentage) + "%", (30, 420), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,255,255), 1)
             # cv2.putText(frame, "Face percentage: " + str("{:.2f}".format(40 + Face_percentage)) + "%", (90, 400), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (self.B, self.G, self.R), 1)
             cv2.putText(frame, "Face Blurreness:" + str(Face_blurreness), (30, 400), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,255,255), 1)
             
-            statusCap = self.captureSave(current_time=current_time, frame=notFlip,cropFrame=face_gray)
-            
-            if statusCap:
-                if not self.eyeBlink(gray=gray):
-                    self.facialTraining() 
                   
         elif len(faces) >= 1:
             self.status.setText("Multiple face is detected")
@@ -404,8 +427,7 @@ class facialRegister(QtWidgets.QFrame):
             # update blink count and status
             status = self.update_blink_count_and_status(ear)
 
-
-        return self.blink
+        return status
 
     def extract_eye_coordinates(self, landmarks):
         left_eye = []

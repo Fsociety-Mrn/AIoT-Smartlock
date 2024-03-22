@@ -1,13 +1,15 @@
 import os
 import shutil
+import cv2
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import *
 from PyQt5.QtWidgets import QWidget
 from PyQt5.QtCore import pyqtSignal
-from Firebase.firebase import firebaseRead
-
-        
+from Firebase.firebase import firebaseRead,firebaseTokenVerify,firebaseDeleteVerifiedToken
+from pages.Custom_MessageBox import MessageBox
+from Face_Recognition.JoloRecognition import JoloRecognition as Jolo
+from Firebase.Offline import create_person_temporarily_banned
         
 class TokenForm(QtWidgets.QFrame):
     data_passed = pyqtSignal(str)
@@ -20,21 +22,29 @@ class TokenForm(QtWidgets.QFrame):
         # name
         self.rearranged_string = ""
         
+        # for video streaming variable
+        self.videoStream = cv2.VideoCapture(1) if cv2.VideoCapture(1).isOpened() else cv2.VideoCapture(0)
+        self.videoStream.set(4, 1080)
+        
+        # haar cascade face detection
+        self.face_detector = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+        
         # message box
-        self.MessageBox = QtWidgets.QMessageBox()
+        self.MessageBox = MessageBox()
         self.MessageBox.setStyleSheet("""
-                  QMessageBox { 
-                      text-align: center;
-                  }
-                  QMessageBox::icon {
-                      subcontrol-position: center;
-                  }
-                  QPushButton { 
-                      width: 250px; 
-                      height: 30px; 
-                      font-size: 15px;
-                  }
-              """)
+                        QLabel{
+                            min-width: 600px; 
+                            min-height: 50px; 
+                            font-size: 20px;
+                            padding-top: 10px; 
+                            padding-bottom: 10px; 
+                        }
+                        QPushButton { 
+                            width: 250px; 
+                            height: 30px; 
+                            font-size: 15px;
+                         }
+                    """)
         
         # frame
         self.setObjectName("Tokenfield")
@@ -88,22 +98,6 @@ class TokenForm(QtWidgets.QFrame):
         self.TokenID.setAlignment(QtCore.Qt.AlignCenter)
         self.TokenID.setPlaceholderText("Token ID")
         self.TokenID.setObjectName("TokenID")
-        
-        # continue
-        # self.Continue = QtWidgets.QPushButton(self)
-        # self.Continue.setGeometry(QtCore.QRect(420, 290, 181, 51))
-        # font = QtGui.QFont()
-        # font.setFamily("Segoe UI")
-        # font.setPointSize(12)
-        # font.setBold(True)
-        # font.setWeight(75)
-        # self.Continue.setFont(font)
-        # self.Continue.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        # self.Continue.setStyleSheet("border: none;\n"
-        # "background: qlineargradient(spread:pad, x1:0, y1:0.505682, x2:1, y2:0.477, stop:0 rgba(11, 131, 120, 219), stop:1 rgba(85, 98, 112, 226));\n"
-        # "border-radius: 25px;\n"
-        # "color: white;")
-        # self.Continue.setObjectName("Continue")
         
         # cancel
         self.Cancel = QtWidgets.QPushButton(self)
@@ -868,6 +862,11 @@ class TokenForm(QtWidgets.QFrame):
 "}")
         self.pushButton_78.setText("")
         self.pushButton_78.setObjectName("pushButton_78")
+        
+        # Timer
+        self.timer = QtCore.QTimer(self)
+        self.timer.timeout.connect(self.videoStreaming)
+        self.timer.start()
        
         
         self.retranslateUi()
@@ -977,16 +976,10 @@ class TokenForm(QtWidgets.QFrame):
 
     def input_digit(self, digit):
             
-        # self.errorMessage.setText("")
         current_text = self.TokenID.text()
-        # if len(current_text) == 1:
-        #         current_text = current_text + "-"
-
         
         if len(current_text) != 6:   
             self.TokenID.setText(current_text + digit) 
-                
-        # self.TokenID.setText(current_text + digit)
                 
     def backspace(self):
         current_text = self.TokenID.text()
@@ -1001,15 +994,22 @@ class TokenForm(QtWidgets.QFrame):
             self.TokenID.setText(current_text)
                   
     def backTomain(self):
-        self.main_menu.timers(False)
+        self.stop_streaming()
         
+        self.main_menu.upload_banned_person()
+        self.main_menu.timers(False)  
         self.close()
     
     # Function to delete folders recursively
     def delete_folders(self): 
-        path= "/home/aiotsmartlock/Downloads/AIoT_Smartlock/Known_Faces"
+        path= "/home/aiotsmartlock/Downloads/AIoT_Smart-lock/Known_Faces"
+        
         # Read data from Firebase
         data = firebaseRead("LOCK")
+        
+        if data == False:
+            return
+        
         folders_to_keep = list(data.keys())
 
         for root, dirs, files in os.walk(path, topdown=False):
@@ -1020,73 +1020,73 @@ class TokenForm(QtWidgets.QFrame):
                     shutil.rmtree(folder_path)
                 
     def continueTo(self):
+            
+        # delete unregistered folder
+        self.delete_folders()
         
-        from Firebase.firebase import firebaseTokenVerify,firebaseDeleteVerifiedToken
-
         # check if TokenID is not empty
         if not self.TokenID.text():
             return self.messageBoxShow(
-                icon=self.MessageBox.Warning,
                 title="AIoT Smartlock",
-                text="Name cannot be empty",
+                text="Token field cannot be empty",
+                buttons=self.MessageBox.Ok)
+            
+        # spam recognition result
+        text,result_spam,__,__ = self.anti_spam()
+        
+        if result_spam:
+                
+            self.backTomain()
+            
+            return self.messageBoxShow(
+                title="AIoT Smartlock",
+                text=text,
                 buttons=self.MessageBox.Ok)
         
         result = firebaseTokenVerify(self.TokenID.text())  
         
         # if invalid Token
-        if result == None:
+        if result[0] == None and result[1] == False:
             formatted_text = "<b>Invalid Token Detected!</b>"
+            
             return self.messageBoxShow(
-                icon=self.MessageBox.Warning,
                 title="AIoT Smartlock",
-                text=formatted_text + " To perform Facial Updates/Facial Register, you must generate a valid token from the AIoT Smartlock webApp.",
+                text=formatted_text + "\n To perform Facial Register, you must generate a valid token from the AIoT Smartlock webApp.",
                 buttons=self.MessageBox.Ok)
+            
+        # no internet 
+        if result[0] == None and result[1] == True:
+            self.messageBoxShow(
+                title="AIoT Smartlock",
+                text="No Internet Connection",
+                buttons=self.MessageBox.Ok
+                )
+            
+            return self.backTomain()
         
-        # delete un registered folder
-        self.delete_folders()
-
         # words = str(result).split(',')
-        self.rearranged_string = str(result)
-        # print(self.rearranged_string)
+        self.rearranged_string = str(result[0])
 
-        # # Define the path for the known faces folder
-        path = f"/home/aiotsmartlock/Downloads/AIoT_Smartlock/Known_Faces/{str(result)}"
+        # Define the path for the known faces folder
+        path = f"/home/aiotsmartlock/Downloads/AIoT_Smart-lock/Known_Faces/{str(result[0])}"
         
         if os.path.exists(path):
-            
-        # NOTE: if exist ask the user if wanted to updated the faces or proceed to updated
-            
-            
-            # Show a message box indicating that the folder already exists
             # Remove all contents of the folder
             shutil.rmtree(path)
-            os.makedirs(path, exist_ok=True)
 
-
-        else:
-
-            # Create the known faces folder if it doesn't exist
-            os.makedirs(path, exist_ok=True)
-
-        #     # Show a message box indicating that the folder has been created
-        #     self.messageBoxShow(
-        #         icon=self.MessageBox.Information,
-        #         title="AIoT Smartlock",
-        #         text="please align your face to camera properly",
-        #         buttons=self.MessageBox.Ok
-        #     )
-            
+        # Create the known faces folder if it doesn't exist
+        os.makedirs(path, exist_ok=True)
 
         # pass the {self.TokenID.text()} into facialRegister username label
         self.errorMessage.setText("Loading..............")   
         
-        # self.Continue.isEnabled = False
-        self.Cancel.isEnabled = False
+        self.pushButton_76.setEnabled(False)
+        self.Cancel.setEnabled(False)
         
-        firebaseDeleteVerifiedToken(str(result))
+        firebaseDeleteVerifiedToken(str(result[0]))
         
-        print(str(result))
-            
+        self.stop_streaming()
+        
         # Delay the creation of the toFacialRegister object by 100 milliseconds
         QtCore.QTimer.singleShot(50, self.toFacialRegister)
             
@@ -1104,10 +1104,9 @@ class TokenForm(QtWidgets.QFrame):
         self.TokenID.setText("")
         self.errorMessage.setText("")
 
-    def messageBoxShow(self, icon=None, title=None, text=None, buttons=None):
+    def messageBoxShow(self, title=None, text=None, buttons=None):
 
         # Set the window icon, title, and text
-        self.MessageBox.setIcon(icon)
         self.MessageBox.setWindowTitle(title)
         self.MessageBox.setText(text)
 
@@ -1122,7 +1121,99 @@ class TokenForm(QtWidgets.QFrame):
         self.MessageBox.close()
         # Show the message box and return the result
         return result
+
+    # for video streaming
+    def videoStreaming(self):
+        ret, frame = self.videoStream.read()
         
+        # if no detected frames
+        if not ret:
+            self.messageBoxShow(
+                title="FACIAL REGISTER",
+                text="Unable to open camera. Please contact the administrator for assistance.",
+                buttons=self.MessageBox.Ok
+            )
+            self.backTomain()
+            return
+        
+        # process the frame
+        frame = cv2.flip(frame, 1)
+
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    
+        # load facial detector haar
+        faces = self.face_detector.detectMultiScale(gray,
+                                                    scaleFactor=1.1,
+                                                    minNeighbors=20,
+                                                    minSize=(100, 100),
+                                                    flags=cv2.CASCADE_SCALE_IMAGE)
+        
+
+        # detect one face only
+        if len(faces) == 1:
+            
+            x, y, w, h = faces[0]
+            faceCrop = frame[y:y+h, x:x+w]
+            face_gray = cv2.cvtColor(faceCrop, cv2.COLOR_BGR2GRAY)
+            
+            
+            # Calculate the Laplacian
+            laplacian = cv2.Laplacian(face_gray, cv2.CV_64F)
+    
+            # Calculate the variance of the Laplacian
+            variance = laplacian.var()
+            
+            # blurred level
+            Face_blurred = float("{:.2f}".format(variance))
+            
+            self.greetings.setText("Hello Friend,\nPlease enter your Token code below")
+
+            if Face_blurred < 0:
+                self.greetings.setText("Camera feed is blurred. Please ensure the camera is clean")
+             
+
+        # Multiple Face Detected
+        elif len(faces) >= 1:    
+            self.greetings.setText("Multiple faces detected. Please ensure only one face is visible")
+
+        # No face detected
+        else:
+            self.greetings.setText("No face detected. Please ensure your face is visible.")
+        
+    # spam recognition
+    def anti_spam(self):
+                
+        ret, image = self.videoStream.read()
+        
+        if not ret:
+            return "camera unable to capture"
+        
+            # process the frame
+        image = cv2.flip(image, 1)
+                        
+            # check spam detection
+        result = Jolo().spam_detection(image=image,threshold=0.7)
+        
+        person = result[0]  # None 
+        spam_detected = result[2] # if detected
+        error_occur = result[3]
+        
+        text,result = "",False
+
+        # if detected it will save images
+        if spam_detected and error_occur == None:
+            
+            # verify person is in database
+            text,result = create_person_temporarily_banned(person,"Facial")
+        
+        # return Text result 
+        return text,result,person,image
+
+    def stop_streaming(self):
+        self.videoStream.release()
+        cv2.destroyAllWindows()
+        self.timer.stop()
+            
 if __name__ == "__main__":
     
     import sys,background
