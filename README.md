@@ -1,5 +1,5 @@
 <p align="center">
- <img width="133" height="133" src="https://github.com/Fsociety-Mrn/design-1-Smart-AioT/blob/main/Images/logo192x192.png" alt="Paro Paro G logo">
+ <img width="150" height="150" src="https://github.com/Fsociety-Mrn/design-1-Smart-AioT/blob/main/Images/logo192x192.png" alt="Paro Paro G logo">
 </p>
 
 <h1 align="center">AIoT Smartlock</h1>
@@ -16,6 +16,10 @@ recognition to ensure authorized access and allows for real-time monitoring and
 tracking of locker usage. Physical keys are not needed, and the system includes a
 blinking-based liveness check to confirm the user's human presence.
 
+
+## Demo
+- [admin website](https://aiot-smartlock.firebaseapp.com/Login)
+- [user website](https://user-aiot-smartlocker.web.app/Login)
 
 ## Tech Stack
 
