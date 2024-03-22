@@ -51,7 +51,7 @@ class JoloRecognition:
                 
                     # calculate the face distance
                     emb = self.facenet(face.unsqueeze(0)).detach()
-                
+
                     # self.Embedding_List is the load data.pt 
                     for idx, emb_db in enumerate(self.Embedding_List):
 
@@ -61,17 +61,13 @@ class JoloRecognition:
                         # percentage
                         percentage = self.__thresh_to_percent(face_distance=dist,face_match_threshold=threshold)
                         percentage = percentage * 100
-                        
-                        print("result: ",dist < threshold)
+
                         if dist < threshold:
-                            return (self.Name_List[dist], percentage)
+                            return (self.Name_List[idx], percentage)
                       
                     return ('No match detected', percentage)
 
-                
-                else:
-                    return ('No match detected', None)
-                
+                return ('No match detected', None)  
         except:
             return ('No match detected', None)
             
@@ -141,9 +137,10 @@ class JoloRecognition:
 
             # check if there is a detected face and has probability of 90%
                 if face is not None and prob > 0.90:
-                # calculate face distance
+                    # calculate face distance
                     emb = self.facenet(face.unsqueeze(0))
                     return emb
+                
         except Exception as e:
             print("__face_encodings:",e)
             return e

@@ -10,6 +10,15 @@ import threading
 # batch_one_locker = [21,20,16,12,7,8,25]
 # batch_one_doorSensor = [26,19,13,6,5,8,11]
 
+door_locker_sensor = {
+    "20": 26,
+    "21": 19,
+    "16": 13,
+    "12": 6,
+    "7": 5,
+    "8": 11,
+}
+
 # for number in batch_one_locker:
 #     GPIO.setup(number,GPIO.OUT)
 #     GPIO.output(number,True)
@@ -48,8 +57,16 @@ def OpenLockers(name,key,value):
         print("Open Lockers: ")
         print(name,value)
         
+        start_time = time.time()
         # gpio_manual(int(key),GPIO.LOW)
-        # time.sleep(2)
+        
+        while (time.time() - start_time) < 5:
+            # Code inside this loop will run for 5 seconds
+            if door_status(door_locker_sensor[str(key)]):
+                break
+
+        print("Loop finished executing for 5 seconds.")
+
         # gpio_manual(int(key),GPIO.HIGH)
         
         print("Open Lockers: ")
