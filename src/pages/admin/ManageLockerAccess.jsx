@@ -235,15 +235,14 @@ const Card = ({ imgSrc, title, user, isActive, LockerNumber, Data, isAdmin, id  
             {user}
           </Typography>
 
-          {isAdmin && 
             <Typography 
             variant='h5' 
             color="#0F2C3D" 
             fontWeight="bold" 
             fontSize="0.7rem">
-              admin
+              {isAdmin ? "admin" : "..."}
             </Typography>
-          }
+       
           <Typography 
           variant='h5' 
           color="#0F2C3D" 
@@ -462,6 +461,18 @@ const MobileView = (props) => {
 
   }, [dataUser]);
 
+  const [Locker,setLocker]=  React.useState([
+    { value: 20, label: "1. Locker number 20" },
+    { value: 21, label: "2. Locker number 21"  },
+    { value: 16, label: "3. Locker number 16"  },
+    { value: 12, label: "4. Locker number 12"  },
+    { value: 7, label: "5. Locker number 7"  },
+    { value: 8, label: "6. Locker number 8"  }
+    // Add more currencies as needed
+  ]);
+
+
+
   return(
     <>
 
@@ -470,6 +481,7 @@ const MobileView = (props) => {
       open={openModal} 
       setOpen={setOpenModal} 
       tokenList={listTokens}
+      Locker={Locker}
       />
 
       {/* view suspended person */}
@@ -518,6 +530,27 @@ const MobileView = (props) => {
                     };
                 });
                 setListTokesn(formattedTokenList); 
+                
+                // Extract LOCKERNUMBER values
+                const lockerNumbers = formattedTokenList.map(token => token.LOCKERNUMBER);
+
+                // Count occurrences of each LOCKERNUMBER
+                const lockerNumberCounts = lockerNumbers.reduce((acc, lockerNumber) => {
+                  acc[lockerNumber] = (acc[lockerNumber] || 0) + 1;
+                  return acc;
+                }, {});
+
+                console.log(lockerNumberCounts)
+
+                // Filter out locker numbers that occur more than twice
+                const lockerNumbersToRemove = Object.entries(lockerNumberCounts)
+                    .filter((data, key) =>data[1] >= 2)
+                    .map((lockerNumber) => parseInt(lockerNumber)); // Convert lockerNumber back to integer
+
+                // Remove locker numbers from Locker state
+                setLocker(prevLocker => prevLocker.filter(locker => !lockerNumbersToRemove.includes(locker.value)));
+
+                
               })
             .catch(error => {
               console.error(error);

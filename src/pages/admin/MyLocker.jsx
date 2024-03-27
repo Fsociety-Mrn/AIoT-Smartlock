@@ -316,7 +316,7 @@ const MyLocker = () => {
               </IconButton>
 
               <Typography variant='h5' color="#0F2C3D" fontWeight="bold" fontSize="1rem">
-                your locker is { sliderValue ? "close" : "open"}
+                your locker is { sliderValue ? "open" : "close"}
               </Typography> 
            
               <Button 

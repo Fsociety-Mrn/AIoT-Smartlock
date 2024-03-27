@@ -74,6 +74,7 @@ return new Promise((resolve, reject) => {
     // Add 3 hours to the current time
     const newDate = new Date(currentDate.getTime() + 3 * 60 * 60000); // 3 hours in milliseconds
 
+
     const dateOptions = {
       month: 'short',
       day: 'numeric',
@@ -87,7 +88,7 @@ return new Promise((resolve, reject) => {
       hour12: true,
     };
 
-    const formattedDate = String(currentDate.toLocaleString('en-US', dateOptions)).replace(",", "");
+    const formattedDate = String(newDate.toLocaleString('en-US', dateOptions)).replace(",", "");
     const formattedTime = newDate.toLocaleString('en-US', timeOptions);
 
     const data = {
@@ -98,6 +99,7 @@ return new Promise((resolve, reject) => {
         time: formattedTime
       }
     }
+
 
     const tokensRef = ref(RTdb, 'GenerateToken_User');
     const newTokenRef = push(tokensRef); // This generates a unique key
@@ -133,9 +135,11 @@ export const TokenList = () => {
       // Remove expired tokens
       const expiredTokens = data && Object.entries(data).filter(([key, token]) => {
         const expirationDate = new Date(`${token.EXPIRATION.date} ${token.EXPIRATION.time}`);
+
         return expirationDate <= currentTime;
       });
 
+      
       // Remove expired tokens from the database
       const removalPromises = expiredTokens && expiredTokens.map(([key]) => removeKey(key));
 
@@ -155,6 +159,39 @@ export const TokenList = () => {
   });
 }
 
+// get token limit
+export const get_token_limit = async () => {
+  return new Promise((resolve, reject) => {
+    try {
+      const dbRef = ref(RTdb, 'token/limit');
+
+      onValue(dbRef, (snapshot) => {
+        const data = snapshot.val();
+        resolve(data) 
+      })
+  
+    } catch (err) {
+      console.error(err);
+      reject(err)
+    }
+  })
+}
+
+export const add_token_cap = async (data) =>{
+  return new Promise((resolve, reject) => {
+    try{
+
+      const tokensRef = ref(RTdb, 'token/cap');
+      const newTokenRef = push(tokensRef); // This generates a unique key
+
+      set(newTokenRef, data);
+      resolve("add to token cap")
+    }catch(e){
+      console.error(e)
+      reject(e)
+    }
+  })
+}
 
 // **************** AIoT Lock**************** //
 

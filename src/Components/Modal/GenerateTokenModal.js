@@ -17,48 +17,10 @@ import React from 'react'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import KeyOutlinedIcon from '@mui/icons-material/KeyOutlined';
 import CloseIcon from '@mui/icons-material/Close';
-import { generateToken } from '../../firebase/Realtime_Db';
+import {
+    generateToken
+} from '../../firebase/Realtime_Db';
 
-// const columns = [
-//     { field: 'OTP', headerName: 'OTP', width: 150 },
-//     { field: 'LOCKERNUMBER', headerName: 'LOCKER', width: 80 },
-//     { field: 'TIME', headerName: 'EXPIRED TIME', width: 120 },
-//     { field: 'DATE', headerName: 'EXPIRED DATE', width: 120 },
-//   ];
-
-
-// const rows = [
-//     { 
-//       id: 1,
-//       OTP: 'ABC123', 
-//       DATE: 'Nov 23 2023', 
-//       TIME: "9:40 AM"
-//     },
-//     { 
-//         id: 2,
-//         OTP: 'ABC123', 
-//         DATE: 'Nov 23 2023', 
-//         TIME: "9:40 AM"
-//     },
-//     { 
-//         id: 3,
-//         OTP: 'ABC123', 
-//         DATE: 'Nov 23 2023', 
-//         TIME: "9:40 AM"
-//     },
-//     { 
-//         id: 4,
-//         OTP: 'ABC123', 
-//         DATE: 'Nov 23 2023', 
-//         TIME: "9:40 AM"
-//     },
-//     { 
-//         id: 5,
-//         OTP: 'ABC123', 
-//         DATE: 'Nov 23 2023', 
-//         TIME: "9:40 AM"
-//     },
-// ];
 
 const ChildModal = (props) => {
     return(
@@ -118,19 +80,9 @@ const GenerateTokenModal = (props) => {
     const [open,setOpen] = React.useState()
     const [otp,setOtp] = React.useState()
 
-
     const [expanded, setExpanded] = React.useState('');
 
-
-    const currencies = [
-        { value: 20, label: "Locker number 1" },
-        { value: 21, label: "Locker number 2"  },
-        { value: 16, label: "Locker number 3"  },
-        { value: 12, label: "Locker number 4"  },
-        { value: 7, label: "Locker number 5"  },
-        { value: 8, label: "Locker number 6"  }
-        // Add more currencies as needed
-      ];
+    const currencies = props.Locker;
 
     const [selectedCurrency, setSelectedCurrency] = React.useState('');
     const [toks, setToks] = React.useState(true);
@@ -140,8 +92,6 @@ const GenerateTokenModal = (props) => {
         setToks(false);
     };
 
-
-    
     return ( 
         <div>
 
@@ -156,26 +106,24 @@ const GenerateTokenModal = (props) => {
             onClose={handleClose}
             >
                 <Box 
-                sx={
-                    {
-                        position: 'absolute',
-                        top: '50%',
-                        left: '50%',
-                        transform: 'translate(-50%, -50%)',
-                        width: "400px",
-                        bgcolor: 'background.paper',
-                        // border: '2px solid #000',
-                        boxShadow: 24,
-                        borderRadius: "10px",
-                        p: 4
-                    }
-                }>
+                sx={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    width: "400px",
+                    bgcolor: 'background.paper',
+                    // border: '2px solid #000',
+                    boxShadow: 24,
+                    borderRadius: "10px",
+                    p: 4
+                }}>
 
                     <Stack
                     direction="column"
                     justifyContent="center"
                     alignItems="center"
-                    spacing={2}>
+                    spacing={1}>
 
                         <IconButton
                         edge="start"
@@ -191,6 +139,20 @@ const GenerateTokenModal = (props) => {
                         <Typography id="modal-modal-title" variant="h6" component="h2">
                         One-Time Password (OTP)
                         </Typography>
+
+                        <Stack
+                        direction="column"
+                        justifyContent="center"
+                        alignItems="center"
+                        spacing={0}>
+                            <Typography variant="body2" color="red" component="p">
+                            Max OTP per locker: 2
+                            </Typography>
+                            <Typography variant="body2" color="red" component="p" style={{fontSize: '0.8rem',textAlign: 'center'}}>
+                            🔒<strong>please note:</strong> Each OTP you generate is single-use. Once you've consumed both OTPs, simply generate to get more
+                            </Typography>
+                 
+                        </Stack>
 
                         <Grid
                         container
@@ -209,7 +171,7 @@ const GenerateTokenModal = (props) => {
                                     .map((data,key) => (
                                         <Accordion key={key} expanded={expanded === data.DATE} onChange={() => setExpanded(expanded === data.DATE ? '' : data.DATE)}>
                                             <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls={`panel${key}bh-content`} id={`panel${key}bh-header`}>
-                                                <Typography> <strong>{data.OTP} </strong> </Typography>
+                                                <Typography> {1 + key}. Locker: {data.LOCKERNUMBER} , otp: <strong>{data.OTP} </strong> </Typography>
                                             </AccordionSummary>
 
                                             <AccordionDetails>
@@ -243,6 +205,7 @@ const GenerateTokenModal = (props) => {
                                 alignItems="center"
                                 >
 
+   
                                 <TextField
                                 select
                                 label="Locker Number"        
@@ -250,7 +213,6 @@ const GenerateTokenModal = (props) => {
                                 variant="outlined"
                                 value={selectedCurrency}
                                 onChange={handleCurrencyChange}
-                                // disabled={true}
                                 >
                                     {currencies.map((option) => (
                                         <MenuItem key={option.value} value={option.value}>
@@ -258,7 +220,7 @@ const GenerateTokenModal = (props) => {
                                         </MenuItem>
                                     ))}
                                     </TextField>
-                                
+                          
                                 <Button 
                                 fullWidth
                                 disabled={toks}
@@ -267,17 +229,17 @@ const GenerateTokenModal = (props) => {
                                 style={{ borderRadius: "10px", padding: "8px" }}
                                 onClick={()=>{
                                     generateToken(selectedCurrency)
-                                    .then(otp=>{
+                                    .then((otp)=>{
                                         setOtp(otp)
                                         setOpen(!open)
                                         setToks(true)
                                         setSelectedCurrency('')
                                     })
                                     // handleClose()
-                                    
                                 }}
                                     >Generate Token</Button>
-                                    
+
+                              
                                 </Stack>
                             </Grid>
                           
