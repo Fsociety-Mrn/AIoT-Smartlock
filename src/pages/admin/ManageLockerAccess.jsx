@@ -44,6 +44,8 @@ import KeyIcon from '@mui/icons-material/Key';
 import PersonIcon from '@mui/icons-material/Person';
 import AdminPanelSettingsOutlinedIcon from '@mui/icons-material/AdminPanelSettingsOutlined';
 import ViewSuspended from '../../Components/Modal/ViewSuspended';
+import LOGO from '../../Images/logo512.png'
+import { ConfirmPassword } from '../../Components/Modal/PasswordModal';
 
 //  user s
 const Card = ({ imgSrc, title, user, isActive, LockerNumber, Data, isAdmin, id  }) => {
@@ -53,6 +55,8 @@ const Card = ({ imgSrc, title, user, isActive, LockerNumber, Data, isAdmin, id  
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [openModal,setOpenModal] = React.useState(false)
   const [changeLocker,setChangeLocker] = React.useState(false)
+  const [createModal,setCreateModal] = React.useState(false)
+  const [userData,setUserData] = React.useState()
 
   const openS = Boolean(anchorEl);
 
@@ -99,6 +103,13 @@ const Card = ({ imgSrc, title, user, isActive, LockerNumber, Data, isAdmin, id  
     
     <StyledCard>
 
+      {/* deactivate user */}
+      <ConfirmPassword
+      createModal={createModal}
+      setCreateModal={setCreateModal}
+      data={userData}
+      />
+
       <ModalLocker 
       open={changeLocker} 
       setOpen={setChangeLocker} 
@@ -107,6 +118,7 @@ const Card = ({ imgSrc, title, user, isActive, LockerNumber, Data, isAdmin, id  
       FullName={user} 
       />
 
+      {/* delete password */}
       <ModalConfirm
       open={openModal}
       setOpen={setOpenModal}
@@ -181,7 +193,14 @@ const Card = ({ imgSrc, title, user, isActive, LockerNumber, Data, isAdmin, id  
           {isActive && <Divider /> }
           
           {isActive &&
-          <MenuItem onClick={()=>setUserStatus(id,!isActive)}>
+          <MenuItem onClick={()=>{
+            setCreateModal(true)
+            setUserData({
+              id: id,
+              status: !isActive
+            })
+            // setUserStatus(id,!isActive)
+            }}>
             <ListItemIcon>
               <PersonOffIcon fontSize="medium" color="primary"/>
             </ListItemIcon>
@@ -217,7 +236,7 @@ const Card = ({ imgSrc, title, user, isActive, LockerNumber, Data, isAdmin, id  
 
         <Avatar
         alt={title}
-        src={imgSrc}
+        src={imgSrc ? imgSrc : LOGO}
         sx={{ width: 150, height: 150, border: "2px solid rgb(61, 152, 154)" }}
         >A</Avatar>
 

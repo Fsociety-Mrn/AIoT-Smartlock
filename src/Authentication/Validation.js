@@ -71,12 +71,21 @@ export const Change_password = yup.object().shape({
                 .oneOf([yup.ref('NewPassword'), null], 'Passwords must match')
     });
 
-// Password Validation
+// email Validation
 export const Email_validation = yup.object().shape({
         email : yup.string()
                 .email("Incorrect email format")
                 .required("Please fill out the email field"),
     });
+
+
+// password Validation
+export const Password_validation = yup.object().shape({
+        password: yup.string()
+        .required("Please enter your password")
+        .min(6,"Password should be 6 char long"),
+});
+    
     
 // PIN schema
 export const pinSchema = yup.object().shape({

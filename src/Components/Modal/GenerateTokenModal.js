@@ -17,9 +17,8 @@ import React from 'react'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import KeyOutlinedIcon from '@mui/icons-material/KeyOutlined';
 import CloseIcon from '@mui/icons-material/Close';
-import {
-    generateToken
-} from '../../firebase/Realtime_Db';
+import { generateToken } from '../../firebase/Realtime_Db';
+
 
 
 const ChildModal = (props) => {
@@ -148,8 +147,11 @@ const GenerateTokenModal = (props) => {
                             <Typography variant="body2" color="red" component="p">
                             Max OTP per locker: 2
                             </Typography>
-                            <Typography variant="body2" color="red" component="p" style={{fontSize: '0.8rem',textAlign: 'center'}}>
-                            🔒<strong>please note:</strong> Each OTP you generate is single-use. Once you've consumed both OTPs, simply generate to get more
+                            <Typography variant="body2" color="red" component="p" style={{fontSize: '0.9rem',textAlign: 'center'}}>
+                                <span role="img" aria-label="locked">🔒</span>
+                                <strong>Please note:</strong> 
+                                Each OTP you generate is single-use. 
+                                Once you've consumed both OTPs, simply generate to get more.
                             </Typography>
                  
                         </Stack>

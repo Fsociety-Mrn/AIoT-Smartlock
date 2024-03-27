@@ -1,6 +1,8 @@
 import { Backdrop, Box, Fade, Grid, Modal, Stack, Typography,Button } from '@mui/material';
 import React from 'react'
-
+import { DesktopTextbox } from '../Textfield';
+import { Password_validation } from "../../Authentication/Validation";
+import { reauthentication } from "../../firebase/FirebaseConfig";
 
 const style = {
     position: 'absolute',
@@ -15,9 +17,46 @@ const style = {
 };
 
 
-const ModalConfirm = (props) => {
+const ModalConfirm = (props) => {   
+
+    const [isChangePasswordOpen] = React.useState(false);
+    const [error,setError] = React.useState({
+        Password: false,
+        PasswordMessage: ""
+    })
+    const [password,setPassword] = React.useState("")
     
     const handleClose = () => props.setOpen(false);
+
+
+    // Function to handle form submission for 
+    const handleSubmitCreate = async (event) => {
+        event.preventDefault();
+        try {
+
+            await Password_validation.validate({ password: password }, { abortEarly: false });
+     
+            reauthentication(password)
+            .then(data=>{
+                setError(data)
+                props.delete()
+            })
+            .catch(error=>setError(error))
+
+        } catch (validationError) {
+
+            // Extract specific error messages for email and password
+            const passwordError = validationError.inner.find((error) => error.path === 'password');
+  
+
+            // If validation errors occur
+            setError({
+                Password: !!passwordError,
+                PasswordMessage: passwordError && passwordError.message
+            });
+
+        }
+    };
 
     return (
         <div>            
@@ -45,16 +84,27 @@ const ModalConfirm = (props) => {
                             spacing={0}
                             paddingTop={2}
                             >
-                            <Typography variant='h5' color="#0F2C3D" fontWeight="lightweight" fontSize="1rem">
+                                <Typography variant='h5' color="#0F2C3D" fontWeight="lightweight" fontSize="1rem">
                                 Are you sure you want to remove
-                            </Typography>
-                            <Typography variant='h5' color="#0F2C3D" fontWeight="lightweight" fontSize="1rem">
-                               {props.name} ?
-                            </Typography>
+                                </Typography>
+                                <Typography variant='h5' color="#0F2C3D" fontWeight="lightweight" fontSize="1rem">
+                                {props.name} ?
+                                </Typography>
                             </Stack>
                         </Grid>
 
-                     
+                        <Grid item xs={12}>
+                            <DesktopTextbox fullWidth             
+                            id="password"
+                            name="password"
+                            placeholder='enter your password first'
+                            value={password}
+                            onChange={e=>setPassword(e.target.value)}
+                            type={isChangePasswordOpen ? "text" : "password"}
+                            error={error.Password}
+                            helperText={error.PasswordMessage}
+                            />
+                        </Grid>
 
                         <Grid item xs={12}>
                             <Stack
@@ -64,7 +114,7 @@ const ModalConfirm = (props) => {
                             spacing={2}
                             paddingTop={2}
                             >
-                                <Button variant='contained' color='error' onClick={props.delete}>Yes</Button>
+                                <Button variant='contained' color='error' onClick={handleSubmitCreate}>Yes</Button>
                                 <Button variant='outlined' onClick={handleClose}>No</Button>
                             </Stack>
                             

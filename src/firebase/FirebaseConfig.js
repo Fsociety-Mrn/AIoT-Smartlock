@@ -123,3 +123,27 @@ export const ForgotPasswords = (email) => {
   });
 };
 
+// re authenticate
+export const reauthentication = (CurrentPass) => {
+  return new Promise((resolve, reject) => {
+    const credential = EmailAuthProvider.credential(auth.currentUser.email, CurrentPass);
+
+    reauthenticateWithCredential(auth.currentUser, credential)
+    .then(() => {
+      resolve({
+        Password: false,
+        PasswordMessage: "User Authenticated",
+      })
+    })
+    .catch((error) => {
+
+      reject({
+        Password: true,
+        PasswordMessage: "Invalid password",
+      })
+
+    });
+
+  })
+}
+
