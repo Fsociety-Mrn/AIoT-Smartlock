@@ -490,7 +490,7 @@ class FacialLogin(QtWidgets.QFrame):
         faces = self.face_detector.detectMultiScale(gray,
                                                     scaleFactor=1.1,
                                                     minNeighbors=20,
-                                                    minSize=(180, 180),
+                                                    minSize=(100, 100),
                                                     flags=cv2.CASCADE_SCALE_IMAGE)
         
         current_time = time.time()

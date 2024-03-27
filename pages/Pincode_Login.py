@@ -483,7 +483,7 @@ class PincodeLogin(QtWidgets.QFrame):
 
         self.greetings.setText(_translate("MainWindow", "Hello Friend,\n"
         "Kindly provide your locker number and PIN for access."))
-        self.checkBox.setText(_translate("MainWindow", "Show Password"))
+        self.checkBox.setText(_translate("MainWindow", "Show PIN"))
              
     def toggle_password_visibility(self,state):
       

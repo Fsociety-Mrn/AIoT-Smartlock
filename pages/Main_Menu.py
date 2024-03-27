@@ -429,10 +429,10 @@ class MainWindow(QtWidgets.QFrame):
         self.facialLogin.setText(_translate("mainMenu", "Facial Login"))
         self.facialLogin.clicked.connect(self.openFacialLogin)\
         
-        self.admin_2.setText(_translate("mainMenu", "  https://aiot-smartlock.firebaseapp.com"))
+        self.admin_2.setText(_translate("mainMenu", "  https://aiot-smartlock.web.app"))
         self.admin_1.setText(_translate("mainMenu", "  for admin website just visit this"))
      
-        self.user_3.setText(_translate("mainMenu", "  https://user-aiot-smartlock.web.app"))
+        self.user_3.setText(_translate("mainMenu", "  https://user-aiot-smartlocker.web.app"))
         self.user_2.setText(_translate("mainMenu", "  or just visit this:"))
         self.user_1.setText(_translate("mainMenu", "  Scan this qr code for user website --->"))
         
