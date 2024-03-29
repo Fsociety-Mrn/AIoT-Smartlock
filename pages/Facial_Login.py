@@ -61,7 +61,7 @@ class FacialLogin(QtWidgets.QFrame):
         self.R,self.G ,self.B = (255,255,0)
      
         # EAR of eye
-        self.blink_threshold, self.blink_counter, self.blink, self.last_dilation_time = 0.5,0,False,0
+        self.blink_threshold, self.blink_counter, self.blink, self.last_dilation_time = 0.3,0,False,0
     
         # haar cascade face detection
         self.face_detector = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
@@ -518,7 +518,7 @@ class FacialLogin(QtWidgets.QFrame):
             # face blurred level
             face_blurred = self.detect_blur_in_face(face_gray=face_gray)
             
-            if not face_blurred > 0:
+            if not face_blurred > 300:
                 self.status.setText("Oops! Blurry camera. please clean lens or try face login again; if it persists, contact the admin for help!")
                 self.show_frame(frame)
                 return
