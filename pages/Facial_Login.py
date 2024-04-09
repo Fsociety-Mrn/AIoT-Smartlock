@@ -6,10 +6,12 @@ import torch
 import os
 import uuid
 import shutil
+import threading
 
 from Face_Recognition.JoloRecognition import JoloRecognition as Jolo
 from Firebase.Offline import offline_insert,checkLocker
 from Raspberry.Raspberry import OpenLockers,gpio_manual
+from Music.music import play_music
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import *
@@ -317,13 +319,12 @@ class FacialLogin(QtWidgets.QFrame):
         result = Jolo().spam_detection(image=frame,threshold=0.7)
         person, __, spam_detected, error_occur = result
         
-        
-        
         # verify person is in database
         text,result_ = create_person_temporarily_banned(person,"Facial",False)
         self.result = person,text,result_,spam_detected,error_occur
         
         if spam_detected and error_occur == None and result_:
+            threading.Thread(target=play_music,args=("Music/Access Denied.mp3",0)).start()
             self.facial_result = ("Denied",'No match detected')
             return
 
@@ -355,6 +356,8 @@ class FacialLogin(QtWidgets.QFrame):
         else:
             self.R,self.G,self.B = (255,0,0)
             self.facial_result = ("Denied",result[0])
+            
+            threading.Thread(target=play_music,args=("Music/Access Denied.mp3",0)).start()
             
         offline_history(name=result[0],
             access_type="Facial Login",

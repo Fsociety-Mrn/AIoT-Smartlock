@@ -6,10 +6,12 @@ from Firebase.firebase import firebaseVerify_Pincode,lockerList,locker_sensor,fi
 from pages.Custom_MessageBox import MessageBox
 
 from Raspberry.Raspberry import openLocker,door_status
+from Music.music import play_music
 
 import requests
 import shutil
 import os
+import threading
 
 class MainWindow(QtWidgets.QFrame):
     def __init__(self,parent=None):
@@ -409,6 +411,9 @@ class MainWindow(QtWidgets.QFrame):
         self.closeEvent = self.closeEvent
         self.horizontalLayout.addWidget(self.widget_2) 
         self.retranslateUi()
+        
+        threading.Thread(target=play_music,args=("Music/Welcome.mp3",)).start()
+
         QtCore.QMetaObject.connectSlotsByName(self)
         
         # main menu
