@@ -369,7 +369,7 @@ class facialRegister(QtWidgets.QFrame):
             if statusCap:
                 if not self.eyeBlink(gray=face_gray):
                     gpio_manual(self.Light_PIN,True)
-                    self.facialTraining(image=frame) 
+                    self.facialTraining(image=faceCrop) 
                     
             
             cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)

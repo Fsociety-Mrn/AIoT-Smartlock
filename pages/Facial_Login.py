@@ -490,7 +490,7 @@ class FacialLogin(QtWidgets.QFrame):
         faces = self.face_detector.detectMultiScale(gray,
                                                     scaleFactor=1.1,
                                                     minNeighbors=20,
-                                                    minSize=(180, 180),
+                                                    minSize=(100, 100),
                                                     flags=cv2.CASCADE_SCALE_IMAGE)
         
         current_time = time.time()
@@ -533,8 +533,8 @@ class FacialLogin(QtWidgets.QFrame):
                 OpenLockers(name=result,key=self.LockerNumber,value=True)
                 self.LockerNumber = 0
                 offline_insert(TableName="Facial_update", data={"data" : "Facial Login"})
-                
-                return self.back_to_main()
+                self.back_to_main()
+                return 
             
             # check if user i not authenticated
             if validation == "Denied" :

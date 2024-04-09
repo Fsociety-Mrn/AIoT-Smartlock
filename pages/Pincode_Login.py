@@ -485,7 +485,7 @@ class PincodeLogin(QtWidgets.QFrame):
 
         self.greetings.setText(_translate("MainWindow", "Hello Friend,\n"
         "Kindly provide your locker number and PIN for access."))
-        self.checkBox.setText(_translate("MainWindow", "Show Password"))
+        self.checkBox.setText(_translate("MainWindow", "Show pin"))
         gpio_manual(self.Light_PIN,False)
              
     def toggle_password_visibility(self,state):
@@ -673,7 +673,7 @@ class PincodeLogin(QtWidgets.QFrame):
             # blurred level
             Face_blurred = float("{:.2f}".format(variance))
             
-            self.greetings.setText("Kindly provide your Locker number and PIN \n(in the format LN-XXXX) for access.")
+            self.greetings.setText("Kindly provide your Locker number and PIN \n(in the format ex: 16-9259) for access.")
             self.seven_11.setDisabled(False)
             
             if Face_blurred < 300:

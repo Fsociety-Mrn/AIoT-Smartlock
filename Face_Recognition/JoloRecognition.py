@@ -70,60 +70,7 @@ class JoloRecognition:
                 return ('No match detected', None)  
         except:
             return ('No match detected', None)
-            
-    def spam_detection(self, Dataset_Folder="spam_detection", image=None,threshold=0.6):
-        try:
-            
-            # face2 = self.__face_encodings(image)
-            
-            face2, prob = self.mtcnn(image, return_prob=True)
-            
-             # check if there is a detected face and has probability of 90%
-            if face2 is None and prob < 0.90:
-                return
-            
-            face2 = self.facenet(face2.unsqueeze(0))
-            
-            # define a function to collate data
-            def collate_fn(x):
-                return x[0]
-            
-            # locate the dataset of known faces
-            dataset = datasets.ImageFolder(Dataset_Folder)
-
-            # load the folder name in dataset
-            label_names = {i: c for c, i in dataset.class_to_idx.items()}
-
-            # load the dataset
-            loader = DataLoader(
-                dataset, 
-                batch_size=1, 
-                collate_fn=collate_fn, 
-                pin_memory=True)
-
-            for images, label in loader:
-                
-                with torch.no_grad():
-
-                    # for facial detection level 2 --- Using MTCNN model
-                    face, prob = self.mtcnn(images, return_prob=True)
-
-                    # check if there is a detected face and has probability of 90%
-                    if face is not None and prob > 0.90:
-                        
-                        # calculate face distance
-                        emb = self.facenet(face.unsqueeze(0))
-
-                        dist = torch.dist(emb, face2).item()
-                         
-                        if dist < threshold:
-                            return (label_names[label], dist,True,None)
-
-            return (None, None,False,None)
-
-        except Exception as e:
-            print(f"spam_detection - Error occurred while training the model: {str(e)}")
-            return (None, None,False,f"spam_detection: {str(e)}")
+        
 
     def __face_encodings(self, image_path):
         
@@ -176,6 +123,49 @@ class JoloRecognition:
                 collate_fn=collate_fn, 
                 pin_memory=True)
 
+            for images, label in loader:
+
+                with torch.no_grad():
+
+                    # for facial detection level 2 --- Using MTCNN model
+                    face, prob = self.mtcnn(images, return_prob=True)
+
+                    # check if there is a detected face and has probability of 90%
+                    if face is not None and prob > 0.90:
+                        
+                        # calculate face distance
+                        emb = self.facenet(face.unsqueeze(0))
+                        
+                        dist = torch.dist(emb, face2).item()
+                         
+                        if dist < threshold:
+                            return (label_names[label], dist,True,None)
+
+            return (None, None,False,None)
+
+        except Exception as e:
+            print(f"spam_detection - Error occurred while training the model: {str(e)}")
+            return (None, None,False,f"spam_detection: {str(e)}")
+        
+    # training from dataset
+    def Face_Train(self, Dataset_Folder="/home/aiotsmartlock/Downloads/AIoT_Smart-lock/Known_Faces", location="/home/aiotsmartlock/Downloads/AIoT_Smart-lock/Model"):
+        try:
+
+            training_batch = 1
+            
+            # define a function to collate data
+            def collate_fn(x):
+                return x[0]
+            
+            # locate the dataset of known faces
+            dataset = datasets.ImageFolder(Dataset_Folder)
+
+            # load the folder name in dataset
+            label_names = {i: c for c, i in dataset.class_to_idx.items()}
+
+            # load the dataset
+            loader = DataLoader(dataset, batch_size=20, collate_fn=collate_fn, pin_memory=True)
+
             # create empty lists for storing embeddings and names
             name_list = []
             embedding_list = []
@@ -195,17 +185,19 @@ class JoloRecognition:
 
                         embedding_list.append(emb.detach())
                         name_list.append(label_names[label])
-                        
-                        dist = torch.dist(emb, face2).item()
-                         
-                        if dist < threshold:
-                            return (label_names[label], dist,True,None)
 
-            return (None, None,False,None)
+                        training_batch +=1
+
+            data = [embedding_list, name_list]
+
+            # save the calculated face distance into data.pt
+            torch.save(data, location + '/data.pt')
+
+            return "Successfully trained"
 
         except Exception as e:
-            print(f"spam_detection - Error occurred while training the model: {str(e)}")
-            return (None, None,False,f"spam_detection: {str(e)}")
+            print(f"Error occurred while training the model: {str(e)}")
+            return "Error occurred while training the model"
          
     def face_compare_result(self,face_one,face_two):
         with torch.no_grad():
