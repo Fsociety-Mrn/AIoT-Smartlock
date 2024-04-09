@@ -11,7 +11,7 @@ import {
 } from "@mui/material"
 import { DesktopTextbox } from '../Textfield';
 import React from "react"
-import { createPIN,verifyPIN } from "../../firebase/Realtime_Db";
+import { checkPINexist, createPIN,verifyPIN } from "../../firebase/Realtime_Db";
 import { pinSchema,NewpinSchema, Password_validation } from "../../Authentication/Validation";
 import { reauthentication } from "../../firebase/FirebaseConfig";
 import { setUserStatus } from "../../firebase/Firestore";
@@ -56,8 +56,17 @@ export const CreatePassword = (props) => {
 
             await pinSchema.validate({ PIN: createPin.newPin, PIN2: createPin.confirmPin }, { abortEarly: false });
      
-      
+            
+            const checkPINExist = await checkPINexist(String(props.LockerNumber) + "-"+ String(createPin.newPin))
+
+            if (checkPINExist ){
+                setError({ pin1: true, pin1Error: "", pin2: true, pin2Error: "please create a unique PIN code" })
+                return 
+            }
+
             createPIN(props.FullName,createPin.confirmPin, props.LockerNumber).then(e=>{
+
+             
                 setError({
                     pin1: false,
                     pin1Error: "",
@@ -208,9 +217,15 @@ export const ChangePassword = (props) => {
 
             await NewpinSchema.validate({ PIN: createPin.oldPin, PIN2: createPin.newPin }, { abortEarly: false });
             
-  
-            verifyPIN(props.FullName, createPin.oldPin).then(result=>{
-      
+        
+
+            verifyPIN(props.FullName, createPin.oldPin).then(async result=>{
+                const checkPINExist = await checkPINexist(String(props.LockerNumber) + "-"+ String(createPin.newPin))
+
+                if (checkPINExist && result){
+                    setError({ pin1: true, pin1Error: "", pin2: true, pin2Error: "please create a unique PIN code" })
+                    return 
+                }
               // if pincode is verified
               result && createPIN(props.FullName,createPin.newPin, props.LockerNumber).then(result=> {     
                 setError({
@@ -325,7 +340,7 @@ export const ChangePassword = (props) => {
             control={
               <Checkbox checked={isChangePasswordOpen} onChange={handlePasswordChange} />
             }
-            label="Show Password"
+            label="Show PIN password"
           />
                             </Grid>
 
