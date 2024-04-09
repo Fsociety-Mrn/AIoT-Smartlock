@@ -155,6 +155,29 @@ import {
         });
     }
 
+    export const checkPINexist = (FullName,PIN) => {
+        return new Promise(async (resolve, reject) => {
+            try {
+
+                const LockerNumber = await getLocker(FullName)
+      
+                const dbRef = ref(RTdb, `PIN`);
+                onValue(dbRef, (snapshot) => {
+                    const data = snapshot.val();
+      
+                    const pins = Object.values(data).map(item => item.pincode);
+                    resolve(pins.includes(String(LockerNumber) + "-" + String(PIN)))
+      
+                }, (error) => {
+                reject(error);
+                });
+      
+            }catch(error){
+                reject(error);
+            }
+        });
+      } 
+
     export const verifyPIN = (FullName,PIN) => {
         return new Promise((resolve, reject) => {
             try {

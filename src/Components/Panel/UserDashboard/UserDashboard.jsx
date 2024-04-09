@@ -14,6 +14,7 @@ import {
   createPIN,
   verifyPIN,
   getLockerSensor,
+  checkPINexist,
 } from "../../../utils/Firebase/Database/Database";
 
 // Firebase.Firestore
@@ -166,8 +167,17 @@ const UserDashboard = (props) => {
 
       await pinSchema.validate({ PIN: createPin.newPin, PIN2: createPin.confirmPin }, { abortEarly: false });
       const FullName = String(props.firstName + " " + props.lastName).toUpperCase()
+
+      const result = await checkPINexist(FullName,createPin.confirmPin)
+      result && setError({
+        pin1: false,
+        pin1Error: "",
+    
+        pin2: true,
+        pin2Error: "please create unique PIN code"
+      })
       
-      createPIN(FullName,createPin.confirmPin).then(e=>{
+      !result && createPIN(FullName,createPin.confirmPin).then(e=>{
         setError({
           pin1: false,
           pin1Error: "",
@@ -203,7 +213,23 @@ const UserDashboard = (props) => {
 
       await NewpinSchema.validate({ PIN: oldPin, PIN2: newPin}, { abortEarly: false });
       const FullName = String(props.firstName + " " + props.lastName).toUpperCase()
-      verifyPIN(FullName, oldPin).then(result=>{
+      verifyPIN(FullName, oldPin).then(async result=>{
+
+
+        
+      const CheckPINExist = await checkPINexist(FullName,newPin)
+
+      if (CheckPINExist && result){
+        setError({
+          pin1: false,
+          pin1Error: "",
+      
+          pin2: true,
+          pin2Error: "please create unique PIN code"
+        })
+        return
+      }
+  
 
         // if pincode is verified
         result && createPIN(FullName,newPin).then(result=> {     
