@@ -1,24 +1,36 @@
 
-import time
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QGridLayout, QPushButton, QLineEdit
+import cv2
+import os
+import uuid
+import shutil
+
+from Face_Recognition.JoloRecognition import JoloRecognition as Jolo
+from PyQt5.QtWidgets import  QLineEdit
 from PyQt5.QtWidgets import *
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 from Firebase.firebase import firebaseHistory
-from Firebase.Offline import pinCodeLogin,offline_history,delete_table,offline_insert
-from Raspberry.Raspberry import OpenLockers
+from Firebase.Offline import pinCodeLogin,offline_history,delete_table,create_person_temporarily_banned
+from Raspberry.Raspberry import OpenLockers,gpio_manual
 
 from pages.Custom_MessageBox import MessageBox
 
 
 class PincodeLogin(QtWidgets.QFrame):
+    
     def __init__(self, parent):
         super().__init__(parent)
         
         self.main_menu = parent
+        self.Light_PIN = 25
+                
+        # for video streaming variable
+        self.videoStream = cv2.VideoCapture(1) if cv2.VideoCapture(1).isOpened() else cv2.VideoCapture(0)
+        self.videoStream.set(4, 1080)
         
-        self.failed = 1
-        
+        # haar cascade face detection
+        self.face_detector = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+
         # message box
         self.MessageBox = MessageBox()
         self.MessageBox.setStyleSheet("""
@@ -129,7 +141,7 @@ class PincodeLogin(QtWidgets.QFrame):
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(12)
-        font.setBold(False)
+        font.setBold(True)
         font.setWeight(10)
         self.errorMessage.setFont(font)
         self.errorMessage.setStyleSheet("color: red")
@@ -344,7 +356,7 @@ class PincodeLogin(QtWidgets.QFrame):
         self.seven_11.setText("")
         
         icon = QtGui.QIcon()
-        pixmap = QtGui.QPixmap("/home/aiotsmartlock/Downloads/AIoT_Smartlock/Images/check.png")
+        pixmap = QtGui.QPixmap("Images/check.png")
         icon.addPixmap(pixmap, QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.seven_11.setIcon(icon)
         self.seven_11.setIconSize(QtCore.QSize(20, 20))
@@ -370,7 +382,7 @@ class PincodeLogin(QtWidgets.QFrame):
 "}")
         self.seven_12.setText("")
         icon1 = QtGui.QIcon()
-        pixmap = QtGui.QPixmap("/home/aiotsmartlock/Downloads/AIoT_Smartlock/Images/backspace.png")
+        pixmap = QtGui.QPixmap("Images/backspace.png")
         icon1.addPixmap(pixmap, QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.seven_12.setIcon(icon1)
         self.seven_12.setIconSize(QtCore.QSize(24, 24))
@@ -419,6 +431,11 @@ class PincodeLogin(QtWidgets.QFrame):
         self.Cancel_2.setObjectName("Cancel_2")
         self.Cancel_2.clicked.connect(self.cancel)
         
+        # Timer
+        self.timer = QtCore.QTimer(self)
+        self.timer.timeout.connect(self.videoStreaming)
+        self.timer.start()
+        
         self.state = True
 
         self.retranslateUi()
@@ -429,6 +446,8 @@ class PincodeLogin(QtWidgets.QFrame):
         self.setWindowTitle(_translate("Pincode", "Frame"))
         self.TokenID_3.setPlaceholderText(_translate("MainWindow", "eg: LN-XXXX"))
 
+        self.errorMessage.setText(_translate("MainWindow", "<strong> Enter your Locker Number </strong>"))
+               
         self.seven_2.setText(_translate("MainWindow", "1"))
         self.seven_3.setText(_translate("MainWindow", "2"))
         self.seven_4.setText(_translate("MainWindow", "3"))
@@ -466,7 +485,8 @@ class PincodeLogin(QtWidgets.QFrame):
 
         self.greetings.setText(_translate("MainWindow", "Hello Friend,\n"
         "Kindly provide your locker number and PIN for access."))
-        self.checkBox.setText(_translate("MainWindow", "Show Password"))
+        self.checkBox.setText(_translate("MainWindow", "Show pin"))
+        gpio_manual(self.Light_PIN,False)
              
     def toggle_password_visibility(self,state):
       
@@ -476,105 +496,123 @@ class PincodeLogin(QtWidgets.QFrame):
                 self.TokenID_3.setEchoMode(QtWidgets.QLineEdit.Password)
                 
         # self.TokenID_3.setEchoMode(QtWidgets.QLineEdit.Password if state else QtWidgets.QLineEdit.Normal)
+    
+    def input_digit_instruction(self, text):
+
+        if len(text) < 1:
+            self.errorMessage.setText("<strong> Enter your Locker Number </strong>")
+            return
+                
+        self.errorMessage.setText("<strong> Enter your 4 digit pin code </strong>")
+                
+        if len(text) >= 6:
+            self.errorMessage.setText("<strong> You can now proceed with PIN login. </strong>")
 
     def input_digit(self, digit):
             
-        self.errorMessage.setText("")
         current_text = self.TokenID_3.text()
+        self.input_digit_instruction(current_text)
+        
         if len(current_text) == 2:
-                current_text = current_text + "-"
+            current_text = current_text + "-"
                 
         if len(current_text) != 7:   
-                self.TokenID_3.setText(current_text + digit)
-
+            self.TokenID_3.setText(current_text + digit)
+                
     def backspace(self):
         current_text = self.TokenID_3.text()
         if current_text:
             updated_text = current_text[:-1]  # Remove the last character
             self.TokenID_3.setText(updated_text)
             
+        self.input_digit_instruction(current_text)
+            
     def cancel(self):
+        gpio_manual(self.Light_PIN,True)
+        self.videoStream.release()
+        cv2.destroyAllWindows()
+        self.timer.stop()
+        
+        self.main_menu.upload_banned_person()
         self.main_menu.timers(False)
+
         self.close()
         
     def enterPINcode(self):
-            
-        self.checkFail()
-        
-        current_date = QtCore.QDate.currentDate().toString("MMM d yyyy")
-        current_time = QtCore.QTime.currentTime().toString("h:mm:ss AP")
-        
-        if self.TokenID_3.text() == "":
-            return
-        
-        if len(self.TokenID_3.text()) < 3:
-            return
-        
-        pins = self.TokenID_3.text().split("-")        
-            
-        data = pinCodeLogin(pin=str(int(pins[0])) + "-" + pins[1])
-        
-        self.errorMessage.setText("")
-        
-        if data[0] == None:
-                
-           self.errorMessage.setText("Wrong PIN, please try again.")
-           self.TokenID_3.setText("")
-           result = firebaseHistory(
-                        name="No match detected",
-                        date=current_date,
-                        time=current_time,
-                        access_type="PIN Login")
-            
-        
-           if not result:
-                offline_history(
-                        name="No match detected",
-                        date=current_date,
-                        time=current_time,
-                        access_type="PIN Login")
-                
-           self.failed = self.failed + 1
-                
-           
-        else:
 
-            
-            
-            result = firebaseHistory(
-                        name=data[0],
-                        date=current_date,
-                        time=current_time,
-                        access_type="PIN Login")
-            
+        pin_code = self.TokenID_3.text()
         
-            if not result:
-                offline_history(  
-                        name=data[0],
-                        date=current_date,
-                        time=current_time,
-                        access_type="PIN Login")
-                
+        # filter the text box
+        if pin_code == "":
+            self.errorMessage.setText("Please enter your PIN to proceed.")
+            return
+        
+        if len(pin_code) < 3:
+            self.errorMessage.setText("PIN must be 6 characters long. Please try again.")
+            return
+        
+        # check person is suspended and banned
+        name,result,person,frame = self.anti_spam()
+        
+        if result:
+            
+            # check if person is suspended
             self.messageBoxShow(
-                icon=self.MessageBox.Information,
                 title="PIN LOGIN",
-                text="Welcome " + str(data[0]) + "!<br>Locker Number: " + str(data[1]),
+                text=name,
                 buttons=self.MessageBox.Ok
             )
             
-            # for open the Locker
-            OpenLockers(str(data[0]),key=int(data[1]),value=True)
-       
+            self.cancel()
+            return
             
-            delete_table("Failed attempt")
-            delete_table("Fail History")
+        
+        # pin code splitting text
+        pins = pin_code.split("-")        
+        
+        # get current date and time
+        current_date = QtCore.QDate.currentDate().toString("MMM d yyyy")
+        current_time = QtCore.QTime.currentTime().toString("h:mm:ss AP")  
+  
+        data = pinCodeLogin(pin=str(int(pins[0])) + "-" + pins[1])
+        
+        # pin verify
+        if data[0] == None:
+            errorMessage = "<strong> Invalid PIN, please try again. </strong>"
+            name = "No match detected"
+            text = self.create_dir(person=person,image=frame)
+        else:
+            name = data[0]
+            errorMessage = ""
+            text="Welcome " + str(data[0]) + "!<br>Locker Number: " + str(data[1])
+            delete_table(Table_Name=person,dir="Firebase/banned_and_temporary_list.json")
+            self.delete_folder(person)
+
+        offline_history(
+                name=name,
+                date=current_date,
+                time=current_time,
+                access_type="PIN Login")
+
+        
+        self.errorMessage.setText(errorMessage)
+        self.TokenID_3.setText("")
+            
+        self.messageBoxShow(
+            title="PIN LOGIN",
+            text=text,
+            buttons=self.MessageBox.Ok
+        )
+        
+        # for open the Locker
+        if not data[0] == None:
+            OpenLockers(str(data[0]),key=int(data[1]),value=True)
             self.cancel()
                     
     # message box
-    def messageBoxShow(self, icon=None, title=None, text=None, buttons=None):
+    def messageBoxShow(self, title=None, text=None, buttons=None):
 
         # Set the window icon, title, and text
-    
         self.MessageBox.setWindowTitle(title)
         self.MessageBox.setText(text)
 
@@ -590,11 +628,184 @@ class PincodeLogin(QtWidgets.QFrame):
         
         # Show the message box and return the result
         return result
+    
+    # for video streaming
+    def videoStreaming(self):
+        ret, frame = self.videoStream.read()
+        
+        # if no detected frames
+        if not ret:
+            self.messageBoxShow(
+                title="PIN LOGIN",
+                text="Unable to open camera. Please contact the administrator for assistance.",
+                buttons=self.MessageBox.Ok
+            )
+            self.cancel()
+            return
+        
+        # process the frame
+        frame = cv2.flip(frame, 1)
 
-    def checkFail(self):
-        if self.failed == 3:
-           offline_insert(data={'Fail': "Wrong PIN"},TableName= "Fail History")
-           self.cancel()
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    
+        # load facial detector haar
+        faces = self.face_detector.detectMultiScale(gray,
+                                                    scaleFactor=1.1,
+                                                    minNeighbors=20,
+                                                    minSize=(100, 100),
+                                                    flags=cv2.CASCADE_SCALE_IMAGE)
+        
+
+        # detect one face only
+        if len(faces) == 1:
+            
+            x, y, w, h = faces[0]
+            faceCrop = frame[y:y+h, x:x+w]
+            face_gray = cv2.cvtColor(faceCrop, cv2.COLOR_BGR2GRAY)
+            
+            
+            # Calculate the Laplacian
+            laplacian = cv2.Laplacian(face_gray, cv2.CV_64F)
+    
+            # Calculate the variance of the Laplacian
+            variance = laplacian.var()
+            
+            # blurred level
+            Face_blurred = float("{:.2f}".format(variance))
+            
+            self.greetings.setText("Kindly provide your Locker number and PIN \n(in the format ex: 16-9259) for access.")
+            self.seven_11.setDisabled(False)
+            
+            if Face_blurred < 300:
+                self.greetings.setText("Camera feed is blurred. Please ensure the camera is clean")
+                self.seven_11.setDisabled(True)
+        
+
+        # Multiple Face Detected
+        elif len(faces) >= 1:    
+            self.greetings.setText("Multiple faces detected. Please ensure only one face is visible")
+            self.seven_11.setDisabled(True)
+        # No face detected
+        else:
+            self.greetings.setText("No face detected. Please ensure your face is visible.")
+            self.seven_11.setDisabled(True)
+            
+    # LIFO
+    def LastIn_FirstOut(self,directory=None,new_image=None,batch=19):
+                
+        # Get the list of files in the directory
+        files = os.listdir(directory)
+        
+        # Filter the list to include only image files
+        image_files = [file for file in files if file.endswith((".png", ".jpg", ".jpeg"))]
+
+        # Sort the image file names numerically in ascending order
+        sorted_image_files = sorted(image_files, key=lambda x: int(os.path.splitext(x)[0]))
+
+        # Get the highest numeric value in the remaining image files 
+        highest_value = max([int(os.path.splitext(file)[0]) for file in sorted_image_files]) if sorted_image_files else 0
+
+        # Generate the new image path with an incremental value
+        new_value = highest_value + 1
+        new_image_name = f"{new_value}.png"
+        new_image_path = os.path.join(directory, new_image_name)
+
+        # Save the new image using cv2.imwrite()
+        cv2.imwrite(new_image_path, new_image)
+        
+        # remove first image if images are greather than 20
+        if len(files) > batch:
+            oldest_image = sorted_image_files[0]
+            os.remove(os.path.join(directory, oldest_image))
+            sorted_image_files = sorted_image_files[1:]
+    
+    # create directory
+    def create_dir(self,image,person):
+        
+        directory = "spam_detection"
+                
+        # Generate a random UUID (version 4)
+        unique_id = uuid.uuid4()
+        
+        # person is none create folder and save images
+        if person == None:
+            
+            # Convert UUID to a hexadecimal string and return the first 8 characters
+            personID = "person_" + str(unique_id).upper()[:5]
+            new_dir = f"{directory}/{personID}"
+        
+            os.makedirs(new_dir, exist_ok=True)
+            try:
+                self.LastIn_FirstOut(directory=new_dir, new_image=image,batch=2)
+            except:
+                self.delete_folder(person=personID)
+                return "please make sure your face is properly aligned at the center of the camera"
+        else:
+            new_dir=f"{directory}/{person}"
+            try:
+                self.LastIn_FirstOut(directory=new_dir, new_image=image,batch=2)
+            except:
+                return "please make sure your face is properly aligned at the center of the camera"
+            
+        return create_person_temporarily_banned(person,"Facial")[0]
+         
+    # spam recognition
+    def anti_spam(self):
+         
+        ret, image = self.videoStream.read()
+        
+        if not ret:
+            return "camera unable to capture"
+        
+        # process the frame
+        image = cv2.flip(image, 1)
+        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        
+        # load facial detector haar
+        faces = self.face_detector.detectMultiScale(gray,
+                                                    scaleFactor=1.1,
+                                                    minNeighbors=20,
+                                                    minSize=(100, 100),
+                                                    flags=cv2.CASCADE_SCALE_IMAGE)
+        
+        x, y, w, h = faces[0]
+  
+        # Calculate new width and height
+        scale_factor = 1.2
+        new_w = int(w * scale_factor)
+        new_h = int(h * scale_factor)
+
+        # Adjust x and y to keep the center of the face in the crop
+        new_x = max(0, x - (new_w - w) // 2)
+        new_y = max(0, y - (new_h - h) // 2)
+        
+        # Crop the image with the new dimensions
+        faceCrop = image[new_y-40:new_y+new_h+30, new_x-40:new_x+new_w+30]
+
+        result = Jolo().spam_detection(image=faceCrop,threshold=0.7)
+        
+        person = result[0]  # None 
+        spam_detected = result[2] # if detected
+        error_occur = result[3]
+        
+        # verify person is in database
+        text,result = create_person_temporarily_banned(person,"Facial",False)
+        
+        # if detected it will save images
+        if spam_detected and error_occur == None and result:
+            create_person_temporarily_banned(person,"Facial")
+            
+        # return Text result 
+        return text,result,person,faceCrop
+
+    def delete_folder(self,person):
+        try:
+            dir = f"spam_detection/{person}"
+            shutil.rmtree(dir)
+            print(f"Folder '{dir}' deleted successfully.")
+        except Exception as e:
+            print(f"Error: {dir} : {e}")
+        
 if __name__ == "__main__":
     
     import sys,background
