@@ -572,8 +572,7 @@ class FacialLogin(QtWidgets.QFrame):
                 current_time=current_time
             )
             cv2.putText(frame, "Face blurriness: " + str(face_blurred), (30, 440), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (self.B, self.G, self.R), 1)
-
-            cv2.imwrite("test.png", frame)
+            
         # Multiple Face Detected
         elif len(faces) >= 1:
             

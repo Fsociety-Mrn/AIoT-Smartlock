@@ -48,6 +48,7 @@ class Dialog(QDialog):
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(12)
+        font.setBold(True)
         self.Warning.setFont(font)
         self.Warning.setTextFormat(QtCore.Qt.MarkdownText)
         self.Warning.setAlignment(QtCore.Qt.AlignCenter)
