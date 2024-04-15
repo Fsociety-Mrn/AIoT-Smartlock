@@ -493,7 +493,7 @@ class FacialLogin(QtWidgets.QFrame):
             return
         
         if self.Show:
-            warning_text = "<html><head/><body><p align=\"center\"><span style=\" font-size:11pt;\">Reminder: Before authenticating, please remove any glasses or headgear.</span></p><p align=\"center\"><span style=\" font-size:11pt;\">If you keep them on, it might be harder for us to recognize you.</span></p><p align=\"center\"><span style=\" font-size:11pt;\">Thank you!</span></p></body></html>"
+            warning_text = "<html><head/><body><p align=\"center\"><span style=\" font-size:11pt;\">Reminder: Before Facial Login, please remove any glasses or headgear.</span></p><p align=\"center\"><span style=\" font-size:11pt;\">If you keep them on, it might be harder for us to recognize you.</span></p><p align=\"center\"><span style=\" font-size:11pt;\">Thank you!</span></p></body></html>"
             image_path = "Images/WARNING.png"
             Dialog(warning_text,image_path).exec_()
             
@@ -703,6 +703,7 @@ class FacialLogin(QtWidgets.QFrame):
                     self.blink = False
                     
                     self.blink_counter = self.blink_counter + 1
+                    self.last_dilation_time = None
                     return True
                 
                 # self.last_dilation_time = None

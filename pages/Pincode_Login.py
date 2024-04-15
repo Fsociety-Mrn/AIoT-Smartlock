@@ -13,7 +13,7 @@ from Firebase.firebase import firebaseHistory
 from Firebase.Offline import pinCodeLogin,offline_history,delete_table,create_person_temporarily_banned
 from Raspberry.Raspberry import OpenLockers,gpio_manual
 
-from pages.Custom_MessageBox import MessageBox
+from pages.Custom_MessageBox import MessageBox,Dialog
 
 
 class PincodeLogin(QtWidgets.QFrame):
@@ -23,6 +23,7 @@ class PincodeLogin(QtWidgets.QFrame):
         
         self.main_menu = parent
         self.Light_PIN = 25
+        self.Show = True
                 
         # for video streaming variable
         self.videoStream = cv2.VideoCapture(1) if cv2.VideoCapture(1).isOpened() else cv2.VideoCapture(0)
@@ -642,6 +643,13 @@ class PincodeLogin(QtWidgets.QFrame):
             )
             self.cancel()
             return
+        
+        if self.Show:
+            warning_text = "<html><head/><body><p align=\"center\"><span style=\" font-size:11pt;\">Reminder: Before PIN Login, please remove any glasses or headgear.</span></p><p align=\"center\"><span style=\" font-size:11pt;\">This helps us see who is trying to use PIN login.</span></p><p align=\"center\"><span style=\" font-size:11pt;\">Thank you!</span></p></body></html>"
+            image_path = "Images/WARNING.png"
+            Dialog(warning_text,image_path).exec_()
+            
+            self.Show = False
         
         # process the frame
         frame = cv2.flip(frame, 1)
