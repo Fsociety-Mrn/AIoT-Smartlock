@@ -502,6 +502,7 @@ class FacialLogin(QtWidgets.QFrame):
             Dialog(warning_text,image_path).exec_()
             
             self.Show = False
+            return
         
         # process the frame
         frame = cv2.flip(frame, 1)
