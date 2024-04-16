@@ -16,7 +16,7 @@ class JoloRecognition:
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         
         # face detection
-        self.mtcnn  = MTCNN(image_size=160, margin=0, min_face_size=50,select_largest=False, device=self.device)
+        self.mtcnn  = MTCNN(image_size=160, margin=0, min_face_size=50,select_largest=True, device=self.device)
         
         # facial recognition
         self.facenet = InceptionResnetV1(pretrained='vggface2').eval().to(self.device)

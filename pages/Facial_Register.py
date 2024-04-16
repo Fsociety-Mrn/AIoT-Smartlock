@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import *
 from Face_Recognition.JoloRecognition import JoloRecognition as JL
 from Raspberry.Raspberry import gpio_manual
 from Firebase.Offline import delete_table
-from pages.Custom_MessageBox import MessageBox
+from pages.Custom_MessageBox import MessageBox,Dialog
 
 import cv2
 import time
@@ -18,6 +18,7 @@ class facialRegister(QtWidgets.QFrame):
             super().__init__(parent)
             
             self.main_menu = parent
+            self.Show = True
             
             self.Light_PIN,self.lights_on = 25, True
   
@@ -38,7 +39,7 @@ class facialRegister(QtWidgets.QFrame):
               """)
 
             # EAR of eye
-            self.blink_threshold,self.blink_counter,self.blink = 0.35,0,True
+            self.blink_threshold, self.blink_counter, self.blink, self.last_dilation_time = 0.3,0,False,0
 
             #frame
             self.setObjectName("facialRegistration")
@@ -318,11 +319,24 @@ class facialRegister(QtWidgets.QFrame):
                                                     minSize=(100, 100),
                                                     flags=cv2.CASCADE_SCALE_IMAGE)
         
+        
+        if self.Show:
+            warning_text = "<html><head/><body><p align=\"center\"><span style=\" font-size:11pt;\">Reminder: Before facial registration, remove glasses or headgear for clear photos.</span></p><p align=\"center\"><span style=\" font-size:11pt;\">Persistence may hinder future recognition.</span></p><p align=\"center\"><span style=\" font-size:11pt;\">Thank you!</span></p></body></html>"
+            image_path = "Images/WARNING.png"
+            Dialog(warning_text,image_path).exec_()
+            
+            warning_text = "<html><head/><body><p align=\"center\"><span style=\" font-size:11pt;\">NOTE: Please ensure your face is properly aligned at the center of the screen</span></p><p align=\"center\"><span style=\" font-size:11pt;\"> for accurate facial recognition.</span></p><p align=\"center\"><span style=\" font-size:11pt;\">Thank you!</span></p></body></html>"
+            image_path = "Images/Align.png"
+            Dialog(warning_text,image_path).exec_()
+            
+            self.Show = False
+            return
+            
         # check time 10 seconds
         current_time = time.time()
-        if current_time - self.start_start <= 11:
+        if current_time - self.start_start <= 8:
             
-            self.status.setText(f"please be ready at {int(10)-int(current_time - self.start_start)}")
+            self.status.setText(f"please be ready at {int(8)-int(current_time - self.start_start)}")
             
             if len(faces) == 1:  
                 x, y, w, h = faces[0]
@@ -367,7 +381,7 @@ class facialRegister(QtWidgets.QFrame):
             statusCap = self.captureSave(current_time=current_time, frame=faceCrop,cropFrame=face_gray)
             
             if statusCap:
-                if not self.eyeBlink(gray=face_gray):
+                if self.eyeBlink(gray=face_gray):
                     gpio_manual(self.Light_PIN,True)
                     self.facialTraining(image=faceCrop) 
                     
@@ -427,7 +441,7 @@ class facialRegister(QtWidgets.QFrame):
             # update blink count and status
             status = self.update_blink_count_and_status(ear)
 
-        return status
+            return status
 
     def extract_eye_coordinates(self, landmarks):
         left_eye = []
@@ -463,21 +477,34 @@ class facialRegister(QtWidgets.QFrame):
 
         return round(EAR, 2)
 
-    def update_blink_count_and_status(self, ear):
+    def update_blink_count_and_status(self,ear=None,dilate_threshold=0.3):
+
         if ear < self.blink_threshold:
-
-            # if eye is once Open
-            if self.blink:
-                self.blink_counter += 1
-                self.blink = False
-
-                self.status.setText("Facial Training")
-                return False
+            
+            self.blink = False
+            
+            # if eye is open
+            if self.last_dilation_time is None:
+                
+                self.last_dilation_time = time.time()
             else:
-                # if eye is open
-                self.status.setText("Please Blink")
-                self.blink = True
-                return True
+                current_time = time.time()
+                time_since_dilate = current_time - self.last_dilation_time
+                
+                if time_since_dilate >= dilate_threshold:
+                    self.last_dilation_time = None
+                    self.blink = False
+                    
+                    self.blink_counter = self.blink_counter + 1
+                    return True
+                
+                # self.last_dilation_time = None
+        else:
+            
+            # If eye is closed
+            self.last_dilation_time = None
+            self.blink = True
+        return False
 
 
 if __name__ == "__main__":

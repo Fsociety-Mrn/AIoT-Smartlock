@@ -1048,7 +1048,7 @@ class TokenForm(QtWidgets.QFrame):
         # if invalid Token
         if result[0] == None and result[1] == False:
             formatted_text = "<b>Invalid Token Detected!</b>"
-            
+            self.TokenID.setText("")
             return self.messageBoxShow(
                 title="AIoT Smartlock",
                 text=formatted_text + "\n To perform Facial Register, you must generate a valid token from the AIoT Smartlock webApp.",

@@ -13,7 +13,7 @@ from Raspberry.Raspberry import OpenLockers,gpio_manual
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import *
-from pages.Custom_MessageBox import MessageBox
+from pages.Custom_MessageBox import MessageBox,Dialog
 
 from Firebase.Offline import delete_table,offline_history,offline_insert,create_person_temporarily_banned
 
@@ -26,6 +26,8 @@ class FacialLogin(QtWidgets.QFrame):
         self.start_start = time.time()
         
         self.main_menu = main_menu
+        
+        self.Show = True
         
         # for video streaming variable
         self.videoStream = cv2.VideoCapture(1) if cv2.VideoCapture(1).isOpened() else cv2.VideoCapture(0)
@@ -419,7 +421,8 @@ class FacialLogin(QtWidgets.QFrame):
         if result == False:
             return text
         
-        return self.back_to_main()
+        self.back_to_main()
+        return 
          
     # for facial detection
     def curveBox(self,frame=None,p1=None,p2=None,curvedRadius=30,BGR=(255,255,0)):
@@ -478,6 +481,22 @@ class FacialLogin(QtWidgets.QFrame):
         if not ret:
             self.status.setText("Please wait camera is loading")
             self.video.setPixmap(QtGui.QPixmap(":/background/Images/loading.png"))
+            self.messageBoxShow(title="FACIAL LOGIN",
+                                text="Unable to open camera. Please contact the administrator for assistance.",
+                                buttons=self.MessageBox.Ok)
+            self.back_to_main()
+            return
+        
+        if self.Show:
+            warning_text = "<html><head/><body><p align=\"center\"><span style=\" font-size:11pt;\">Reminder: Before Facial Login, please remove any glasses or headgear.</span></p><p align=\"center\"><span style=\" font-size:11pt;\">If you keep them on, it might be harder for us to recognize you.</span></p><p align=\"center\"><span style=\" font-size:11pt;\">Thank you!</span></p></body></html>"
+            image_path = "Images/WARNING.png"
+            Dialog(warning_text,image_path).exec_()
+            
+            warning_text = "<html><head/><body><p align=\"center\"><span style=\" font-size:11pt;\">NOTE: Please ensure your face is properly aligned at the center of the screen</span></p><p align=\"center\"><span style=\" font-size:11pt;\"> for accurate facial recognition.</span></p><p align=\"center\"><span style=\" font-size:11pt;\">Thank you!</span></p></body></html>"
+            image_path = "Images/Align.png"
+            Dialog(warning_text,image_path).exec_()
+            
+            self.Show = False
             return
 
         
