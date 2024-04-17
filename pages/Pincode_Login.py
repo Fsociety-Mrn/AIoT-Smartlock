@@ -646,7 +646,7 @@ class PincodeLogin(QtWidgets.QFrame):
         
         if self.Show:
             warning_text = "<html><head/><body><p align=\"center\"><span style=\" font-size:11pt;\">Reminder: Before PIN Login, please remove any glasses or headgear.</span></p><p align=\"center\"><span style=\" font-size:11pt;\">This helps us see who is trying to use PIN login.</span></p><p align=\"center\"><span style=\" font-size:11pt;\">Thank you!</span></p></body></html>"
-            image_path = "Images/WARNING.png"
+            image_path = "/home/aiotsmartlock/Downloads/AIoT_Smart-lock/Images/WARNING.png"
             Dialog(warning_text,image_path).exec_()
             
             self.Show = False

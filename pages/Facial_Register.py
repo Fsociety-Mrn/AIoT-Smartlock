@@ -322,11 +322,11 @@ class facialRegister(QtWidgets.QFrame):
         
         if self.Show:
             warning_text = "<html><head/><body><p align=\"center\"><span style=\" font-size:11pt;\">Reminder: Before facial registration, remove glasses or headgear for clear photos.</span></p><p align=\"center\"><span style=\" font-size:11pt;\">Persistence may hinder future recognition.</span></p><p align=\"center\"><span style=\" font-size:11pt;\">Thank you!</span></p></body></html>"
-            image_path = "Images/WARNING.png"
+            image_path = "/home/aiotsmartlock/Downloads/AIoT_Smart-lock/Images/WARNING.png"
             Dialog(warning_text,image_path).exec_()
             
             warning_text = "<html><head/><body><p align=\"center\"><span style=\" font-size:11pt;\">NOTE: Please ensure your face is properly aligned at the center of the screen</span></p><p align=\"center\"><span style=\" font-size:11pt;\"> for accurate facial recognition.</span></p><p align=\"center\"><span style=\" font-size:11pt;\">Thank you!</span></p></body></html>"
-            image_path = "Images/Align.png"
+            image_path = "/home/aiotsmartlock/Downloads/AIoT_Smart-lock/Images/Align.png"
             Dialog(warning_text,image_path).exec_()
             
             self.Show = False

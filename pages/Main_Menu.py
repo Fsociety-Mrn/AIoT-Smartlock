@@ -577,7 +577,7 @@ class MainWindow(QtWidgets.QFrame):
             # Attempt to create a socket connection to a known server (e.g., Google DNS)
             requests.head("http://www.google.com/", timeout=3)
             self.label.setText("<html><head/><body><p>AIoT Smartlock is <Strong>online<strong/></p></body></html>")
-
+            print("may net")
             self.internet = True
             
             if self.run_once == True:
@@ -834,11 +834,12 @@ class MainWindow(QtWidgets.QFrame):
         upload_to_firebase_banned()
             
     def update_banned_person(self):
+        print("data")
         if self.internet == False:
             return
             
         data = firebaseRead("suspended")
-        
+        print(bool(data))
         if bool(data) == False:
             return
         
@@ -849,6 +850,7 @@ class MainWindow(QtWidgets.QFrame):
                 self.remove_spam_folder(person)
                 
     def remove_spam_folder(self,person):
+        print("test")
         path = f"/home/aiotsmartlock/Downloads/AIoT_Smart-lock/spam_detection/{person}"
         if os.path.exists(path):
             shutil.rmtree(path)
