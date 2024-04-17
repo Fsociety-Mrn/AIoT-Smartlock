@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>960</width>
+    <width>1025</width>
     <height>565</height>
    </rect>
   </property>
@@ -43,7 +43,7 @@ background-position: center;
      <property name="geometry">
       <rect>
        <x>130</x>
-       <y>230</y>
+       <y>300</y>
        <width>431</width>
        <height>61</height>
       </rect>
@@ -599,7 +599,7 @@ Please choose your name and enter your pincode</string>
      <property name="geometry">
       <rect>
        <x>130</x>
-       <y>320</y>
+       <y>370</y>
        <width>131</width>
        <height>17</height>
       </rect>
@@ -624,7 +624,58 @@ Please choose your name and enter your pincode</string>
                                                 }</string>
      </property>
      <property name="text">
-      <string>Show Password</string>
+      <string>Show PIN</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="comboBox">
+     <property name="geometry">
+      <rect>
+       <x>270</x>
+       <y>230</y>
+       <width>151</width>
+       <height>61</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Segoe UI</family>
+       <pointsize>12</pointsize>
+      </font>
+     </property>
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">      QComboBox {
+background: transparents;
+color: #3D989A;
+background-color: rgb(255, 255, 255);
+border: 1px solid #3D989A;
+border-radius: 25px;
+
+            }
+            
+            QComboBox::drop-down {
+                border: none;
+            }
+            
+            QComboBox::down-arrow {
+                image: url(down_arrow.png); /* Replace with your arrow icon */
+            }
+            
+            QComboBox::down-arrow:on {
+                top: 1px;
+            }
+            
+            QComboBox::down-arrow:disabled {
+                image: url(disabled_arrow.png); /* Replace with your disabled arrow icon */
+            }</string>
+     </property>
+     <property name="frame">
+      <bool>true</bool>
+     </property>
+     <property name="modelColumn">
+      <number>1</number>
      </property>
     </widget>
     <zorder>greetings</zorder>
@@ -632,6 +683,7 @@ Please choose your name and enter your pincode</string>
     <zorder>KeyboardContainer_3</zorder>
     <zorder>Cancel_2</zorder>
     <zorder>checkBox</zorder>
+    <zorder>comboBox</zorder>
    </widget>
   </widget>
  </widget>

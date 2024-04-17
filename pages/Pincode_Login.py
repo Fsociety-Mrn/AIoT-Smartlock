@@ -79,7 +79,10 @@ class PincodeLogin(QtWidgets.QFrame):
         
         # show password
         self.checkBox = QtWidgets.QCheckBox(self)
-        self.checkBox.setGeometry(QtCore.QRect(130, 300, 135, 17))
+        self.checkBox.setGeometry(QtCore.QRect(130, 300 + 700, 135, 17))
+        self.checkBox.setChecked(False)
+
+    
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(11)
@@ -118,11 +121,48 @@ class PincodeLogin(QtWidgets.QFrame):
                 "    background-color: rgb(61, 152, 154);\n"
                 "}")
         self.Cancel_2.setObjectName("Cancel_2")   
+    
+
+        # Locker Number
+        self.comboBox = QtWidgets.QComboBox(self)
+        self.comboBox.setGeometry(QtCore.QRect(130, 230, 100, 61))
+        font = QtGui.QFont()
+        font.setFamily("Segoe UI")
+        font.setPointSize(12)
+        self.comboBox.setFont(font)
+        self.comboBox.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.comboBox.setStyleSheet("      QComboBox {\n"
+"background: transparent;\n"
+"color: #3D989A;\n"
+"background-color: rgb(255, 255, 255);\n"
+"border: 1px solid #3D989A;\n"
+"border-radius: 25px;\n"
+"\n"
+"            }\n"
+"            \n"
+"            QComboBox::drop-down {\n"
+"                border: none;\n"
+"            }\n"
+"            \n"
+"            QComboBox::down-arrow {\n"
+"                image: url(down_arrow.png); /* Replace with your arrow icon */\n"
+"            }\n"
+"            \n"
+"            QComboBox::down-arrow:on {\n"
+"                top: 1px;\n"
+"            }\n"
+"            \n"
+"            QComboBox::down-arrow:disabled {\n"
+"                image: url(disabled_arrow.png); /* Replace with your disabled arrow icon */\n"
+"            }")
+        self.comboBox.setFrame(True)
+        self.comboBox.setModelColumn(1)
+        self.comboBox.setObjectName("comboBox")
         
 
         # Token ID
         self.TokenID_3 = QtWidgets.QLineEdit(self)
-        self.TokenID_3.setGeometry(QtCore.QRect(130, 230, 431, 61))
+        self.TokenID_3.setGeometry(QtCore.QRect(150+100, 230, 431-120, 61))
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(18)
@@ -439,6 +479,9 @@ class PincodeLogin(QtWidgets.QFrame):
         
         self.state = True
 
+        
+
+        
         self.retranslateUi()
         QtCore.QMetaObject.connectSlotsByName(self)
            
@@ -459,6 +502,7 @@ class PincodeLogin(QtWidgets.QFrame):
         self.seven_9.setText(_translate("MainWindow", "7"))
         self.seven_10.setText(_translate("MainWindow", "8"))
         self.seven_13.setText(_translate("MainWindow", "0"))
+        
 
         self.seven_12.clicked.connect(self.backspace)
 
@@ -488,6 +532,13 @@ class PincodeLogin(QtWidgets.QFrame):
         "Kindly provide your locker number and PIN for access."))
         self.checkBox.setText(_translate("MainWindow", "Show pin"))
         gpio_manual(self.Light_PIN,False)
+        
+        self.comboBox.addItem("LN1")
+        self.comboBox.addItem("LN2")
+        self.comboBox.addItem("LN3")
+        self.comboBox.addItem("LN4")
+        self.comboBox.addItem("LN5")
+        self.comboBox.setCurrentIndex(0)
              
     def toggle_password_visibility(self,state):
       
