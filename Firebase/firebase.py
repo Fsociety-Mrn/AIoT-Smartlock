@@ -99,9 +99,35 @@ def firebaseTokenVerify(token):
         requests.head("http://www.google.com/", timeout=3)
         data = db.child("GenerateToken_FacialUpdate").get().val()
         
+
+        for Name,data in data.items():
+            print(Name)
+            
+            if not data['TOKEN'] == token:
+                print("Token Expired")
+                return None,False
+            
+            # Convert expiration date and time strings to datetime objects
+            expiration_datetime = datetime.strptime(data['EXPIRATION']['date'] + " " + data['EXPIRATION']['time'], "%B %d %Y %I:%M:%S %p")
+        
+            # Get the current date and time
+            current_datetime = datetime.now()
+
+            # Check if expiration date and time have passed
+            if expiration_datetime < current_datetime:
+                print("Token for {} has expired.".format(Name))
+                return None,False
+            
+            # filter date if expired
+            print(expiration_datetime)
+            print(current_datetime)
+            
+            return Name,False
+
+            
         # If the token matches, get the name
-        name = [name for name, tk in data.items() if tk == token][0]
-        return name,False
+        # name = [name for name, tk in data.items() if tk == token][0]
+        # return name,False
     except requests.exceptions.Timeout:
         pass
         print("firebaseTokenVerify: Request timed out")
@@ -386,3 +412,7 @@ def locker_sensor(keyName,value):
         pass
         return False
 
+
+data = firebaseTokenVerify("WAMM6G")
+
+print(data)

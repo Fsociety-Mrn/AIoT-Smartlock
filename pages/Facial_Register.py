@@ -39,7 +39,7 @@ class facialRegister(QtWidgets.QFrame):
               """)
 
             # EAR of eye
-            self.blink_threshold, self.blink_counter, self.blink, self.last_dilation_time = 0.3,0,False,0
+            self.blink_threshold, self.blink_counter, self.blink, self.last_dilation_time = 0.35,0,False,0
 
             #frame
             self.setObjectName("facialRegistration")
@@ -93,7 +93,6 @@ class facialRegister(QtWidgets.QFrame):
             # Set the default image to your custom image
             self.default_image = QtGui.QPixmap("Images/loading.png")
 
-        
             self.captureStat = 1
             # camera capture
             self.label = QtWidgets.QLabel(self)
@@ -137,7 +136,6 @@ class facialRegister(QtWidgets.QFrame):
             self.dlib_faceDetcetoor = dlib.get_frontal_face_detector()
             self.landmark_detector = dlib.shape_predictor('Model/shape_predictor_68_face_landmarks.dat')
 
-
             # turn on the switch 
             self.Lights = QtWidgets.QPushButton(self)
             self.Lights.setGeometry(QtCore.QRect(910 - 30, 250, 101, 41))
@@ -160,9 +158,6 @@ class facialRegister(QtWidgets.QFrame):
             self.Lights.setObjectName("back")
             self.Lights.clicked.connect(self.toggle_light)
             
-            
-
-            
             # Timer
             self.timer = QtCore.QTimer(self)
             self.timer.timeout.connect(self.videoStreaming)
@@ -177,12 +172,11 @@ class facialRegister(QtWidgets.QFrame):
         _translate = QtCore.QCoreApplication.translate
         self.setWindowTitle(_translate("facialRegistration", "Frame"))
         self.capture.setText(_translate("facialRegistration", "0"))
-        self.status.setText(_translate("facialRegistration", "Please be ready at 16"))
+        self.status.setText(_translate("facialRegistration", "Please be ready at 5"))
         self.Name.setText(_translate("facialRegistration", "Art Lisboa"))
         gpio_manual(self.Light_PIN,False)
         
     # =================== for Lights Button =================== #
-
     def toggle_light(self):
         # Toggle the state of the lights
         self.lights_on = not self.lights_on
@@ -315,14 +309,12 @@ class facialRegister(QtWidgets.QFrame):
 
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     
-
         # load facial detector haar
         faces = self.face_detector.detectMultiScale(gray,
                                                     scaleFactor=1.1,
                                                     minNeighbors=20,
                                                     minSize=(100, 100),
                                                     flags=cv2.CASCADE_SCALE_IMAGE)
-        
         
         if self.Show:
             warning_text = "<html><head/><body><p align=\"center\"><span style=\" font-size:11pt;\">Reminder: Before facial registration, remove glasses or headgear for clear photos.</span></p><p align=\"center\"><span style=\" font-size:11pt;\">Persistence may hinder future recognition.</span></p><p align=\"center\"><span style=\" font-size:11pt;\">Thank you!</span></p></body></html>"
@@ -345,7 +337,6 @@ class facialRegister(QtWidgets.QFrame):
             if len(faces) == 1:  
                 x, y, w, h = faces[0]
                 cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
-                
                 
             height, width, channel = frame.shape
             bytesPerLine = channel * width
