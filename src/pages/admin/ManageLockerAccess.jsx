@@ -408,6 +408,18 @@ const MobileView = (props) => {
   const [listTokens, setListTokesn] = React.useState("")
   const [checked, setChecked] = React.useState(true);
 
+  // Locker LIST
+  const [Locker,setLocker]=  React.useState([
+    { value: 20, label: "1. Locker number 20" },
+    { value: 21, label: "2. Locker number 21"  },
+    { value: 16, label: "3. Locker number 16"  },
+    { value: 12, label: "4. Locker number 12"  },
+    { value: 7, label: "5. Locker number 7"  },
+    { value: 8, label: "6. Locker number 8"  }
+    // Add more currencies as needed
+  ]);
+
+
   // view suspended
   const [suspendedModal,setSuspendedModal] = React.useState(false);
   const [suspendedData,setSuspendedData] = React.useState("");
@@ -441,10 +453,21 @@ const MobileView = (props) => {
     // fetch the user List
     const fetchData = async () => {
       try {
-
-       const data = await userData();
-
         if (isMounted) {
+          const data = await userData();
+
+          // Locker Owner
+          const user = data.filter(data=>data.Status === "user");
+
+          // Their Locker Number
+          const user_locker = user.map(data=>data.LockerNumber);
+
+          setLocker(Locker.filter(locker=>!user_locker.includes(locker.value)))
+
+          // data.forEach((item) => {
+          //   console.log(item)
+          // })
+
         data.forEach((item) => {
           setDataUser((prevData) => {
             // Check if the item already exists in the dataUser state
@@ -480,15 +503,6 @@ const MobileView = (props) => {
 
   }, [dataUser]);
 
-  const [Locker,setLocker]=  React.useState([
-    { value: 20, label: "1. Locker number 20" },
-    { value: 21, label: "2. Locker number 21"  },
-    { value: 16, label: "3. Locker number 16"  },
-    { value: 12, label: "4. Locker number 12"  },
-    { value: 7, label: "5. Locker number 7"  },
-    { value: 8, label: "6. Locker number 8"  }
-    // Add more currencies as needed
-  ]);
 
 
 
@@ -522,14 +536,10 @@ const MobileView = (props) => {
       }}
       >
 
-        <Grid item xs={7} md={3} sm={7}>
-          <Stack
-          direction="column"
-          justifyContent="center"
-          alignItems="center"
-          spacing={2}
-          >
-     
+        <Grid item xs={8} md={3} sm={12}>
+
+
+            {/* Create User button */}
             <Button 
             variant='contained' 
             fullWidth 
@@ -577,38 +587,104 @@ const MobileView = (props) => {
             setOpenModal(!openModal);
             }}>Create user </Button>
 
-          <Button 
-          variant='contained' 
-          fullWidth 
-          style={{ borderRadius: "10px", padding: "8px" }}
-          startIcon={<AdminPanelSettingsOutlinedIcon fontSize='large'/>}
-          onClick={()=>getSuspended()
-          .then(data=>{   
+ 
+
+
+
+
+        </Grid>
+        
+        {/* Suspended List */}
+        <Grid item xs={8} md={3} sm={12}>
+
+           <Button 
+            variant='contained' 
+            fullWidth 
+            style={{ borderRadius: "10px", padding: "8px" }}
+            startIcon={<AdminPanelSettingsOutlinedIcon fontSize='large'/>}
+            onClick={()=>getSuspended()
+            .then(data=>{   
               setSuspendedData(data)
               setSuspendedModal(true)
-            })
-          }>
-          View Suspended
-          </Button>
+              })
+            }>
+              View Suspended
+            </Button>
+        </Grid>
 
-          <FormControlLabel
-          value="end"
-          control={<Switch color="primary" checked={checked} onChange={handleChangeSwitch}/>}
-          label={checked ? "Active User" : "Inactive User"}
-          labelPlacement="end"
-          />
 
+        
+        {/* Active and Inactive User  */}
+        <Grid item xs={7} md={7} sm={7}>
+          <Stack
+          direction="column"
+          justifyContent="center"
+          alignItems="center"
+          spacing={2}
+          >
+            <FormControlLabel
+            value="end"
+            control={<Switch color="primary" checked={checked} onChange={handleChangeSwitch}/>}
+            label={checked ? "Active User" : "Inactive User"}
+            labelPlacement="end"
+            />
           </Stack>
         </Grid>
 
+        {/* spacing */}
+        <Grid item xs={12} sm={12} />
+
+        <Grid item xs={12} md={12} >
+            <Divider>
+              <Typography variant='h5'>Owner Locker</Typography>
+            </Divider>
+            <br/>
+        </Grid>
+          
+        {/* Person List of user */}
+        <Grid item xs={12} sm={12}>
+        <Grid
+        container
+        direction="row"
+        justifyContent={props.jc}
+        alignItems="center"
+        spacing={1}
+        >
+          {dataUser
+            .filter(person => person.isActive === checked && person.Status === "user")
+            .map((person, index) => (
+              <Grid item key={index} xl={3} md={3} sm={4}>
+                <Card
+                key={index}
+                imgSrc={person.photoUrl}
+                user={FormatName(person.user)}
+                LockerNumber={person.LockerNumber}
+                isActive={person.isActive}
+                Data={Data}
+                isAdmin={person.isAdmin}
+                id={person.id}
+                />
+              </Grid>
+          ))}
+
+        </Grid>
+        </Grid>
       
+        <Grid item xs={12} md={12} >
+        <br/>
+        <br/>
+          <Divider>
+            <Typography variant='h5'>Co-user Locker</Typography>
+          </Divider>
+          <br/>
+        </Grid>
 
-      <Grid item xs={12} sm={12} />
-
-
-
-      {/* Person List */}
-      {dataUser.filter(person => person.isActive === checked).map((person, index) => (
+        {/* Person List of co-user Admin*/}
+        {dataUser
+          .filter(person => person.isActive === checked &&
+                            person.Status === "co-user" && 
+                            person.isAdmin === true)
+          .map((person, index) => (
         
         <Grid item key={index} xl={3} md={3} sm={4}>
 
@@ -624,11 +700,34 @@ const MobileView = (props) => {
           />
 
         </Grid>
-      ))}
+        ))}
+
+        {/* Person List of co-user*/}
+        {dataUser
+          .filter(person => person.isActive === checked &&
+                            person.Status === "co-user" && 
+                            person.isAdmin === false)
+          .map((person, index) => (
+        
+        <Grid item key={index} xl={3} md={3} sm={4}>
+
+          <Card
+          key={index}
+          imgSrc={person.photoUrl}
+          user={FormatName(person.user)}
+          LockerNumber={person.LockerNumber}
+          isActive={person.isActive}
+          Data={Data}
+          isAdmin={person.isAdmin}
+          id={person.id}
+          />
+
+        </Grid>
+        ))}
 
 
 
-    </Grid>
+      </Grid>
    </>
   )
 }

@@ -173,7 +173,7 @@ const GenerateTokenModal = (props) => {
                                     .map((data,key) => (
                                         <Accordion key={key} expanded={expanded === data.DATE} onChange={() => setExpanded(expanded === data.DATE ? '' : data.DATE)}>
                                             <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls={`panel${key}bh-content`} id={`panel${key}bh-header`}>
-                                                <Typography> {1 + key}. Locker: {data.LOCKERNUMBER} , otp: <strong>{data.OTP} </strong> </Typography>
+                                                <Typography fontFamily={'monospace'}> {1 + key}. Locker: {data.LOCKERNUMBER} , otp: <strong>{data.OTP} </strong> </Typography>
                                             </AccordionSummary>
 
                                             <AccordionDetails>
