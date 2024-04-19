@@ -536,10 +536,8 @@ const MobileView = (props) => {
       }}
       >
 
+        {/* Create User button */}
         <Grid item xs={8} md={3} sm={12}>
-
-
-            {/* Create User button */}
             <Button 
             variant='contained' 
             fullWidth 
@@ -586,12 +584,6 @@ const MobileView = (props) => {
             });
             setOpenModal(!openModal);
             }}>Create user </Button>
-
- 
-
-
-
-
         </Grid>
         
         {/* Suspended List */}
@@ -612,15 +604,13 @@ const MobileView = (props) => {
             </Button>
         </Grid>
 
-
-        
         {/* Active and Inactive User  */}
-        <Grid item xs={7} md={7} sm={7}>
+        <Grid item xs={8} md={3} sm={12}>
           <Stack
           direction="column"
           justifyContent="center"
           alignItems="center"
-          spacing={2}
+          spacing={0}
           >
             <FormControlLabel
             value="end"
@@ -634,11 +624,11 @@ const MobileView = (props) => {
         {/* spacing */}
         <Grid item xs={12} sm={12} />
 
-        <Grid item xs={12} md={12} >
-            <Divider>
-              <Typography variant='h5'>Owner Locker</Typography>
-            </Divider>
-            <br/>
+        <Grid item xs={11} md={11} >
+          <Divider>
+            <Typography variant='h5'>Owner Locker</Typography>
+          </Divider>
+          <br/>
         </Grid>
           
         {/* Person List of user */}
@@ -670,12 +660,12 @@ const MobileView = (props) => {
         </Grid>
         </Grid>
       
-        <Grid item xs={12} md={12} >
-        <br/>
-        <br/>
-          <Divider>
-            <Typography variant='h5'>Co-user Locker</Typography>
-          </Divider>
+        <Grid item xs={11} md={11} >
+          <br/>
+          <br/>
+            <Divider>
+              <Typography variant='h5'>Co-user Locker</Typography>
+            </Divider>
           <br/>
         </Grid>
 
