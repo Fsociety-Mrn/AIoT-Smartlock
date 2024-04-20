@@ -69,7 +69,7 @@ const ChildModal = (props) => {
     </div>
     )
 }
-const GenerateTokenModal = (props) => {
+const AddCoownerModal = (props) => {
 
     const handleClose = () => {
         props.setOpen(false)
@@ -144,9 +144,9 @@ const GenerateTokenModal = (props) => {
                         justifyContent="center"
                         alignItems="center"
                         spacing={0}>
-                            <Typography variant="body2" color="red" component="p">
+                            {/* <Typography variant="body2" color="red" component="p">
                             Max OTP per locker: 2
-                            </Typography>
+                            </Typography> */}
                             <Typography variant="body2" color="red" component="p" style={{fontSize: '0.9rem',textAlign: 'center'}}>
                                 <span role="img" aria-label="locked">🔒</span>
                                 <strong>Please note:</strong> 
@@ -230,7 +230,7 @@ const GenerateTokenModal = (props) => {
                                 startIcon={<KeyOutlinedIcon fontSize='large'/>}
                                 style={{ borderRadius: "10px", padding: "8px" }}
                                 onClick={()=>{
-                                    generateToken(selectedCurrency,"owner")
+                                    generateToken(selectedCurrency,"co-owner")
                                     .then((otp)=>{
                                         setOtp(otp)
                                         setOpen(!open)
@@ -255,4 +255,4 @@ const GenerateTokenModal = (props) => {
     )
 }
 
-export default GenerateTokenModal
+export default AddCoownerModal

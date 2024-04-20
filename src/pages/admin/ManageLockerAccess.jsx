@@ -26,6 +26,7 @@ import FormatName from '../../Components/FormatName';
 import { Avatar, Grid } from '@mui/material';
 
 import GenerateTokenModal from '../../Components/Modal/GenerateTokenModal'
+import AddCoownerModal from '../../Components/Modal/AddCoownerModal';
 import ModalConfirm from '../../Components/Modal/ModalConfirm';
 
 // data
@@ -34,7 +35,6 @@ import { TokenList, getHistory, getSuspended, removeUser } from '../../firebase/
 
 // Icons
 import SettingsIcon from '@mui/icons-material/Settings';
-import KeyOutlinedIcon from '@mui/icons-material/KeyOutlined';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import LockResetIcon from '@mui/icons-material/LockReset';
@@ -42,10 +42,13 @@ import ModalLocker from '../../Components/Modal/ModalLocker';
 import PersonOffIcon from '@mui/icons-material/PersonOff';
 import KeyIcon from '@mui/icons-material/Key';
 import PersonIcon from '@mui/icons-material/Person';
-import AdminPanelSettingsOutlinedIcon from '@mui/icons-material/AdminPanelSettingsOutlined';
 import ViewSuspended from '../../Components/Modal/ViewSuspended';
+import AdminPanelSettingsOutlinedIcon from '@mui/icons-material/AdminPanelSettingsOutlined';
+import ManageAccountsOutlinedIcon from '@mui/icons-material/ManageAccountsOutlined';
+import PersonAddOutlinedIcon from '@mui/icons-material/PersonAddOutlined';
 import LOGO from '../../Images/logo512.png'
 import { ConfirmPassword } from '../../Components/Modal/PasswordModal';
+
 
 //  user s
 const Card = ({ imgSrc, title, user, isActive, LockerNumber, Data, isAdmin, id  }) => {
@@ -405,11 +408,23 @@ const MobileView = (props) => {
   const [dataUser, setDataUser] = React.useState([])
   const [Data,setData] = React.useState()
   const [openModal,setOpenModal] = React.useState(false)
+  const [addModal,setAddModal] = React.useState(false)
   const [listTokens, setListTokesn] = React.useState("")
+  const [addTokens, setAddToken] = React.useState("")
   const [checked, setChecked] = React.useState(true);
 
   // Locker LIST
   const [Locker,setLocker]=  React.useState([
+    { value: 20, label: "1. Locker number 20" },
+    { value: 21, label: "2. Locker number 21"  },
+    { value: 16, label: "3. Locker number 16"  },
+    { value: 12, label: "4. Locker number 12"  },
+    { value: 7, label: "5. Locker number 7"  },
+    { value: 8, label: "6. Locker number 8"  }
+    // Add more currencies as needed
+  ]);
+
+  const [CoLocker,setColocker]=  React.useState([
     { value: 20, label: "1. Locker number 20" },
     { value: 21, label: "2. Locker number 21"  },
     { value: 16, label: "3. Locker number 16"  },
@@ -457,16 +472,13 @@ const MobileView = (props) => {
           const data = await userData();
 
           // Locker Owner
-          const user = data.filter(data=>data.Status === "user");
+          const user = data.filter(data=>data.Status === "owner");
 
           // Their Locker Number
           const user_locker = user.map(data=>data.LockerNumber);
 
           setLocker(Locker.filter(locker=>!user_locker.includes(locker.value)))
-
-          // data.forEach((item) => {
-          //   console.log(item)
-          // })
+          setColocker(CoLocker.filter(locker=>user_locker.includes(locker.value)))
 
         data.forEach((item) => {
           setDataUser((prevData) => {
@@ -509,12 +521,20 @@ const MobileView = (props) => {
   return(
     <>
 
-      {/* create user account */}
+      {/* create owner account */}
       <GenerateTokenModal 
       open={openModal} 
       setOpen={setOpenModal} 
       tokenList={listTokens}
       Locker={Locker}
+      />
+
+      {/* add co owner */}
+      <AddCoownerModal 
+      open={addModal} 
+      setOpen={setAddModal} 
+      tokenList={addTokens}
+      Locker={CoLocker}
       />
 
       {/* view suspended person */}
@@ -536,17 +556,18 @@ const MobileView = (props) => {
       }}
       >
 
-        {/* Create User button */}
+        {/* Create Owner button */}
         <Grid item xs={8} md={3} sm={12}>
             <Button 
             variant='contained' 
             fullWidth 
-            startIcon={<KeyOutlinedIcon fontSize='large'/>}
+            startIcon={<ManageAccountsOutlinedIcon fontSize='large'/>}
             style={{ borderRadius: "10px", padding: "8px" }}
             onClick={()=>{
               TokenList()
                 .then(tokenList => {
-                  const formattedTokenList = tokenList.map((token, index) => {
+
+                  const formattedTokenList = tokenList.filter(data=>data.Status === "owner").map((token, index) => {
                     const expirationDate = new Date(`${token.EXPIRATION.date} ${token.EXPIRATION.time}`);
                     return {
                       id: index + 1, // Assuming you want 1-based index
@@ -567,11 +588,11 @@ const MobileView = (props) => {
                   return acc;
                 }, {});
 
-                console.log(lockerNumberCounts)
+      
 
                 // Filter out locker numbers that occur more than twice
                 const lockerNumbersToRemove = Object.entries(lockerNumberCounts)
-                    .filter((data, key) =>data[1] >= 2)
+                    .filter((data, key) =>data[1] >= 1)
                     .map((lockerNumber) => parseInt(lockerNumber)); // Convert lockerNumber back to integer
 
                 // Remove locker numbers from Locker state
@@ -583,7 +604,58 @@ const MobileView = (props) => {
               console.error(error);
             });
             setOpenModal(!openModal);
-            }}>Create user </Button>
+            }}>Create owner locker </Button>
+        </Grid>
+        
+        <Grid item xs={8} md={3} sm={12}>
+            <Button 
+            variant='contained' 
+            fullWidth 
+            startIcon={<PersonAddOutlinedIcon fontSize='large'/>}
+            style={{ borderRadius: "10px", padding: "8px" }}
+            onClick={()=>{
+              TokenList()
+                .then(tokenList => {
+
+                  const formattedTokenList = tokenList.filter(data=>data.Status === "co-owner").map((token, index) => {
+                    const expirationDate = new Date(`${token.EXPIRATION.date} ${token.EXPIRATION.time}`);
+                    return {
+                      id: index + 1, // Assuming you want 1-based index
+                      OTP: token.OTP,
+                      LOCKERNUMBER: token.LockerNumber,
+                      DATE: expirationDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+                      TIME: expirationDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }),
+                    };
+                });
+                setAddToken(formattedTokenList); 
+                
+                // Extract LOCKERNUMBER values
+                const lockerNumbers = formattedTokenList.map(token => token.LOCKERNUMBER);
+
+                // Count occurrences of each LOCKERNUMBER
+                const lockerNumberCounts = lockerNumbers.reduce((acc, lockerNumber) => {
+                  acc[lockerNumber] = (acc[lockerNumber] || 0) + 1;
+                  return acc;
+                }, {});
+
+
+
+                // Filter out locker numbers that occur more than twice
+                const lockerNumbersToRemove = Object.entries(lockerNumberCounts)
+                    .filter((data, key) =>data[1] >= 1)
+                    .map((lockerNumber) => parseInt(lockerNumber)); // Convert lockerNumber back to integer
+
+                console.log(lockerNumbersToRemove)
+                // Remove locker numbers from Locker state
+                setColocker(prevLocker => prevLocker.filter(locker => !lockerNumbersToRemove.includes(locker.value)));
+
+                
+              })
+            .catch(error => {
+              console.error(error);
+            });
+            setAddModal(!addModal);
+            }}>Add co-owner </Button>
         </Grid>
         
         {/* Suspended List */}
@@ -626,12 +698,12 @@ const MobileView = (props) => {
 
         <Grid item xs={11} md={11} >
           <Divider>
-            <Typography variant='h5'>Owner Locker</Typography>
+            <Typography variant='h5'>Locker Owner </Typography>
           </Divider>
           <br/>
         </Grid>
           
-        {/* Person List of user */}
+        {/* Person List of owner */}
         <Grid item xs={12} sm={12}>
         <Grid
         container
@@ -641,7 +713,7 @@ const MobileView = (props) => {
         spacing={1}
         >
           {dataUser
-            .filter(person => person.isActive === checked && person.Status === "user")
+            .filter(person => person.isActive === checked && person.Status === "owner")
             .map((person, index) => (
               <Grid item key={index} xl={3} md={3} sm={4}>
                 <Card
@@ -664,7 +736,7 @@ const MobileView = (props) => {
           <br/>
           <br/>
             <Divider>
-              <Typography variant='h5'>Co-user Locker</Typography>
+              <Typography variant='h5'>Co-owner Locker</Typography>
             </Divider>
           <br/>
         </Grid>
@@ -672,7 +744,7 @@ const MobileView = (props) => {
         {/* Person List of co-user Admin*/}
         {dataUser
           .filter(person => person.isActive === checked &&
-                            person.Status === "co-user" && 
+                            person.Status === "co-owner" && 
                             person.isAdmin === true)
           .map((person, index) => (
         
@@ -695,7 +767,7 @@ const MobileView = (props) => {
         {/* Person List of co-user*/}
         {dataUser
           .filter(person => person.isActive === checked &&
-                            person.Status === "co-user" && 
+                            person.Status === "co-owner" && 
                             person.isAdmin === false)
           .map((person, index) => (
         

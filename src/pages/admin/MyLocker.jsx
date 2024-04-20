@@ -136,7 +136,7 @@ const MyLocker = () => {
   
       setToken(tokenCode)
       setIsdisable(true)
-      setTimer(30)
+      setTimer(60)
   
       pushToken({ FullName: userDetails.Name, Code: tokenCode })
   
@@ -265,7 +265,7 @@ const MyLocker = () => {
 
               {/* For Face OTP */}
               {isDisable && 
-              <Typography variant='h6' color="#c71e1e" fontWeight="bold" fontSize="1rem">
+              <Typography variant='h6' color="#c71e1e" fontWeight="bold" fontSize="1rem" fontStyle={'unset'}>
                 <strong>{Token}</strong>
               </Typography>}
               {isDisable &&

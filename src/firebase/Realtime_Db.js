@@ -63,7 +63,7 @@ export const removeKey = (key) => {
 };
 
 // generate a token
-export const generateToken = async (LockerNumber) => {
+export const generateToken = async (LockerNumber,Status) => {
 return new Promise((resolve, reject) => {
   try {
     const Token = TokenGenerator();
@@ -94,6 +94,7 @@ return new Promise((resolve, reject) => {
     const data = {
       LockerNumber: LockerNumber,
       OTP: Token,
+      Status: Status,
       EXPIRATION: {
         date: formattedDate,
         time: formattedTime
@@ -289,7 +290,36 @@ export const getLockerSensor = async (locker) => {
 // **************** generate a token and Remove Token **************** //
 export const pushToken = async (props) => {
   try {
-      set(ref(RTdb, 'GenerateToken_FacialUpdate/' + props.FullName),String(props.Code));
+
+       // Get the current date and time
+       const currentDate = new Date();
+
+      // Add 2 minutes to the current time
+      const newDate = new Date(currentDate.getTime() + 1 * 60 * 1000); // 2 minutes in milliseconds
+
+       const dateOptions = {
+         month: 'short',
+         day: 'numeric',
+         year: 'numeric',
+       };
+   
+       const timeOptions = {
+         hour: '2-digit',
+         minute: '2-digit',
+         second: '2-digit',
+         hour12: true,
+       };
+   
+       const formattedDate = String(newDate.toLocaleString('en-US', dateOptions)).replace(",", "");
+       const formattedTime = newDate.toLocaleString('en-US', timeOptions);
+
+      set(ref(RTdb, 'GenerateToken_FacialUpdate/' + props.FullName),{
+        "TOKEN": String(props.Code),
+        "EXPIRATION":{
+          "date": formattedDate,
+          "time": formattedTime
+        }
+      });
   } catch (err) {
       console.error(err);
   }
