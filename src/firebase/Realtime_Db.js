@@ -547,3 +547,94 @@ export const updateSuspended = async (personID) => {
     }
   });
 }
+
+
+// **************** Request a locker**************** //
+
+// generate a request
+export const RequestLocker = async (props) => {
+  return new Promise((resolve, reject) => {
+    try {
+  
+      const now = new Date();
+
+      const dateOptions = {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+      };
+
+      const timeOptions = {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true,
+      };
+
+      const dateNow = String(now.toLocaleString('en-US', dateOptions)).replace(",", "");
+      const timeNow = now.toLocaleString('en-US', timeOptions);
+
+      const data = {
+        Name: props.Name,
+        LockerNumber: props.LockerNumber,
+        AccountStatus: "pending",
+        Status: "co-owner",
+        Time: timeNow
+      }
+  
+      const tokensRef = ref(RTdb, `Request/${dateNow}`);
+      const newTokenRef = push(tokensRef); // This generates a unique key
+  
+      set(newTokenRef, data);
+      resolve("Request is pending")
+  
+    } catch (err) {
+      console.error(err);
+      reject(err)
+    }
+  })
+}
+
+export const viewRequest = async () => {
+  return new Promise((resolve, reject) => {
+    try {
+      const dbRef = ref(RTdb, `Request`);
+      onValue(dbRef, (snapshot) => 
+        {
+          const data = snapshot.val();
+
+          resolve(data);
+        }, (error) => 
+        {
+          reject(error);
+        });
+
+    }catch(error){
+      reject(error);
+    }
+  });
+}
+
+export const deleteRequest = async (key) => {
+  return new Promise((resolve, reject) => {
+    try {
+      const dbRef = ref(RTdb, `Request/${key}`);
+
+  
+      remove(dbRef)
+        .then(() => {
+          console.log(`removeUser(): removed successfully.`);
+          resolve(`${key}: removed successfully.`)
+        })
+        .catch((error) => {
+          console.error(`${key}: Error removing:`, error);
+          reject(`${key}: Error removing:`, error);
+        });
+
+    }catch(error){
+      reject(error);
+    }
+  });
+}
+  
+  

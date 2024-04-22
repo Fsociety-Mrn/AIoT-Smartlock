@@ -10,7 +10,7 @@ import {
     Divider
  } from '@mui/material';
 import { updateLocker } from '../../firebase/Firestore';
-import { changeLockerNumber,removePIN } from '../../firebase/Realtime_Db';
+import { RequestLocker, changeLockerNumber,removePIN, viewRequest } from '../../firebase/Realtime_Db';
 import React from 'react'
 
 
@@ -60,6 +60,24 @@ const ModalLocker = (props) => {
             await changeLockerNumber("PIN",props.FullName,selectedLocker)
             return
         }
+
+        // verify if request are exist
+        const request = await viewRequest();
+
+        if (request !== null){
+            Object.values(request).map(data=>console.log(data))
+        }
+
+     
+
+        const result = await RequestLocker({
+            Name: props.FullName,
+            LockerNumber: props.LockerNumber,
+            AccountStatus: "pending",
+            Status: "co-owner"
+        })
+
+        console.log(result)
 
     
 
