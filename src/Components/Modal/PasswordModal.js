@@ -14,7 +14,7 @@ import React from "react"
 import { checkPINexist, createPIN,verifyPIN } from "../../firebase/Realtime_Db";
 import { pinSchema,NewpinSchema, Password_validation } from "../../Authentication/Validation";
 import { reauthentication } from "../../firebase/FirebaseConfig";
-import { setUserStatus } from "../../firebase/Firestore";
+import { removeOwnership, setUserStatus } from "../../firebase/Firestore";
 
 const style = {
     position: 'absolute',
@@ -384,6 +384,108 @@ export const ConfirmPassword = (props) => {
             .then(data=>{
                 setError(data)
                 setUserStatus(props.data.id,props.data.status)
+            })
+            .catch(error=>setError(error))
+
+        } catch (validationError) {
+
+            // Extract specific error messages for email and password
+            const passwordError = validationError.inner.find((error) => error.path === 'password');
+  
+
+            // If validation errors occur
+            setError({
+                Password: !!passwordError,
+                PasswordMessage: passwordError && passwordError.message
+            });
+
+        }
+    };
+
+
+    return (
+        <div>  
+            <Modal
+            open={props.createModal}
+            onClose={handleClose}
+            closeAfterTransition
+            slots={{ backdrop: Backdrop }}
+            slotProps={{
+                backdrop: {
+                timeout: 500,
+            },
+            }}>
+                <Fade in={props.createModal}>
+                    <Box sx={style}>
+
+                        <Typography variant='h5' color="#0F2C3D" fontWeight="BOLD" fontSize="1rem">
+                        please type your password before to proceed
+                        </Typography>
+
+                        <Grid container spacing={1} padding={2}
+                        direction="row"
+                        justifyContent="center"
+                        alignItems="center">
+
+                            <Grid item xs={12}>
+                                <DesktopTextbox fullWidth             
+                                id="password"
+                                name="password"
+                                placeholder='enter your password'
+                                value={password}
+                                onChange={e=>setPassword(e.target.value)}
+                                type={isChangePasswordOpen ? "text" : "password"}
+                                error={error.Password}
+                                helperText={error.PasswordMessage}
+                                />
+                            </Grid>
+
+                            <Grid item xs={6}>
+                                <Button fullWidth 
+                                onClick={handleSubmitCreate}
+                                color="error"
+                                variant="contained">Confirm</Button>
+                            </Grid>
+                            <Grid item xs={6}>
+                                <Button fullWidth 
+                                onClick={handleClose}
+                                // color="warning"
+                                variant="contained">cancel</Button>
+                            </Grid>
+
+
+
+                        </Grid>
+                    </Box>
+                </Fade>
+            </Modal>
+        </div>
+    )
+}
+
+export const RemoveOwnership = (props) => {
+
+    const [isChangePasswordOpen] = React.useState(false);
+    const [error,setError] = React.useState({
+        Password: false,
+        PasswordMessage: ""
+    })
+    const [password,setPassword] = React.useState("")
+
+
+    const handleClose = () => props.setCreateModal(false);
+
+    // Function to handle form submission for 
+    const handleSubmitCreate = async (event) => {
+        event.preventDefault();
+        try {
+
+            await Password_validation.validate({ password: password }, { abortEarly: false });
+     
+            reauthentication(password)
+            .then(data=>{
+                setError(data)
+                removeOwnership(props.data.id)
             })
             .catch(error=>setError(error))
 

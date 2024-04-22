@@ -261,7 +261,7 @@ const MyLocker = () => {
               </Stack>
 
               {/* For Open the Locker */}
-              <Button onClick={()=>setOpenModal(!openModal)}>  Change your Locker Number </Button>
+              {/* <Button onClick={()=>setOpenModal(!openModal)}>  Change your Locker Number </Button> */}
 
               {/* For Face OTP */}
               {isDisable && 

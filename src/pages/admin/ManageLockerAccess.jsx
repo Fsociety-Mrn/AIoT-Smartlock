@@ -18,16 +18,19 @@ import {
   ListItemIcon,
   Divider,
   FormControlLabel,
-  Switch
+  Switch,
+  Avatar, Grid
 } from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+
+
 import FormatName from '../../Components/FormatName'; 
 
-import { Avatar, Grid } from '@mui/material';
-
+// Modal List
 import GenerateTokenModal from '../../Components/Modal/GenerateTokenModal'
 import AddCoownerModal from '../../Components/Modal/AddCoownerModal';
 import ModalConfirm from '../../Components/Modal/ModalConfirm';
+import ModalLocker from '../../Components/Modal/ModalLocker';
+import { ConfirmPassword,RemoveOwnership } from '../../Components/Modal/PasswordModal';
 
 // data
 import { userData,promoteAdmin, deleteUser, setUserStatus } from '../../firebase/Firestore'
@@ -38,7 +41,6 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import LockResetIcon from '@mui/icons-material/LockReset';
-import ModalLocker from '../../Components/Modal/ModalLocker';
 import PersonOffIcon from '@mui/icons-material/PersonOff';
 import KeyIcon from '@mui/icons-material/Key';
 import PersonIcon from '@mui/icons-material/Person';
@@ -46,12 +48,27 @@ import ViewSuspended from '../../Components/Modal/ViewSuspended';
 import AdminPanelSettingsOutlinedIcon from '@mui/icons-material/AdminPanelSettingsOutlined';
 import ManageAccountsOutlinedIcon from '@mui/icons-material/ManageAccountsOutlined';
 import PersonAddOutlinedIcon from '@mui/icons-material/PersonAddOutlined';
+import RemoveModeratorIcon from '@mui/icons-material/RemoveModerator';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+
 import LOGO from '../../Images/logo512.png'
-import { ConfirmPassword } from '../../Components/Modal/PasswordModal';
 
 
-//  user s
-const Card = ({ imgSrc, title, user, isActive, LockerNumber, Data, isAdmin, id  }) => {
+
+//  users
+const Card = ({ 
+  imgSrc, 
+  title, 
+  user, 
+  isActive, 
+  LockerNumber, 
+  Data, 
+  isAdmin, 
+  id, 
+  AdminLocker,
+  Locker, 
+  Status  
+}) => {
 
   const [open, setOpen] = useState(false);
   const [expanded, setExpanded] = useState('');
@@ -59,6 +76,7 @@ const Card = ({ imgSrc, title, user, isActive, LockerNumber, Data, isAdmin, id  
   const [openModal,setOpenModal] = React.useState(false)
   const [changeLocker,setChangeLocker] = React.useState(false)
   const [createModal,setCreateModal] = React.useState(false)
+  const [removeModal,setRemoveModal] = React.useState(false)
   const [userData,setUserData] = React.useState()
 
   const openS = Boolean(anchorEl);
@@ -113,12 +131,23 @@ const Card = ({ imgSrc, title, user, isActive, LockerNumber, Data, isAdmin, id  
       data={userData}
       />
 
+      {/* remove User */}
+      <RemoveOwnership
+      createModal={removeModal}
+      setCreateModal={setRemoveModal}
+      data={userData}
+      />
+
+      {/* Modal Locker */}
       <ModalLocker 
       open={changeLocker} 
       setOpen={setChangeLocker} 
       LockerNumber={LockerNumber}
+      Locker={Locker}
+      AdminLocker={AdminLocker}
       UID={id}
       FullName={user} 
+      Status={Status}
       />
 
       {/* delete password */}
@@ -209,6 +238,22 @@ const Card = ({ imgSrc, title, user, isActive, LockerNumber, Data, isAdmin, id  
             </ListItemIcon>
             Deactivate Account
           </MenuItem>}
+
+          {Status === "owner" && isActive && 
+          <MenuItem onClick={()=>{
+            setRemoveModal(true)
+            setUserData({
+              id: id,
+              status: !isActive
+            })
+            // setUserStatus(id,!isActive)
+            }}>
+            <ListItemIcon>
+              <RemoveModeratorIcon fontSize="small" color="error"/>
+            </ListItemIcon>
+            Remove Ownership 
+          </MenuItem>}
+
 
           {!isActive &&
           <MenuItem onClick={changeuserStatus}>
@@ -725,6 +770,9 @@ const MobileView = (props) => {
                 Data={Data}
                 isAdmin={person.isAdmin}
                 id={person.id}
+                AdminLocker={Locker}
+                Locker={CoLocker}
+                Status="owner"
                 />
               </Grid>
           ))}
@@ -759,6 +807,9 @@ const MobileView = (props) => {
           Data={Data}
           isAdmin={person.isAdmin}
           id={person.id}
+          AdminLocker={Locker}
+          Locker={CoLocker}
+          Status="co-owner"
           />
 
         </Grid>
@@ -782,6 +833,9 @@ const MobileView = (props) => {
           Data={Data}
           isAdmin={person.isAdmin}
           id={person.id}
+          AdminLocker={Locker}
+          Locker={CoLocker}
+          Status="co-owner"
           />
 
         </Grid>

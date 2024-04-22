@@ -180,10 +180,23 @@ export const updateLocker = async (UID=null, LockerNumber=null) =>{
   }
 
   await updateDoc(doc(Fdb, "users", UID), {
-    LockerNumber: LockerNumber
+    LockerNumber: LockerNumber,
+    Status: "owner"
   })
     .then(test=>{
       alert("Your locker has been updated! Please set a new PIN code.");
+      window.location.reload();
+    })
+    .catch(err=>console.log(err));
+}
+
+export const removeOwnership = async (UID=null) =>{
+
+  await updateDoc(doc(Fdb, "users", UID), {
+    Status: "co-owner"
+  })
+    .then(test=>{
+      alert("You have successfully removed ownership.");
       window.location.reload();
     })
     .catch(err=>console.log(err));
