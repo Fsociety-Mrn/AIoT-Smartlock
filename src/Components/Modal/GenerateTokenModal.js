@@ -51,7 +51,7 @@ const ChildModal = (props) => {
 
 
 
-                        <Typography id="modal-modal-title" variant='h5' color="red" fontWeight="BOLD" fontSize="1.2rem"> 
+                        <Typography id="modal-modal-title" variant='h5' color="red" fontWeight="BOLD" fontSize="1.2rem"  fontFamily={'monospace'}> 
                             "{props.OTP}"
                         </Typography>
 
@@ -144,9 +144,6 @@ const GenerateTokenModal = (props) => {
                         justifyContent="center"
                         alignItems="center"
                         spacing={0}>
-                            <Typography variant="body2" color="red" component="p">
-                            Max OTP per locker: 2
-                            </Typography>
                             <Typography variant="body2" color="red" component="p" style={{fontSize: '0.9rem',textAlign: 'center'}}>
                                 <span role="img" aria-label="locked">🔒</span>
                                 <strong>Please note:</strong> 

@@ -7,10 +7,9 @@ import {
     Button,
     Grid,
     Stack,
-    Divider
  } from '@mui/material';
 import { updateLocker } from '../../firebase/Firestore';
-import { RequestLocker, changeLockerNumber,removePIN, viewRequest } from '../../firebase/Realtime_Db';
+import { changeLockerNumber,removePIN } from '../../firebase/Realtime_Db';
 import React from 'react'
 
 
@@ -31,13 +30,11 @@ const style = {
 
 const ModalLocker = (props) => {
 
-    // const [LockerNumber] = React.useState(['20', '21', '16', '12', '7', '8'])
+    const LockerNumber = ['20', '21', '16', '12', '7', '8']
     const [selectedLocker, setSelectedLocker] = React.useState(null);
-    const [status, setStatus] = React.useState(null);
 
     const handleButtonClick = (number,status) => {
       setSelectedLocker(number === selectedLocker ? null : number);
-      setStatus(status)
     };
 
 
@@ -50,38 +47,10 @@ const ModalLocker = (props) => {
     
     const handleonsavechanges = async () => {
 
-        console.log(selectedLocker)
-        console.log(status)
-        if (status === "owner"){
-
-            updateLocker(props.UID, selectedLocker)
-            await changeLockerNumber("LOCK",props.FullName,selectedLocker)
-            await removePIN(props.FullName)
-            await changeLockerNumber("PIN",props.FullName,selectedLocker)
-            return
-        }
-
-        // verify if request are exist
-        const request = await viewRequest();
-
-        if (request !== null){
-            Object.values(request).map(data=>console.log(data))
-        }
-
-     
-
-        const result = await RequestLocker({
-            Name: props.FullName,
-            LockerNumber: props.LockerNumber,
-            AccountStatus: "pending",
-            Status: "co-owner"
-        })
-
-        console.log(result)
-
-    
-
-     
+        updateLocker(props.UID, selectedLocker)
+        await changeLockerNumber("LOCK",props.FullName,selectedLocker)
+        await removePIN(props.FullName)
+        // await changeLockerNumber("PIN",props.FullName,selectedLocker)
 
     }
 
@@ -114,16 +83,11 @@ const ModalLocker = (props) => {
                             </Grid>
 
 
-                            {/* owner Locker */}
-                            <Grid item xs={12}>
-                                <Divider>Available owner Locker</Divider>
-                            </Grid>
-
-                            {props.AdminLocker && [...props.AdminLocker.map(locker=>locker.value)].map((number) => (
+                            {LockerNumber.map((number) => (
 
                                 <Grid item xs={3} key={number}> 
                                     <Button
-                                    variant={selectedLocker === number ? 'contained' : 'outlined'}
+                                    variant={parseInt(selectedLocker) === parseInt(number) ? 'contained' : 'outlined'}
                                     style={{
                                         width: '50px',
                                         height: '50px',
@@ -135,32 +99,6 @@ const ModalLocker = (props) => {
                                     </Button>
                                 </Grid>
                             ))}
-
-
-                         {/* co-owner locker */}
-                            {props.Status === "co-owner" && 
-                                <Grid item xs={12}>
-                                    <Divider>Available co-owner Locker</Divider>
-                                </Grid>
-                            }
-
-                    
-                            {props.Status === "co-owner" && props.Locker && [...props.Locker.map(locker=>locker.value)].map((number) => (
-                                <Grid item xs={3} key={number}> 
-                                    <Button
-                                    variant={selectedLocker === number ? 'contained' : 'outlined'}
-                                    style={{
-                                        width: '50px',
-                                        height: '50px',
-                                        fontSize: '16px',
-                                    }}
-                                    onClick={() => handleButtonClick(number,"co-owner")}
-                                    >
-                                        {number}
-                                    </Button>
-                                </Grid>
-                            ))}
-
 
                             <Grid item xs={12}>
                                 <Stack
