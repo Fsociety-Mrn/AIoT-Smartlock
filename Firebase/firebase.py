@@ -108,7 +108,7 @@ def firebaseTokenVerify(token):
                 return None,False
             
             # Convert expiration date and time strings to datetime objects
-            expiration_datetime = datetime.strptime(data['EXPIRATION']['date'] + " " + data['EXPIRATION']['time'], "%B %d %Y %I:%M:%S %p")
+            expiration_datetime = datetime.strptime(data['EXPIRATION']['date'] + " " + data['EXPIRATION']['time'], "%b %d %Y %I:%M:%S %p")
         
             # Get the current date and time
             current_datetime = datetime.now()
@@ -413,6 +413,6 @@ def locker_sensor(keyName,value):
         return False
 
 
-data = firebaseTokenVerify("WAMM6G")
+# data = firebaseTokenVerify("VWAJEI")
 
-print(data)
+# print(data)
