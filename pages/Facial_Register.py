@@ -39,7 +39,7 @@ class facialRegister(QtWidgets.QFrame):
               """)
 
             # EAR of eye
-            self.blink_threshold, self.blink_counter, self.blink, self.last_dilation_time = 0.3,0,False,0
+            self.blink_threshold, self.blink_counter, self.blink, self.last_dilation_time = 0.35,0,False,0
 
             #frame
             self.setObjectName("facialRegistration")

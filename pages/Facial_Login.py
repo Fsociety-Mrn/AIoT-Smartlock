@@ -698,6 +698,7 @@ class FacialLogin(QtWidgets.QFrame):
                     self.blink = False
                     
                     self.blink_counter = self.blink_counter + 1
+                    self.last_dilation_time = None
                     return True
                 
                 # self.last_dilation_time = None

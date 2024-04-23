@@ -79,7 +79,10 @@ class PincodeLogin(QtWidgets.QFrame):
         
         # show password
         self.checkBox = QtWidgets.QCheckBox(self)
-        self.checkBox.setGeometry(QtCore.QRect(130, 300, 135, 17))
+        self.checkBox.setGeometry(QtCore.QRect(130+100, 300, 135, 17))
+        self.checkBox.setChecked(False)
+
+    
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(11)
@@ -118,11 +121,48 @@ class PincodeLogin(QtWidgets.QFrame):
                 "    background-color: rgb(61, 152, 154);\n"
                 "}")
         self.Cancel_2.setObjectName("Cancel_2")   
+    
+
+        # Locker Number
+        self.comboBox = QtWidgets.QComboBox(self)
+        self.comboBox.setGeometry(QtCore.QRect(130, 230, 75, 61))
+        self.comboBox.setObjectName("comboBox")
+        font = QtGui.QFont()
+        font.setFamily("Segoe UI")
+        font.setPointSize(18)
+        self.comboBox.setFont(font)
+        self.comboBox.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.comboBox.setStyleSheet("      QComboBox {\n"
+"background: transparent;\n"
+"color: #3D989A;\n"
+"background-color: rgb(255, 255, 255);\n"
+"border: 1px solid #3D989A;\n"
+"border-radius: 25px;\n"
+"text-align: center\n"
+"\n"
+"            }\n"
+"            \n"
+"            QComboBox::drop-down {\n"
+"                border: none;\n"
+"            }\n"
+"            \n"
+"            QComboBox::down-arrow {\n"
+"                image: url(Images/down_arrow.png); /* Replace with your arrow icon */\n"
+"                padding-right: 20px\n"
+"            }\n"
+"            \n"
+"            QComboBox::down-arrow:on {\n"
+"                top: 1px;\n"
+"                padding-right: 25px\n"
+"            }\n"
+"            }")
+        self.comboBox.setFrame(True)
+
         
 
         # Token ID
         self.TokenID_3 = QtWidgets.QLineEdit(self)
-        self.TokenID_3.setGeometry(QtCore.QRect(130, 230, 431, 61))
+        self.TokenID_3.setGeometry(QtCore.QRect(150+100-25, 230, 431-120+25, 61))
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(18)
@@ -488,6 +528,18 @@ class PincodeLogin(QtWidgets.QFrame):
         "Kindly provide your locker number and PIN for access."))
         self.checkBox.setText(_translate("MainWindow", "Show pin"))
         gpio_manual(self.Light_PIN,False)
+        
+        self.comboBox.addItem("LN")
+        self.comboBox.addItem("20")
+        self.comboBox.addItem("21")
+        self.comboBox.addItem("16")
+        self.comboBox.addItem("12")
+        self.comboBox.addItem("07")
+        self.comboBox.addItem("08")
+        
+        self.comboBox.setCurrentIndex(0)
+        # self.comboBox.setEditable(True)
+        # self.comboBox.lineEdit().setAlignment(QtCore.Qt.AlignCenter)
              
     def toggle_password_visibility(self,state):
       
@@ -500,13 +552,13 @@ class PincodeLogin(QtWidgets.QFrame):
     
     def input_digit_instruction(self, text):
 
-        if len(text) < 1:
-            self.errorMessage.setText("<strong> Enter your Locker Number </strong>")
+        if self.comboBox.currentText() == "LN":
+            self.errorMessage.setText("<strong> Select your Locker Number </strong>")
             return
                 
         self.errorMessage.setText("<strong> Enter your 4 digit pin code </strong>")
                 
-        if len(text) >= 6:
+        if len(text) >= 3:
             self.errorMessage.setText("<strong> You can now proceed with PIN login. </strong>")
 
     def input_digit(self, digit):
@@ -514,10 +566,10 @@ class PincodeLogin(QtWidgets.QFrame):
         current_text = self.TokenID_3.text()
         self.input_digit_instruction(current_text)
         
-        if len(current_text) == 2:
-            current_text = current_text + "-"
+        if self.comboBox.currentText() == "LN":
+            return
                 
-        if len(current_text) != 7:   
+        if len(current_text) != 4:   
             self.TokenID_3.setText(current_text + digit)
                 
     def backspace(self):
@@ -544,12 +596,16 @@ class PincodeLogin(QtWidgets.QFrame):
         pin_code = self.TokenID_3.text()
         
         # filter the text box
+        if self.comboBox.currentText() == "LN":
+            self.errorMessage.setText("<strong>Select your Locker Number.</strong>")
+            return
+            
         if pin_code == "":
-            self.errorMessage.setText("Please enter your PIN to proceed.")
+            self.errorMessage.setText("<strong>Please enter your PIN to proceed.</strong>")
             return
         
         if len(pin_code) < 3:
-            self.errorMessage.setText("PIN must be 6 characters long. Please try again.")
+            self.errorMessage.setText("<strong>PIN must be 4 characters long. Please try again.</strong>")
             return
         
         # check person is suspended and banned
@@ -565,17 +621,13 @@ class PincodeLogin(QtWidgets.QFrame):
             )
             
             self.cancel()
-            return
-            
-        
-        # pin code splitting text
-        pins = pin_code.split("-")        
+            return  
         
         # get current date and time
         current_date = QtCore.QDate.currentDate().toString("MMM d yyyy")
         current_time = QtCore.QTime.currentTime().toString("h:mm:ss AP")  
   
-        data = pinCodeLogin(pin=str(int(pins[0])) + "-" + pins[1])
+        data = pinCodeLogin(pin=str(self.comboBox.currentText()) + "-" + pin_code)
         
         # pin verify
         if data[0] == None:
