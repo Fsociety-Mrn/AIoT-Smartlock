@@ -306,7 +306,7 @@ const UserDashboard = (props) => {
 
     setToken(tokenCode)
     setIsdisable(true)
-    setTimer(30)
+    setTimer(60)
 
     pushToken({ FullName: FullName,Code: tokenCode })
 
@@ -363,7 +363,7 @@ const UserDashboard = (props) => {
                 <div className="text-danger text-center">
 
                 Generate Face Update OTP Code: <strong>{Token}</strong> 
-                <p>({tokenStatus})</p>
+                <p style={{ fontFamily: 'monospace'}}>({tokenStatus})</p>
                 </div>
               }
 
