@@ -30,7 +30,7 @@ const style = {
 
 const ModalLocker = (props) => {
 
-    const LockerNumber = ['20', '21', '16', '12', '7', '8']
+    // const LockerNumber = ['20', '21', '16', '12', '7', '8']
     const [selectedLocker, setSelectedLocker] = React.useState(null);
 
     const handleButtonClick = (number,status) => {
@@ -83,7 +83,7 @@ const ModalLocker = (props) => {
                             </Grid>
 
 
-                            {LockerNumber.map((number) => (
+                            {props.AdminLocker && props.AdminLocker.map(data=>data.value).map((number) => (
 
                                 <Grid item xs={3} key={number}> 
                                     <Button

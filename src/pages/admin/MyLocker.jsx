@@ -45,6 +45,15 @@ const MyLocker = () => {
   const [changeModal,setChangeModal] = React.useState(false)
   const [checkPIN, setCheckPIN] = React.useState(false);
   const [disabled, setDisabled] = React.useState(false);
+  const [Locker]=  React.useState([
+    { value: 20, label: "1. Locker number 20" },
+    { value: 21, label: "2. Locker number 21"  },
+    { value: 16, label: "3. Locker number 16"  },
+    { value: 12, label: "4. Locker number 12"  },
+    { value: 7, label: "5. Locker number 7"  },
+    { value: 8, label: "6. Locker number 8"  }
+    // Add more currencies as needed
+  ]);
  
 
   // State for the Update Faces
@@ -200,6 +209,7 @@ const MyLocker = () => {
       LockerNumber={userDetails.LockerNumber}
       UID={userDetails.uid}
       FullName={userDetails.Name} 
+      AdminLocker={Locker}
       />
 
       <CreatePassword 
