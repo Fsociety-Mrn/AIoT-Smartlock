@@ -70,8 +70,6 @@ class Dialog(QDialog):
         self.Picture.setAlignment(QtCore.Qt.AlignCenter)
         self.Picture.setObjectName("Picture")
         
-
-        
         self.pushButton = QtWidgets.QPushButton(self.widget)
         self.pushButton.setGeometry(QtCore.QRect(260, 440, 191, 40))
         font = QtGui.QFont()
@@ -90,6 +88,11 @@ class Dialog(QDialog):
         
         # Center the main window
         self.center()
+        
+        # Set up a timer to close the dialog after 5 seconds
+        self.timer = QtCore.QTimer(self)
+        self.timer.timeout.connect(self.close_dialog)
+        self.timer.start(3000)  # 5000 milliseconds = 5 seconds
 
         self.retranslateUi()
         QtCore.QMetaObject.connectSlotsByName(self)
@@ -102,9 +105,7 @@ class Dialog(QDialog):
         self.pushButton.setText(_translate("Dialog", "okay"))
         # Connect the clicked signal of the push button to close the dialog
         self.pushButton.clicked.connect(self.close_dialog)
-        
-
-
+    
     def center(self):
         # Get the center point of the screen
         qr = self.frameGeometry()
@@ -113,6 +114,7 @@ class Dialog(QDialog):
         self.move(qr.topLeft())
         
     def close_dialog(self):
+        self.timer.stop()
         self.close()
         
 
