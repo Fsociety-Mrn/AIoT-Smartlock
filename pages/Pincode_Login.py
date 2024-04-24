@@ -631,7 +631,7 @@ class PincodeLogin(QtWidgets.QFrame):
         current_date = QtCore.QDate.currentDate().toString("MMM d yyyy")
         current_time = QtCore.QTime.currentTime().toString("h:mm:ss AP")  
   
-        data = pinCodeLogin(pin=str(self.comboBox.currentText()) + "-" + pin_code)
+        data = pinCodeLogin(pin=str(int(self.comboBox.currentText())) + "-" + pin_code)
         
         # pin verify
         if data[0] == None:
