@@ -29,6 +29,10 @@ class FacialLogin(QtWidgets.QFrame):
         
         self.Show = True
         
+        self.Saved_Data =  Jolo().Face_Train_TEST()
+        self.Embedding_List = self.Saved_Data[0]
+        self.Name_List = self.Saved_Data[1]
+        
         # for video streaming variable
         self.videoStream = cv2.VideoCapture(1) if cv2.VideoCapture(1).isOpened() else cv2.VideoCapture(0)
         self.videoStream.set(4, 1080)
@@ -324,7 +328,12 @@ class FacialLogin(QtWidgets.QFrame):
     def FacialRecognition(self, frame):
         
         # check spam recognition first
-        result = Jolo().spam_detection(image=frame,threshold=0.7)
+        result = Jolo().FaceCompare_TEST(
+            face=frame,
+            threshold=0.7,
+            DATA_EMBEDDING=self.Embedding_List,
+            DATA_LABEL=self.Name_List 
+            )
         person, __, spam_detected, error_occur = result
         
         # verify person is in database
@@ -543,7 +552,7 @@ class FacialLogin(QtWidgets.QFrame):
             # face blurred level
             face_blurred = self.detect_blur_in_face(face_gray=face_gray)
             
-            if not face_blurred > 300:
+            if not face_blurred > 0:
                 self.status.setText("Oops! Blurry camera. please clean lens or try face login again; if it persists, contact the admin for help!")
                 self.show_frame(frame)
                 return
@@ -719,7 +728,7 @@ class FacialLogin(QtWidgets.QFrame):
         cv2.putText(frame, "Blink Counter: {}".format(self.blink_counter), (30, 70), cv2.FONT_HERSHEY_SIMPLEX, 0.5,
                     (self.B, self.G, self.R),1)
         # cv2.putText(frame, "E.A.R: {}".format(EAR), (30, 90), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (self.B, self.G, self.R), 1)
-        cv2.putText(frame, "Eye Status: {}".format("OPEN" if self.blink else "CLOSE"), (30, 420), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (self.B, self.G, self.R),1)
+        cv2.putText(frame, "Eye Status: {}".format("OPEN" if self.blink else "CLOSE"), (30, 420), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (self.B, self.G, self.R),1)()
         
 
 
