@@ -28,10 +28,7 @@ class FacialLogin(QtWidgets.QFrame):
         self.main_menu = main_menu
         
         self.Show = True
-        
-        self.Saved_Data =  Jolo().Face_Train_TEST()
-        self.Embedding_List = self.Saved_Data[0]
-        self.Name_List = self.Saved_Data[1]
+
         
         # for video streaming variable
         self.videoStream = cv2.VideoCapture(1) if cv2.VideoCapture(1).isOpened() else cv2.VideoCapture(0)
@@ -328,11 +325,9 @@ class FacialLogin(QtWidgets.QFrame):
     def FacialRecognition(self, frame):
         
         # check spam recognition first
-        result = Jolo().FaceCompare_TEST(
-            face=frame,
+        result = Jolo().spam_detection(
+            image=frame,
             threshold=0.7,
-            DATA_EMBEDDING=self.Embedding_List,
-            DATA_LABEL=self.Name_List 
             )
         person, __, spam_detected, error_occur = result
         

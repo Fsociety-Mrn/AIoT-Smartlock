@@ -277,15 +277,14 @@ def is_person_temporary_banned(personID,insert):
     records = table.all()
     
     if len(records) == 3 and __is_date_expired(records,2):
-        __insert_person_permanent_banned(personID)
         return False
 
-    # if len(records) == 6 and __is_date_expired(records,5):
-    #     return False
+    if len(records) == 6 and __is_date_expired(records,5):
+        return False
     
-    # if len(records) == 9:
-    #     __insert_person_permanent_banned(personID)
-    #     return False
+    if len(records) == 9:
+        __insert_person_permanent_banned(personID)
+        return False
     
     if insert:
         __insert_date_and_time(personID)
