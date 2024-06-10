@@ -1,5 +1,5 @@
 <p align="center">
- <img width="150" height="150" src="https://github.com/Fsociety-Mrn/design-1-Smart-AioT/blob/main/Images/logo192x192.png" alt="Paro Paro G logo">
+ <img width="150" height="150" src="https://github.com/Fsociety-Mrn/design-1-Smart-AioT/blob/main/Images/logo192x192.png](https://github.com/Fsociety-Mrn/AIoT-Smartlock/blob/raspberry/Images/logo192x192.png" alt="Paro Paro G logo">
 </p>
 
 <h1 align="center">AIoT Smartlock</h1>
