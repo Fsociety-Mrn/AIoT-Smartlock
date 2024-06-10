@@ -303,5 +303,5 @@ class JoloRecognition:
 # result = JoloRecognition().spam_detection(image="Images/2.png")
 # print(result)
 
-# data = JoloRecognition().Face_Train_TEST()
+# data = JoloRecognition().Face_Train()
 # print(data)
