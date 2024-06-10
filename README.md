@@ -2,15 +2,15 @@
  <img width="150" height="150" src="https://github.com/Fsociety-Mrn/AIoT-Smartlock/blob/raspberry/Images/logo192x192.png" alt="Paro Paro G logo">
 </p>
 
-<h1 align="center">AIoT Smartlock</h1>
+<h1 align="center">AI and IoT Smartlock</h1>
 
 <p align="center">
-    A Smart Lock with AI and IoT interfacing in CEA Faculty in RTU Campus
+    A Smart Lock with AI and IoT interfacing in CEng Faculty in RTU Campus
 </p>
 
 ## Abstract
 
-CEA Faculty at RTU Pasig Campus implemented a Smart Locker System with
+CEng Faculty at RTU Pasig Campus implemented a Smart Locker System with
 AI and IoT to enhance security and convenience. The system uses facial
 recognition to ensure authorized access and allows for real-time monitoring and
 tracking of locker usage. Physical keys are not needed, and the system includes a
